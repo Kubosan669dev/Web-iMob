@@ -220,8 +220,9 @@ async def chat(req: ChatRequest):
 
 ---
 
-## 9. TRẠNG THÁI HIỆN TẠI
+## 9. TRẠNG THÁI HIỆN TẠI (cập nhật 16/07/2026)
 
-- 📋 **Kế hoạch đang chờ duyệt — chưa viết dòng code nào.**
-- Thư mục dự án trống (chỉ có file kế hoạch này).
-- Sau khi kế hoạch được duyệt: bắt đầu từ Bước 1, làm tuần tự, dừng chờ xác nhận sau mỗi bước.
+- ✅ **Bước 1–5 đã hoàn thành** (commits: `44a3d99` → `7ec9b24`): design system, layout, Hero, About + Services, Projects + Contact. Chạy thử: `npm run dev` → http://localhost:5173
+- ⏸ **Bước 6 (AI Chatbot UI) + Bước 7 (Polish) TẠM DỪNG** — chủ dự án chuyển sang học Python theo lộ trình trong `hoc-python/README.md` để tự build backend chatbot (mục 7b)
+- Trên trang chủ còn đúng 1 placeholder `#chatbot` — sẽ thay khi làm tiếp Bước 6
+- Khi quay lại: nói "tiếp tục Bước 6" là làm tiếp theo kế hoạch này
