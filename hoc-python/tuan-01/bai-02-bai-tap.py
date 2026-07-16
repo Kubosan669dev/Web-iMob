@@ -19,11 +19,18 @@ gio = 9
 #        (các nhánh sau không cần lặp lại vế >= vì elif xét từ trên xuống)
 
 # TODO: viết code câu 1 ở đây
-
+if gio >= 5 and gio < 11 :
+    print(f"Chào buổi sáng!")
+elif gio >= 11 and gio < 13:
+    print(f"Chào buổi trưa") 
+elif gio >= 13 and gio < 18:
+    print(f"Chào buổi chiều")
+else:
+    print(f"Chào buổi tối")
 
 # ---------- CÂU 2 — BỘ NÃO BOT SƠ KHAI ----------
 # Cho tin nhắn (đổi nội dung để thử từng nhánh):
-tin_nhan = "Shop ơi cho mình xin BÁO GIÁ làm app"
+tin_nhan = "Shop ơi cho mình xin báo giá làm app"
 
 # Viết bot phân loại tin nhắn theo từ khóa (nhớ hạ về chữ thường trước):
 #   có "giá" hoặc "bao nhiêu"      -> Bot: Bạn để lại SĐT, bên mình gửi báo giá ngay ạ!
@@ -33,8 +40,17 @@ tin_nhan = "Shop ơi cho mình xin BÁO GIÁ làm app"
 # Thử ít nhất 3 tin nhắn khác nhau trước khi nộp bài!
 
 # TODO: viết code câu 2 ở đây
-
-
+print("giá" in tin_nhan)
+if "giá" in tin_nhan or "bao nhiêu" in tin_nhan:
+    print(f"Bạn để lại SĐT, bên mình gửi báo giá ngay ạ!")
+elif "chào" in tin_nhan or "hello" in tin_nhan:
+    print(f"Xin chào! Mình giúp gì được cho bạn?")
+elif "địa chỉ" in tin_nhan or "ở đâu" in tin_nhan:
+    print(f"Bên mình ở Hạ Long, Quảng Ninh nhé!")
+else:
+    print(f"Bạn mô tả rõ hơn nhu cầu giúp mình nha.")
+    
+    
 # ---------- CÂU 3 — HỎI ĐÁP VỚI NGƯỜI DÙNG (input) ----------
 # Viết chương trình:
 #   1. Hỏi "Bạn cần làm app hay web? "  và lưu câu trả lời
@@ -46,15 +62,22 @@ tin_nhan = "Shop ơi cho mình xin BÁO GIÁ làm app"
 # Gợi ý: kết hợp kiến thức câu 4 bài 1 (int vs str) + phần 6 file ví dụ.
 
 # TODO: viết code câu 3 ở đây
-
+san_pham = input("Bạn cần làm app hay làm web ?").lower()
+ngan_sach = int(input("Bạn có ngân sách bao nhiêu ?"))
+if "app" in san_pham and ngan_sach >= 50:
+    print(f"Đủ ngân sách làm app xịn luôn")
+elif "app" in san_pham and ngan_sach < 50 :
+    print(f"Nên làm zalo miniapp cho tiết kiệm")
+else:
+    print(f"Làm web cho tiện")
 
 # ---------- CÂU 4 — SỬA LỖI (3 lỗi) ----------
 # Bỏ dấu # ở 4 dòng dưới, chạy, đọc lỗi và sửa cho tới khi:
 #   với diem = 8 in ra:  Khách đánh giá tốt!
 # (Gợi ý 3 lỗi: một dấu bị dùng sai chỗ, một dòng thiếu ký tự cuối, một dòng quên thụt lề)
 
-# diem = 8
-# if diem = 5:
-#     print("Khách đánh giá trung bình")
-# elif diem >= 7
-# print("Khách đánh giá tốt!")
+diem = 8
+if diem < 5:
+    print("Khách đánh giá trung bình")
+elif diem >= 7:
+    print("Khách đánh giá tốt!")

@@ -44,6 +44,6 @@ Ghi chú: tuần 4 trở đi sẽ quay lại làm **Bước 6** của website (g
 ## TIẾN ĐỘ
 
 - [x] Tuần 1 — Bài 1: Biến & kiểu dữ liệu — ĐẠT 16/07/2026 (logic 4/4; ghi chú: chú ý khớp định dạng output từng ký tự)
-- [ ] Tuần 1 — Bài 2: if/else & input ← **BẠN Ở ĐÂY**
-- [ ] Tuần 1 — Bài 3: Mini-project "chatbot ngốc" phiên bản console
+- [x] Tuần 1 — Bài 2: if/else & input — ĐẠT 16/07/2026 (ghi chú: câu 2 sửa dữ liệu thay vì dùng .lower() trong code — trả nợ ở Bài 3 yêu cầu 3)
+- [ ] Tuần 1 — Bài 3: Mini-project "chatbot ngốc" console (while + break) ← **BẠN Ở ĐÂY**
 - (các bài sau sẽ được giao dần khi bạn hoàn thành)
