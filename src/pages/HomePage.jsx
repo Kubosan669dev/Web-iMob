@@ -1,4 +1,6 @@
 import Hero from "../sections/Hero.jsx";
+import About from "../sections/About.jsx";
+import Services from "../sections/Services.jsx";
 
 // HomePage: ghép các section theo thứ tự kế hoạch.
 // Placeholder còn lại sẽ được thay dần ở Bước 4-6.
@@ -24,8 +26,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <PlaceholderSection id="about" title="About" note="Sẽ xây ở Bước 4" />
-      <PlaceholderSection id="services" title="Services" note="Sẽ xây ở Bước 4" />
+      <About />
+      <Services />
       <PlaceholderSection id="projects" title="Projects" note="Sẽ xây ở Bước 5" />
       <PlaceholderSection id="chatbot" title="AI Chatbot" note="Sẽ xây ở Bước 6" />
       <PlaceholderSection id="contact" title="Contact" note="Sẽ xây ở Bước 5" />

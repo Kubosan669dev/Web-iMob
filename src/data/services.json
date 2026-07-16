@@ -1,0 +1,35 @@
+[
+  {
+    "id": "zalo-miniapp",
+    "icon": "smartphone",
+    "title": "Phát triển Zalo MiniApp",
+    "description": "Xây dựng Zalo Mini App — kênh ứng dụng gọn nhẹ chạy trực tiếp trên Zalo, giúp doanh nghiệp tiếp cận hàng triệu người dùng mà không cần cài đặt.",
+    "features": [
+      "Thiết kế UI/UX theo nhận diện thương hiệu",
+      "Tích hợp thanh toán, đặt lịch, CSKH",
+      "Vận hành & bảo trì trọn gói"
+    ]
+  },
+  {
+    "id": "software-hardware",
+    "icon": "cpu",
+    "title": "Giải pháp Phần mềm & Phần cứng",
+    "description": "Phần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh, tích hợp đồng bộ toàn hệ thống.",
+    "features": [
+      "Phần mềm quản lý may đo theo nghiệp vụ",
+      "Thiết bị IoT & phần cứng thông minh",
+      "Tích hợp đồng bộ hệ thống sẵn có"
+    ]
+  },
+  {
+    "id": "digital-training",
+    "icon": "graduation-cap",
+    "title": "Đào tạo Chuyển đổi số",
+    "description": "Chương trình đào tạo thực chiến giúp đội ngũ của bạn làm chủ công cụ số và AI, áp dụng ngay vào công việc hằng ngày.",
+    "features": [
+      "Lộ trình thiết kế theo từng doanh nghiệp",
+      "Thực hành công cụ số & AI tại chỗ",
+      "Đồng hành hỗ trợ sau đào tạo"
+    ]
+  }
+]

@@ -71,6 +71,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Anchor không bị navbar (fixed, cao 64-72px) che mất tiêu đề section */
+  section[id] {
+    scroll-margin-top: 80px;
+  }
+
   body {
     @apply bg-night font-sans text-gray-200 antialiased;
   }
