@@ -1,6 +1,7 @@
+import Hero from "../sections/Hero.jsx";
+
 // HomePage: ghép các section theo thứ tự kế hoạch.
-// Bước 2: dùng placeholder để test Navbar (scroll effect + scroll-spy).
-// Bước 3-6 sẽ thay từng placeholder bằng section thật.
+// Placeholder còn lại sẽ được thay dần ở Bước 4-6.
 
 function PlaceholderSection({ id, title, note }) {
   return (
@@ -22,7 +23,7 @@ function PlaceholderSection({ id, title, note }) {
 export default function HomePage() {
   return (
     <>
-      <PlaceholderSection id="home" title="Hero" note="Sẽ xây ở Bước 3" />
+      <Hero />
       <PlaceholderSection id="about" title="About" note="Sẽ xây ở Bước 4" />
       <PlaceholderSection id="services" title="Services" note="Sẽ xây ở Bước 4" />
       <PlaceholderSection id="projects" title="Projects" note="Sẽ xây ở Bước 5" />
