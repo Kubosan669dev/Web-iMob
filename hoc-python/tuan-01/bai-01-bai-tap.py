@@ -16,6 +16,11 @@
 #   Mình là <ho_ten>, <tuoi> tuổi, sống ở <thanh_pho>.
 
 # TODO: viết code câu 1 ở đây
+ho_ten = "Nam"
+tuoi  = 20
+thanh_pho = "Ha Long"
+dang_di_hoc = True
+print(f"Mình là  {ho_ten}, {tuoi} tuổi, sống ở {thanh_pho}." )
 
 
 # ---------- CÂU 2 ----------
@@ -26,27 +31,32 @@
 # Gợi ý: tiền = so_token / 1000 * don_gia
 
 # TODO: viết code câu 2 ở đây
-
+so_token = 2350000
+don_gia = 0.5
+tien_phai_tra = so_token / 1000 * don_gia
+print(f"Dùng {so_token} token, phải trả {tien_phai_tra}")
 
 # ---------- CÂU 3 ----------
 # Cho tin nhắn sau (giữ nguyên dòng này):
 tin_nhan = "Bên bạn có làm app quản lý bán hàng cho shop nhỏ không?"
 
-# a) In số ký tự của tin nhắn
-# b) In số từ của tin nhắn
+# a) In số ký tự của tin nhắn (len)
+# b) In số từ của tin nhắn len(.sprilt)
 # c) In tin nhắn viết HOA toàn bộ — tự tìm hiểu: thử gõ  tin_nhan.  rồi xem
 #    VSCode gợi ý những hàm nào (mẹo: tên hàm cần tìm là 'upper')
 
 # TODO: viết code câu 3 ở đây
-
+print(f"Số kí tự {len(tin_nhan)}")
+print(f"Số từ : {len(tin_nhan.split())}")
+print(f"{tin_nhan.upper()}")
 
 # ---------- CÂU 4 — SỬA LỖI (kỹ năng quan trọng nhất!) ----------
 # Đoạn code dưới đây có 3 LỖI. Bỏ dấu # ở 3 dòng code, chạy, đọc thông báo lỗi,
 # sửa từng lỗi một cho tới khi in ra:  Bot Alpha đã trả lời 15 câu hỏi
 
-# ten_bot = Bot Alpha
-# so_cau = "15"
-# print(f"{ten_bot} đã trả lời {so_cau + 5 - 5} câu hỏi")
+ten_bot = "Bot Alpha"
+so_cau = 15
+print(f"{ten_bot} đã trả lời {so_cau + 5 - 5} câu hỏi")
 
 # (Gợi ý: chuỗi phải có ngoặc kép; "15" đang là chuỗi chứ không phải số —
 #  không cộng trừ được với số. Nghĩ xem nên khai báo lại thế nào.)
