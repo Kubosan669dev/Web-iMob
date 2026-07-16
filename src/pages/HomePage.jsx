@@ -1,6 +1,8 @@
 import Hero from "../sections/Hero.jsx";
 import About from "../sections/About.jsx";
 import Services from "../sections/Services.jsx";
+import Projects from "../sections/Projects.jsx";
+import Contact from "../sections/Contact.jsx";
 
 // HomePage: ghép các section theo thứ tự kế hoạch.
 // Placeholder còn lại sẽ được thay dần ở Bước 4-6.
@@ -28,9 +30,9 @@ export default function HomePage() {
       <Hero />
       <About />
       <Services />
-      <PlaceholderSection id="projects" title="Projects" note="Sẽ xây ở Bước 5" />
+      <Projects />
       <PlaceholderSection id="chatbot" title="AI Chatbot" note="Sẽ xây ở Bước 6" />
-      <PlaceholderSection id="contact" title="Contact" note="Sẽ xây ở Bước 5" />
+      <Contact />
     </>
   );
 }

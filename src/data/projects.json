@@ -1,0 +1,50 @@
+[
+  {
+    "id": "spa-booking-miniapp",
+    "icon": "calendar-check",
+    "theme": "purple",
+    "title": "Zalo MiniApp đặt lịch Spa",
+    "description": "Mini app đặt lịch, tích điểm và chăm sóc khách hàng cho chuỗi spa — chạy trực tiếp trên Zalo, không cần cài đặt.",
+    "tags": ["Zalo MiniApp", "Booking"]
+  },
+  {
+    "id": "smart-warehouse",
+    "icon": "package",
+    "theme": "blue",
+    "title": "Hệ thống quản lý kho thông minh",
+    "description": "Phần mềm quản lý kho kết hợp thiết bị quét IoT: theo dõi tồn kho thời gian thực, cảnh báo tự động.",
+    "tags": ["Phần mềm", "IoT"]
+  },
+  {
+    "id": "ecommerce-web",
+    "icon": "shopping-cart",
+    "theme": "cyan",
+    "title": "Website thương mại điện tử",
+    "description": "Website bán hàng chuẩn SEO, tối ưu tốc độ, tích hợp thanh toán và quản lý đơn hàng tập trung.",
+    "tags": ["Website", "E-commerce"]
+  },
+  {
+    "id": "ai-support-chatbot",
+    "icon": "bot",
+    "theme": "purple",
+    "title": "Chatbot CSKH tích hợp AI",
+    "description": "Trợ lý ảo trả lời khách 24/7 bằng tiếng Việt, học từ dữ liệu doanh nghiệp, bàn giao kèm dashboard theo dõi.",
+    "tags": ["AI", "Chatbot"]
+  },
+  {
+    "id": "restaurant-app",
+    "icon": "utensils",
+    "theme": "blue",
+    "title": "Ứng dụng quản lý nhà hàng",
+    "description": "App gọi món tại bàn, quản lý bếp và doanh thu — đồng bộ realtime giữa thu ngân, bếp và quản lý.",
+    "tags": ["Mobile", "POS"]
+  },
+  {
+    "id": "digital-training-program",
+    "icon": "presentation",
+    "theme": "cyan",
+    "title": "Đào tạo chuyển đổi số doanh nghiệp",
+    "description": "Chương trình đào tạo 8 tuần cho 200+ nhân sự: làm chủ công cụ số và AI áp dụng ngay vào quy trình thật.",
+    "tags": ["Training", "AI"]
+  }
+]
