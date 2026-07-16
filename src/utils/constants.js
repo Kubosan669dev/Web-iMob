@@ -31,6 +31,15 @@ export const NAV_ITEMS = [
   { id: "contact", label: "CONTACT", href: "#contact" },
 ];
 
+// Mạng xã hội hiển thị ở Footer — id khớp với icon map trong Footer.jsx,
+// thay href "#" bằng link thật khi có.
+export const SOCIAL_LINKS = [
+  { id: "facebook", label: "Facebook", href: "#" },
+  { id: "youtube", label: "YouTube", href: "#" },
+  { id: "linkedin", label: "LinkedIn", href: "#" },
+  { id: "github", label: "GitHub", href: "#" },
+];
+
 // Base URL của backend AI Python — đặt trong file .env (VITE_API_URL).
 // Để trống = gọi tương đối /api/* (đã có proxy trong vite.config.js).
 export const API_BASE_URL = import.meta.env.VITE_API_URL || "";

@@ -216,6 +216,7 @@ async def chat(req: ChatRequest):
 6. Commit theo bước, message rõ ràng — đừng dồn 3 bước 1 commit
 7. Test mobile bằng DevTools NGAY trong lúc làm, đừng để đến Bước 7
 8. **ESLint 10 + eslint-plugin-react-hooks v7**: `configs.recommended` của plugin vẫn là format cũ (legacy) → khai báo thủ công trong `eslint.config.js`: `plugins: { "react-hooks": reactHooks }` + bật từng rule (`rules-of-hooks: error`, `exhaustive-deps: warn`)
+9. **lucide-react v1.x đã GỠ brand icons** (Facebook, YouTube, LinkedIn, GitHub…) — không import chúng từ lucide; dùng SVG inline trong `components/icons/BrandIcons.jsx` (path theo simple-icons), không cần thêm thư viện
 
 ---
 
