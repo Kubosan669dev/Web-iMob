@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — nguồn duy nhất cho màu / font / hiệu ứng.
+   Palette lấy theo phân tích imob.vn:
+   nền đen + blue-500 (#3b82f6) + purple-500 (#a855f7) + cyan-400 (#22d3ee)
+   Component chỉ dùng token/utility, KHÔNG hardcode mã màu.
+   ============================================================ */
+@theme {
+  /* --- Fonts (self-host qua @fontsource, import trong main.jsx) --- */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", monospace;
+
+  /* --- Nền & bề mặt --- */
+  --color-night: #05050a; /* nền chính: đen ánh xanh */
+  --color-surface: #0b0b14; /* nền panel / card */
+
+  /* --- Màu thương hiệu (alias ngữ nghĩa của thang Tailwind) --- */
+  --color-primary: #3b82f6; /* = blue-500 */
+  --color-accent: #a855f7; /* = purple-500 */
+  --color-neon: #22d3ee; /* = cyan-400 */
+
+  /* --- Glow shadows (dùng: shadow-glow-blue, hover:shadow-glow-purple...) --- */
+  --shadow-glow-blue: 0 0 24px rgba(59, 130, 246, 0.35);
+  --shadow-glow-purple: 0 0 24px rgba(168, 85, 247, 0.35);
+  --shadow-glow-cyan: 0 0 24px rgba(34, 211, 238, 0.3);
+
+  /* --- Animations (dùng: animate-float, animate-glow-pulse...) --- */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
+  --animate-gradient-x: gradient-x 6s ease infinite;
+  --animate-spin-slow: spin-slow 14s linear infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  @keyframes gradient-x {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* ---------------- Base ---------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-night font-sans text-gray-200 antialiased;
+  }
+
+  ::selection {
+    @apply bg-purple-500/40 text-white;
+  }
+
+  /* Scrollbar tối giản hợp dark theme */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-night);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(59, 130, 246, 0.6),
+      rgba(168, 85, 247, 0.6)
+    );
+    border-radius: 8px;
+  }
+}
+
+/* ---------------- Custom utilities ---------------- */
+
+/* Chữ gradient thương hiệu: blue-400 → purple-400 → cyan-400 (giống heading imob) */
+@utility text-gradient {
+  background-image: linear-gradient(90deg, #60a5fa, #c084fc, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Nền kính mờ (glassmorphism) cho card / navbar / panel */
+@utility glass {
+  background-color: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+}
