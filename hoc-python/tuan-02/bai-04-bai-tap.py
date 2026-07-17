@@ -14,12 +14,15 @@
 # c) In thêm dòng:  Tổng cộng: 4 dịch vụ   (dùng len, đừng gõ số 4 cứng!)
 
 # TODO: viết code câu 1 ở đây
-
-
+ds_dich_vu =["Zalo Mini App","Website","Chuyển đổi số","Phần mềm"]
+print("\nMENU DỊCH VỤ")
+stt = 1
+for dv in ds_dich_vu:
+    print(f"{stt}. {dv}")
+    stt +=1
+    
 # ---------- CÂU 2 — QUÉT TỪ KHÓA BẰNG LIST ----------
 # Cho (giữ nguyên 2 dòng):
-cau_hoi = "shop ơi làm cái web bán hàng tốn kém lắm không"
-tu_khoa_gia = ["giá", "bao nhiêu", "chi phí", "tốn"]
 
 # Viết vòng for + cờ (flag) như phần 5 file ví dụ:
 #   nếu cau_hoi chứa 1 trong các từ khóa → in  Phát hiện khách hỏi giá!
@@ -28,7 +31,17 @@ tu_khoa_gia = ["giá", "bao nhiêu", "chi phí", "tốn"]
 
 # TODO: viết code câu 2 ở đây
 
-
+cau_hoi = "shop ơi làm cái web bán hàng tốn kém lắm không"
+tu_khoa_gia = ["giá", "bao nhiêu", "chi phí", "tốn"]
+khach_dat_hang = False
+for tk in tu_khoa_gia:
+    if tk in cau_hoi:
+        khach_dat_hang = True
+        break
+if khach_dat_hang:
+    print(f"Chờ nhé")
+else:
+    print(f"Bạn cần xem menu k")
 # ---------- CÂU 3 — BOT KUBO CÓ TRÍ NHỚ ----------
 # Nâng cấp chatbot bài 3 (chép phần code bot của bạn sang đây rồi sửa):
 #   1. Trước vòng while: tạo  lich_su = []
@@ -39,8 +52,16 @@ tu_khoa_gia = ["giá", "bao nhiêu", "chi phí", "tốn"]
 #        - in  === Lịch sử hội thoại ===
 #        - in từng tin nhắn trong lich_su có đánh số 1. 2. 3...
 # Test: chat 3-4 câu rồi bye, lịch sử phải đủ và đúng thứ tự.
-
-# TODO: viết code câu 3 ở đây
+lich_su = []
+while True:
+    cau = input("Khách :").lower()
+    lich_su.append(cau)
+    
+    if "tạm biệt" in cau or "bye" in cau:
+        print(f"Hẹn gặp lại")
+        break
+    else:
+        print(f"Bot xin nghe")
 
 
 # ---------- CÂU 4 — SỬA LỖI (3 lỗi) ----------
