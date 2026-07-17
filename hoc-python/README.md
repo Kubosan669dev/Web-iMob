@@ -45,5 +45,7 @@ Ghi chú: tuần 4 trở đi sẽ quay lại làm **Bước 6** của website (g
 
 - [x] Tuần 1 — Bài 1: Biến & kiểu dữ liệu — ĐẠT 16/07/2026 (logic 4/4; ghi chú: chú ý khớp định dạng output từng ký tự)
 - [x] Tuần 1 — Bài 2: if/else & input — ĐẠT 16/07/2026 (ghi chú: câu 2 sửa dữ liệu thay vì dùng .lower() trong code — trả nợ ở Bài 3 yêu cầu 3)
-- [ ] Tuần 1 — Bài 3: Mini-project "chatbot ngốc" console (while + break) ← **BẠN Ở ĐÂY**
+- [x] Tuần 1 — Bài 3: Mini-project chatbot console — ĐẠT 16/07/2026 🎉 (bot Kubo: while True + .lower() + 4 nhánh + bonus đếm câu; tự sửa: đưa nhánh tạm biệt lên đầu)
+- [ ] Tuần 2 — Bài 4: List & vòng lặp for (từ khóa dạng list + lịch sử chat) ← **BẠN Ở ĐÂY**
+- [ ] Tuần 2 — Bài 5: Dict (cấu trúc của JSON)
 - (các bài sau sẽ được giao dần khi bạn hoàn thành)

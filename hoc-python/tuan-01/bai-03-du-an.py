@@ -50,3 +50,27 @@
 # ============================================================
 
 # TODO: viết chatbot của bạn từ đây ↓
+ten_bot = "Kubo"
+cau_tra_loi = 0
+print(f"Xin chào tôi là bot {ten_bot}, tôi có thể giúp gì bạn ?")
+while True:
+    cau_hoi = input("Bạn: ").lower()
+    if "giá" in cau_hoi or "bao nhiêu" in cau_hoi:
+        print(f"Mình đưa ra mức giá này")
+        cau_tra_loi +=1
+    elif "chào" in cau_hoi or "hello" in cau_hoi or "hi" in cau_hoi:
+        print(f"Xin chào bạn, bạn cần tôi giúp gì nào")
+        cau_tra_loi +=1
+    elif "liên hệ" in cau_hoi or "sđt" in cau_hoi or "gọi" in cau_hoi:
+        print(f"Hãy liên hệ với số này")
+        cau_tra_loi +=1
+    elif "dịch vụ" in cau_hoi:
+        print(f"Chúng tôi có các dịch vụ sau")
+        cau_tra_loi +=1
+    elif "bye" in cau_hoi or "tạm biệt" in cau_hoi:
+        print(f"Hẹn gặp lại, hôm nay tôi đã trả lời được {cau_tra_loi} câu hỏi ")
+        break
+    else:
+        print(f"Vui lòng nhập lại")
+  
+        
