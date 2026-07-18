@@ -220,9 +220,9 @@ async def chat(req: ChatRequest):
 
 ---
 
-## 9. TRẠNG THÁI HIỆN TẠI (cập nhật 16/07/2026)
+## 9. TRẠNG THÁI HIỆN TẠI (cập nhật 17/07/2026)
 
 - ✅ **Bước 1–5 đã hoàn thành** (commits: `44a3d99` → `7ec9b24`): design system, layout, Hero, About + Services, Projects + Contact. Chạy thử: `npm run dev` → http://localhost:5173
-- ⏸ **Bước 6 (AI Chatbot UI) + Bước 7 (Polish) TẠM DỪNG** — chủ dự án chuyển sang học Python theo lộ trình trong `hoc-python/README.md` để tự build backend chatbot (mục 7b)
-- Trên trang chủ còn đúng 1 placeholder `#chatbot` — sẽ thay khi làm tiếp Bước 6
-- Khi quay lại: nói "tiếp tục Bước 6" là làm tiếp theo kế hoạch này
+- ✅ **Bước 6 (AI Chatbot) — XONG GIAO DIỆN, để trống "bộ não"**: đã có đủ widget nổi, khung chat kiểu ChatGPT (ChatWidget/ChatWindow/MessageBubble/TypingIndicator/ChatInput), hook `useChat` (lịch sử + hiệu ứng gõ chữ), section `ChatbotIntro`, nút Chat AI ở Hero mở widget. **Phần trả lời (`chatService.js`) hiện là stub** trả về câu "đang phát triển" — chưa có dữ liệu mẫu (đã xóa `chatResponses.json`). Khi build AI: chỉ điền logic vào hàm `sendMessage()`, UI không phải sửa.
+- ⏸ **Chưa commit** — chờ chủ dự án xem/duyệt
+- Bước 7 (Polish) + backend Python (mục 7b) làm sau
