@@ -1,6 +1,11 @@
 # Dependencies
 node_modules
 
+# Python backend
+backend/.venv
+__pycache__
+*.pyc
+
 # Build output
 dist
 dist-ssr

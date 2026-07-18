@@ -6,6 +6,7 @@ import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import AnimatedGridBackground from "../components/ui/AnimatedGridBackground.jsx";
 import { SITE } from "../utils/constants.js";
+import { openChat } from "../utils/chatBus.js";
 
 /* ================= Entrance animation (stagger) ================= */
 const container = {
@@ -168,8 +169,7 @@ export default function Hero() {
             <Button href="#contact" size="lg">
               Liên hệ <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
-            {/* Bước 6 sẽ đổi nút này thành mở ChatWidget; tạm cuộn tới section chatbot */}
-            <Button href="#chatbot" variant="outline" size="lg">
+            <Button onClick={openChat} variant="outline" size="lg">
               <MessageCircle className="h-4 w-4" aria-hidden="true" /> Chat AI
             </Button>
           </motion.div>

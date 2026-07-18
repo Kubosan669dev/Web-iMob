@@ -118,3 +118,28 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(59, 130, 246, 0.18);
 }
+
+/* ---------------- Chatbot markdown ----------------
+   react-markdown xuất ra thẻ HTML thuần (p, ul, strong...) không có
+   class — Tailwind preflight lại xoá hết margin/list-style mặc định,
+   nên phải tự thêm style cho đúng khu vực bong bóng chat của bot. */
+@layer components {
+  .chat-markdown p {
+    @apply mb-2 last:mb-0;
+  }
+  .chat-markdown strong {
+    @apply font-semibold text-white;
+  }
+  .chat-markdown ul {
+    @apply mb-2 list-disc space-y-1 pl-5 last:mb-0;
+  }
+  .chat-markdown ol {
+    @apply mb-2 list-decimal space-y-1 pl-5 last:mb-0;
+  }
+  .chat-markdown code {
+    @apply rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.85em] text-cyan-300;
+  }
+  .chat-markdown a {
+    @apply text-cyan-300 underline underline-offset-2 hover:text-cyan-200;
+  }
+}
