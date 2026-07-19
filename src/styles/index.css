@@ -84,6 +84,28 @@
     @apply bg-purple-500/40 text-white;
   }
 
+  /* ---- Tôn trọng "giảm chuyển động" của hệ điều hành ----
+     Người bị say chuyển động / nhạy cảm với hiệu ứng có thể bật tuỳ chọn này
+     (Windows: Cài đặt → Trợ năng → Hiệu ứng hình ảnh → Hiệu ứng động).
+     Khi đó tắt hết animation CSS lặp vô hạn (float, glow-pulse, ping, spin)
+     và cuộn mượt. Hiệu ứng của thư viện motion đã được xử lý riêng
+     bằng <MotionConfig reducedMotion="user"> trong App.jsx.
+     Lưu ý: KHÔNG dùng animation:none — vài hiệu ứng cần chạy tới khung hình
+     cuối để hiện đúng; rút còn 0.01ms là cách an toàn, phổ biến. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Scrollbar tối giản hợp dark theme */
   ::-webkit-scrollbar {
     width: 10px;

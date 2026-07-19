@@ -102,17 +102,19 @@ export default function Footer() {
                 );
               })}
             </div>
+            {/* shrink-0 + mt-0.5: icon giữ nguyên kích thước và neo ở dòng đầu
+                khi chữ dài phải xuống dòng (địa chỉ trên màn hình hẹp) */}
             <div className="space-y-2 text-sm text-gray-400">
-              <p className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
+              <p className="flex items-start gap-2">
+                <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
                 {SITE.phone}
               </p>
-              <p className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
-                {SITE.email}
+              <p className="flex items-start gap-2">
+                <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
+                <span className="break-all">{SITE.email}</span>
               </p>
-              <p className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
+              <p className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
                 {SITE.address}
               </p>
             </div>

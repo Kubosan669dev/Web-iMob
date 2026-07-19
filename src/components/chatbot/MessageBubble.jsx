@@ -1,13 +1,24 @@
+import { lazy, Suspense } from "react";
 import { Bot, User } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+
+// react-markdown nặng (~150kB) mà chỉ tin nhắn của BOT mới cần.
+// lazy() đẩy nó ra file riêng, trình duyệt chỉ tải khi thật sự có bong bóng
+// bot xuất hiện → trang chủ nhẹ đi đáng kể.
+// Trong lúc chờ, Suspense hiện tạm text thô (chớp mắt là xong).
+const ReactMarkdown = lazy(() => import("react-markdown"));
 
 // MessageBubble: 1 dòng chat — bot bên trái (avatar Bot, nền kính mờ,
 // render markdown), user bên phải (avatar người, nền gradient đặc).
 // Tin của user luôn là text người tự gõ nên hiển thị THÔ (không qua
 // markdown) — vừa an toàn vừa đúng ý người gõ (không lo lỡ tay gõ
 // ký tự * _ # làm lệch định dạng).
-export default function MessageBubble({ role, text }) {
+//
+// plain = true: hiện text thô kể cả tin của bot. Dùng cho mockup tĩnh ở
+// trang chủ — chữ mẫu do mình tự viết, không có markdown, nên khỏi tải
+// thư viện markdown chỉ để trang trí.
+export default function MessageBubble({ role, text, plain = false }) {
   const isBot = role === "bot";
+  const dungMarkdown = isBot && !plain;
 
   return (
     <div className={`flex items-end gap-2.5 ${isBot ? "" : "flex-row-reverse"}`}>
@@ -34,9 +45,11 @@ export default function MessageBubble({ role, text }) {
             : "rounded-br-sm bg-gradient-to-br from-purple-500 to-blue-500 text-white")
         }
       >
-        {isBot ? (
+        {dungMarkdown ? (
           <div className="chat-markdown">
-            <ReactMarkdown>{text}</ReactMarkdown>
+            <Suspense fallback={text}>
+              <ReactMarkdown>{text}</ReactMarkdown>
+            </Suspense>
           </div>
         ) : (
           text

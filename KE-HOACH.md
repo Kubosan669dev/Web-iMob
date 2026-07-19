@@ -220,9 +220,24 @@ async def chat(req: ChatRequest):
 
 ---
 
-## 9. TRẠNG THÁI HIỆN TẠI (cập nhật 17/07/2026)
+## 9. TRẠNG THÁI HIỆN TẠI (cập nhật 19/07/2026)
 
-- ✅ **Bước 1–5 đã hoàn thành** (commits: `44a3d99` → `7ec9b24`): design system, layout, Hero, About + Services, Projects + Contact. Chạy thử: `npm run dev` → http://localhost:5173
-- ✅ **Bước 6 (AI Chatbot) — XONG GIAO DIỆN, để trống "bộ não"**: đã có đủ widget nổi, khung chat kiểu ChatGPT (ChatWidget/ChatWindow/MessageBubble/TypingIndicator/ChatInput), hook `useChat` (lịch sử + hiệu ứng gõ chữ), section `ChatbotIntro`, nút Chat AI ở Hero mở widget. **Phần trả lời (`chatService.js`) hiện là stub** trả về câu "đang phát triển" — chưa có dữ liệu mẫu (đã xóa `chatResponses.json`). Khi build AI: chỉ điền logic vào hàm `sendMessage()`, UI không phải sửa.
-- ⏸ **Chưa commit** — chờ chủ dự án xem/duyệt
-- Bước 7 (Polish) + backend Python (mục 7b) làm sau
+### ✅ TOÀN BỘ 7 BƯỚC ĐÃ HOÀN THÀNH
+
+- ✅ **Bước 1–5** (commits `44a3d99` → `7ec9b24`): design system, layout, Hero, About + Services, Projects + Contact
+- ✅ **Bước 6 — AI Chatbot, CHẠY THẬT** (commit `f504ea3`): giao diện đầy đủ + backend Python `backend/` (FastAPI + Ollama qwen2.5:3b chạy local) + lá chắn `guard.py` + bot dự phòng rule-based khi backend tắt. Đánh giá 74 câu: **0 lỗi đỏ**. Hướng dẫn dễ hiểu: [HUONG-DAN-CHATBOT.md](HUONG-DAN-CHATBOT.md), chi tiết kỹ thuật: [CHATBOT.md](CHATBOT.md)
+- ✅ **Bước 7 — Polish** (19/07/2026):
+  - **Giảm chuyển động**: `<MotionConfig reducedMotion="user">` (phủ toàn bộ motion) + `@media (prefers-reduced-motion)` trong `index.css` (phủ animation CSS) + `useReducedMotion` trong `useChat` (tắt hiệu ứng gõ chữ)
+  - **SEO**: Open Graph + Twitter Card + `theme-color` + canonical + robots trong `index.html`
+  - **Hiệu năng**: bundle chính **543 kB → 401 kB** (gzip 173 → 128 kB) nhờ tách `react-markdown` (116 kB), `ChatWindow` và `UiKitPage` thành chunk riêng bằng `lazy()`. Hết cảnh báo >500 kB
+  - **Sửa lỗi mobile**: nút nổi từng đè lên nút Gửi khi chat mở full màn hình → ẩn nút nổi dưới 640px; khoá cuộn nền khi chat full màn hình
+  - **Sửa nội dung sai**: mockup trang chủ từng ghi giá bịa "**30 triệu**" — trái với thiết kế backend (tuyệt đối không báo giá) → đổi thành mời để lại liên hệ
+
+### ⚠️ Việc còn lại trước khi dùng thật
+
+1. 🔴 **Thông tin liên hệ đang là giả** (`+84 900 000 000`, `hotro@example.com`) — sửa ở `src/utils/constants.js` **và** `backend/knowledge.py` (mục `COMPANY`), phải khớp nhau
+2. 🟡 **Chưa có bảng giá** — bot chỉ mời khách để lại liên hệ
+3. 🟡 **og:image** — cần ảnh 1200×630 trong `public/`, và đổi `og:url`/canonical thành tên miền thật khi deploy
+4. 🟡 **Ollama chỉ chạy trên máy dev** — deploy lên mạng phải đổi sang API (Gemini Flash có gói miễn phí), sửa mỗi hàm `hoi_ai()` trong `backend/llm.py`
+5. 🟢 **Responsive**: đã rà bằng đọc code, **chưa render đo thật** ở 375/768/1280 — nên mở DevTools xem lại 3 mức này
+6. 🟢 **Lighthouse**: chưa chạy đo (cần Chrome). DoD còn lại của Bước 7

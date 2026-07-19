@@ -1,8 +1,23 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { MessageCircle, X } from "lucide-react";
-import ChatWindow from "./ChatWindow.jsx";
 import { onOpenChat } from "../../utils/chatBus.js";
+
+// TẢI TRỄ khung chat: ChatWindow kéo theo react-markdown (~150kB) nhưng
+// khách chỉ cần khi thực sự bấm mở chat. lazy() tách nó thành file riêng,
+// trình duyệt chỉ tải lúc mở lần đầu → trang chủ nhẹ hơn hẳn.
+const ChatWindow = lazy(() => import("./ChatWindow.jsx"));
+
+// Khung chờ trong lúc tải file ChatWindow (thường chỉ chớp mắt).
+// Giữ đúng hình dạng panel để không bị "giật" bố cục khi nội dung hiện ra.
+function ChatWindowSkeleton() {
+  return (
+    <div className="glass flex h-full items-center justify-center sm:rounded-2xl">
+      <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-purple-400" />
+      <span className="sr-only">Đang mở khung chat…</span>
+    </div>
+  );
+}
 
 // ChatWidget: nút nổi góc phải màn hình, xuất hiện trên MỌI trang
 // (gắn ở Layout.jsx, không phải trong 1 section) — bấm để mở/đóng
@@ -13,6 +28,18 @@ export default function ChatWidget() {
 
   useEffect(() => onOpenChat(() => setOpen(true)), []);
 
+  // Khoá cuộn trang khi khung chat chiếm TRỌN màn hình điện thoại —
+  // không khoá thì nền phía sau vẫn trôi theo ngón tay, rất rối.
+  // Chỉ áp dụng dưới 640px (sm); ở desktop khung chat chỉ là panel nhỏ,
+  // khoá cuộn cả trang sẽ gây khó chịu.
+  useEffect(() => {
+    if (!open || !window.matchMedia("(max-width: 639px)").matches) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <>
       {/* ---------- Nút nổi ---------- */}
@@ -20,7 +47,14 @@ export default function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Đóng khung chat" : "Mở khung chat với AI"}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-900/40 transition-transform duration-300 hover:scale-110 hover:shadow-glow-purple sm:bottom-6 sm:right-6"
+        // Khi ĐANG MỞ trên điện thoại: ẩn nút này đi.
+        // Lý do: khung chat mở full màn hình, nút nổi (56px, cách mép 20px)
+        // đè trúng nút Gửi của ô nhập (40px, cách mép 12px) — khách bấm Gửi
+        // lại hoá ra bấm đóng chat. Đóng chat đã có dấu X trên header rồi.
+        className={
+          "fixed bottom-5 right-5 z-50 h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-900/40 transition-transform duration-300 hover:scale-110 hover:shadow-glow-purple sm:bottom-6 sm:right-6 sm:flex " +
+          (open ? "hidden sm:flex" : "flex")
+        }
       >
         {/* Vòng pulse mời gọi — chỉ hiện khi đang ĐÓNG, tránh rối mắt lúc chat */}
         {!open && (
@@ -51,7 +85,9 @@ export default function ChatWidget() {
             // Mobile: full màn hình. Từ sm trở lên: panel nổi góc phải, bo góc.
             className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[75vh] sm:w-96"
           >
-            <ChatWindow onClose={() => setOpen(false)} />
+            <Suspense fallback={<ChatWindowSkeleton />}>
+              <ChatWindow onClose={() => setOpen(false)} />
+            </Suspense>
           </motion.div>
         )}
       </AnimatePresence>

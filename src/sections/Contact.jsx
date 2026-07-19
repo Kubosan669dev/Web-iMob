@@ -224,8 +224,9 @@ export default function Contact() {
             ))}
             <Reveal delay={0.3}>
               <p className="rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
-                💡 Bạn cũng có thể hỏi nhanh qua <strong className="text-gray-300">Chat AI</strong> ở
-                góc màn hình — sẽ kích hoạt ở bước tiếp theo.
+                💡 Cần trả lời ngay? Hỏi nhanh trợ lý{" "}
+                <strong className="text-gray-300">Chat AI</strong> ở góc màn
+                hình — hoạt động 24/7.
               </p>
             </Reveal>
           </div>

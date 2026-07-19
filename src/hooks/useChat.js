@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useReducedMotion } from "motion/react";
 import { sendMessage } from "../services/chatService.js";
 
 // ============================================================
@@ -45,6 +46,10 @@ async function typeOutMessage(id, fullText, setMessages) {
 }
 
 export default function useChat() {
+  // Người dùng bật "giảm chuyển động" thì hiện nguyên câu ngay, không gõ dần.
+  // Hiệu ứng này chạy bằng JavaScript nên MotionConfig/CSS không với tới được,
+  // phải tự kiểm tra ở đây.
+  const reduceMotion = useReducedMotion();
   const [messages, setMessages] = useState([GREETING]);
   const [isWaiting, setIsWaiting] = useState(false); // giai đoạn 1: 3 chấm
   const [isTyping, setIsTyping] = useState(false); // bận suốt 2 giai đoạn
@@ -71,9 +76,13 @@ export default function useChat() {
       const { response } = await sendMessage(trimmed, history);
       setIsWaiting(false); // hết chờ mạng → chuyển sang hiện chữ dần
 
-      const botMessage = createMessage("bot", "");
-      setMessages((prev) => [...prev, botMessage]);
-      await typeOutMessage(botMessage.id, response, setMessages);
+      if (reduceMotion) {
+        setMessages((prev) => [...prev, createMessage("bot", response)]);
+      } else {
+        const botMessage = createMessage("bot", "");
+        setMessages((prev) => [...prev, botMessage]);
+        await typeOutMessage(botMessage.id, response, setMessages);
+      }
     } catch (err) {
       setError(err.message);
       setMessages((prev) => [

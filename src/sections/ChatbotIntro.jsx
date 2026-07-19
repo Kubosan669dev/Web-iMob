@@ -9,13 +9,18 @@ import { openChat } from "../utils/chatBus.js";
 
 // Đoạn hội thoại mẫu — TĨNH, chỉ để minh hoạ giao diện thật trông thế nào.
 // Tái dùng MessageBubble thật (Bước 6 vừa xây) thay vì vẽ lại UI lần 2.
+//
+// QUAN TRỌNG: câu trả lời mẫu phải KHỚP với hành vi thật của bot.
+// Bản trước ghi "bắt đầu từ 30 triệu" — một con số KHÔNG có trong dữ liệu,
+// trong khi backend được thiết kế để tuyệt đối không báo giá (xem guard.py).
+// Quảng cáo một đằng, bot trả lời một nẻo là mất lòng tin của khách.
 const PREVIEW_MESSAGES = [
   { id: 1, role: "bot", text: "Xin chào! Mình có thể giúp gì cho bạn? 👋" },
   { id: 2, role: "user", text: "Cho mình hỏi giá làm Zalo MiniApp" },
   {
     id: 3,
     role: "bot",
-    text: "Zalo MiniApp bên mình bắt đầu từ **30 triệu** ạ. Để lại liên hệ, bên mình gửi báo giá chi tiết nhé!",
+    text: "Chi phí tuỳ theo quy mô và tính năng bạn cần ạ. Bạn để lại số điện thoại, bên mình tư vấn và báo giá chi tiết miễn phí trong 24h nhé!",
   },
 ];
 
@@ -79,7 +84,7 @@ export default function ChatbotIntro() {
             </div>
             <div className="space-y-4 px-4 py-5">
               {PREVIEW_MESSAGES.map((m) => (
-                <MessageBubble key={m.id} role={m.role} text={m.text} />
+                <MessageBubble key={m.id} role={m.role} text={m.text} plain />
               ))}
               <TypingIndicator />
             </div>
