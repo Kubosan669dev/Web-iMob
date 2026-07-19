@@ -158,10 +158,10 @@ Còn nếu khách hỏi **"Zalo MiniApp là gì?"** — guard không có từ kh
 | File | Ví như | Làm gì |
 |---|---|---|
 | [main.py](backend/main.py) | **quản lý** | Mở cổng `/api/chat`, điều phối: gọi guard trước, không xong thì gọi AI. Chứa **system prompt** (bản mô tả công việc cho AI). |
-| [guard.py](backend/guard.py) | **lễ tân + bảo vệ** | Bảng từ khóa → câu trả lời cố định. 7 nhóm: chống đánh lừa · ngoài phạm vi · địa chỉ · SĐT · email · liên hệ · giá. |
+| [guard.py](backend/guard.py) | **lễ tân + bảo vệ** | Bảng từ khóa → câu trả lời cố định. 8 nhóm: chống đánh lừa · ngoài phạm vi · địa chỉ · SĐT · email · liên hệ · **tiến độ** · giá. |
 | [knowledge.py](backend/knowledge.py) | **sách công thức** | Đọc thẳng `services.json` + `projects.json` của website → gom thành một đoạn văn cho AI đọc. |
 | [llm.py](backend/llm.py) | **đường dây tới bếp** | Gửi hội thoại sang Ollama, nhận chữ về. Đổi sang AI khác chỉ cần sửa file này. |
-| [danh_gia.py](backend/danh_gia.py) | **thanh tra** | Bắn 74 câu hỏi vào bot, tự dò lỗi, xuất báo cáo. |
+| [danh_gia.py](backend/danh_gia.py) | **thanh tra** | Bắn 77 câu hỏi vào bot, tự dò lỗi, xuất báo cáo. |
 
 ### Frontend — thư mục [src/](src/)
 
@@ -253,15 +253,27 @@ Mở [guard.py](backend/guard.py), thêm vào danh sách `CAC_CHU_DE`:
 },
 ```
 
-**3 luật vàng khi viết từ khóa:**
+**4 luật vàng khi viết từ khóa:**
 
 1. **Viết KHÔNG DẤU** — vì code bỏ dấu câu hỏi trước rồi mới so ("Mấy giờ?" → `may gio`)
 2. **Thứ tự quan trọng** — mục nào đứng trên được ưu tiên. Nhóm chống đánh lừa luôn để đầu.
-3. **Tránh từ đơn dễ đụng** — đây là bug thật đã gặp:
+3. **Tránh từ/cụm dễ đụng** — bug này đã dính **hai lần**:
 
-   > Từng để từ khóa `"gia"`. Nhưng khách hỏi *"khách hàng **đánh giá** bên bạn thế nào"* → bỏ dấu thành `danh gia` → **dính chữ `gia`** → bot tưởng hỏi giá, trả lời bảng giá. 🤦
+   > Lần 1: từ khóa `"gia"` → khách hỏi *"khách hàng **đánh giá** bên bạn thế nào"* → bỏ dấu thành `danh gia` → **dính chữ `gia`** → bot tưởng hỏi giá. 🤦
    >
-   > Cách sửa: chỉ dùng **cụm rõ nghĩa** (`bao gia`, `chi phi`, `bao nhieu tien`).
+   > Lần 2: từ khóa `"tien do"` → khách hỏi *"mình trả **tiền đó** bằng cách nào"* → cũng ra `tien do` → bot tưởng hỏi tiến độ. 🤦🤦
+   >
+   > Cách sửa: chỉ dùng **cụm rõ nghĩa** (`bao gia`, `chi phi`, `tien do du an`).
+
+4. **Thử va chạm TRƯỚC khi tin dùng** — viết nhanh một script liệt kê 2 danh sách: câu *phải* trúng nhóm mới, và câu *không được* trúng. Chạy thử ngay. Đúng cách này đã bắt được bug "tiền đó" trong 10 giây, trước khi nó kịp ra tới khách:
+
+   ```python
+   # trong thu muc backend/, chay: .venv/Scripts/python.exe -c "..."
+   import guard
+   for cau in ["lam mot du an mat bao lau",      # PHAI trung thoi-gian
+               "minh tra tien do bang cach nao"]: # KHONG duoc trung
+       print(cau, "->", guard.kiem_tra(cau) is not None)
+   ```
 
 ### 🔧 Đổi thông tin công ty
 
@@ -327,14 +339,45 @@ Bạn có thể *nhờ* AI đừng làm gì đó. Nhưng nếu chuyện đó **b
 
 Đây không phải mẹo riêng của dự án nhỏ. Các sản phẩm AI thương mại lớn đều làm y hệt: có một lớp lọc chạy **trước** và **sau** model.
 
+### 🔴 Lỗi thứ 5 — loại NGUY HIỂM HƠN, tìm ra khi chạy thật (19/07/2026)
+
+Bộ chấm báo **0 lỗi đỏ**, nhưng chỉ cần gõ tay vài câu là lòi ra ngay:
+
+| Hỏi | Bot trả lời | |
+|---|---|---|
+| "Làm một dự án **mất bao lâu**?" *(có dấu)* | "Dự án mất thời gian tùy quy mô…" | ✅ đúng |
+| "lam mot du an **mat bao lau**" *(không dấu)* | "…dự án **mã bảo mật** lâu dài… thiết bị IoT…" | ❌ lạc đề |
+
+Model đọc `mat bao lau` thành **"mã bảo mật lâu"** rồi tư vấn về an ninh. Khách hỏi **tiến độ**, bot trả lời **bảo mật**.
+
+**Vì sao loại lỗi này nguy hiểm hơn 4 lỗi trước:**
+
+4 lỗi trước đều có dấu hiệu máy dò được — có con số tiền, có chữ "QUY TẮC BẮT BUỘC", thiếu chữ "Hạ Long". Còn lỗi này thì câu trả lời **trôi chảy, lịch sự, đúng văn phong, đúng tên dịch vụ có thật**. Chỉ sai mỗi chủ đề. Máy không có cách nào bắt được.
+
+> ### Bài học phụ: kiểm thử tự động chỉ bắt được lỗi bạn ĐÃ BIẾT cách mô tả.
+>
+> `danh_gia.py` dò 4 dấu hiệu vì đó là 4 lỗi mình từng gặp. Lỗi thứ 5 chưa ai nghĩ tới thì không có dòng code nào chờ sẵn để bắt nó. **Số liệu đẹp không thay được việc ngồi gõ thử.**
+
+**Cách chữa** — thêm nhóm `thoi-gian` vào `guard.py`. Nhưng lúc thêm lại **dính đúng cái bẫy cũ**:
+
+```
+Từ khóa "tien do"  →  "mình trả TIỀN ĐÓ bằng cách nào"
+                       cũng bỏ dấu ra "tien do"  →  bắt nhầm!
+```
+
+Giống hệt vụ "đánh giá" → "danh gia" dính "gia" hồi trước. Sửa bằng cách bỏ cụm trống, chỉ dùng cụm rõ nghĩa: `tien do du an`, `tien do lam`, `tien do the nao`.
+
+Lần này có rút kinh nghiệm: **viết script thử va chạm TRƯỚC khi tin dùng** — 8 câu phải trúng, 10 câu không được trúng. Chính script đó bắt được lỗi "tiền đó" ngay lập tức, không phải chờ khách phàn nàn.
+
 ### ✅ Kết quả sau khi thêm `guard.py`
 
 ```
 Lần 1 (chỉ có AI):        74 câu · 4 lỗi đỏ  ❌
 Lần 2 (AI + lá chắn):     74 câu · 0 lỗi đỏ  ✅
+Lần 3 (thêm nhóm tiến độ): 77 câu · 0 lỗi đỏ  ✅
 
-Trong đó:  20 câu qua lá chắn  → 0.0 giây, chính xác tuyệt đối
-           54 câu qua AI       → trung bình 1.3 giây
+Trong đó:  26 câu qua lá chắn  → 0.0 giây, chính xác tuyệt đối
+           51 câu qua AI       → trung bình 1.2 giây
 ```
 
 Lá chắn còn cho **2 lợi ích miễn phí**: câu hay hỏi nhất trả lời **tức thì**, và **giảm tải** cho GPU.

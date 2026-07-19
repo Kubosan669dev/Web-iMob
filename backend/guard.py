@@ -115,6 +115,38 @@ CAC_CHU_DE = [
             "Hoặc điền form ở mục *Liên hệ* phía dưới trang, bên mình phản hồi trong 24h!"
         ),
     },
+    # Hỏi TIẾN ĐỘ / THỜI GIAN.
+    # Vì sao phải chặn: chạy thử thật cho thấy model đọc SAI tiếng Việt không
+    # dấu — câu "lam mot du an mat bao lau" bị nó hiểu thành "mã bảo mật lâu",
+    # rồi trả lời lạc sang an ninh và IoT. Câu có dấu thì lại trả lời đúng.
+    # Đây là lỗi NGUY HIỂM KIỂU KHÁC: câu chữ trôi chảy, lịch sự, đúng văn
+    # phong — nên bộ chấm tự động không phát hiện được, chỉ người đọc mới thấy.
+    #
+    # LƯU Ý: dữ liệu gốc KHÔNG có con số thời gian nào (xem knowledge.py),
+    # nên ở đây tuyệt đối không được bịa "2-4 tuần" — cùng kỷ luật với giá.
+    {
+        "id": "thoi-gian",
+        # CHÚ Ý: KHÔNG dùng cụm trống "tien do".
+        # Lý do: bỏ dấu xong, "trả TIỀN ĐÓ bằng cách nào" cũng ra "tien do"
+        # → câu hỏi về thanh toán bị hiểu nhầm thành hỏi tiến độ.
+        # (Đúng loại bug đã gặp với "đánh giá" → "danh gia" dính "gia".)
+        "tu_khoa": [
+            "bao lau", "khi nao", "may ngay", "may tuan", "may thang",
+            "thoi han", "deadline", "mat bao nhieu thoi gian",
+            "thoi gian lam", "thoi gian trien khai", "thoi gian hoan thanh",
+            "tien do du an", "tien do lam", "tien do the nao", "tien do ra sao",
+            "lam xong", "bao gio xong", "bao gio co",
+        ],
+        "tra_loi": (
+            "Thời gian phụ thuộc vào **quy mô và số tính năng** của từng dự án "
+            "nên bên mình chưa có mốc cố định ạ.\n\n"
+            "Quy trình bên mình gồm 5 bước: **Ý tưởng → Tư vấn → Thiết kế → "
+            "Triển khai → Đào tạo & bàn giao**, sau bàn giao vẫn có vận hành "
+            "và bảo trì trọn gói.\n\n"
+            f"Bạn mô tả nhu cầu hoặc gọi **{COMPANY['dien_thoai']}**, bên mình "
+            "tư vấn miễn phí và chốt tiến độ cụ thể trong 24h nhé!"
+        ),
+    },
     {
         "id": "gia",
         # CHÚ Ý: KHÔNG dùng từ đơn "gia".

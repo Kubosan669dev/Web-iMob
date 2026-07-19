@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:chat": "node scripts/test-chatbot.mjs",
-    "backend": "backend/.venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000 --app-dir backend"
+    "backend": "backend\\.venv\\Scripts\\python.exe -m uvicorn main:app --reload --port 8000 --app-dir backend"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",

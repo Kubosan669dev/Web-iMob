@@ -65,7 +65,7 @@
     {
       "id": "process-time",
       "category": "quy-trinh",
-      "keywords": ["bao lâu", "thời gian", "quy trình", "tiến độ", "mất bao", "làm trong", "khi nào", "xong", "bao giờ xong", "làm mất", "hoàn thành trong"],
+      "keywords": ["bao lâu", "thời gian", "quy trình", "tiến độ", "tiến độ dự án", "mất bao", "làm trong", "khi nào", "xong", "bao giờ xong", "làm mất", "hoàn thành trong"],
       "answer": "Thời gian tùy phạm vi dự án ạ. Quy trình bên mình:\n\n**Ý tưởng → Tư vấn → Thiết kế → Triển khai → Đào tạo & bàn giao**\n\nBạn mô tả nhu cầu, bên mình ước lượng tiến độ cụ thể nhé!"
     },
     {
