@@ -3,6 +3,9 @@
 > Tài liệu để **review dần** trước khi build. Chưa viết code sản phẩm.
 > Bối cảnh: bot trả lời **FAQ dịch vụ/giá** bằng tiếng Việt cho website iMob.
 > Máy dev: **GTX 1650 (4GB VRAM) + 16GB RAM**. Cập nhật: 17/07/2026.
+>
+> 📖 **Chỉ muốn hiểu bot chạy thế nào và cách dùng?** → đọc [HUONG-DAN-CHATBOT.md](HUONG-DAN-CHATBOT.md)
+> (file này là hồ sơ kế hoạch + kết quả đánh giá, dài và nặng kỹ thuật hơn).
 
 ## Mục lục
 1. [Kết luận nhanh](#1-kết-luận-nhanh)
