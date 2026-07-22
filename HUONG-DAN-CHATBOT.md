@@ -140,9 +140,18 @@ Khách gõ **"Mini app zalo la gi?"** (không dấu) rồi Enter:
 | [components/chatbot/](src/components/chatbot/) | Giao diện: nút nổi, khung chat, bong bóng tin nhắn, ô nhập. |
 | [scripts/test-chatbot.mjs](scripts/test-chatbot.mjs) | Bộ kiểm tra tự động (`npm run test:chat`). |
 
-### Thư mục [backend/](backend/) — **không còn được dùng**
+### Thư mục `backend/` — **đã xóa**
 
-Đây là bản chatbot AI cũ (FastAPI + Ollama). Website **không gọi tới nữa**, nhưng file vẫn giữ trong repo làm tư liệu học: `main.py` (server), `llm.py` (gọi Ollama), `knowledge.py` (gom dữ liệu), `guard.py` (lá chắn chống bịa), `danh_gia.py` + `so_sanh.py` (chấm điểm). Muốn xem nó từng chạy thế nào thì đọc [CHATBOT.md](CHATBOT.md).
+Đây từng là bản chatbot AI (FastAPI + Ollama): `main.py` (server), `llm.py` (gọi Ollama), `knowledge.py` (gom dữ liệu), `guard.py` (lá chắn chống bịa), `danh_gia.py` + `so_sanh.py` (chấm điểm). Đã xóa ngày 22/07/2026 cùng 2 file báo cáo `BAO-CAO-*.md`.
+
+**Code vẫn còn trong git**, muốn xem lại lúc nào cũng được:
+
+```powershell
+git show b2be1d9^:backend/guard.py     # xem nội dung 1 file
+git log --oneline -- backend/          # xem lịch sử cả thư mục
+```
+
+Câu chuyện vì sao bỏ nằm ở [CHATBOT.md](CHATBOT.md) mục 9 và [phần 9](#9-vì-sao-thiết-kế-như-vậy) bên dưới.
 
 ---
 
@@ -216,7 +225,7 @@ Thêm vào mảng `intents` của mục đó:
 
 | `nguon` | Nghĩa là | Mức tin cậy |
 |---|---|---|
-| `web` | Lấy từ dữ liệu website (`company/services/projects/about/faq.json`) | ✅ Chắc chắn đúng |
+| `web` | Lấy từ dữ liệu website (`company` / `services` / `projects` / `about`.json) | ✅ Chắc chắn đúng |
 | `ngoai` | Kiến thức nền tra từ nguồn ngoài — **phải kèm `link`** để sau này kiểm chứng lại | ⚠️ Kiểm tra định kỳ |
 | `soan` | Tự soạn theo tinh thần website | 🔴 **Chủ dự án phải đọc duyệt** |
 
@@ -312,6 +321,8 @@ Trong kho kiến thức **không bao giờ chép tay** số điện thoại — 
 ## 9. Vì sao thiết kế như vậy
 
 Phần này là **bài học rút ra từ thử nghiệm thật**, đáng đọc nhất trong file.
+
+> Các file nhắc tới dưới đây (`guard.py`, `danh_gia.py`, `BAO-CAO-DANH-GIA.md`…) **đã xóa khỏi dự án** ngày 22/07/2026, chỉ còn trong lịch sử git. Giữ lại câu chuyện vì đây chính là lý do dẫn tới thiết kế hiện tại.
 
 ### 🔴 Giai đoạn 1 — bot chỉ có AI
 

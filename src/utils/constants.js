@@ -2,9 +2,9 @@
 // Hằng số toàn site.
 //
 // Thông tin công ty KHÔNG còn viết ở đây nữa — nó nằm trong
-// data/company.json để CHATBOT BACKEND cũng đọc được cùng một file
-// (backend/knowledge.py). Trước đây thông tin bị chép ở 2 nơi, sửa một
-// bên quên bên kia là bot nói sai thông tin công ty.
+// data/company.json để CHATBOT cũng đọc được cùng một file (bot điền vào
+// các chỗ {{cong_ty.*}} trong data/kienThuc.json). Trước đây thông tin bị
+// chép ở 2 nơi, sửa một bên quên bên kia là bot nói sai thông tin công ty.
 //
 // Đổi tên/SĐT/email/địa chỉ → sửa data/company.json, KHÔNG sửa file này.
 // ============================================================

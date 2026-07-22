@@ -18,7 +18,7 @@
         {
           "id": "ngoai-pham-vi",
           "nguon": "soan",
-          "_note": "Chuyển từ backend/guard.py sang. CỐ Ý BỎ từ khoá 'bai toan' mà guard.py đang dùng: 'bài toán' là từ khách hàng thật hay nói ('bên mình có bài toán quản lý kho') và chính website cũng dùng ('hiểu đúng bài toán của bạn') — để nguyên sẽ từ chối nhầm khách thật. Chỉ giữ cụm rõ nghĩa 'giải bài toán'.",
+          "_note": "Chuyển sang từ lá chắn của bản chatbot AI cũ (xem CHATBOT.md mục 9). CỐ Ý BỎ từ khoá 'bai toan' mà bản cũ dùng: 'bài toán' là từ khách hàng thật hay nói ('bên mình có bài toán quản lý kho') và chính website cũng dùng ('hiểu đúng bài toán của bạn') — để nguyên sẽ từ chối nhầm khách thật. Chỉ giữ cụm rõ nghĩa 'giải bài toán'.",
           "keywords": ["phương trình", "giải toán", "giải bài toán", "tích phân", "đạo hàm", "thời tiết", "dự báo", "nấu ăn", "món ngon", "ăn gì", "bóng đá", "chứng khoán", "bitcoin", "xổ số", "tử vi", "bói toán", "kể chuyện cười", "câu chuyện cười", "làm thơ", "viết thơ", "dịch giúp mình", "học tiếng anh"],
           "answer": "Xin lỗi bạn, phần này ngoài phạm vi hỗ trợ của mình ạ 🙏 Mình là trợ lý của **iMob**, chỉ tư vấn được về **dịch vụ công nghệ** như Zalo Mini App, website, phần mềm quản lý và đào tạo chuyển đổi số.\n\nBạn có nhu cầu nào về mấy mảng này không ạ?"
         }
@@ -74,7 +74,7 @@
         {
           "id": "pricing",
           "nguon": "web",
-          "_note": "KHÔNG dùng từ đơn 'gia': bỏ dấu xong 'đánh giá' → 'danh gia' cũng chứa 'gia'. Danh sách 'tru' chặn các câu 'bao nhiêu DỰ ÁN / KHÁCH HÀNG' — hỏi năng lực chứ không hỏi tiền (bug này backend đã dính 3 lần, xem guard.py).",
+          "_note": "KHÔNG dùng từ đơn 'gia': bỏ dấu xong 'đánh giá' → 'danh gia' cũng chứa 'gia'. Danh sách 'tru' chặn các câu 'bao nhiêu DỰ ÁN / KHÁCH HÀNG' — hỏi năng lực chứ không hỏi tiền (bug từ khoá kiểu này dự án đã dính 3 lần, xem CHATBOT.md mục 9).",
           "keywords": ["giá", "bao nhiêu", "chi phí", "chi phí làm", "khoảng nhiêu", "báo giá", "tốn kém", "học phí", "giá cả", "hết bao nhiêu", "giá bao nhiêu", "bảng giá", "mấy triệu", "bao tiền", "nhiêu tiền", "giá thành", "đắt không", "rẻ không", "ngân sách"],
           "tru": ["bao nhiêu dự án", "bao nhiêu khách", "bao nhiêu năm", "bao nhiêu nhân viên", "bao nhiêu người", "mấy dự án"],
           "answer": "Chi phí **tùy theo quy mô và yêu cầu** của từng dự án nên bên mình không có mức cố định ạ 🙏.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}**, bên mình sẽ **tư vấn và báo giá chi tiết miễn phí** {{cong_ty.thoi_gian_phan_hoi}}!"
@@ -357,7 +357,7 @@
     {
       "id": "hop-dong-ban-giao",
       "ten": "Hợp đồng & bàn giao",
-      "mo_ta": "Nguồn: faq.json. ⚠️ Nội dung soạn theo tinh thần website, chủ dự án cần đối chiếu với hợp đồng thật.",
+      "mo_ta": "⚠️ Nội dung soạn theo tinh thần website chứ website chưa hề nói tới — chủ dự án cần đối chiếu với hợp đồng thật.",
       "intents": [
         {
           "id": "source-code",
@@ -377,7 +377,7 @@
     {
       "id": "ho-tro-bao-mat",
       "ten": "Hỗ trợ & bảo mật",
-      "mo_ta": "Nguồn: faq.json + services.json.",
+      "mo_ta": "Bảo hành và cam kết bảo mật. ⚠️ Phần thời hạn/phạm vi cần đối chiếu hợp đồng thật.",
       "intents": [
         {
           "id": "warranty-support",

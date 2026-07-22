@@ -1,16 +1,11 @@
 # Dependencies
 node_modules
 
-# Python backend
-backend/.venv
-__pycache__
-*.pyc
-
 # Build output
 dist
 dist-ssr
 
-# Env — chứa VITE_API_URL / VITE_USE_MOCK khi kết nối backend Python
+# Env — chứa VITE_API_URL khi form Liên hệ cần backend thật
 .env
 .env.local
 .env.*.local

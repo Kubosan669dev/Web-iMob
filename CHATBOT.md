@@ -347,20 +347,16 @@ Câu hỏi khách
 - Muốn chống dụ tốt hơn: cần model 7B hoặc API cloud.
 - Chat chỉ chạy khi **Ollama + backend đang bật** (frontend tự quay về bot v1 khi backend tắt).
 
-### Cách chạy
+### Cách chạy ~~(lúc đó)~~
 
 ```bash
-# 1. Backend (cần Ollama đang chạy)
-npm run backend            # hoặc: cd backend && .venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000
-
-# 2. Frontend
+# ⚠️ CÁC LỆNH NÀY KHÔNG CÒN CHẠY ĐƯỢC — thư mục backend/ đã xóa 22/07/2026
+npm run backend            # backend FastAPI + Ollama
 npm run dev                # http://localhost:5173
-
-# 3. Chấm lại chất lượng bất cứ lúc nào
 cd backend && .venv/Scripts/python.exe danh_gia.py   # → BAO-CAO-DANH-GIA.md
 ```
 
-> ⚠️ **Mục 8 trở lên là hồ sơ lịch sử.** Kiến trúc AI + Ollama mô tả ở trên **đã dừng sử dụng** ngày 22/07/2026 — xem mục 9 bên dưới.
+> ⚠️ **Toàn bộ mục 1–8 là hồ sơ lịch sử.** Kiến trúc AI + Ollama mô tả ở trên **đã dừng sử dụng** ngày 22/07/2026, thư mục `backend/` và 2 file `BAO-CAO-*.md` **đã xóa** khỏi dự án (vẫn còn trong git: `git show b2be1d9^:backend/guard.py`). Xem mục 9 bên dưới.
 
 ---
 
@@ -370,7 +366,16 @@ cd backend && .venv/Scripts/python.exe danh_gia.py   # → BAO-CAO-DANH-GIA.md
 
 Bỏ hẳn tầng AI (FastAPI + Ollama + `qwen2.5:3b`). Chatbot chạy **100% trong trình duyệt**: khớp từ khóa trên một kho kiến thức chia mục.
 
-Thư mục `backend/` **giữ lại trong repo làm tư liệu** nhưng website không gọi tới nữa.
+**Đã xóa khỏi dự án** (cùng ngày, sau khi commit `b2be1d9` giữ lại toàn bộ):
+
+| Xóa | Vì sao |
+|---|---|
+| `backend/` (33 MB, phần lớn là `.venv`) | Không còn được gọi tới |
+| `BAO-CAO-DANH-GIA.md` · `BAO-CAO-SO-SANH.md` | Biên bản chấm bot AI cũ — bài học đã tóm tắt ở mục 9 này |
+| `src/data/faq.json` | Chỉ `backend/knowledge.py` đọc; nội dung đã nằm trong `kienThuc.json` |
+| script `npm run backend` · proxy `/api` trong `vite.config.js` | Không còn backend để trỏ tới |
+
+Lấy lại bất cứ lúc nào: `git show b2be1d9^:backend/guard.py`
 
 ## 9.2. Vì sao
 

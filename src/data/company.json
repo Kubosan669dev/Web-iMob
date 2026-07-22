@@ -1,5 +1,5 @@
 {
-  "_note": "THÔNG TIN CÔNG TY — NGUỒN DUY NHẤT. Cả website (qua utils/constants.js) và chatbot backend (qua backend/knowledge.py) đều đọc file này. Trước đây thông tin bị chép ở 2 nơi nên dễ lệch nhau. Sửa ở đây là cả web lẫn bot cùng cập nhật. ⚠️ phone/email hiện là placeholder — đổi thành thông tin thật trước khi dùng chính thức.",
+  "_note": "THÔNG TIN CÔNG TY — NGUỒN DUY NHẤT. Cả website (qua utils/constants.js) và chatbot (qua services/chatBrain.js, điền vào chỗ {{cong_ty.*}} trong kienThuc.json) đều đọc file này. Trước đây thông tin bị chép ở 2 nơi nên dễ lệch nhau. Sửa ở đây là cả web lẫn bot cùng cập nhật. ⚠️ phone/email hiện là placeholder — đổi thành thông tin thật trước khi dùng chính thức.",
   "name": "iMob",
   "tagline": "Solution & Technology",
   "fullName": "iMob Solution & Technology",

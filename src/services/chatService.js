@@ -8,16 +8,17 @@ import { findAnswer } from "./chatBrain.js";
 // Bot chạy HOÀN TOÀN TRONG TRÌNH DUYỆT: đọc kho kiến thức (kienThuc.json)
 // rồi khớp từ khóa (chatBrain.js). Không gọi mạng, không cần server.
 //
-// Vì sao bỏ backend AI (FastAPI + Ollama)?
+// Vì sao bỏ tầng AI (dự án từng chạy FastAPI + Ollama + qwen2.5:3b)?
 //   - Model 3B chạy local từng BỊA thông tin thật (nói địa chỉ ở "Đống Đa,
-//     Hà Nội" trong khi dữ liệu ghi Hạ Long) — xem BAO-CAO-DANH-GIA.md.
+//     Hà Nội" trong khi dữ liệu ghi Hạ Long).
 //   - Nó đọc sai tiếng Việt không dấu và không tự chống được câu đánh lừa,
-//     nên phải dựng thêm guard.py chặn cứng những câu quan trọng nhất.
+//     nên phải dựng thêm một lớp luật cứng chặn các câu quan trọng nhất.
 //   - Ollama bắt người dùng cài đặt, ăn GPU, và không deploy được lên
 //     hosting tĩnh.
+// Chi tiết đầy đủ ở CHATBOT.md mục 9.
+//
 // Đổi lại, kho kiến thức phải giàu và có tổ chức — đó là việc của
 // src/data/kienThuc.json (muốn bot thông minh hơn thì thêm vào file đó).
-// Thư mục backend/ vẫn còn trong repo làm tư liệu, nhưng website KHÔNG gọi tới.
 //
 // Chữ ký cố định (hợp đồng giữa UI và bộ não):
 //   sendMessage(message, history) → Promise<{ response: string }>

@@ -95,7 +95,7 @@ export function findAnswer(message, knowledge, congTy) {
     // "tru" = danh sách cụm LOẠI TRỪ. Trúng một cụm là bỏ qua intent này.
     // Vì sao cần: có những từ khóa vừa rộng vừa không thể bỏ. "bao nhiêu"
     // là của intent giá, nhưng "bao nhiêu DỰ ÁN" lại là hỏi năng lực.
-    // (Backend đã dính đúng kiểu bug này 3 lần — xem backend/guard.py.)
+    // (Dự án đã dính đúng kiểu bug này 3 lần — xem CHATBOT.md mục 9.)
     const biLoaiTru = (intent.tru ?? []).some((cum) =>
       text.includes(normalize(cum))
     );

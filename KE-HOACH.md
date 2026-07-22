@@ -225,7 +225,7 @@ async def chat(req: ChatRequest):
 ### ✅ TOÀN BỘ 7 BƯỚC ĐÃ HOÀN THÀNH
 
 - ✅ **Bước 1–5** (commits `44a3d99` → `7ec9b24`): design system, layout, Hero, About + Services, Projects + Contact
-- ✅ **Bước 6 — AI Chatbot, CHẠY THẬT** (commit `f504ea3`): giao diện đầy đủ + backend Python `backend/` (FastAPI + Ollama qwen2.5:3b chạy local) + lá chắn `guard.py` + bot dự phòng rule-based khi backend tắt. Đánh giá 74 câu: **0 lỗi đỏ**. Hướng dẫn dễ hiểu: [HUONG-DAN-CHATBOT.md](HUONG-DAN-CHATBOT.md), chi tiết kỹ thuật: [CHATBOT.md](CHATBOT.md)
+- ✅ **Bước 6 — Chatbot** (commit `f504ea3`, **làm lại 22/07/2026** ở commit `b2be1d9`): ban đầu là backend Python + Ollama qwen2.5:3b chạy local; sau khi thử nghiệm thật thấy model 3B hay bịa nên **bỏ hẳn AI**, chuyển sang kho kiến thức `src/data/kienThuc.json` (15 mục · 53 intent) chạy trong trình duyệt — 153 câu test, 100%. Hướng dẫn dễ hiểu: [HUONG-DAN-CHATBOT.md](HUONG-DAN-CHATBOT.md), lý do đầy đủ: [CHATBOT.md](CHATBOT.md) mục 9
 - ✅ **Bước 7 — Polish** (19/07/2026):
   - **Giảm chuyển động**: `<MotionConfig reducedMotion="user">` (phủ toàn bộ motion) + `@media (prefers-reduced-motion)` trong `index.css` (phủ animation CSS) + `useReducedMotion` trong `useChat` (tắt hiệu ứng gõ chữ)
   - **SEO**: Open Graph + Twitter Card + `theme-color` + canonical + robots trong `index.html`
@@ -235,9 +235,9 @@ async def chat(req: ChatRequest):
 
 ### ⚠️ Việc còn lại trước khi dùng thật
 
-1. 🔴 **Thông tin liên hệ đang là giả** (`+84 900 000 000`, `hotro@example.com`) — sửa ở `src/utils/constants.js` **và** `backend/knowledge.py` (mục `COMPANY`), phải khớp nhau
+1. 🔴 **Thông tin liên hệ đang là giả** (`+84 900 000 000`, `hotro@example.com`) — sửa **duy nhất** `src/data/company.json`, website và bot cùng đọc file đó
 2. 🟡 **Chưa có bảng giá** — bot chỉ mời khách để lại liên hệ
 3. 🟡 **og:image** — cần ảnh 1200×630 trong `public/`, và đổi `og:url`/canonical thành tên miền thật khi deploy
-4. 🟡 **Ollama chỉ chạy trên máy dev** — deploy lên mạng phải đổi sang API (Gemini Flash có gói miễn phí), sửa mỗi hàm `hoi_ai()` trong `backend/llm.py`
+4. 🟡 **Kiến thức `nguon: "soan"` và `nguon: "ngoai"` trong `kienThuc.json`** — phần tự soạn cần chủ dự án duyệt, phần tra ngoài (quy định Zalo) nên rà lại theo `link` mỗi nửa năm
 5. 🟢 **Responsive**: đã rà bằng đọc code, **chưa render đo thật** ở 375/768/1280 — nên mở DevTools xem lại 3 mức này
 6. 🟢 **Lighthouse**: chưa chạy đo (cần Chrome). DoD còn lại của Bước 7

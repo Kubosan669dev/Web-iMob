@@ -6,9 +6,10 @@ import Reveal from "../components/ui/Reveal.jsx";
 import { SITE } from "../utils/constants.js";
 import about from "../data/about.json";
 
-// Nội dung section đọc từ data/about.json để CHATBOT cũng dùng được
-// (backend/knowledge.py đọc chung file này) — trước đây hardcode ở đây
-// nên bot không biết gì về số liệu và điểm mạnh của công ty.
+// Nội dung section đọc từ data/about.json — trước đây hardcode ngay ở đây
+// nên chatbot không biết gì về số liệu và điểm mạnh của công ty.
+// (Các câu trả lời "about-stats" / "strengths" trong data/kienThuc.json
+// lấy đúng những số này — sửa số ở đây thì nhớ sửa cả bên đó.)
 //
 // Map tên icon (chuỗi trong JSON) → component lucide, giống cách
 // Services.jsx và Projects.jsx đang làm: JSON không chứa được component.
