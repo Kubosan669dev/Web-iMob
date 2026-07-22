@@ -158,6 +158,13 @@ CAC_CHU_DE = [
             "gia ca", "nhieu tien", "may trieu", "gia bao", "gia the nao",
             "gia sao", "het bao nhieu", "gia du an", "gia dich vu",
         ],
+        # "bao nhieu" là từ khóa RẤT rộng: "bao nhiêu DỰ ÁN", "bao nhiêu
+        # KHÁCH HÀNG" là hỏi năng lực chứ không phải hỏi giá.
+        # Mấy câu này để AI trả lời (nó có số liệu trong kho kiến thức).
+        "tru": [
+            "bao nhieu du an", "bao nhieu khach", "bao nhieu nam",
+            "bao nhieu nhan vien", "bao nhieu nguoi", "may du an",
+        ],
         "tra_loi": (
             "Chi phí **tùy theo quy mô và yêu cầu** của từng dự án nên bên mình "
             "chưa có bảng giá cố định ạ 🙏\n\n"
@@ -180,11 +187,25 @@ def _dinh_tu_khoa(text: str, tokens: list[str], tu_khoa: str) -> bool:
 
 
 def kiem_tra(cau_hoi: str) -> str | None:
-    """Trả về câu trả lời cố định nếu là chủ đề quan trọng, ngược lại None."""
+    """Trả về câu trả lời cố định nếu là chủ đề quan trọng, ngược lại None.
+
+    Mỗi chủ đề có thể khai báo thêm khoá "tru" — danh sách cụm LOẠI TRỪ.
+    Trúng một cụm loại trừ thì bỏ qua chủ đề đó, để câu hỏi đi tiếp
+    (thường là xuống AI).
+
+    Vì sao cần: đây là lần thứ BA dính cùng một kiểu bug — từ khóa ngắn
+    bắt nhầm câu khác nghĩa ("đánh giá"→"gia", "tiền đó"→"tien do",
+    "bao nhiêu dự án"→"bao nhieu"). Hai lần trước vá bằng cách đổi từ khóa;
+    nhưng có những từ vừa rộng vừa không thể bỏ (như "bao nhieu"), nên
+    cần hẳn một cơ chế loại trừ thay vì sửa vặt mãi.
+    """
     text = chuan_hoa(cau_hoi)
     tokens = text.split()
 
     for chu_de in CAC_CHU_DE:
+        # Bị loại trừ → bỏ qua chủ đề này, xét chủ đề tiếp theo
+        if any(chuan_hoa(t) in text for t in chu_de.get("tru", [])):
+            continue
         for tu_khoa in chu_de["tu_khoa"]:
             if _dinh_tu_khoa(text, tokens, chuan_hoa(tu_khoa)):
                 return chu_de["tra_loi"]

@@ -1,11 +1,14 @@
 # 🤖 KẾ HOẠCH & ĐÁNH GIÁ AI CHATBOT
 
-> Tài liệu để **review dần** trước khi build. Chưa viết code sản phẩm.
+> **Hồ sơ theo dòng thời gian** của chatbot: kế hoạch → thí nghiệm → kết quả → quyết định.
 > Bối cảnh: bot trả lời **FAQ dịch vụ/giá** bằng tiếng Việt cho website iMob.
-> Máy dev: **GTX 1650 (4GB VRAM) + 16GB RAM**. Cập nhật: 17/07/2026.
+> Máy dev: **GTX 1650 (4GB VRAM) + 16GB RAM**. Cập nhật: 22/07/2026.
+>
+> ⚠️ **Đọc mục 9 trước.** Mục 1–8 là hồ sơ giai đoạn dùng AI (Ollama) — **đã dừng** ngày 22/07/2026.
+> Giữ lại vì các bài học ở đó chính là lý do dẫn tới kiến trúc hiện tại.
 >
 > 📖 **Chỉ muốn hiểu bot chạy thế nào và cách dùng?** → đọc [HUONG-DAN-CHATBOT.md](HUONG-DAN-CHATBOT.md)
-> (file này là hồ sơ kế hoạch + kết quả đánh giá, dài và nặng kỹ thuật hơn).
+> (file này dài và nặng kỹ thuật hơn).
 
 ## Mục lục
 1. [Kết luận nhanh](#1-kết-luận-nhanh)
@@ -15,6 +18,8 @@
 5. [RAG là gì (giải thích cho người mới)](#5-rag-là-gì-giải-thích-cho-người-mới)
 6. [Bộ câu hỏi vàng — để đánh giá bot](#6-bộ-câu-hỏi-vàng--để-đánh-giá-bot)
 7. [Lộ trình build (khi bắt đầu)](#7-lộ-trình-build-khi-bắt-đầu)
+8. [Kế hoạch AI thật v2 + kết quả *(lịch sử)*](#8-kế-hoạch-triển-khai-ai-thật-v2)
+9. ⭐ [**Dừng dùng Ollama — chuyển sang kho kiến thức (22/07/2026)**](#9--dừng-dùng-ollama--chuyển-sang-kho-kiến-thức-22072026)
 
 ---
 
@@ -293,6 +298,33 @@ Không so khớp intent được nữa vì câu trả lời là văn tự do. C�
 
 > **Prompt là lời khuyên, không phải hàng rào.** Không giao việc an toàn cho model yếu bằng cách "dặn dò" trong prompt. Việc gì bắt buộc phải đúng (thông tin công ty, chống đánh lừa, giới hạn phạm vi) → chặn bằng **luật cứng trong code**.
 
+### 📈 Mở rộng kho kiến thức (19/07/2026)
+
+Kho kiến thức ban đầu chỉ **833 token**, dựng từ `services.json` + `projects.json` + vài đoạn viết tay — **mỏng hơn chính nội dung website**. Khách hỏi *"bên bạn làm được bao nhiêu dự án rồi"* thì bot trả lời chung chung *"nhiều dự án khác nhau"*, dù trang About ghi rõ **50+ dự án**.
+
+Đã gom lại thành **5 file JSON dùng chung giữa web và bot** (`company` · `services` · `projects` · `about` · `faq`) → **1.960 token**. Tiện thể xử lý luôn 2 vấn đề cấu trúc:
+
+- Nội dung About trước đây hardcode trong `About.jsx`, backend không đọc được
+- Thông tin công ty bị chép ở **2 nơi** (`constants.js` và `knowledge.py`) — comment trong code đã tự cảnh báo *"GIỮ KHỚP"*, tức là đang chờ ngày lệch nhau
+
+Kết quả đo A/B xem mục *"Kết quả so sánh A/B"* bên dưới.
+
+### 🛡️ Cơ chế LOẠI TRỪ trong guard (lần thứ 3 dính cùng một bug)
+
+Khi thêm câu hỏi về số liệu, phát hiện *"bên bạn làm được **bao nhiêu** dự án"* dính từ khóa `"bao nhieu"` của nhóm **giá** → bot báo giá.
+
+Đây là lần thứ ba cùng một kiểu lỗi:
+
+| Lần | Từ khóa | Câu bắt nhầm |
+|---|---|---|
+| 1 | `"gia"` | "đánh **giá**" → `danh gia` |
+| 2 | `"tien do"` | "trả **tiền đó**" → `tien do` |
+| 3 | `"bao nhieu"` | "**bao nhiêu** dự án" |
+
+Hai lần đầu vá bằng cách đổi từ khóa. Nhưng `"bao nhieu"` vừa rộng vừa **không thể bỏ** (nó là cách hỏi giá phổ biến nhất), nên phải thêm hẳn cơ chế: mỗi nhóm khai báo được danh sách **`tru`** (loại trừ) — trúng cụm loại trừ thì bỏ qua nhóm đó, để câu hỏi đi tiếp xuống AI.
+
+> **Bài học:** vá 1-2 lần thì sửa dữ liệu, vá tới lần thứ 3 thì sửa **cơ chế**.
+
 ### 💡 Bài học phụ (từ lỗi 5)
 
 > **Kiểm thử tự động chỉ bắt được lỗi bạn ĐÃ BIẾT cách mô tả.** `danh_gia.py` báo 0 lỗi đỏ nhưng vẫn lọt lỗi 5, vì câu trả lời sai đó **trôi chảy, lịch sự, đúng tên dịch vụ có thật** — không có dấu hiệu nào máy dò được. Chỉ ngồi gõ thử tay mới thấy. **Số liệu đẹp không thay được việc dùng thử.**
@@ -326,4 +358,87 @@ npm run dev                # http://localhost:5173
 
 # 3. Chấm lại chất lượng bất cứ lúc nào
 cd backend && .venv/Scripts/python.exe danh_gia.py   # → BAO-CAO-DANH-GIA.md
+```
+
+> ⚠️ **Mục 8 trở lên là hồ sơ lịch sử.** Kiến trúc AI + Ollama mô tả ở trên **đã dừng sử dụng** ngày 22/07/2026 — xem mục 9 bên dưới.
+
+---
+
+# 9. ❌ DỪNG DÙNG OLLAMA — CHUYỂN SANG KHO KIẾN THỨC (22/07/2026)
+
+## 9.1. Quyết định
+
+Bỏ hẳn tầng AI (FastAPI + Ollama + `qwen2.5:3b`). Chatbot chạy **100% trong trình duyệt**: khớp từ khóa trên một kho kiến thức chia mục.
+
+Thư mục `backend/` **giữ lại trong repo làm tư liệu** nhưng website không gọi tới nữa.
+
+## 9.2. Vì sao
+
+Tổng kết từ chính các thí nghiệm đã ghi ở mục 8 và trong `BAO-CAO-DANH-GIA.md` / `BAO-CAO-SO-SANH.md`:
+
+| Lý do | Bằng chứng trong dự án |
+|---|---|
+| **Model 3B bịa sự thật** | Nói văn phòng ở "Đống Đa, Hà Nội" và "Đà Lạt, Đắk Lắk" — dữ liệu ghi Hạ Long |
+| **Đọc sai tiếng Việt không dấu** | `mat bao lau` → hiểu thành "mã bảo mật lâu", trả lời lạc sang IoT |
+| **Không tự chống được prompt injection** | Đọc vanh vách system prompt khi bị hỏi; đồng ý đổi vai |
+| **Lá chắn đã ôm gần hết câu quan trọng** | `guard.py` cuối cùng phải xử lý 8 nhóm — phần AI thật sự đóng góp còn ít |
+| **Rào cản vận hành** | Bắt cài Ollama ~2GB, ăn GPU, phải bật 2 cửa sổ terminal mỗi lần chạy |
+| **Không deploy được** | Hosting tĩnh không có Ollama → bot lên mạng là chết |
+
+## 9.3. Kiến trúc mới
+
+```
+Khách gõ câu hỏi
+      ↓
+useChat.js → chatService.js → chatBrain.js → src/data/kienThuc.json
+                                    ↓
+                        điền {{cong_ty.*}} từ company.json
+```
+
+Không server, không gọi mạng, không mô hình AI.
+
+**Ba nâng cấp ở `chatBrain.js`** (bộ khớp từ khóa cũ không đủ sức cho kho 53 mục):
+
+1. **Đọc cấu trúc chia mục** — `kienThuc.json` gom intent theo chủ đề, `gomIntents()` trải phẳng khi khớp.
+2. **Chấm điểm theo độ dài từ khóa** — điểm = số từ. Trước đây mọi từ khóa đều 1 điểm nên `"zalo"` ngang `"duyet mini app"`. Ở quy mô 53 intent đây là khác biệt sống còn.
+3. **Cơ chế loại trừ `tru`** — chép lại từ `guard.py` (nơi đã phải thêm sau 3 lần dính cùng một bug từ khóa rộng).
+
+**Chống lệch dữ liệu:** kho kiến thức không chép tay SĐT/địa chỉ nữa mà viết `{{cong_ty.dien_thoai}}`, bot điền từ `company.json` lúc trả lời — cùng nguyên tắc một-nguồn-duy-nhất mà `knowledge.py` và `constants.js` đang theo. (Bản `chatKnowledge.json` cũ hardcode `+84 900 000 000`, đúng loại lỗi này.)
+
+## 9.4. Kho kiến thức mới
+
+`src/data/chatKnowledge.json` (27 intent phẳng) → **`src/data/kienThuc.json`** (15 mục · 53 intent).
+
+Mục sâu nhất là `zalo-mini-app` (14 intent), gồm cả **kiến thức nền về nền tảng** tra từ tài liệu chính thức: Mini App là gì · không cần cài đặt · khác gì app riêng / website · liên kết Zalo OA · thanh toán ZaloPay · đăng nhập bằng tài khoản Zalo · hồ sơ đăng ký & eKYC · xét duyệt · xin quyền dữ liệu · cập nhật sau phát hành · hợp với ngành nào.
+
+Mỗi intent ghi `nguon`: `web` (dữ liệu website) · `ngoai` (tra ngoài, **kèm `link` kiểm chứng**) · `soan` (tự soạn, **chủ dự án phải duyệt**).
+
+> **Kỷ luật giữ nguyên:** không con số giá, không mốc thời gian. Khi lấy kiến thức ngoài, cố tình **bỏ qua** các con số marketing kiểu "rẻ hơn 50-70%" hay "triển khai trong 1 tuần" mà các bài viết trên mạng hay nêu.
+>
+> **Một lỗi của `guard.py` được sửa lại khi chuyển sang:** nhóm "ngoài phạm vi" của guard có từ khóa `"bai toan"` — nhưng *"bên mình có **bài toán** quản lý kho"* là câu khách thật hay nói, và chính website cũng dùng từ đó ("hiểu đúng **bài toán** của bạn"). Kho mới chỉ giữ cụm rõ nghĩa `"giải bài toán"`, và có câu test riêng canh chuyện này.
+
+## 9.5. Kết quả
+
+```
+Trước:  27 intent · AI 3B hay bịa · lá chắn 8 nhóm · Ollama 2GB · 1-3 giây/câu
+Sau:    53 intent chia 15 mục · chạy trong trình duyệt · ~0.35 giây/câu
+
+npm run test:chat →  152 câu · 152 đúng · 100% · 0 cảnh báo
+```
+
+Bộ kiểm tra `scripts/test-chatbot.mjs` cũng được nâng, giờ bắt 5 loại lỗi thay vì 1: khớp sai intent · **đúng intent nhưng đáp thiếu ý (`phai_co`)** · từ khóa trùng giữa 2 intent · intent chưa có câu test · placeholder `{{...}}` viết sai tên.
+
+Trong đó `phai_co` vốn đã có sẵn trong `chatTestQuestions.json` từ thời `danh_gia.py` nhưng script frontend chưa dùng tới — nay dùng luôn.
+
+## 9.6. Đánh đổi (phải biết)
+
+- **Mất khả năng hiểu câu hỏi hoàn toàn lạ.** Không có trong kho là bot nói "chưa có thông tin" + mời để lại liên hệ. Với bot tư vấn dịch vụ, đây là đánh đổi **có lợi**: mọi câu trả lời đều do người duyệt, không có chỗ cho việc đoán.
+- **Kho kiến thức phải được nuôi.** Cách nuôi nhanh nhất: gom câu khách hỏi thật mà bot chưa trả lời được, mỗi tuần bổ sung một đợt.
+- **Phần `nguon: "ngoai"` sẽ cũ dần** — quy định của Zalo có thể đổi, nên rà lại theo `link` định kỳ.
+
+## 9.7. Cách chạy (bản mới)
+
+```bash
+npm run dev          # http://localhost:5173 — không cần bật gì thêm
+npm run test:chat    # 152 câu, phải 100% và không có cảnh báo
 ```

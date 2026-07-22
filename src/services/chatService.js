@@ -1,47 +1,43 @@
-import knowledge from "../data/chatKnowledge.json";
+import knowledge from "../data/kienThuc.json";
+import company from "../data/company.json";
 import { findAnswer } from "./chatBrain.js";
-import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
 // chatService: "tổng đài" — nơi DUY NHẤT giao diện gọi để lấy câu trả lời.
 //
-// Có 2 tầng, tự động chuyển:
-//   1. AI THẬT  — gọi backend Python (FastAPI + Ollama chạy local).
-//                 Hiểu được cả câu hỏi lạ chưa soạn trước.
-//   2. DỰ PHÒNG — nếu backend chưa bật/lỗi mạng: dùng bot khớp từ khóa
-//                 chạy ngay trong trình duyệt (chatBrain.js).
-//                 Nhờ vậy website KHÔNG BAO GIỜ "chết chat".
+// Bot chạy HOÀN TOÀN TRONG TRÌNH DUYỆT: đọc kho kiến thức (kienThuc.json)
+// rồi khớp từ khóa (chatBrain.js). Không gọi mạng, không cần server.
+//
+// Vì sao bỏ backend AI (FastAPI + Ollama)?
+//   - Model 3B chạy local từng BỊA thông tin thật (nói địa chỉ ở "Đống Đa,
+//     Hà Nội" trong khi dữ liệu ghi Hạ Long) — xem BAO-CAO-DANH-GIA.md.
+//   - Nó đọc sai tiếng Việt không dấu và không tự chống được câu đánh lừa,
+//     nên phải dựng thêm guard.py chặn cứng những câu quan trọng nhất.
+//   - Ollama bắt người dùng cài đặt, ăn GPU, và không deploy được lên
+//     hosting tĩnh.
+// Đổi lại, kho kiến thức phải giàu và có tổ chức — đó là việc của
+// src/data/kienThuc.json (muốn bot thông minh hơn thì thêm vào file đó).
+// Thư mục backend/ vẫn còn trong repo làm tư liệu, nhưng website KHÔNG gọi tới.
 //
 // Chữ ký cố định (hợp đồng giữa UI và bộ não):
 //   sendMessage(message, history) → Promise<{ response: string }>
 // ============================================================
 
-// Chờ tối đa 60s: model chạy trên GPU nhà nên câu đầu tiên có thể chậm
-// (phải nạp model vào VRAM).
-const TIMEOUT_MS = 60000;
+// Nghỉ một nhịp trước khi trả lời. Bot trả lời tức thì (0ms) trông giật cục
+// và làm hiệu ứng "đang gõ" chỉ loé lên rồi tắt — chờ chút cho tự nhiên.
+const DO_TRE_MS = 350;
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// history: lịch sử hội thoại UI gửi kèm. Bot khớp từ khóa chưa dùng tới,
+// nhưng giữ tham số để UI không phải sửa nếu sau này bot hiểu câu nối tiếp.
+// eslint-disable-next-line no-unused-vars
 export async function sendMessage(message, history = []) {
-  try {
-    // AbortController = cách hủy request khi chờ quá lâu
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  await sleep(DO_TRE_MS);
 
-    const res = await fetch(`${API_BASE_URL}/api/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, history }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timer);
-    if (!res.ok) throw new Error(`Backend trả về lỗi ${res.status}`);
-
-    const data = await res.json();
-    return { response: data.response };
-  } catch (err) {
-    // Backend chưa chạy → quay về bot dự phòng, website vẫn chat được
-    console.warn("[chatService] Không gọi được AI, dùng bot dự phòng:", err.message);
-    const { answer } = findAnswer(message, knowledge);
-    return { response: answer };
-  }
+  // company: để chatBrain điền {{cong_ty.dien_thoai}}, {{cong_ty.dia_chi}}...
+  const { answer } = findAnswer(message, knowledge, company);
+  return { response: answer };
 }

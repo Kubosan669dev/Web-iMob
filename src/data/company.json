@@ -1,0 +1,12 @@
+{
+  "_note": "THÔNG TIN CÔNG TY — NGUỒN DUY NHẤT. Cả website (qua utils/constants.js) và chatbot backend (qua backend/knowledge.py) đều đọc file này. Trước đây thông tin bị chép ở 2 nơi nên dễ lệch nhau. Sửa ở đây là cả web lẫn bot cùng cập nhật. ⚠️ phone/email hiện là placeholder — đổi thành thông tin thật trước khi dùng chính thức.",
+  "name": "iMob",
+  "tagline": "Solution & Technology",
+  "fullName": "iMob Solution & Technology",
+  "description": "Đơn vị tiên phong chuyển đổi số trong mọi lĩnh vực",
+  "phone": "+84 900 000 000",
+  "email": "hotro@example.com",
+  "address": "Hạ Long, Quảng Ninh, Việt Nam",
+  "workingHours": "8h00 – 17h30, Thứ 2 – Thứ 7",
+  "responseTime": "trong vòng 24 giờ"
+}

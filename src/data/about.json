@@ -1,0 +1,26 @@
+{
+  "_note": "Nội dung section GIỚI THIỆU. Trước đây hardcode trong src/sections/About.jsx nên backend không đọc được — giờ tách ra để cả web và chatbot cùng dùng. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component).",
+  "philosophy": "Từ website, ứng dụng, phần mềm quản trị đến trợ lý AI — mỗi sản phẩm đều được xây trên một nền tảng: hiểu đúng bài toán của bạn trước, chọn công nghệ sau. Bắt đầu nhỏ, chạy thật, mở rộng dần.",
+  "stats": [
+    { "value": "50+", "label": "Dự án triển khai" },
+    { "value": "30+", "label": "Khách hàng đồng hành" },
+    { "value": "99%", "label": "Mức độ hài lòng" }
+  ],
+  "features": [
+    {
+      "icon": "handshake",
+      "title": "Đối tác tin cậy",
+      "description": "Đồng hành lâu dài từ khâu ý tưởng, tư vấn, thiết kế đến triển khai và đào tạo vận hành."
+    },
+    {
+      "icon": "users",
+      "title": "Đội ngũ chuyên môn",
+      "description": "Kỹ sư giàu kinh nghiệm thực chiến trong phát triển sản phẩm số và tích hợp AI."
+    },
+    {
+      "icon": "wrench",
+      "title": "Giải pháp may đo",
+      "description": "Không rập khuôn — mỗi giải pháp được thiết kế đúng theo bài toán và quy mô của bạn."
+    }
+  ]
+}

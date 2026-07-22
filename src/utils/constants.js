@@ -1,16 +1,19 @@
 // ============================================================
-// Hằng số toàn site — đổi thương hiệu / thông tin liên hệ TẠI ĐÂY,
-// không hardcode các giá trị này bên trong component.
+// Hằng số toàn site.
+//
+// Thông tin công ty KHÔNG còn viết ở đây nữa — nó nằm trong
+// data/company.json để CHATBOT BACKEND cũng đọc được cùng một file
+// (backend/knowledge.py). Trước đây thông tin bị chép ở 2 nơi, sửa một
+// bên quên bên kia là bot nói sai thông tin công ty.
+//
+// Đổi tên/SĐT/email/địa chỉ → sửa data/company.json, KHÔNG sửa file này.
 // ============================================================
 
-export const SITE = {
-  name: "iMob",
-  tagline: "Solution & Technology",
-  description: "Đơn vị tiên phong chuyển đổi số trong mọi lĩnh vực",
-  email: "hotro@example.com",
-  phone: "+84 900 000 000",
-  address: "Hạ Long, Quảng Ninh, Việt Nam",
-};
+import company from "../data/company.json";
+
+// Giữ nguyên tên `SITE` và các khoá cũ để mọi component đang dùng
+// không phải sửa gì.
+export const SITE = company;
 
 // Menu điều hướng — item có `children` sẽ hiển thị dropdown.
 // Giai đoạn này dropdown anchor tới section; sau này có thể đổi href
@@ -40,6 +43,10 @@ export const SOCIAL_LINKS = [
   { id: "github", label: "GitHub", href: "#" },
 ];
 
-// Base URL của backend AI Python — đặt trong file .env (VITE_API_URL).
+// Base URL của backend — đặt trong file .env (VITE_API_URL).
 // Để trống = gọi tương đối /api/* (đã có proxy trong vite.config.js).
+//
+// CHATBOT KHÔNG DÙNG BIẾN NÀY NỮA: bot chạy hẳn trong trình duyệt, đọc
+// data/kienThuc.json (xem services/chatService.js). Giữ lại để dành cho
+// form Liên hệ khi nào có backend nhận dữ liệu thật (services/contactService.js).
 export const API_BASE_URL = import.meta.env.VITE_API_URL || "";

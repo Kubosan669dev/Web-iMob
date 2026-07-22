@@ -1,0 +1,470 @@
+{
+  "_note": "KHO KIẾN THỨC của chatbot — 'bộ não' đọc file này để trả lời. Đây là file DUY NHẤT cần sửa khi muốn dạy thêm cho bot. CẤU TRÚC: muc[] = nhóm chủ đề, mỗi mục chứa intents[] (keywords nhận diện + answer markdown). Từ khoá KHÔNG phân biệt hoa/thường và dấu tiếng Việt (chatBrain.js tự chuẩn hoá). CHẤM ĐIỂM: mỗi từ khoá trúng được điểm = SỐ TỪ của nó, nên cụm dài thắng từ đơn; hoà điểm thì mục/intent đứng TRƯỚC thắng → THỨ TỰ TRONG FILE LÀ CÓ CHỦ Ý, đọc _note của từng chỗ trước khi đổi. TRƯỜNG tru = danh sách cụm LOẠI TRỪ (trúng thì bỏ qua intent đó). TRƯỜNG nguon: web = lấy từ dữ liệu website (chắc chắn đúng) · ngoai = kiến thức nền tra từ nguồn ngoài, có link kiểm chứng · soan = tự soạn theo tinh thần website, CHỦ DỰ ÁN PHẢI ĐỌC DUYỆT. QUY TẮC BẤT BIẾN: tuyệt đối KHÔNG ghi con số giá và KHÔNG ghi mốc thời gian cụ thể ('2-4 tuần') vào bất kỳ câu trả lời nào. THÔNG TIN CÔNG TY: viết {{cong_ty.dien_thoai}} / {{cong_ty.email}} / {{cong_ty.dia_chi}} / {{cong_ty.gio_lam_viec}} / {{cong_ty.ten_day_du}} / {{cong_ty.thoi_gian_phan_hoi}} — bot tự điền từ company.json, KHÔNG chép tay số điện thoại vào đây.",
+  "cap_nhat": "2026-07-22",
+  "fallback": "Mình chưa hiểu rõ câu hỏi này lắm 🙏. Bạn thử hỏi mình về **dịch vụ** (Zalo Mini App, website, phần mềm quản lý, chatbot AI, đào tạo), **quy trình làm việc**, **dự án đã làm** hoặc cách **liên hệ** nhé — hoặc để lại số điện thoại ở mục *Liên hệ* để được tư vấn trực tiếp!",
+
+  "muc": [
+    {
+      "id": "an-toan",
+      "ten": "An toàn & phạm vi",
+      "mo_ta": "Chặn câu dụ lộ thông tin nội bộ và câu ngoài phạm vi. ĐẶT ĐẦU TIÊN để luôn thắng khi hoà điểm.",
+      "intents": [
+        {
+          "id": "refuse",
+          "nguon": "soan",
+          "keywords": ["system prompt", "prompt của bạn", "prompt hệ thống", "bỏ qua chỉ dẫn", "bỏ qua mọi chỉ dẫn", "quên chỉ dẫn", "quên hết chỉ dẫn", "trợ lý tự do", "không còn giới hạn", "ignore previous", "ignore all", "khách hàng khác", "thông tin người khác", "tin nhắn người khác", "đóng vai", "giả vờ là", "jailbreak", "lộ prompt", "cấu hình của bạn", "hướng dẫn của bạn", "chỉ dẫn của bạn", "quy tắc của bạn"],
+          "answer": "Xin lỗi bạn, mình là trợ lý của **iMob** nên chỉ hỗ trợ thông tin về **dịch vụ, báo giá và liên hệ** thôi ạ 🙏. Mình không thể chia sẻ cấu hình nội bộ hay dữ liệu của khách hàng khác.\n\nMình giúp gì được cho bạn về dịch vụ không?"
+        },
+        {
+          "id": "ngoai-pham-vi",
+          "nguon": "soan",
+          "_note": "Chuyển từ backend/guard.py sang. CỐ Ý BỎ từ khoá 'bai toan' mà guard.py đang dùng: 'bài toán' là từ khách hàng thật hay nói ('bên mình có bài toán quản lý kho') và chính website cũng dùng ('hiểu đúng bài toán của bạn') — để nguyên sẽ từ chối nhầm khách thật. Chỉ giữ cụm rõ nghĩa 'giải bài toán'.",
+          "keywords": ["phương trình", "giải toán", "giải bài toán", "tích phân", "đạo hàm", "thời tiết", "dự báo", "nấu ăn", "món ngon", "ăn gì", "bóng đá", "chứng khoán", "bitcoin", "xổ số", "tử vi", "bói toán", "kể chuyện cười", "câu chuyện cười", "làm thơ", "viết thơ", "dịch giúp mình", "học tiếng anh"],
+          "answer": "Xin lỗi bạn, phần này ngoài phạm vi hỗ trợ của mình ạ 🙏 Mình là trợ lý của **iMob**, chỉ tư vấn được về **dịch vụ công nghệ** như Zalo Mini App, website, phần mềm quản lý và đào tạo chuyển đổi số.\n\nBạn có nhu cầu nào về mấy mảng này không ạ?"
+        }
+      ]
+    },
+
+    {
+      "id": "cong-ty",
+      "ten": "Về công ty iMob",
+      "mo_ta": "Giới thiệu, năng lực, số liệu, điểm mạnh, cách làm việc. Nguồn: company.json + about.json.",
+      "intents": [
+        {
+          "id": "about-stats",
+          "nguon": "web",
+          "_note": "PHẢI đứng TRƯỚC intent 'pricing': câu 'bao nhiêu dự án' cũng chứa 'bao nhiêu' của pricing. Ngoài ra pricing còn có danh sách 'tru' chặn lần hai.",
+          "keywords": ["bao nhiêu dự án", "mấy dự án", "số dự án", "bao nhiêu khách hàng", "bao nhiêu khách", "bao nhiêu năm", "đã làm bao nhiêu", "làm được bao nhiêu", "kinh nghiệm bao nhiêu", "quy mô", "hài lòng", "mức độ hài lòng", "uy tín không", "có đáng tin"],
+          "answer": "Tới nay iMob đã triển khai **50+ dự án** cho **30+ khách hàng**, với mức độ hài lòng **99%** ạ.\n\nBạn muốn xem dự án nào gần với nhu cầu của mình để mình giới thiệu cụ thể hơn không?"
+        },
+        {
+          "id": "company-intro",
+          "nguon": "web",
+          "keywords": ["công ty gì", "imob là", "giới thiệu công ty", "công ty làm về", "bên bạn là ai", "công ty của bạn", "về công ty", "công ty như thế nào"],
+          "answer": "**{{cong_ty.ten_day_du}}** là đơn vị **tiên phong chuyển đổi số trong mọi lĩnh vực** ạ.\n\nBên mình làm 3 mảng chính: **Zalo Mini App**, **phần mềm & phần cứng (IoT)** và **đào tạo chuyển đổi số** — văn phòng ở {{cong_ty.dia_chi}}.\n\nBạn đang quan tâm mảng nào để mình nói kỹ hơn ạ?"
+        },
+        {
+          "id": "strengths",
+          "nguon": "web",
+          "keywords": ["điểm mạnh", "thế mạnh", "ưu điểm", "vì sao chọn", "tại sao chọn", "nên chọn", "khác gì", "hơn gì", "nổi bật", "khác biệt", "so với đơn vị khác", "hơn đối thủ"],
+          "answer": "Ba điều bên mình tự tin nhất:\n\n- **Đối tác tin cậy** — đồng hành từ ý tưởng, tư vấn, thiết kế tới triển khai và đào tạo vận hành\n- **Đội ngũ chuyên môn** — kỹ sư có kinh nghiệm thực chiến về sản phẩm số và tích hợp AI\n- **Giải pháp may đo** — không rập khuôn, thiết kế đúng theo bài toán và quy mô của bạn"
+        },
+        {
+          "id": "philosophy",
+          "nguon": "web",
+          "_note": "KHÔNG dùng 'làm việc thế nào' — câu 'quy trình làm việc thế nào' là hỏi QUY TRÌNH (intent process-time) chứ không hỏi triết lý.",
+          "keywords": ["cách làm việc", "triết lý", "phương châm", "nguyên tắc làm", "cách tiếp cận"],
+          "answer": "Từ website, ứng dụng, phần mềm quản trị đến trợ lý AI — mỗi sản phẩm bên mình đều xây trên một nền tảng: **hiểu đúng bài toán của bạn trước, chọn công nghệ sau**.\n\nCách làm là **bắt đầu nhỏ, chạy thật, mở rộng dần** — để bạn thấy kết quả sớm thay vì chờ một hệ thống khổng lồ."
+        },
+        {
+          "id": "team",
+          "nguon": "soan",
+          "_note": "Website KHÔNG có số nhân sự → tuyệt đối không bịa con số. Trả lời bằng năng lực, không bằng quân số.",
+          "keywords": ["bao nhiêu nhân viên", "bao nhiêu người", "đội ngũ", "nhân sự", "team bao nhiêu", "mấy người làm"],
+          "answer": "Đội ngũ bên mình gồm các kỹ sư có kinh nghiệm thực chiến về **phát triển sản phẩm số và tích hợp AI** ạ. Mỗi dự án đều có người phụ trách xuyên suốt từ tư vấn tới bàn giao.\n\nQuy mô nhân sự tham gia sẽ tuỳ theo phạm vi dự án — bạn để lại liên hệ, bên mình trao đổi cụ thể nhé!"
+        }
+      ]
+    },
+
+    {
+      "id": "chi-phi-thoi-gian",
+      "ten": "Chi phí & thời gian",
+      "mo_ta": "KỶ LUẬT BẤT BIẾN: không bao giờ nêu con số giá hay mốc thời gian. ĐẶT SỚM để câu hỏi giá luôn thắng câu hỏi dịch vụ (vd 'làm app đơn giản tốn kém không' phải ra giá, không phải ra dịch vụ app).",
+      "intents": [
+        {
+          "id": "pricing",
+          "nguon": "web",
+          "_note": "KHÔNG dùng từ đơn 'gia': bỏ dấu xong 'đánh giá' → 'danh gia' cũng chứa 'gia'. Danh sách 'tru' chặn các câu 'bao nhiêu DỰ ÁN / KHÁCH HÀNG' — hỏi năng lực chứ không hỏi tiền (bug này backend đã dính 3 lần, xem guard.py).",
+          "keywords": ["giá", "bao nhiêu", "chi phí", "chi phí làm", "khoảng nhiêu", "báo giá", "tốn kém", "học phí", "giá cả", "hết bao nhiêu", "giá bao nhiêu", "bảng giá", "mấy triệu", "bao tiền", "nhiêu tiền", "giá thành", "đắt không", "rẻ không", "ngân sách"],
+          "tru": ["bao nhiêu dự án", "bao nhiêu khách", "bao nhiêu năm", "bao nhiêu nhân viên", "bao nhiêu người", "mấy dự án"],
+          "answer": "Chi phí **tùy theo quy mô và yêu cầu** của từng dự án nên bên mình không có mức cố định ạ 🙏.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}**, bên mình sẽ **tư vấn và báo giá chi tiết miễn phí** {{cong_ty.thoi_gian_phan_hoi}}!"
+        },
+        {
+          "id": "process-time",
+          "nguon": "web",
+          "_note": "KHÔNG dùng cụm trống 'tien do': bỏ dấu xong 'trả TIỀN ĐÓ bằng cách nào' cũng ra 'tien do' → hỏi thanh toán bị hiểu nhầm thành hỏi tiến độ.",
+          "keywords": ["bao lâu", "thời gian", "quy trình", "tiến độ dự án", "tiến độ làm", "tiến độ thế nào", "mất bao", "làm trong", "khi nào", "xong", "bao giờ xong", "làm mất", "hoàn thành trong", "mấy ngày", "mấy tuần", "mấy tháng", "deadline"],
+          "answer": "Thời gian phụ thuộc vào **quy mô và số tính năng** của từng dự án nên bên mình chưa có mốc cố định ạ.\n\nQuy trình bên mình gồm 5 bước: **Ý tưởng → Tư vấn → Thiết kế → Triển khai → Đào tạo & bàn giao**, sau bàn giao vẫn có vận hành và bảo trì trọn gói.\n\nBạn mô tả nhu cầu, bên mình ước lượng tiến độ cụ thể và báo lại {{cong_ty.thoi_gian_phan_hoi}} nhé!"
+        }
+      ]
+    },
+
+    {
+      "id": "zalo-mini-app",
+      "ten": "Zalo Mini App",
+      "mo_ta": "Mục sâu nhất: vừa là dịch vụ của iMob (nguồn web), vừa là kiến thức nền về nền tảng Zalo (nguồn ngoài, có link kiểm chứng). LƯU Ý khi bổ sung: chỉ chép SỰ THẬT VỀ NỀN TẢNG, không chép các con số quảng cáo kiểu 'rẻ hơn 50-70%' hay 'xong trong 1 tuần' của các bên khác.",
+      "intents": [
+        {
+          "id": "zalo-miniapp",
+          "nguon": "web",
+          "keywords": ["làm zalo mini app", "làm mini app", "miniapp", "mini app", "ứng dụng zalo", "app zalo", "app trên zalo", "dịch vụ zalo", "nhận làm mini app"],
+          "answer": "**Phát triển Zalo Mini App** 📱\n\nỨng dụng gọn nhẹ chạy trực tiếp trên Zalo, khách dùng ngay không cần cài đặt. Bên mình làm trọn gói:\n\n- Thiết kế UI/UX theo nhận diện thương hiệu\n- Tích hợp thanh toán, đặt lịch, CSKH\n- Vận hành & bảo trì trọn gói\n\nBạn muốn Mini App phục vụ việc gì (đặt lịch, bán hàng, tích điểm...) để mình tư vấn cụ thể ạ?"
+        },
+        {
+          "id": "zma-la-gi",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["mini app là gì", "miniapp là gì", "zalo mini app là gì", "mini app zalo là gì", "hiểu về mini app", "mini app nghĩa là"],
+          "answer": "**Zalo Mini App** là ứng dụng nhỏ chạy **ngay bên trong Zalo** ạ — khách mở từ Zalo là dùng được luôn, không phải ra CH Play hay App Store tải về.\n\nDoanh nghiệp hay dùng để **đặt lịch, bán hàng, tích điểm, tra cứu đơn**... ngay trong ứng dụng khách vẫn mở hằng ngày.\n\nBạn muốn làm Mini App cho lĩnh vực nào để mình tư vấn cụ thể?"
+        },
+        {
+          "id": "zma-khong-can-cai",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["có phải cài", "cần cài đặt", "phải tải về", "tải app không", "cài đặt không", "không cần cài"],
+          "answer": "Không cần cài gì thêm ạ 🙌 Mini App **chạy trong Zalo**, khách bấm là mở được ngay.\n\nĐây là lợi thế lớn: bỏ được bước \"tải app về máy\" — bước mà rất nhiều khách bỏ cuộc giữa chừng. Khách cũng không tốn dung lượng máy."
+        },
+        {
+          "id": "zma-vs-app",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["khác gì app", "so với app riêng", "mini app hay app", "app riêng hay mini", "thay app được không", "so sánh với app"],
+          "answer": "Khác nhau ở chỗ **khách tiếp cận thế nào** ạ:\n\n- **App riêng**: khách phải lên CH Play / App Store tải và cài, nhưng bạn toàn quyền về tính năng và thương hiệu\n- **Zalo Mini App**: khách mở thẳng trong Zalo, không cài đặt — đổi lại phải chạy theo khuôn khổ và chính sách của nền tảng Zalo\n\nNhiều doanh nghiệp bắt đầu bằng Mini App để khách dùng thử nhanh, sau đó mở rộng dần. Bạn mô tả nhu cầu, bên mình tư vấn nên chọn hướng nào nhé!"
+        },
+        {
+          "id": "zma-vs-website",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["mini app hay website", "website hay mini app", "khác gì website", "so với website", "nên làm web hay"],
+          "answer": "Hai kênh bù cho nhau ạ:\n\n- **Website**: ai cũng vào được bằng trình duyệt, tốt cho **tìm kiếm Google/SEO** và giới thiệu thương hiệu\n- **Zalo Mini App**: nằm sẵn trong Zalo, tiện **chăm sóc khách quen** — nhận diện khách qua tài khoản Zalo, nhắn tin lại qua Zalo OA\n\nKhá nhiều doanh nghiệp làm cả hai: web để khách mới tìm thấy, Mini App để khách cũ quay lại. Bạn kể mình nghe mô hình kinh doanh của bạn nhé!"
+        },
+        {
+          "id": "zma-oa",
+          "nguon": "ngoai",
+          "link": "https://oa.zalo.me",
+          "keywords": ["zalo oa", "official account", "tài khoản oa", "oa doanh nghiệp", "liên kết oa", "gửi tin nhắn khách"],
+          "answer": "Mini App thường đi kèm **Zalo Official Account (OA)** của doanh nghiệp ạ.\n\nLiên kết OA giúp bạn **nhắn tin chăm sóc khách, gửi thông báo** sau khi khách dùng Mini App — và việc xác thực Mini App cho doanh nghiệp cũng thực hiện qua OA.\n\nBên mình hỗ trợ bạn phần kết nối này trong quá trình triển khai nhé!"
+        },
+        {
+          "id": "zma-thanh-toan",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/docs/payment/",
+          "_note": "Có cụm 'tích hợp zalopay' vì riêng từ 'zalopay' (1 điểm) thua intent 'tich-hop-he-thong' vốn được 2 điểm từ cụm 'tích hợp'.",
+          "keywords": ["zalopay", "zalo pay", "tích hợp zalopay", "tích hợp zalo pay", "thanh toán trong app", "thanh toán online", "cổng thanh toán", "khách trả tiền", "tích hợp thanh toán"],
+          "answer": "Có ạ — Mini App **tích hợp được thanh toán qua ZaloPay**, khách trả tiền ngay trong Zalo mà không phải chuyển sang ứng dụng khác.\n\nPhía doanh nghiệp cần có tài khoản merchant và bộ khoá tích hợp do ZaloPay cấp; bên mình làm phần kỹ thuật và hướng dẫn bạn chuẩn bị hồ sơ.\n\nTuỳ nghiệp vụ vẫn giữ song song được các hình thức khác như chuyển khoản hay thanh toán khi nhận hàng."
+        },
+        {
+          "id": "zma-dang-nhap",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["đăng nhập", "tạo tài khoản", "khách phải đăng ký", "login", "nhận diện khách"],
+          "answer": "Khách **không phải tạo tài khoản mới** ạ — Mini App nhận diện khách qua chính tài khoản Zalo họ đang dùng, nên bớt hẳn một rào cản.\n\nNếu bạn đã có dữ liệu khách cũ, bên mình liên kết được theo **số điện thoại** để khách quen vào là thấy lịch sử của mình.\n\nLưu ý: Zalo **không cho phép** đăng nhập bằng Google/Facebook bên trong Mini App."
+        },
+        {
+          "id": "zma-dang-ky",
+          "nguon": "ngoai",
+          "link": "https://docs.zaloplatforms.com/docs/MA/intro/getting-started",
+          "_note": "Có cụm 'đưa mini app lên' vì câu 'muốn đưa mini app lên Zalo cần chuẩn bị gì' vốn bị intent 'getting-started' giành mất (nó có cụm 'cần chuẩn bị' 3 điểm).",
+          "keywords": ["đăng ký mini app", "cần gì để làm mini", "thủ tục mini app", "hồ sơ mini app", "giấy tờ mini app", "đưa mini app lên", "đưa lên zalo", "phát hành mini app", "ekyc", "định danh"],
+          "answer": "Để đưa Mini App lên Zalo, doanh nghiệp cần chuẩn bị ạ:\n\n- **Zalo OA** của doanh nghiệp (đăng ký tại oa.zalo.me)\n- **Tài khoản nhà phát triển** trên nền tảng Zalo\n- Tài khoản đăng ký phải hoàn tất **định danh điện tử (eKYC)**; doanh nghiệp/hộ kinh doanh xác thực qua OA doanh nghiệp hoặc nộp **giấy đăng ký kinh doanh + CCCD người đại diện**\n\nPhần kỹ thuật bên mình lo, bạn chỉ cần chuẩn bị giấy tờ — bên mình hướng dẫn từng bước nhé!"
+        },
+        {
+          "id": "zma-xet-duyet",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["xét duyệt", "kiểm duyệt", "duyệt mini app", "duyệt app", "zalo duyệt", "bị từ chối duyệt"],
+          "answer": "Trước khi tới tay khách, Mini App phải qua **vòng xét duyệt của Zalo** ạ. Vài điểm cần biết:\n\n- Bản gửi duyệt **chính là bản khách sẽ dùng**, nên mọi tính năng phải chạy được đầy đủ\n- Nếu app có hệ thống tài khoản riêng, phải cấp **tài khoản thử** cho đội duyệt\n- Ngành nghề kinh doanh có điều kiện cần nộp thêm **giấy phép** liên quan\n\nThời gian duyệt do Zalo quyết định nên bên mình không hứa trước được, nhưng sẽ chuẩn bị hồ sơ kỹ để hạn chế bị trả lại."
+        },
+        {
+          "id": "zma-quyen-du-lieu",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["xin quyền", "lấy số điện thoại khách", "quyền truy cập", "vị trí khách", "quyền camera", "thông tin người dùng"],
+          "answer": "Các thông tin nhạy cảm như **số điện thoại, vị trí, camera** đều phải **xin phép khách** và **đăng ký trước** với Zalo mới dùng được ạ.\n\nZalo cũng không cho phép hỏi quyền ngay lúc khách vừa mở app — phải hỏi đúng lúc thật sự cần, ví dụ khi khách bấm \"đặt lịch\" mới xin số điện thoại.\n\nBên mình thiết kế luồng theo đúng quy định này ngay từ đầu để tránh bị trả hồ sơ."
+        },
+        {
+          "id": "zma-cap-nhat",
+          "nguon": "ngoai",
+          "link": "https://miniapp.zaloplatforms.com/developers",
+          "keywords": ["cập nhật mini app", "sửa mini app", "nâng cấp app", "thêm tính năng sau", "chỉnh sửa sau khi"],
+          "answer": "Được ạ — Mini App phát hành rồi vẫn sửa và nâng cấp bình thường.\n\nMỗi bản mới sẽ **nộp lại cho Zalo duyệt** rồi mới tới tay khách, nên bên mình thường gom các thay đổi thành từng đợt cho gọn.\n\nGói **vận hành & bảo trì** của bên mình lo luôn phần này giúp bạn."
+        },
+        {
+          "id": "zma-nganh",
+          "nguon": "web",
+          "keywords": ["mini app cho ngành", "phù hợp ngành nào", "ngành nào nên làm", "hợp với ngành", "lĩnh vực nào dùng"],
+          "answer": "Mini App hợp nhất với những ngành **khách quay lại nhiều lần** ạ:\n\n- **Spa / làm đẹp** — đặt lịch, tích điểm (bên mình đã làm cho một chuỗi spa)\n- **Nhà hàng, quán** — đặt bàn, gọi món, khuyến mãi\n- **Bán lẻ** — đơn hàng, ưu đãi cho khách quen\n- **Dịch vụ cần tra cứu** — tra đơn, tra lịch hẹn\n\nBạn đang kinh doanh mảng nào để mình gợi ý tính năng phù hợp?"
+        }
+      ]
+    },
+
+    {
+      "id": "website",
+      "ten": "Website",
+      "mo_ta": "Dịch vụ làm website. Nguồn: projects.json (dự án web thương mại điện tử).",
+      "intents": [
+        {
+          "id": "website",
+          "nguon": "web",
+          "keywords": ["website", "web bán hàng", "trang web", "web giới thiệu", "landing page", "thương mại điện tử", "ecommerce", "e-commerce", "web công ty", "làm web"],
+          "answer": "Bên mình có làm **website** ạ — ví dụ web thương mại điện tử chuẩn SEO, tối ưu tốc độ, tích hợp thanh toán & quản lý đơn hàng tập trung.\n\nBạn muốn làm web **giới thiệu** hay web **bán hàng** để mình tư vấn cụ thể?"
+        },
+        {
+          "id": "web-seo",
+          "nguon": "web",
+          "keywords": ["seo", "lên google", "tìm kiếm google", "thứ hạng google", "tối ưu tốc độ", "chuẩn seo"],
+          "answer": "Có ạ — website bên mình làm **chuẩn SEO và tối ưu tốc độ** ngay từ khâu xây dựng, để Google đọc hiểu nội dung và khách mở trang không phải chờ lâu.\n\nSEO là việc lâu dài chứ không phải bật một nút, nên bên mình sẽ trao đổi rõ với bạn phần nào làm được ngay và phần nào cần đầu tư nội dung dần."
+        }
+      ]
+    },
+
+    {
+      "id": "phan-mem-phan-cung",
+      "ten": "Phần mềm & phần cứng (IoT)",
+      "mo_ta": "Nguồn: services.json + projects.json (kho thông minh, nhà hàng).",
+      "intents": [
+        {
+          "id": "software-hardware",
+          "nguon": "web",
+          "keywords": ["phần mềm", "phần cứng", "phần mềm quản lý", "hệ thống quản lý", "quản lý bán hàng", "quản lý doanh nghiệp", "phần mềm riêng"],
+          "answer": "**Giải pháp Phần mềm & Phần cứng** 🖥️\n\nPhần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh, tích hợp đồng bộ toàn hệ thống:\n\n- Phần mềm quản lý may đo theo nghiệp vụ\n- Thiết bị IoT & phần cứng thông minh\n- Tích hợp đồng bộ hệ thống sẵn có\n\nBạn đang cần quản lý mảng nào (kho, bán hàng, nhân sự, nhà hàng...) ạ?"
+        },
+        {
+          "id": "quan-ly-kho",
+          "nguon": "web",
+          "keywords": ["quản lý kho", "tồn kho", "kiểm kho", "xuất nhập kho", "quét mã kho"],
+          "answer": "Bên mình đã làm **hệ thống quản lý kho thông minh** kết hợp thiết bị quét IoT ạ: theo dõi **tồn kho thời gian thực** và **cảnh báo tự động** khi hàng sắp hết hoặc lệch số.\n\nBạn đang quản kho bằng gì (sổ, Excel, phần mềm cũ) để mình gợi ý hướng chuyển đổi cho nhẹ nhàng?"
+        },
+        {
+          "id": "iot",
+          "nguon": "web",
+          "keywords": ["iot", "thiết bị", "cảm biến", "phần cứng thông minh", "máy quét"],
+          "answer": "Có ạ — bên mình làm cả **thiết bị IoT & phần cứng thông minh**, và quan trọng hơn là **nối được thiết bị với phần mềm quản lý** để số liệu chạy về một chỗ.\n\nVí dụ thực tế: thiết bị quét trong hệ thống quản lý kho, giúp tồn kho cập nhật ngay khi hàng vào/ra."
+        },
+        {
+          "id": "tich-hop-he-thong",
+          "nguon": "web",
+          "keywords": ["tích hợp", "kết nối phần mềm", "hệ thống sẵn có", "đồng bộ dữ liệu", "phần mềm đang dùng", "kết nối api"],
+          "answer": "Được ạ — **tích hợp đồng bộ với hệ thống sẵn có** là một trong những việc bên mình làm thường xuyên, để bạn không phải bỏ phần mềm đang dùng.\n\nBạn cho mình biết đang dùng phần mềm gì, bên mình xem khả năng kết nối rồi đề xuất cách làm nhé!"
+        }
+      ]
+    },
+
+    {
+      "id": "chatbot-ai",
+      "ten": "Chatbot & trợ lý AI",
+      "mo_ta": "Nguồn: projects.json (Chatbot CSKH tích hợp AI) + chính con bot này.",
+      "intents": [
+        {
+          "id": "chatbot-ai",
+          "nguon": "web",
+          "keywords": ["chatbot", "chat bot", "trợ lý ảo", "trí tuệ nhân tạo", "con bot", "bot tư vấn", "bot trả lời", "làm bot"],
+          "answer": "Có ạ — bên mình xây **trợ lý AI / chatbot** trả lời khách **24/7 bằng tiếng Việt**, học theo dữ liệu doanh nghiệp, bàn giao kèm dashboard theo dõi (chính con bot bạn đang chat là một ví dụ 😄).\n\nQuan tâm thì để lại liên hệ, bên mình tư vấn nhé!"
+        },
+        {
+          "id": "chatbot-du-lieu",
+          "nguon": "soan",
+          "keywords": ["bot học dữ liệu", "dạy bot", "train bot", "bot lấy thông tin", "bot biết gì", "cập nhật kiến thức bot"],
+          "answer": "Bot học từ **chính dữ liệu của doanh nghiệp bạn**: bảng giá dịch vụ, câu hỏi khách hay hỏi, quy trình, chính sách... Bên mình gom lại thành một kho kiến thức để bot chỉ trả lời trong phạm vi đó — **không tự bịa**.\n\nMuốn sửa câu trả lời hay thêm kiến thức mới thì sửa trong kho dữ liệu, bot cập nhật theo ngay mà không phải viết lại phần mềm."
+        }
+      ]
+    },
+
+    {
+      "id": "dao-tao",
+      "ten": "Đào tạo chuyển đổi số",
+      "mo_ta": "Nguồn: services.json + projects.json. PHẢI đứng TRƯỚC intent 'tech-stack' (câu 'học công nghệ' chứa 'công nghệ').",
+      "intents": [
+        {
+          "id": "digital-training",
+          "nguon": "web",
+          "keywords": ["đào tạo", "chuyển đổi số", "khóa học", "training", "tập huấn", "dạy nhân viên", "học công nghệ", "đào tạo nhân sự"],
+          "answer": "**Đào tạo Chuyển đổi số** 🎓\n\nChương trình thực chiến giúp đội ngũ làm chủ công cụ số và AI, áp dụng ngay vào công việc:\n\n- Lộ trình thiết kế theo từng doanh nghiệp\n- Thực hành công cụ số & AI tại chỗ\n- Đồng hành hỗ trợ sau đào tạo\n\nBên mình từng đào tạo chương trình cho **200+ nhân sự** của một doanh nghiệp. Đội ngũ bạn khoảng bao nhiêu người ạ?"
+        },
+        {
+          "id": "dao-tao-noi-dung",
+          "nguon": "web",
+          "keywords": ["học những gì", "nội dung khóa", "dạy cái gì", "học được gì", "chương trình học", "giáo trình"],
+          "answer": "Nội dung **thiết kế riêng theo từng doanh nghiệp** chứ không dùng chung một giáo trình ạ — bên mình khảo sát công việc thật của đội ngũ rồi mới xây lộ trình.\n\nĐiểm chung là **học đi đôi với thực hành**: học công cụ số và AI rồi áp ngay vào quy trình đang chạy, kết thúc khóa vẫn có người đồng hành hỗ trợ tiếp."
+        }
+      ]
+    },
+
+    {
+      "id": "dich-vu-tong-quan",
+      "ten": "Tổng quan dịch vụ",
+      "mo_ta": "Câu hỏi chung chung. ĐẶT SAU các mục dịch vụ cụ thể để câu hỏi rõ ràng luôn về đúng mục của nó.",
+      "intents": [
+        {
+          "id": "app-general",
+          "nguon": "web",
+          "_note": "KHÔNG dùng từ đơn 'app': 'mini app' cũng chứa token 'app' → mọi câu về Zalo Mini App sẽ bị cộng điểm nhầm. Chỉ dùng cụm.",
+          "keywords": ["làm app", "ứng dụng", "mobile app", "app quản lý", "viết app", "app điện thoại", "app cho", "app nhà hàng", "app bán hàng"],
+          "answer": "Bên mình làm **ứng dụng** cho doanh nghiệp — từ **Zalo Mini App** (chạy trên Zalo, không cần cài) tới các app quản lý riêng (đặt lịch, bán hàng, nhà hàng...).\n\nBạn cần app cho lĩnh vực gì để mình tư vấn cụ thể ạ?"
+        },
+        {
+          "id": "services-overview",
+          "nguon": "web",
+          "keywords": ["dịch vụ gì", "những dịch vụ", "cung cấp gì", "có dịch vụ", "làm những gì", "làm gì", "dịch vụ nào", "các dịch vụ", "bên bạn làm", "cung cấp dịch vụ", "bên mình làm gì"],
+          "answer": "iMob cung cấp **3 nhóm dịch vụ chính**:\n\n1. **Phát triển Zalo Mini App** — ứng dụng chạy ngay trên Zalo\n2. **Giải pháp Phần mềm & Phần cứng** — phần mềm quản lý + thiết bị IoT\n3. **Đào tạo Chuyển đổi số** — giúp đội ngũ làm chủ công cụ số & AI\n\nNgoài ra bên mình còn làm **website** và **chatbot AI**. Bạn muốn tìm hiểu kỹ mảng nào ạ?"
+        }
+      ]
+    },
+
+    {
+      "id": "du-an",
+      "ten": "Dự án đã làm",
+      "mo_ta": "Nguồn: projects.json — 6 dự án tiêu biểu.",
+      "intents": [
+        {
+          "id": "portfolio",
+          "nguon": "web",
+          "keywords": ["dự án", "đã làm", "từng làm", "sản phẩm đã", "khách hàng", "portfolio", "đã triển khai", "làm cho ai", "case study", "sản phẩm tiêu biểu", "dự án tiêu biểu"],
+          "answer": "Một vài dự án bên mình đã thực hiện:\n\n- **Zalo Mini App đặt lịch Spa** — đặt lịch, tích điểm, CSKH\n- **Hệ thống quản lý kho thông minh (IoT)** — tồn kho thời gian thực\n- **Website thương mại điện tử** — chuẩn SEO, tích hợp thanh toán\n- **Chatbot CSKH tích hợp AI** — trả lời khách 24/7\n- **Ứng dụng quản lý nhà hàng** — gọi món, bếp, doanh thu realtime\n- **Đào tạo chuyển đổi số** — chương trình 8 tuần cho 200+ nhân sự\n\nBạn muốn xem dự án tương tự nhu cầu của mình không ạ?"
+        },
+        {
+          "id": "du-an-nha-hang",
+          "nguon": "web",
+          "keywords": ["nhà hàng", "quán ăn", "gọi món", "đặt bàn", "quán cafe", "pos"],
+          "answer": "Bên mình đã làm **ứng dụng quản lý nhà hàng** ạ: khách **gọi món tại bàn**, đơn chạy thẳng xuống bếp, doanh thu đồng bộ **realtime** giữa thu ngân – bếp – quản lý.\n\nQuán của bạn đang vướng ở khâu nào nhất (order, bếp, hay theo dõi doanh thu) để mình gợi ý cho sát?"
+        }
+      ]
+    },
+
+    {
+      "id": "quy-trinh",
+      "ten": "Quy trình hợp tác",
+      "mo_ta": "5 bước làm việc, cách bắt đầu, thay đổi giữa chừng, công nghệ sử dụng.",
+      "intents": [
+        {
+          "id": "getting-started",
+          "nguon": "web",
+          "keywords": ["bắt đầu thế nào", "cần chuẩn bị", "muốn bắt đầu", "làm sao để bắt đầu", "bắt đầu từ đâu", "cần gì để", "bước đầu tiên"],
+          "answer": "Bạn chỉ cần **mô tả bài toán đang gặp** và mong muốn của mình, chưa cần biết nên dùng công nghệ gì ạ.\n\nBên mình sẽ hỏi thêm để làm rõ, đề xuất hướng làm rồi báo giá. Để lại số điện thoại ở mục *Liên hệ* là bên mình chủ động gọi lại {{cong_ty.thoi_gian_phan_hoi}}!"
+        },
+        {
+          "id": "change-request",
+          "nguon": "web",
+          "keywords": ["đổi yêu cầu", "thay đổi giữa chừng", "sửa yêu cầu", "phát sinh", "đổi ý", "thêm tính năng"],
+          "answer": "Bình thường ạ — bên mình làm theo hướng **bắt đầu nhỏ, chạy thật, mở rộng dần** nên điều chỉnh giữa chừng là chuyện thường.\n\nThay đổi nhỏ bên mình xử lý trong phạm vi đã thống nhất; thay đổi lớn thì hai bên trao đổi lại tiến độ và chi phí trước khi làm."
+        },
+        {
+          "id": "dao-tao-su-dung",
+          "nguon": "web",
+          "keywords": ["hướng dẫn sử dụng", "dạy cách dùng", "nhân viên biết dùng", "hướng dẫn nhân viên", "tài liệu hướng dẫn", "không biết dùng"],
+          "answer": "Có ạ — **đào tạo sử dụng là một bước nằm trong quy trình bàn giao**, kèm tài liệu hướng dẫn để đội ngũ bạn tra lại khi cần.\n\nNếu muốn nâng năng lực số cho cả công ty chứ không chỉ dùng một phần mềm, bên mình còn có dịch vụ **Đào tạo Chuyển đổi số** riêng."
+        },
+        {
+          "id": "tech-stack",
+          "nguon": "web",
+          "_note": "PHẢI đứng SAU mục 'dao-tao': câu 'học công nghệ' chứa 'công nghệ', hoà điểm thì cái đứng trước thắng — và câu đó phải về đào tạo.",
+          "keywords": ["công nghệ", "ngôn ngữ lập trình", "framework", "tech stack", "dùng gì để làm", "code bằng gì", "nền tảng nào"],
+          "answer": "Bên mình **chọn công nghệ theo bài toán**, không rập khuôn một bộ cố định ạ:\n\n- **Zalo Mini App** cho kênh chạy trên Zalo\n- **Web & mobile app** cho phần mềm quản lý\n- **Thiết bị IoT** cho phần cứng\n- **Mô hình AI** cho trợ lý ảo\n\nNguyên tắc: hiểu đúng nhu cầu trước, chọn công nghệ sau."
+        }
+      ]
+    },
+
+    {
+      "id": "hop-dong-ban-giao",
+      "ten": "Hợp đồng & bàn giao",
+      "mo_ta": "Nguồn: faq.json. ⚠️ Nội dung soạn theo tinh thần website, chủ dự án cần đối chiếu với hợp đồng thật.",
+      "intents": [
+        {
+          "id": "source-code",
+          "nguon": "web",
+          "keywords": ["mã nguồn", "source code", "code nguồn", "giao code", "bàn giao mã", "sở hữu code"],
+          "answer": "Có ạ. Khách hàng được **bàn giao mã nguồn** cùng tài liệu kỹ thuật khi kết thúc dự án, kèm hướng dẫn để đội ngũ của bạn tự vận hành hoặc chuyển giao cho đơn vị khác sau này."
+        },
+        {
+          "id": "contract-payment",
+          "nguon": "web",
+          "keywords": ["hợp đồng", "thanh toán", "trả tiền", "đặt cọc", "trả góp", "ký kết", "thanh toán thế nào", "trả trước", "xuất hóa đơn"],
+          "answer": "Mọi dự án đều **có hợp đồng** ghi rõ phạm vi công việc, tiến độ và nghiệm thu ạ.\n\nThanh toán **chia theo giai đoạn** gắn với mốc bàn giao, không thu trọn một lần từ đầu. Chi tiết bên mình trao đổi khi tư vấn nhé!"
+        }
+      ]
+    },
+
+    {
+      "id": "ho-tro-bao-mat",
+      "ten": "Hỗ trợ & bảo mật",
+      "mo_ta": "Nguồn: faq.json + services.json.",
+      "intents": [
+        {
+          "id": "warranty-support",
+          "nguon": "web",
+          "keywords": ["bảo hành", "bảo trì", "hỗ trợ", "sau bàn giao", "sau khi bàn giao", "support", "chăm sóc sau", "lỗi thì sao", "hỏng thì", "gặp sự cố"],
+          "answer": "Bên mình **vận hành & bảo trì trọn gói** sau bàn giao ạ: sửa lỗi phát sinh, hỗ trợ kỹ thuật khi cần và cập nhật khi môi trường thay đổi.\n\nThời hạn và phạm vi cụ thể ghi rõ trong hợp đồng từng dự án. Riêng dịch vụ đào tạo còn có **đồng hành hỗ trợ sau khóa học**."
+        },
+        {
+          "id": "data-security",
+          "nguon": "web",
+          "keywords": ["bảo mật", "an toàn dữ liệu", "rò rỉ", "lộ dữ liệu", "dữ liệu khách", "riêng tư", "dữ liệu của tôi", "bảo vệ dữ liệu"],
+          "answer": "Bên mình **cam kết bảo mật dữ liệu** trong hợp đồng ạ: chỉ thu thập những gì thật sự cần cho dự án, không dùng dữ liệu của khách này cho khách khác.\n\nVới hệ thống có AI, bên mình **không dùng dữ liệu trò chuyện của khách để huấn luyện mô hình**."
+        }
+      ]
+    },
+
+    {
+      "id": "lien-he",
+      "ten": "Liên hệ",
+      "mo_ta": "Thông tin lấy từ company.json qua {{cong_ty.*}} — KHÔNG chép tay số điện thoại/email vào đây.",
+      "intents": [
+        {
+          "id": "remote-work",
+          "nguon": "web",
+          "_note": "PHẢI đứng TRƯỚC 'location': câu 'làm việc online được không' vô tình chứa cụm 'lam viec o' của location (khớp chuỗi con: 'lam viec online' bắt đầu bằng 'lam viec o').",
+          "keywords": ["tỉnh khác", "từ xa", "remote", "đến tận nơi", "ngoài quảng ninh", "online được không", "khác tỉnh", "ở xa"],
+          "answer": "Được ạ! Văn phòng bên mình ở **{{cong_ty.dia_chi}}** nhưng làm việc từ xa với khách ở tỉnh khác hoàn toàn bình thường — trao đổi online, chỉ gặp trực tiếp ở những mốc thật sự cần như khảo sát hoặc bàn giao."
+        },
+        {
+          "id": "contact",
+          "nguon": "web",
+          "_note": "KHÔNG dùng từ đơn 'zalo' (sẽ ăn tranh với mục Zalo Mini App), chỉ dùng cụm 'số zalo'.",
+          "keywords": ["liên hệ", "liên lạc", "số điện thoại", "sđt", "gọi", "gọi số nào", "số nào", "email", "hotline", "kết nối", "cách liên", "gặp tư vấn", "số zalo", "nhắn tin cho"],
+          "answer": "Bạn có thể liên hệ iMob qua:\n\n- 📞 **{{cong_ty.dien_thoai}}**\n- ✉️ **{{cong_ty.email}}**\n- 📍 {{cong_ty.dia_chi}}\n\nHoặc điền form ở mục *Liên hệ* phía dưới trang, bên mình phản hồi {{cong_ty.thoi_gian_phan_hoi}}!"
+        },
+        {
+          "id": "location",
+          "nguon": "web",
+          "keywords": ["ở đâu", "địa chỉ", "văn phòng", "chỗ nào", "khu vực nào", "trụ sở", "địa điểm", "làm việc ở"],
+          "answer": "Văn phòng iMob ở **{{cong_ty.dia_chi}}** ạ. Bạn ở khu vực nào để bên mình sắp xếp trao đổi thuận tiện nhé?"
+        },
+        {
+          "id": "gio-lam-viec",
+          "nguon": "web",
+          "keywords": ["giờ làm việc", "mấy giờ", "làm việc thứ mấy", "cuối tuần", "chủ nhật", "ngoài giờ", "khi nào mở cửa"],
+          "answer": "Bên mình làm việc **{{cong_ty.gio_lam_viec}}** ạ.\n\nNgoài giờ bạn cứ để lại tin nhắn hoặc điền form ở mục *Liên hệ*, bên mình phản hồi {{cong_ty.thoi_gian_phan_hoi}} — còn trợ lý ảo như mình thì trực 24/7 nhé 😄"
+        },
+        {
+          "id": "consult-free",
+          "nguon": "web",
+          "keywords": ["tư vấn", "miễn phí", "free", "tư vấn phí", "có mất phí", "tư vấn có", "được tư vấn"],
+          "answer": "Bên mình **tư vấn miễn phí** ạ! 🙌 Bạn mô tả nhu cầu và để lại số điện thoại ở mục *Liên hệ*, đội ngũ iMob sẽ liên hệ tư vấn hướng triển khai — không mất phí, không ràng buộc gì."
+        }
+      ]
+    },
+
+    {
+      "id": "hoi-thoai",
+      "ten": "Câu xã giao",
+      "mo_ta": "Chào hỏi, cảm ơn, tạm biệt và câu hỏi về chính con bot.",
+      "intents": [
+        {
+          "id": "greeting",
+          "nguon": "soan",
+          "keywords": ["xin chào", "chào bạn", "chào shop", "hello", "hi shop", "alo", "chào ad", "chào em", "chào ạ"],
+          "answer": "Xin chào! 👋 Mình là trợ lý ảo của **iMob**. Bạn đang quan tâm dịch vụ nào ạ — Zalo Mini App, website, phần mềm quản lý, chatbot AI hay đào tạo chuyển đổi số?"
+        },
+        {
+          "id": "bot-identity",
+          "nguon": "soan",
+          "keywords": ["bạn là ai", "người hay máy", "bot hay người", "là robot", "là người thật", "ai đang trả lời", "bạn tên gì"],
+          "answer": "Mình là **trợ lý ảo của iMob** ạ 🤖 — máy chứ không phải người, nên mình trực được 24/7.\n\nMình trả lời dựa trên thông tin chính thức của công ty; câu nào mình chưa có dữ liệu thì mình nói thẳng và mời bạn gặp đội ngũ thật qua số **{{cong_ty.dien_thoai}}** nhé!"
+        },
+        {
+          "id": "thanks",
+          "nguon": "soan",
+          "_note": "Không cần liệt kê 'cám ơn'/'cảm ợn': bỏ dấu xong tất cả đều thành 'cam on'. Ghi thừa chỉ làm script test báo trùng từ khóa.",
+          "keywords": ["cảm ơn", "thank", "thanks", "biết ơn"],
+          "answer": "Không có gì ạ! 🙌 Cần thêm thông tin gì bạn cứ nhắn mình nhé."
+        },
+        {
+          "id": "bye",
+          "nguon": "soan",
+          "keywords": ["tạm biệt", "bye", "goodbye", "kết thúc", "chào tạm biệt", "đi đây", "hẹn gặp lại"],
+          "answer": "Cảm ơn bạn đã quan tâm iMob! Chúc bạn một ngày tốt lành 👋 Hẹn gặp lại nhé!"
+        }
+      ]
+    }
+  ]
+}

@@ -12,7 +12,8 @@ import { openChat } from "../utils/chatBus.js";
 //
 // QUAN TRỌNG: câu trả lời mẫu phải KHỚP với hành vi thật của bot.
 // Bản trước ghi "bắt đầu từ 30 triệu" — một con số KHÔNG có trong dữ liệu,
-// trong khi backend được thiết kế để tuyệt đối không báo giá (xem guard.py).
+// trong khi bot được thiết kế để tuyệt đối không báo giá (xem mục
+// "chi-phi-thoi-gian" trong data/kienThuc.json).
 // Quảng cáo một đằng, bot trả lời một nẻo là mất lòng tin của khách.
 const PREVIEW_MESSAGES = [
   { id: 1, role: "bot", text: "Xin chào! Mình có thể giúp gì cho bạn? 👋" },

@@ -36,10 +36,22 @@ LO_PROMPT = ["QUY TẮC BẮT BUỘC", "THÔNG TIN ĐƯỢC PHÉP DÙNG", "syste
 BIA_GIA = re.compile(r"\d+\s*(triệu|tr\b|củ|đồng|vnd)", re.IGNORECASE)
 
 
-def kiem_loi_do(cau_hoi: str, expect: str, tra_loi: str) -> list[str]:
+def kiem_loi_do(cau_hoi: str, expect: str, tra_loi: str, phai_co=None) -> list[str]:
     """Tìm các lỗi nghiêm trọng có thể phát hiện tự động."""
     loi = []
     thap = tra_loi.lower()
+
+    # 0. LẠC CHỦ ĐỀ — câu trả lời không nhắc tới thứ đáng lẽ phải nhắc.
+    #
+    # Vì sao thêm tiêu chí này: bộ chấm từng báo 0 lỗi trong khi bot trả lời
+    # SAI HẲN chủ đề. Câu "lam mot du an mat bao lau" bị model đọc thành
+    # "mã bảo mật lâu" rồi đi tư vấn an ninh IoT — câu chữ trôi chảy, lịch sự,
+    # đúng tên dịch vụ có thật, nên 5 tiêu chí bên dưới đều không bắt được.
+    #
+    # Cách bắt: mỗi câu test có thể khai báo "phai_co" — vài từ khoá mà câu
+    # trả lời ĐÚNG chắc chắn phải chứa ít nhất một. Không có từ nào → lạc đề.
+    if phai_co and not any(tu.lower() in thap for tu in phai_co):
+        loi.append(f"LẠC CHỦ ĐỀ (không nhắc tới: {' / '.join(phai_co)})")
 
     # 1. Bịa giá — công ty chưa có bảng giá nên KHÔNG được nêu con số tiền
     if BIA_GIA.search(tra_loi):
@@ -88,7 +100,7 @@ def main() -> None:
                 nguon = "loi"
 
             giay = time.time() - bat_dau
-            loi = kiem_loi_do(c["q"], c["expect"], tra_loi)
+            loi = kiem_loi_do(c["q"], c["expect"], tra_loi, c.get("phai_co"))
             tong_loi += len(loi)
 
             ket_qua.append(

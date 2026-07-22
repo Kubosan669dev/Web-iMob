@@ -8,9 +8,11 @@
 // Cách hoạt động (khớp từ khóa có chấm điểm):
 //   1. Chuẩn hóa câu hỏi: bỏ dấu, thường hóa (để "GIÁ", "gia", "giá"
 //      đều như nhau — người Việt hay gõ không dấu).
-//   2. Với mỗi intent, đếm xem có bao nhiêu từ khóa xuất hiện.
-//   3. Intent điểm cao nhất thắng; hòa thì intent đứng TRƯỚC thắng.
-//   4. Không intent nào dính → trả câu fallback.
+//   2. Gom toàn bộ intent trong các MỤC của kienThuc.json thành một danh sách.
+//   3. Với mỗi intent, cộng điểm từng từ khóa trúng.
+//      Điểm = SỐ TỪ của từ khóa → cụm dài, cụ thể thắng từ đơn chung chung.
+//   4. Intent điểm cao nhất thắng; hòa thì intent đứng TRƯỚC trong file thắng.
+//   5. Không intent nào dính → trả câu fallback.
 // ============================================================
 
 // Bỏ dấu tiếng Việt + thường hóa + bỏ dấu câu + gộp khoảng trắng.
@@ -26,32 +28,89 @@ export function normalize(text) {
     .trim();
 }
 
+// ------------------------------------------------------------
+// Điền thông tin công ty vào câu trả lời.
+//
+// Vì sao cần: kho kiến thức KHÔNG được chép tay số điện thoại/địa chỉ —
+// bản cũ chép "+84 900 000 000" vào câu trả lời, đổi số trong company.json
+// là bot nói sai ngay mà không ai biết. Giờ viết {{cong_ty.dien_thoai}},
+// bot tự lấy từ company.json (đúng một nguồn duy nhất cho cả web lẫn bot).
+// ------------------------------------------------------------
+
+// Tên tiếng Việt trong kho kiến thức  →  khóa thật trong company.json
+const KHOA_CONG_TY = {
+  ten: "name",
+  ten_day_du: "fullName",
+  mo_ta: "description",
+  dien_thoai: "phone",
+  email: "email",
+  dia_chi: "address",
+  gio_lam_viec: "workingHours",
+  thoi_gian_phan_hoi: "responseTime",
+};
+
+export function dienThongTin(text, congTy) {
+  if (!congTy) return text;
+  // $1 là phần tên bên trong {{cong_ty.___}}
+  return text.replace(/\{\{cong_ty\.(\w+)\}\}/g, (nguyenVan, ten) => {
+    const giaTri = congTy[KHOA_CONG_TY[ten]];
+    // Không tìm thấy → GIỮ NGUYÊN {{...}} để lỗi hiện ra thật to,
+    // thay vì âm thầm mất một dòng thông tin (script test cũng bắt được).
+    return giaTri ?? nguyenVan;
+  });
+}
+
+// ------------------------------------------------------------
+// Gom intent của tất cả các mục thành một danh sách phẳng,
+// giữ nguyên thứ tự trong file (thứ tự = mức ưu tiên khi hòa điểm).
+// ------------------------------------------------------------
+export function gomIntents(knowledge) {
+  return knowledge.muc.flatMap((muc) =>
+    muc.intents.map((intent) => ({ ...intent, mucId: muc.id }))
+  );
+}
+
 // Một từ khóa có "dính" câu hỏi không?
 //   - Cụm nhiều từ ("bao nhiêu", "chi phí")  → khớp chuỗi con (substring)
 //   - Từ đơn ("giá", "zalo")                 → khớp TRỌN TỪ, để "giai" KHÔNG
 //     dính từ khóa "gia" (đây là lỗi kinh điển của khớp chuỗi con).
 function keywordHits(text, tokens, keyword) {
-  const k = normalize(keyword);
-  if (k.includes(" ")) return text.includes(k);
-  return tokens.includes(k);
+  if (keyword.includes(" ")) return text.includes(keyword);
+  return tokens.includes(keyword);
 }
 
 // Tìm câu trả lời phù hợp nhất.
-// Trả về: { intentId, answer, score }
-export function findAnswer(message, knowledge) {
+//   message   câu khách gõ
+//   knowledge nội dung kienThuc.json
+//   congTy    nội dung company.json (để điền {{cong_ty.*}}) — có thể bỏ trống
+// Trả về: { intentId, mucId, answer, score }
+export function findAnswer(message, knowledge, congTy) {
   const text = normalize(message);
   const tokens = text.split(" ");
 
   let best = null;
   let bestScore = 0;
 
-  for (const intent of knowledge.intents) {
+  for (const intent of gomIntents(knowledge)) {
+    // "tru" = danh sách cụm LOẠI TRỪ. Trúng một cụm là bỏ qua intent này.
+    // Vì sao cần: có những từ khóa vừa rộng vừa không thể bỏ. "bao nhiêu"
+    // là của intent giá, nhưng "bao nhiêu DỰ ÁN" lại là hỏi năng lực.
+    // (Backend đã dính đúng kiểu bug này 3 lần — xem backend/guard.py.)
+    const biLoaiTru = (intent.tru ?? []).some((cum) =>
+      text.includes(normalize(cum))
+    );
+    if (biLoaiTru) continue;
+
     let score = 0;
     for (const keyword of intent.keywords) {
-      if (keywordHits(text, tokens, keyword)) score += 1;
+      const k = normalize(keyword);
+      // Điểm = số từ của từ khóa. "quy trinh xet duyet" (3 điểm) thắng
+      // "zalo" (1 điểm) — cụm càng cụ thể càng đáng tin.
+      if (keywordHits(text, tokens, k)) score += k.split(" ").length;
     }
+
     // Dùng > (chặt) nên khi HÒA điểm, intent duyệt trước giữ ngôi → thứ tự
-    // trong chatKnowledge.json quyết định ưu tiên.
+    // các mục và intent trong kienThuc.json quyết định ưu tiên.
     if (score > bestScore) {
       bestScore = score;
       best = intent;
@@ -59,7 +118,18 @@ export function findAnswer(message, knowledge) {
   }
 
   if (!best) {
-    return { intentId: "fallback", answer: knowledge.fallback, score: 0 };
+    return {
+      intentId: "fallback",
+      mucId: null,
+      answer: dienThongTin(knowledge.fallback, congTy),
+      score: 0,
+    };
   }
-  return { intentId: best.id, answer: best.answer, score: bestScore };
+
+  return {
+    intentId: best.id,
+    mucId: best.mucId,
+    answer: dienThongTin(best.answer, congTy),
+    score: bestScore,
+  };
 }
