@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, X } from "lucide-react";
+import BrandMark from "../icons/BrandMark.jsx";
 import Button from "../ui/Button.jsx";
 import { NAV_ITEMS, SITE } from "../../utils/constants.js";
 
@@ -55,7 +57,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
             <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-blue-500">
-                  <Zap className="h-4 w-4 text-white" aria-hidden="true" />
+                  <BrandMark className="h-4 w-4 text-white" />
                 </div>
                 <p className="font-black text-white">{SITE.name}</p>
               </div>
@@ -93,14 +95,14 @@ export default function MobileMenu({ open, onClose, activeId }) {
                   {item.children && (
                     <div className="mb-1 mt-1 space-y-0.5 border-l border-purple-500/20 pl-5">
                       {item.children.map((child) => (
-                        <a
+                        <Link
                           key={child.label}
-                          href={child.href}
+                          to={child.to}
                           onClick={onClose}
                           className="block rounded-lg px-3 py-2 text-xs text-gray-400 transition-colors hover:text-white"
                         >
                           {child.label}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -110,7 +112,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
 
             {/* CTA dưới cùng */}
             <motion.div variants={itemVariants} className="border-t border-white/5 p-5">
-              <Button href="#contact" className="w-full" onClick={onClose}>
+              <Button href="/#contact" className="w-full" onClick={onClose}>
                 Liên hệ
               </Button>
             </motion.div>

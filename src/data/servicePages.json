@@ -1,0 +1,265 @@
+{
+  "_note": "NỘI DUNG 3 TRANG DỊCH VỤ RIÊNG (/zalo-miniapp, /software-hardware, /digital-transformation). Bố cục học theo imob.vn nhưng SỐ LIỆU LẤY TỪ DỮ LIỆU THẬT của dự án (about.json: 50+/30+/99%, projects.json: chương trình 8 tuần / 200+ nhân sự) — KHÔNG bịa '100K người dùng', KHÔNG hứa mốc thời gian cụ thể cho từng dự án (cùng kỷ luật với kienThuc.json). 'icon' là tên icon lucide, được map trong src/components/service/icons.js. Trang do các component trong src/components/service/ render.",
+  "zalo-miniapp": {
+    "meta": {
+      "route": "/zalo-miniapp",
+      "title": "Phát triển Zalo Mini App | iMob Solution & Technology",
+      "description": "Xây dựng Zalo Mini App chạy trực tiếp trong Zalo — đặt lịch, bán hàng, tích điểm, thanh toán ZaloPay. Tư vấn miễn phí, đồng hành từ ý tưởng đến vận hành."
+    },
+    "hero": {
+      "badge": "Giải pháp số hóa trải nghiệm",
+      "title": "PHÁT TRIỂN",
+      "highlight": "ZALO MINI APP",
+      "description": "Ứng dụng gọn nhẹ chạy ngay trong Zalo — khách mở là dùng, không cần cài đặt. iMob đồng hành từ ý tưởng, thiết kế, tích hợp thanh toán đến vận hành trọn gói.",
+      "highlights": [
+        { "icon": "smartphone", "label": "Không cần cài đặt" },
+        { "icon": "wallet", "label": "Thanh toán ZaloPay" },
+        { "icon": "users", "label": "Tiếp cận sẵn tệp khách" },
+        { "icon": "bell", "label": "Nhắn tin qua Zalo OA" }
+      ]
+    },
+    "solutions": {
+      "badge": "Ứng dụng toàn diện",
+      "title": "GIẢI PHÁP",
+      "highlight": "ĐA LĨNH VỰC",
+      "description": "Mini App phù hợp nhất với những mô hình khách quay lại nhiều lần — bên mình thiết kế theo đúng nghiệp vụ của bạn.",
+      "columns": [
+        {
+          "icon": "store",
+          "title": "Lĩnh vực ứng dụng",
+          "items": ["Spa & làm đẹp", "Nhà hàng, quán, F&B", "Bán lẻ & thương mại", "Dịch vụ cần tra cứu"]
+        },
+        {
+          "icon": "briefcase",
+          "title": "Đơn vị triển khai",
+          "items": ["Doanh nghiệp vừa & nhỏ", "Chuỗi cửa hàng", "Hộ kinh doanh", "Đơn vị dịch vụ"]
+        },
+        {
+          "icon": "users",
+          "title": "Người dùng cuối",
+          "items": ["Khách đặt lịch, đặt bàn", "Khách mua hàng online", "Khách thành viên tích điểm", "Khách tra cứu đơn / lịch hẹn"]
+        }
+      ]
+    },
+    "features": {
+      "badge": "Tính năng nổi bật",
+      "title": "TÍNH NĂNG",
+      "highlight": "VƯỢT TRỘI",
+      "description": "Những khối chức năng bên mình dựng sẵn và ghép theo nhu cầu từng dự án.",
+      "items": [
+        { "title": "Đăng ký & đặt lịch online", "desc": "Khách đặt lịch, đặt bàn, đăng ký dịch vụ ngay trong Zalo — không phải gọi điện hay chờ phản hồi." },
+        { "title": "Thanh toán qua ZaloPay", "desc": "Khách trả tiền ngay trong Zalo, không chuyển sang ứng dụng khác. Vẫn giữ song song chuyển khoản hoặc thanh toán khi nhận hàng." },
+        { "title": "Mã QR & vé điện tử", "desc": "Sinh mã QR cho vé, lượt hẹn hay ưu đãi — nhân viên quét là xác nhận, bỏ hẳn giấy tờ." },
+        { "title": "Quản lý cá nhân & tích điểm", "desc": "Khách xem lịch sử, tích điểm và đổi ưu đãi; doanh nghiệp giữ chân khách quen ngay trên kênh họ dùng hằng ngày." },
+        { "title": "Thông báo & CSKH qua Zalo OA", "desc": "Liên kết Official Account để nhắn tin nhắc lịch, gửi ưu đãi và chăm sóc khách sau khi dùng Mini App." },
+        { "title": "Trợ lý ảo / chatbot", "desc": "Bot trả lời khách 24/7 bằng tiếng Việt, học theo dữ liệu doanh nghiệp — giảm tải cho đội CSKH." },
+        { "title": "Tích hợp dữ liệu sẵn có", "desc": "Kết nối với phần mềm bạn đang dùng để đơn hàng, khách hàng và tồn kho chạy về một chỗ." }
+      ]
+    },
+    "benefits": {
+      "badge": "Tại sao chọn",
+      "title": "LỢI THẾ",
+      "highlight": "NỀN TẢNG ZALO",
+      "description": "Những điều đúng về bản thân nền tảng Zalo Mini App — không phải lời quảng cáo.",
+      "columns": 3,
+      "cards": [
+        { "icon": "smartphone", "title": "Truy cập ngay trong Zalo", "desc": "Khách bấm là mở, bỏ được bước tải app về máy — bước mà rất nhiều khách bỏ cuộc giữa chừng." },
+        { "icon": "users", "title": "Dễ tiếp cận mọi đối tượng", "desc": "Zalo là ứng dụng người Việt mở hằng ngày, nên Mini App đến tay khách quen một cách tự nhiên." },
+        { "icon": "shield", "title": "Nhận diện & bảo mật", "desc": "Nhận diện khách qua chính tài khoản Zalo; các quyền nhạy cảm đều phải xin phép đúng quy định của Zalo." },
+        { "icon": "palette", "title": "Giao diện tùy biến", "desc": "Thiết kế UI/UX theo nhận diện thương hiệu của bạn, không rập khuôn một mẫu chung." },
+        { "icon": "wallet", "title": "Tối ưu chi phí", "desc": "Tận dụng hạ tầng sẵn có của Zalo, khách không tốn dung lượng máy, doanh nghiệp bớt chi phí phát hành." },
+        { "icon": "bell", "title": "Gắn với Zalo OA", "desc": "Liên kết Official Account để chăm sóc và nhắn tin lại cho khách sau khi họ dùng Mini App." }
+      ]
+    },
+    "process": {
+      "badge": "Quy trình triển khai",
+      "title": "5 BƯỚC",
+      "highlight": "ĐỒNG HÀNH",
+      "description": "Bạn mô tả bài toán, phần kỹ thuật và hồ sơ đăng ký để bên mình lo — hướng dẫn từng bước.",
+      "steps": [
+        { "title": "Ý tưởng", "desc": "Cùng làm rõ nhu cầu, mô hình kinh doanh và tính năng cần có." },
+        { "title": "Tư vấn", "desc": "Đề xuất hướng làm, chuẩn bị Zalo OA và hồ sơ định danh (eKYC)." },
+        { "title": "Thiết kế", "desc": "Dựng UI/UX theo nhận diện thương hiệu và luồng sử dụng của khách." },
+        { "title": "Triển khai", "desc": "Lập trình, tích hợp thanh toán, nộp Zalo xét duyệt và phát hành." },
+        { "title": "Đào tạo & bàn giao", "desc": "Hướng dẫn vận hành, bàn giao và bảo trì trọn gói sau khi lên sóng." }
+      ]
+    },
+    "stats": {
+      "items": [
+        { "value": "50+", "label": "Dự án triển khai" },
+        { "value": "30+", "label": "Khách hàng đồng hành" },
+        { "value": "99%", "label": "Mức độ hài lòng" }
+      ]
+    }
+  },
+
+  "software-hardware": {
+    "meta": {
+      "route": "/software-hardware",
+      "title": "Giải pháp Phần mềm & Phần cứng | iMob Solution & Technology",
+      "description": "Phần mềm quản lý may đo theo nghiệp vụ kết hợp thiết bị IoT, tích hợp đồng bộ toàn hệ thống. Quản lý kho, bán hàng, nhà hàng và hơn thế nữa."
+    },
+    "hero": {
+      "badge": "Giải pháp tùy chỉnh cho doanh nghiệp",
+      "title": "PHẦN MỀM &",
+      "highlight": "PHẦN CỨNG",
+      "description": "Phần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh và tích hợp đồng bộ toàn hệ thống — số liệu chạy về một chỗ.",
+      "highlights": [
+        { "icon": "settings", "label": "May đo theo nghiệp vụ" },
+        { "icon": "cpu", "label": "Thiết bị IoT" },
+        { "icon": "workflow", "label": "Tích hợp đồng bộ" },
+        { "icon": "shield", "label": "Bảo mật đa lớp" }
+      ]
+    },
+    "solutions": {
+      "badge": "Giải pháp tích hợp",
+      "title": "SOFTWARE &",
+      "highlight": "HARDWARE",
+      "description": "Một đầu mối lo cả phần mềm lẫn thiết bị — không phải ghép nhiều nhà cung cấp rồi tự xử lý phần kết nối.",
+      "columns": [
+        {
+          "icon": "monitor",
+          "title": "Giải pháp phần mềm",
+          "items": ["Phần mềm quản lý theo nghiệp vụ", "Web & mobile app quản trị", "Số hóa quy trình thủ công", "Báo cáo & dữ liệu tập trung"]
+        },
+        {
+          "icon": "cpu",
+          "title": "Giải pháp phần cứng",
+          "items": ["Thiết bị IoT & cảm biến", "Máy quét, thiết bị đầu cuối", "Thiết bị hiển thị tại điểm bán", "Hạ tầng mạng & bảo mật"]
+        },
+        {
+          "icon": "workflow",
+          "title": "Lợi ích tích hợp",
+          "items": ["Thiết bị nối thẳng phần mềm", "Số liệu cập nhật thời gian thực", "Một đầu mối chịu trách nhiệm", "Vận hành & bảo trì trọn gói", "Mở rộng dần theo nhu cầu"]
+        }
+      ]
+    },
+    "benefits": {
+      "badge": "Ưu điểm vượt trội",
+      "title": "VÌ SAO",
+      "highlight": "CHỌN IMOB",
+      "description": "Sáu điều bên mình cam kết trong hợp đồng từng dự án.",
+      "columns": 3,
+      "cards": [
+        { "icon": "wrench", "title": "Tùy chỉnh hoàn toàn", "desc": "Xây đúng theo nghiệp vụ của bạn, không ép bạn chạy theo một phần mềm đóng gói cứng nhắc." },
+        { "icon": "gauge", "title": "Hiệu suất & ổn định", "desc": "Thiết kế cho vận hành thật hằng ngày, chịu được lượng giao dịch của doanh nghiệp bạn." },
+        { "icon": "shield", "title": "Bảo mật đa lớp", "desc": "Cam kết bảo mật dữ liệu trong hợp đồng; chỉ thu thập những gì thật sự cần cho dự án." },
+        { "icon": "graduation-cap", "title": "Đào tạo & chuyển giao", "desc": "Bàn giao mã nguồn cùng tài liệu, đào tạo đội ngũ của bạn tự vận hành hoặc chuyển giao sau này." },
+        { "icon": "headphones", "title": "Hỗ trợ sau bàn giao", "desc": "Vận hành & bảo trì trọn gói: sửa lỗi phát sinh, hỗ trợ kỹ thuật khi cần." },
+        { "icon": "expand", "title": "Khả năng mở rộng", "desc": "Bắt đầu nhỏ, chạy thật, mở rộng dần — thêm tính năng và thiết bị khi doanh nghiệp lớn lên." }
+      ]
+    },
+    "industries": {
+      "badge": "Giải pháp theo ngành",
+      "title": "PHÙ HỢP",
+      "highlight": "NHIỀU NGÀNH",
+      "description": "Bên mình đã làm cho nhiều mô hình khác nhau — dưới đây là vài hướng thường gặp.",
+      "columns": 3,
+      "cards": [
+        { "icon": "package", "title": "Kho vận & sản xuất", "items": ["Quản lý kho thông minh (IoT)", "Tồn kho thời gian thực", "Cảnh báo tự động"] },
+        { "icon": "utensils", "title": "Nhà hàng & F&B", "items": ["Gọi món tại bàn", "Đồng bộ bếp – thu ngân", "Theo dõi doanh thu realtime"] },
+        { "icon": "shopping-cart", "title": "Bán lẻ & thương mại", "items": ["Quản lý bán hàng", "Website thương mại điện tử", "Tích hợp thanh toán"] },
+        { "icon": "store", "title": "Spa & dịch vụ", "items": ["Đặt lịch & tích điểm", "Quản lý khách hàng", "Chăm sóc sau dịch vụ"] },
+        { "icon": "briefcase", "title": "Doanh nghiệp", "items": ["Số hóa quy trình nội bộ", "Phần mềm quản trị riêng", "Báo cáo tập trung"] },
+        { "icon": "bot", "title": "Tự động hóa & AI", "items": ["Chatbot CSKH 24/7", "Trợ lý ảo tiếng Việt", "Tích hợp dữ liệu doanh nghiệp"] }
+      ]
+    },
+    "process": {
+      "badge": "Quy trình phát triển",
+      "title": "5 BƯỚC",
+      "highlight": "TỪ Ý TƯỞNG ĐẾN VẬN HÀNH",
+      "description": "Thời gian tùy quy mô và số tính năng từng dự án — bên mình chốt tiến độ cụ thể sau khi nghe nhu cầu.",
+      "steps": [
+        { "title": "Phân tích & tư vấn", "desc": "Khảo sát nghiệp vụ, làm rõ bài toán và đề xuất hướng giải quyết." },
+        { "title": "Thiết kế hệ thống", "desc": "Thiết kế kiến trúc phần mềm, lựa chọn thiết bị phần cứng phù hợp." },
+        { "title": "Phát triển & tích hợp", "desc": "Lập trình, kết nối thiết bị và tích hợp với hệ thống sẵn có." },
+        { "title": "Triển khai & đào tạo", "desc": "Cài đặt tại chỗ, chạy thử, đào tạo đội ngũ sử dụng." },
+        { "title": "Vận hành & hỗ trợ", "desc": "Bàn giao, bảo trì trọn gói và đồng hành khi cần mở rộng." }
+      ]
+    },
+    "stats": {
+      "items": [
+        { "value": "50+", "label": "Dự án triển khai" },
+        { "value": "30+", "label": "Khách hàng đồng hành" },
+        { "value": "99%", "label": "Mức độ hài lòng" }
+      ]
+    }
+  },
+
+  "digital-transformation": {
+    "meta": {
+      "route": "/digital-transformation",
+      "title": "Đào tạo Chuyển đổi số | iMob Solution & Technology",
+      "description": "Chương trình đào tạo chuyển đổi số thực chiến giúp đội ngũ làm chủ công cụ số và AI, áp dụng ngay vào công việc. Lộ trình thiết kế riêng theo từng doanh nghiệp."
+    },
+    "hero": {
+      "badge": "Đào tạo thực chiến",
+      "title": "ĐÀO TẠO",
+      "highlight": "CHUYỂN ĐỔI SỐ",
+      "description": "Chương trình giúp đội ngũ của bạn làm chủ công cụ số và AI, áp dụng ngay vào công việc hằng ngày. Lộ trình thiết kế riêng theo từng doanh nghiệp.",
+      "highlights": [
+        { "icon": "target", "label": "Lộ trình theo doanh nghiệp" },
+        { "icon": "bot", "label": "Thực hành công cụ AI" },
+        { "icon": "users", "label": "Áp dụng vào việc thật" },
+        { "icon": "headphones", "label": "Đồng hành sau khóa" }
+      ]
+    },
+    "objectives": {
+      "badge": "Mục tiêu chương trình",
+      "title": "SAU KHÓA HỌC",
+      "highlight": "ĐỘI NGŨ CỦA BẠN",
+      "description": "Ba điều đội ngũ đạt được khi kết thúc chương trình.",
+      "columns": 3,
+      "cards": [
+        { "icon": "brain", "title": "Tư duy số", "desc": "Hiểu chuyển đổi số là gì, bắt đầu từ đâu và áp dụng vào chính công việc đang làm." },
+        { "icon": "wrench", "title": "Năng lực thực hành", "desc": "Sử dụng thành thạo công cụ số và AI, biến chúng thành trợ thủ hằng ngày." },
+        { "icon": "workflow", "title": "Áp dụng vào quy trình", "desc": "Đưa công cụ vào đúng quy trình thật của doanh nghiệp, tạo kết quả đo được." }
+      ]
+    },
+    "audience": {
+      "badge": "Đối tượng tham gia",
+      "title": "DÀNH CHO",
+      "highlight": "AI",
+      "description": "Chương trình điều chỉnh nội dung theo vai trò của từng nhóm.",
+      "columns": 4,
+      "cards": [
+        { "icon": "briefcase", "title": "Lãnh đạo", "desc": "Định hướng chuyển đổi số cho tổ chức." },
+        { "icon": "settings", "title": "Nhân sự vận hành", "desc": "Số hóa quy trình đang làm thủ công." },
+        { "icon": "users", "title": "Đội ngũ kinh doanh", "desc": "Dùng công cụ số & AI để bán hàng, chăm khách." },
+        { "icon": "graduation-cap", "title": "Nhân sự trẻ", "desc": "Nâng năng lực số để bắt kịp công việc mới." }
+      ]
+    },
+    "modules": {
+      "badge": "Nội dung đào tạo",
+      "title": "LỘ TRÌNH",
+      "highlight": "THIẾT KẾ RIÊNG",
+      "description": "Nội dung xây theo từng doanh nghiệp chứ không dùng chung một giáo trình — dưới đây là các nhóm chủ đề thường có.",
+      "items": [
+        { "title": "Nền tảng số & tư duy chuyển đổi", "desc": "Bức tranh chung về chuyển đổi số, cách nhìn ra cơ hội trong chính công việc của mình." },
+        { "title": "Công cụ AI thực chiến", "desc": "Thực hành các công cụ AI phổ biến, áp dụng vào soạn thảo, phân tích và chăm sóc khách hàng." },
+        { "title": "Số hóa quy trình", "desc": "Rà soát quy trình thủ công và chuyển sang công cụ số để tiết kiệm thời gian." },
+        { "title": "Dữ liệu & tự động hóa", "desc": "Thu thập, tổ chức dữ liệu và tự động hóa các thao tác lặp đi lặp lại." },
+        { "title": "Ứng dụng vào thực tế doanh nghiệp", "desc": "Bài tập trên chính quy trình thật của đơn vị, có người đồng hành hỗ trợ sau khóa." }
+      ]
+    },
+    "formats": {
+      "badge": "Hình thức triển khai",
+      "title": "LINH HOẠT",
+      "highlight": "THEO NHU CẦU",
+      "description": "Chọn hình thức phù hợp với lịch và quy mô đội ngũ của bạn.",
+      "columns": 3,
+      "cards": [
+        { "icon": "users", "title": "Trực tiếp (offline)", "desc": "Đào tạo tại doanh nghiệp, thực hành trực tiếp cùng giảng viên." },
+        { "icon": "monitor", "title": "Trực tuyến (online)", "desc": "Học từ xa linh hoạt theo lịch của đội ngũ, phù hợp nhiều chi nhánh." },
+        { "icon": "presentation", "title": "Chuyên đề", "desc": "Buổi chuyên sâu theo một chủ đề cụ thể mà doanh nghiệp cần." }
+      ]
+    },
+    "stats": {
+      "items": [
+        { "value": "200+", "label": "Nhân sự đã đào tạo" },
+        { "value": "50+", "label": "Dự án triển khai" },
+        { "value": "99%", "label": "Mức độ hài lòng" }
+      ]
+    }
+  }
+}

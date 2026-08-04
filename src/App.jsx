@@ -2,7 +2,16 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "motion/react";
 import Layout from "./components/layout/Layout.jsx";
+import ScrollToTop from "./components/util/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage.jsx";
+
+// Các trang dịch vụ tách bundle bằng lazy() — khách vào trang chủ không tải
+// kèm. Nội dung từng trang đọc từ data/servicePages.json.
+const ZaloMiniAppPage = lazy(() => import("./pages/ZaloMiniAppPage.jsx"));
+const SoftwareHardwarePage = lazy(() => import("./pages/SoftwareHardwarePage.jsx"));
+const DigitalTransformationPage = lazy(() =>
+  import("./pages/DigitalTransformationPage.jsx")
+);
 
 // Style-guide nội bộ: tách khỏi bundle chính bằng lazy() vì khách
 // truy cập trang chủ không bao giờ cần tới nó.
@@ -18,11 +27,18 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <BrowserRouter>
+        <ScrollToTop />
         <Suspense fallback={null}>
           <Routes>
             {/* Các trang chính dùng chung Layout (Navbar + Footer) */}
             <Route element={<Layout />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/zalo-miniapp" element={<ZaloMiniAppPage />} />
+              <Route path="/software-hardware" element={<SoftwareHardwarePage />} />
+              <Route
+                path="/digital-transformation"
+                element={<DigitalTransformationPage />}
+              />
             </Route>
 
             {/* Style-guide nội bộ — không Navbar/Footer */}

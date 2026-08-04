@@ -15,23 +15,25 @@ import company from "../data/company.json";
 // không phải sửa gì.
 export const SITE = company;
 
-// Menu điều hướng — item có `children` sẽ hiển thị dropdown.
-// Giai đoạn này dropdown anchor tới section; sau này có thể đổi href
-// thành route riêng (/zalo-miniapp...) mà không sửa Navbar.
+// Menu điều hướng.
+//   href "/#id" = mục cuộn tới section của TRANG CHỦ. Dùng "/#..." (kèm dấu /)
+//     để bấm từ trang con (vd /zalo-miniapp) vẫn quay về đúng section trang chủ.
+//   children[].to = ROUTE thật của trang dịch vụ riêng (React Router <Link>).
+// Navbar/MobileMenu/Footer đều đọc từ đây → một nguồn dữ liệu duy nhất.
 export const NAV_ITEMS = [
-  { id: "home", label: "HOME", href: "#home" },
-  { id: "about", label: "ABOUT", href: "#about" },
+  { id: "home", label: "HOME", href: "/#home" },
+  { id: "about", label: "ABOUT", href: "/#about" },
   {
     id: "services",
     label: "SERVICES",
-    href: "#services",
+    href: "/#services",
     children: [
-      { label: "Phát triển Zalo MiniApp", href: "#services" },
-      { label: "Giải pháp Phần mềm & Phần cứng", href: "#services" },
-      { label: "Đào tạo Chuyển đổi số", href: "#services" },
+      { label: "Phát triển Zalo MiniApp", to: "/zalo-miniapp" },
+      { label: "Giải pháp Phần mềm & Phần cứng", to: "/software-hardware" },
+      { label: "Đào tạo Chuyển đổi số", to: "/digital-transformation" },
     ],
   },
-  { id: "contact", label: "CONTACT", href: "#contact" },
+  { id: "contact", label: "CONTACT", href: "/#contact" },
 ];
 
 // Mạng xã hội hiển thị ở Footer — id khớp với icon map trong Footer.jsx,

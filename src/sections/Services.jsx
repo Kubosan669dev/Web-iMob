@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Layers, Smartphone, Cpu, GraduationCap, Check, ArrowRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
@@ -38,8 +39,8 @@ function ServiceCard({ service }) {
         ))}
       </ul>
 
-      <a
-        href="#contact"
+      <Link
+        to={service.route}
         className="group/link mt-auto inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-cyan-300 transition-colors hover:text-white"
       >
         Tìm hiểu thêm
@@ -47,7 +48,7 @@ function ServiceCard({ service }) {
           className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1"
           aria-hidden="true"
         />
-      </a>
+      </Link>
     </Card>
   );
 }

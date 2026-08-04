@@ -1,4 +1,6 @@
-import { Zap, Mail, Phone, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Mail, Phone, MapPin } from "lucide-react";
+import BrandMark from "../icons/BrandMark.jsx";
 import Container from "../ui/Container.jsx";
 import {
   FacebookIcon,
@@ -29,12 +31,16 @@ function FooterHeading({ children }) {
   );
 }
 
-function FooterLink({ href, children }) {
-  return (
-    <a
-      href={href}
-      className="block py-1.5 text-sm text-gray-400 transition-colors hover:text-cyan-300"
-    >
+// FooterLink: dùng <Link> khi là route thật (to), <a> khi là mục hash trang chủ (href).
+function FooterLink({ href, to, children }) {
+  const cls =
+    "block py-1.5 text-sm text-gray-400 transition-colors hover:text-cyan-300";
+  return to ? (
+    <Link to={to} className={cls}>
+      {children}
+    </Link>
+  ) : (
+    <a href={href} className={cls}>
       {children}
     </a>
   );
@@ -47,9 +53,9 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* ---------- Cột 1: Brand ---------- */}
           <div className="space-y-4">
-            <a href="#home" className="flex items-center gap-3">
+            <a href="/#home" className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500">
-                <Zap className="h-5 w-5 text-white" aria-hidden="true" />
+                <BrandMark className="h-5 w-5 text-white" />
               </div>
               <div className="leading-tight">
                 <p className="text-lg font-black text-white">{SITE.name}</p>
@@ -78,7 +84,7 @@ export default function Footer() {
           <div>
             <FooterHeading>Services</FooterHeading>
             {serviceLinks.map((service) => (
-              <FooterLink key={service.label} href={service.href}>
+              <FooterLink key={service.label} to={service.to}>
                 {service.label}
               </FooterLink>
             ))}

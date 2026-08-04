@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Zap, ChevronDown, Menu } from "lucide-react";
+import BrandMark from "../icons/BrandMark.jsx";
 import Container from "../ui/Container.jsx";
 import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
@@ -40,13 +42,13 @@ function NavItem({ item, active }) {
         <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
           <div className="glass w-64 rounded-xl p-2 shadow-xl shadow-black/40">
             {item.children.map((child) => (
-              <a
+              <Link
                 key={child.label}
-                href={child.href}
+                to={child.to}
                 className="block rounded-lg px-4 py-2.5 text-sm text-gray-300 transition-colors hover:bg-purple-500/10 hover:text-white"
               >
                 {child.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -71,9 +73,9 @@ export default function Navbar() {
     >
       <Container className="flex h-16 items-center justify-between lg:h-[72px]">
         {/* ---------- Logo ---------- */}
-        <a href="#home" className="group flex items-center gap-3">
+        <a href="/#home" className="group flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 transition-shadow duration-300 group-hover:shadow-glow-purple">
-            <Zap className="h-5 w-5 text-white" aria-hidden="true" />
+            <BrandMark className="h-5 w-5 text-white" />
           </div>
           <div className="leading-tight">
             <p className="text-lg font-black text-white">{SITE.name}</p>
@@ -92,7 +94,7 @@ export default function Navbar() {
 
         {/* ---------- Bên phải: CTA + hamburger ---------- */}
         <div className="flex items-center gap-3">
-          <Button href="#contact" size="sm" className="hidden md:inline-flex">
+          <Button href="/#contact" size="sm" className="hidden md:inline-flex">
             Liên hệ
           </Button>
           <button
