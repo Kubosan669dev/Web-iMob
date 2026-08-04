@@ -16,8 +16,8 @@ import { sendMessage } from "../services/chatService.js";
 
 let nextId = 1; // id tăng dần để React phân biệt từng bong bóng chat
 
-function createMessage(role, text) {
-  return { id: nextId++, role, text }; // role: "bot" | "user"
+function createMessage(role, text, done = true) {
+  return { id: nextId++, role, text, done }; // done: đã gõ xong chưa?
 }
 
 const GREETING = createMessage(
@@ -29,20 +29,27 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// "Gõ" fullText vào đúng tin nhắn có id tương ứng, vài ký tự mỗi nhịp —
-// mỗi lần setMessages là một lần React vẽ lại → tạo hiệu ứng chữ chạy ra.
+// "Gõ" fullText vào đúng tin nhắn có id tương ứng, tự động điều chỉnh tốc độ
+// theo độ dài văn bản để không bị giật lag khung hình khi trả lời dài.
+//
+// QUAN TRỌNG: Trong lúc gõ, message.done = false → MessageBubble chỉ hiện
+// text THÔ (không qua ReactMarkdown). Khi gõ xong, set done = true →
+// ReactMarkdown render DUY NHẤT 1 LẦN. Đây là thủ thuật triệt tiêu lag.
 async function typeOutMessage(id, fullText, setMessages) {
-  const CHARS_PER_TICK = 2;
-  const TICK_MS = 16;
+  const len = fullText.length;
+  const CHARS_PER_TICK = len > 500 ? 12 : len > 200 ? 8 : 4;
+  const TICK_MS = 20;
 
-  for (let i = 0; i <= fullText.length; i += CHARS_PER_TICK) {
+  for (let i = 0; i <= len; i += CHARS_PER_TICK) {
     setMessages((prev) =>
       prev.map((m) => (m.id === id ? { ...m, text: fullText.slice(0, i) } : m))
     );
     await sleep(TICK_MS);
   }
-  // đảm bảo hiện đủ 100% (vòng lặp có thể dừng hụt vài ký tự cuối)
-  setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text: fullText } : m)));
+  // Gõ xong → hiện đủ 100% text VÀ bật done=true để chuyển sang Markdown
+  setMessages((prev) =>
+    prev.map((m) => (m.id === id ? { ...m, text: fullText, done: true } : m))
+  );
 }
 
 export default function useChat() {
@@ -79,7 +86,7 @@ export default function useChat() {
       if (reduceMotion) {
         setMessages((prev) => [...prev, createMessage("bot", response)]);
       } else {
-        const botMessage = createMessage("bot", "");
+        const botMessage = createMessage("bot", "", false); // done=false → hiện text thô lúc gõ
         setMessages((prev) => [...prev, botMessage]);
         await typeOutMessage(botMessage.id, response, setMessages);
       }
@@ -95,5 +102,10 @@ export default function useChat() {
     }
   }
 
-  return { messages, isTyping, isWaiting, error, send };
+  function clearChat() {
+    setMessages([createMessage("bot", "Xin chào! 👋 Mình là trợ lý ảo của iMob. Bạn cần hỏi gì cứ nhắn nhé!")]);
+    setError(null);
+  }
+
+  return { messages, isTyping, isWaiting, error, send, clearChat };
 }

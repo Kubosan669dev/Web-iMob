@@ -12,9 +12,10 @@
     { "q": "có làm ứng dụng zalo không", "expect": "zalo-miniapp" },
 
     { "q": "Bên bạn có làm website không?", "expect": "website" },
-    { "q": "mình cần làm web bán hàng", "expect": "website" },
-    { "q": "lam trang web gioi thieu cong ty", "expect": "website" },
-    { "q": "có nhận làm web thương mại điện tử không", "expect": "website" },
+    { "q": "web giới thiệu", "expect": "web-gioi-thieu" },
+    { "q": "lam trang web gioi thieu cong ty", "expect": "web-gioi-thieu" },
+    { "q": "mình cần làm web bán hàng", "expect": "web-ban-hang" },
+    { "q": "có nhận làm web thương mại điện tử không", "expect": "web-ban-hang" },
 
     { "q": "Có làm phần mềm quản lý không?", "expect": "software-hardware" },
     { "q": "minh can phan mem quan ly kho", "expect": "software-hardware" },
@@ -194,7 +195,7 @@
     { "q": "co giao trinh san khong", "expect": "dao-tao-noi-dung" },
 
     { "q": "Bên bạn có làm cho nhà hàng chưa?", "expect": "du-an-nha-hang" },
-    { "q": "quan an muon goi mon tai ban", "expect": "du-an-nha-hang" },
+    { "q": "quan an muon goi mon tai ban", "expect": "nganh-fb-nhahang" },
 
     { "q": "Nhân viên không biết dùng thì sao?", "expect": "dao-tao-su-dung" },
     { "q": "co tai lieu huong dan khong", "expect": "dao-tao-su-dung" },
@@ -206,6 +207,28 @@
     { "q": "ban ten gi vay", "expect": "bot-identity" },
 
     { "q": "Cho mình xin số điện thoại tư vấn", "expect": "contact", "phai_co": ["+84"] },
-    { "q": "van phong o dau vay", "expect": "location", "phai_co": ["Hạ Long"] }
+    { "q": "van phong o dau vay", "expect": "location", "phai_co": ["Hạ Long"] },
+
+    { "q": "Bên bạn có làm Zalo Mini App cho Dịch vụ công không?", "expect": "zma-dich-vu-cong", "phai_co": ["hành chính công", "1 cửa"] },
+    { "q": "muốn làm app zalo cho UBND phường xã nộp hồ sơ", "expect": "zma-dich-vu-cong" },
+    { "q": "tra cứu thủ tục 1 cửa qua zalo app", "expect": "zma-dich-vu-cong" },
+
+    { "q": "Làm zalo mini app cho bệnh viện phòng khám", "expect": "zma-y-te", "phai_co": ["đặt lịch khám", "BHYT"] },
+    { "q": "đặt lịch khám bệnh qua zalo", "expect": "zma-y-te" },
+
+    { "q": "Làm sổ liên lạc điện tử cho trường học qua zalo", "expect": "zma-giao-duc", "phai_co": ["Sổ liên lạc", "học phí"] },
+    { "q": "nộp học phí trường mầm non qua zalo app", "expect": "zma-giao-duc" },
+
+    { "q": "tôi muốn làm web về bán máy tính", "expect": "web-may-tinh-pc", "phai_co": ["Build PC", "linh kiện"] },
+    { "q": "làm web bán laptop linh kiện pc", "expect": "web-may-tinh-pc" },
+
+    { "q": "mình làm chuỗi spa thẩm mỹ viện muốn đặt lịch ktv", "expect": "nganh-spa-beauty", "phai_co": ["Kỹ thuật viên"] },
+    { "q": "app zalo dat lich spa", "expect": "nganh-spa-beauty" },
+
+    { "q": "làm menu điện tử quét mã qr tại bàn cho nhà hàng", "expect": "nganh-fb-nhahang", "phai_co": ["quét mã QR"] },
+
+    { "q": "làm web bất động sản tính lãi vay ngân hàng", "expect": "nganh-bds-dulich", "phai_co": ["lãi suất vay"] },
+
+    { "q": "tích hợp vietqr tự động xác nhận chuyển khoản", "expect": "tich-hop-thanh-toan-qr", "phai_co": ["VietQR"] }
   ]
 }

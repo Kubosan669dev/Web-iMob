@@ -15,10 +15,23 @@
 //   5. Không intent nào dính → trả câu fallback.
 // ============================================================
 
-// Bỏ dấu tiếng Việt + thường hóa + bỏ dấu câu + gộp khoảng trắng.
+// Từ điển chuẩn hóa từ gõ tắt và thuật ngữ viết tắt phổ biến
+const TUDIEN_GO_TAT = {
+  miniapp: "mini app",
+  zlo: "zalo",
+  dvc: "dich vu cong",
+  ecom: "ban hang",
+  ecommerce: "ban hang",
+  lh: "lien he",
+  ib: "inbox",
+  st: "so dien thoai",
+  bds: "bat dong san",
+};
+
+// Bỏ dấu tiếng Việt + thường hóa + bỏ dấu câu + gộp khoảng trắng + chuẩn hóa từ gõ tắt.
 // Ví dụ: "Giá Zalo bao NHIÊU?" → "gia zalo bao nhieu"
 export function normalize(text) {
-  return text
+  let cleaned = text
     .toLowerCase()
     .normalize("NFD") // tách chữ và dấu thanh ra
     .replace(/\p{Diacritic}/gu, "") // xóa dấu thanh (sắc, huyền, hỏi...)
@@ -26,6 +39,10 @@ export function normalize(text) {
     .replace(/[^a-z0-9\s]/g, " ") // bỏ dấu câu ? , . ! - ... để khớp trọn từ
     .replace(/\s+/g, " ")
     .trim();
+
+  // Chuẩn hóa các từ gõ tắt dạng từ đơn
+  const words = cleaned.split(" ").map((w) => TUDIEN_GO_TAT[w] ?? w);
+  return words.join(" ");
 }
 
 // ------------------------------------------------------------
@@ -131,5 +148,28 @@ export function findAnswer(message, knowledge, congTy) {
     mucId: best.mucId,
     answer: dienThongTin(best.answer, congTy),
     score: bestScore,
+  };
+}
+
+// ------------------------------------------------------------
+// Chống LẶP giữa hai lượt.
+//
+// Bot khớp từ khóa KHÔNG nhớ ngữ cảnh: khi bot hỏi ngược ("làm cho lĩnh vực
+// nào?") và khách trả lời đúng bằng một từ khóa của CHÍNH intent đó, findAnswer
+// sẽ trả về lại đúng intent cũ → câu trả lời y hệt lượt trước, khách thấy bot
+// "lặp lại" (đúng lỗi ở câu web giới thiệu).
+//
+// Cách chặn tận gốc, không phụ thuộc intent: so câu trả lời với câu bot NÓI
+// NGAY TRƯỚC. Trùng khít thì thay bằng một câu ĐẨY TỚI (mời để lại liên hệ).
+// Đặt ở đây (hàm thuần) để chatService dùng và script test kiểm được.
+// ------------------------------------------------------------
+export const CAU_DAY_TOI =
+  "Dạ đúng mảng đó rồi ạ! 🙌 Để tư vấn sát nhất, bạn mô tả thêm một chút về nhu cầu và để lại **số điện thoại** (hoặc gọi **{{cong_ty.dien_thoai}}**), bên mình sẽ liên hệ ngay nhé!";
+
+export function chongLap(answer, cauBotTruoc, congTy) {
+  const lap = Boolean(cauBotTruoc) && cauBotTruoc.trim() === answer.trim();
+  return {
+    lap,
+    response: lap ? dienThongTin(CAU_DAY_TOI, congTy) : answer,
   };
 }

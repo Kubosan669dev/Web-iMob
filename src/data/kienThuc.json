@@ -97,14 +97,15 @@
         {
           "id": "zalo-miniapp",
           "nguon": "web",
-          "keywords": ["làm zalo mini app", "làm mini app", "miniapp", "mini app", "ứng dụng zalo", "app zalo", "app trên zalo", "dịch vụ zalo", "nhận làm mini app"],
-          "answer": "**Phát triển Zalo Mini App** 📱\n\nỨng dụng gọn nhẹ chạy trực tiếp trên Zalo, khách dùng ngay không cần cài đặt. Bên mình làm trọn gói:\n\n- Thiết kế UI/UX theo nhận diện thương hiệu\n- Tích hợp thanh toán, đặt lịch, CSKH\n- Vận hành & bảo trì trọn gói\n\nBạn muốn Mini App phục vụ việc gì (đặt lịch, bán hàng, tích điểm...) để mình tư vấn cụ thể ạ?"
+          "keywords": ["làm zalo mini app", "làm mini app", "mini app", "ứng dụng zalo", "app zalo", "app trên zalo", "dịch vụ zalo", "nhận làm mini app"],
+          "tru": ["giá", "bao nhiêu", "khác gì", "so với", "đăng ký", "xét duyệt", "cập nhật", "dịch vụ công", "y tế", "bệnh viện", "phòng khám", "giáo dục", "trường học", "sổ liên lạc", "app riêng", "website", "web", "chuẩn bị", "đưa lên", "phát hành", "sửa", "chỉnh sửa", "ngành", "phù hợp", "lĩnh vực"],
+          "answer": "**Phát triển Zalo Mini App** 📱\n\nỨng dụng gọn nhẹ chạy trực tiếp trên Zalo, khách dùng ngay không cần cài đặt. Bên mình làm trọn gói:\n\n- Thiết kế UI/UX theo nhận diện thương hiệu\n- Tích hợp thanh toán, đặt lịch, CSKH\n- Vận hành & bảo trì trọn gói\n\nBạn định làm Mini App cho lĩnh vực nào (spa, nhà hàng, y tế, giáo dục, dịch vụ công...) để mình tư vấn cụ thể ạ?"
         },
         {
           "id": "zma-la-gi",
           "nguon": "ngoai",
           "link": "https://miniapp.zaloplatforms.com/developers",
-          "keywords": ["mini app là gì", "miniapp là gì", "zalo mini app là gì", "mini app zalo là gì", "hiểu về mini app", "mini app nghĩa là"],
+          "keywords": ["mini app là gì", "zalo mini app là gì", "mini app zalo là gì", "hiểu về mini app", "mini app nghĩa là"],
           "answer": "**Zalo Mini App** là ứng dụng nhỏ chạy **ngay bên trong Zalo** ạ — khách mở từ Zalo là dùng được luôn, không phải ra CH Play hay App Store tải về.\n\nDoanh nghiệp hay dùng để **đặt lịch, bán hàng, tích điểm, tra cứu đơn**... ngay trong ứng dụng khách vẫn mở hằng ngày.\n\nBạn muốn làm Mini App cho lĩnh vực nào để mình tư vấn cụ thể?"
         },
         {
@@ -183,7 +184,25 @@
           "id": "zma-nganh",
           "nguon": "web",
           "keywords": ["mini app cho ngành", "phù hợp ngành nào", "ngành nào nên làm", "hợp với ngành", "lĩnh vực nào dùng"],
-          "answer": "Mini App hợp nhất với những ngành **khách quay lại nhiều lần** ạ:\n\n- **Spa / làm đẹp** — đặt lịch, tích điểm (bên mình đã làm cho một chuỗi spa)\n- **Nhà hàng, quán** — đặt bàn, gọi món, khuyến mãi\n- **Bán lẻ** — đơn hàng, ưu đãi cho khách quen\n- **Dịch vụ cần tra cứu** — tra đơn, tra lịch hẹn\n\nBạn đang kinh doanh mảng nào để mình gợi ý tính năng phù hợp?"
+          "answer": "Mini App hợp nhất với những ngành **khách quay lại nhiều lần** hoặc **dịch vụ công / tiện ích** ạ:\n\n- **Dịch vụ công & Hành chính** — nộp hồ sơ, tra cứu 1 cửa, phản ánh hiện trường\n- **Y tế & Bệnh viện / Phòng khám** — đặt lịch khám, tra cứu BHYT, nhận kết quả\n- **Giáo dục & Trường học** — sổ liên lạc, đóng học phí, điểm danh\n- **Spa / Làm đẹp & F&B** — đặt lịch KTV, order tại bàn qua QR code\n\nBạn đang kinh doanh hoặc công tác ở mảng nào để mình gợi ý tính năng phù hợp?"
+        },
+        {
+          "id": "zma-dich-vu-cong",
+          "nguon": "soan",
+          "keywords": ["dịch vụ công", "hành chính công", "zalo dịch vụ công", "ubnd", "phường xã", "hồ sơ hành chính", "nộp thủ tục", "phản ánh hiện trường", "bộ phận 1 cửa", "bộ phận một cửa", "thủ tục 1 cửa", "một cửa", "1 cửa"],
+          "answer": "**Zalo Mini App Dịch vụ công & Hành chính công** 🏛️\n\nBên mình có giải pháp Zalo Mini App chuyên biệt cho các cơ quan hành chính, UBND Phường/Xã/Huyện:\n\n- Tra cứu tiến độ hồ sơ bộ phận 1 cửa\n- Nộp hồ sơ thủ tục hành chính trực tuyến\n- Phản ánh hiện trường kèm hình ảnh & vị trí GPS\n- Nhận thông báo kết quả trả hồ sơ qua Zalo ZNS\n- Đặt lịch hẹn làm việc tại trụ sở hành chính\n\nBạn đang cần triển khai Mini App Dịch vụ công cho đơn vị nào ạ?"
+        },
+        {
+          "id": "zma-y-te",
+          "nguon": "soan",
+          "keywords": ["y tế", "bệnh viện", "phòng khám", "đặt lịch khám", "tra cứu bhyt", "hồ sơ sức khỏe", "lịch hẹn khám", "khám chữa bệnh"],
+          "answer": "**Zalo Mini App & Web Y tế / Bệnh viện / Phòng khám** 🏥\n\nGiải pháp số hóa trải nghiệm khám chữa bệnh qua Zalo:\n\n- Đặt lịch khám bệnh theo ngày & chọn bác sĩ\n- Nhắc lịch tái khám tự động qua Zalo ZNS\n- Tra cứu kết quả xét nghiệm & thẻ BHYT\n- Thanh toán viện phí & dịch vụ y tế không dùng tiền mặt\n\nBạn cho mình xin quy mô đơn vị (phòng khám hay bệnh viện) và nhu cầu, bên mình tư vấn cụ thể nhé!"
+        },
+        {
+          "id": "zma-giao-duc",
+          "nguon": "soan",
+          "keywords": ["giáo dục", "trường học", "sổ liên lạc", "nộp học phí", "đóng học phí", "thanh toán học phí", "trường mầm non", "trung tâm tiếng anh"],
+          "answer": "**Zalo Mini App & Web Giáo dục / Trường học / Trung tâm** 🏫\n\nGiải pháp Sổ liên lạc điện tử & Quản lý trường học qua Zalo:\n\n- Nhận thông báo điểm số, nhận xét, điểm danh hằng ngày\n- Đóng học phí trực tuyến nhanh chóng qua ZaloPay/VietQR\n- Đăng ký khóa học, theo dõi thời khóa biểu\n- Kênh tương tác trực tiếp 1-1 giữa Phụ huynh và Nhà trường\n\nBạn cho mình biết cấp đơn vị (mầm non, phổ thông hay trung tâm) và nhu cầu, bên mình tư vấn cụ thể nhé!"
         }
       ]
     },
@@ -196,14 +215,64 @@
         {
           "id": "website",
           "nguon": "web",
-          "keywords": ["website", "web bán hàng", "trang web", "web giới thiệu", "landing page", "thương mại điện tử", "ecommerce", "e-commerce", "web công ty", "làm web"],
+          "keywords": ["website", "trang web", "làm web"],
           "answer": "Bên mình có làm **website** ạ — ví dụ web thương mại điện tử chuẩn SEO, tối ưu tốc độ, tích hợp thanh toán & quản lý đơn hàng tập trung.\n\nBạn muốn làm web **giới thiệu** hay web **bán hàng** để mình tư vấn cụ thể?"
+        },
+        {
+          "id": "web-gioi-thieu",
+          "nguon": "web",
+          "keywords": ["web giới thiệu", "web giới thiệu công ty", "trang giới thiệu", "web thương hiệu", "web doanh nghiệp", "web công ty", "landing page"],
+          "answer": "**Web giới thiệu** thì bên mình làm dạng trang trình bày công ty/thương hiệu gọn gàng, chuyên nghiệp ạ:\n\n- Giới thiệu công ty, dịch vụ, dự án đã làm\n- Hiển thị đẹp trên cả điện thoại lẫn máy tính\n- Chuẩn SEO + tối ưu tốc độ để khách dễ tìm thấy\n- Dễ cập nhật nội dung, gắn form liên hệ / chat tư vấn\n\nBạn muốn giới thiệu về lĩnh vực gì để mình gợi ý bố cục phù hợp?"
+        },
+        {
+          "id": "web-ban-hang",
+          "nguon": "web",
+          "keywords": ["web bán hàng", "bán hàng online", "thương mại điện tử", "ecommerce", "e-commerce", "giỏ hàng", "web đặt hàng"],
+          "answer": "**Web bán hàng** (thương mại điện tử) bên mình đã làm rồi ạ — một trang bán hàng hoàn chỉnh gồm:\n\n- Danh mục sản phẩm, giỏ hàng, đặt hàng\n- Tích hợp thanh toán online\n- Quản lý đơn hàng tập trung\n- Chuẩn SEO + tối ưu tốc độ tải trang\n\nBạn định bán mặt hàng nào để mình tư vấn hướng triển khai gọn nhất?"
+        },
+        {
+          "id": "web-may-tinh-pc",
+          "nguon": "soan",
+          "keywords": ["bán máy tính", "web máy tính", "trang web máy tính", "web bán máy tính", "linh kiện pc", "web đồ công nghệ", "bán laptop", "chọn cấu hình pc", "máy tính"],
+          "answer": "**Website Bán máy tính & Đồ công nghệ** 💻\n\nBên mình thiết kế website chuyên cho ngành máy tính, linh kiện PC và thiết bị công nghệ:\n\n- Tính năng **Build PC / Chọn cấu hình tự động** tương thích\n- So sánh sản phẩm, tra cứu thông số kỹ thuật chi tiết\n- Tích hợp tra cứu bảo hành qua Serial/IMEI\n- Giỏ hàng, thanh toán online & quản lý kho hàng linh kiện\n\nBạn muốn làm web cửa hàng máy tính hay chuỗi phân phối để mình tư vấn cấu hình web ạ?"
         },
         {
           "id": "web-seo",
           "nguon": "web",
           "keywords": ["seo", "lên google", "tìm kiếm google", "thứ hạng google", "tối ưu tốc độ", "chuẩn seo"],
           "answer": "Có ạ — website bên mình làm **chuẩn SEO và tối ưu tốc độ** ngay từ khâu xây dựng, để Google đọc hiểu nội dung và khách mở trang không phải chờ lâu.\n\nSEO là việc lâu dài chứ không phải bật một nút, nên bên mình sẽ trao đổi rõ với bạn phần nào làm được ngay và phần nào cần đầu tư nội dung dần."
+        }
+      ]
+    },
+
+    {
+      "id": "giai-phap-nganh-nghe",
+      "ten": "Giải pháp theo ngành nghề & Thanh toán",
+      "mo_ta": "Giải pháp chuyên sâu cho các lĩnh vực Spa, F&B, BĐS và Tích hợp thanh toán.",
+      "intents": [
+        {
+          "id": "nganh-spa-beauty",
+          "nguon": "soan",
+          "keywords": ["spa", "thẩm mỹ viện", "clinic", "tiệm hair", "salon", "đặt lịch spa", "chọn ktv", "kỹ thuật viên"],
+          "answer": "**Giải pháp Zalo Mini App & Web cho Spa / Thẩm mỹ viện / Clinic** 💅\n\nBên mình đã triển khai thực tế cho chuỗi Spa với các tính năng:\n\n- Đặt lịch chọn giờ, chọn chi nhánh & chọn Kỹ thuật viên (KTV)\n- Nhắc lịch hẹn tự động trước 2 tiếng qua Zalo ZNS\n- Quản lý thẻ liệu trình, tích điểm đổi quà VIP\n- Bảng giá dịch vụ trực quan & đánh giá sau sử dụng\n\nBạn cho mình xin quy mô (1 cơ sở hay chuỗi) và số điện thoại, bên mình tư vấn quy trình cụ thể nhé!"
+        },
+        {
+          "id": "nganh-fb-nhahang",
+          "nguon": "soan",
+          "keywords": ["nhà hàng", "quán cafe", "f&b", "gọi món", "mã qr tại bàn", "menu điện tử", "quét qr order", "tích điểm đổi quà"],
+          "answer": "**Giải pháp Digital F&B (Nhà hàng / Quán Cafe / Trà sữa)** ☕🍔\n\n- **Menu điện tử quét mã QR tại bàn**: Khách quét QR trên bàn bằng Zalo là gọi món & thanh toán ngay\n- Order ship tận nơi & đặt bàn trước\n- Tích điểm thành viên tự động đồng bộ theo số điện thoại\n- Quản lý đơn order trực tiếp xuống bếp / quầy thu ngân\n\nBạn mô tả mô hình quán (cafe, quán ăn hay chuỗi) và để lại số điện thoại, bên mình tư vấn cho sát nhé!"
+        },
+        {
+          "id": "nganh-bds-dulich",
+          "nguon": "soan",
+          "keywords": ["bất động sản", "môi giới bds", "bản đồ quy hoạch", "tính lãi vay", "dự án bds", "homestay", "đặt phòng", "tour du lịch", "du lịch"],
+          "answer": "**Giải pháp Web & App Bất động sản / Du lịch / Homestay** 🏢✈️\n\n- **Mảng BĐS**: Tìm kiếm dự án, xem sơ đồ mặt bằng 3D, bản đồ vị trí, công cụ tính lãi suất vay ngân hàng hằng tháng\n- **Mảng Du lịch / Homestay**: Đặt phòng trực tuyến, chọn ngày check-in/out, thanh toán cọc, xem tour & lịch trình\n\nBạn cho mình biết cụ thể mảng (Bất động sản hay Du lịch) và để lại liên hệ, bên mình tư vấn sâu hơn nhé!"
+        },
+        {
+          "id": "tich-hop-thanh-toan-qr",
+          "nguon": "soan",
+          "keywords": ["chuyển khoản tự động", "vietqr", "viet qr", "mã qr thanh toán", "tự động xác nhận chuyển khoản", "tích hợp momo", "vnpay"],
+          "answer": "**Tích hợp Thanh toán Online & VietQR Tự động** 💳\n\nBên mình hỗ trợ kết nối mọi cổng thanh toán phổ biến:\n\n- **VietQR Tự động (SeABank, MB, Vietcombank...)**: Khách quét mã QR chuyển khoản, hệ thống tự động xác nhận đơn hàng thành công trong 3 giây không cần duyệt tay\n- Tích hợp ZaloPay, MoMo, VNPay, thẻ ATM / Visa / Mastercard\n\nBạn cho mình biết đang dùng ngân hàng/cổng thanh toán nào và để lại liên hệ, bên mình tư vấn cách tích hợp nhé!"
         }
       ]
     },
@@ -217,7 +286,7 @@
           "id": "software-hardware",
           "nguon": "web",
           "keywords": ["phần mềm", "phần cứng", "phần mềm quản lý", "hệ thống quản lý", "quản lý bán hàng", "quản lý doanh nghiệp", "phần mềm riêng"],
-          "answer": "**Giải pháp Phần mềm & Phần cứng** 🖥️\n\nPhần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh, tích hợp đồng bộ toàn hệ thống:\n\n- Phần mềm quản lý may đo theo nghiệp vụ\n- Thiết bị IoT & phần cứng thông minh\n- Tích hợp đồng bộ hệ thống sẵn có\n\nBạn đang cần quản lý mảng nào (kho, bán hàng, nhân sự, nhà hàng...) ạ?"
+          "answer": "**Giải pháp Phần mềm & Phần cứng** 🖥️\n\nPhần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh, tích hợp đồng bộ toàn hệ thống:\n\n- Phần mềm quản lý may đo theo nghiệp vụ\n- Thiết bị IoT & phần cứng thông minh\n- Tích hợp đồng bộ hệ thống sẵn có\n\nBạn mô tả nghiệp vụ cần quản lý (kho, bán hàng, nhà hàng...) để mình tư vấn giải pháp phù hợp nhé!"
         },
         {
           "id": "quan-ly-kho",
@@ -310,12 +379,12 @@
           "id": "portfolio",
           "nguon": "web",
           "keywords": ["dự án", "đã làm", "từng làm", "sản phẩm đã", "khách hàng", "portfolio", "đã triển khai", "làm cho ai", "case study", "sản phẩm tiêu biểu", "dự án tiêu biểu"],
-          "answer": "Một vài dự án bên mình đã thực hiện:\n\n- **Zalo Mini App đặt lịch Spa** — đặt lịch, tích điểm, CSKH\n- **Hệ thống quản lý kho thông minh (IoT)** — tồn kho thời gian thực\n- **Website thương mại điện tử** — chuẩn SEO, tích hợp thanh toán\n- **Chatbot CSKH tích hợp AI** — trả lời khách 24/7\n- **Ứng dụng quản lý nhà hàng** — gọi món, bếp, doanh thu realtime\n- **Đào tạo chuyển đổi số** — chương trình 8 tuần cho 200+ nhân sự\n\nBạn muốn xem dự án tương tự nhu cầu của mình không ạ?"
+          "answer": "Một vài dự án bên mình đã thực hiện:\n\n- **Zalo Mini App đặt lịch Spa** — đặt lịch, tích điểm, CSKH\n- **Hệ thống quản lý kho thông minh (IoT)** — tồn kho thời gian thực\n- **Website thương mại điện tử** — chuẩn SEO, tích hợp thanh toán\n- **Chatbot CSKH tích hợp AI** — trả lời khách 24/7\n- **Ứng dụng quản lý nhà hàng** — gọi món, bếp, doanh thu realtime\n- **Đào tạo chuyển đổi số** — chương trình 8 tuần cho 200+ nhân sự\n\nBạn đang quan tâm loại dự án nào (Mini App, kho, website, chatbot, nhà hàng...) để mình giới thiệu sát hơn ạ?"
         },
         {
           "id": "du-an-nha-hang",
           "nguon": "web",
-          "keywords": ["nhà hàng", "quán ăn", "gọi món", "đặt bàn", "quán cafe", "pos"],
+          "keywords": ["dự án nhà hàng", "làm cho nhà hàng chưa", "từng làm nhà hàng", "kinh nghiệm làm nhà hàng", "dự án quán ăn"],
           "answer": "Bên mình đã làm **ứng dụng quản lý nhà hàng** ạ: khách **gọi món tại bàn**, đơn chạy thẳng xuống bếp, doanh thu đồng bộ **realtime** giữa thu ngân – bếp – quản lý.\n\nQuán của bạn đang vướng ở khâu nào nhất (order, bếp, hay theo dõi doanh thu) để mình gợi ý cho sát?"
         }
       ]
