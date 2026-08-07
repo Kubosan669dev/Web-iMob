@@ -1,0 +1,170 @@
+{
+  "privacy-policy": {
+    "route": "/privacy-policy",
+    "eyebrow": "Pháp lý",
+    "title": "Chính sách bảo mật",
+    "subtitle": "Privacy Policy",
+    "effective": "Hiệu lực từ 01/01/2025 · Cập nhật lần cuối 01/01/2025",
+    "intro": "Công ty Cổ phần Công nghệ & Giải pháp iMob cam kết bảo vệ quyền riêng tư và thông tin cá nhân của khách hàng. Khi sử dụng dịch vụ của iMob, bạn đồng ý với các điều khoản trong chính sách này.",
+    "sections": [
+      {
+        "heading": "Thu thập thông tin",
+        "intro": "Chúng tôi có thể thu thập các loại thông tin sau:",
+        "items": [
+          "Thông tin cá nhân: họ tên, email, số điện thoại, địa chỉ khi đăng ký dịch vụ",
+          "Thông tin doanh nghiệp: tên công ty, ngành nghề, quy mô khi tư vấn",
+          "Dữ liệu kỹ thuật: địa chỉ IP, trình duyệt, thông tin thiết bị",
+          "Cookie: dùng để nâng cao trải nghiệm và phân tích website"
+        ]
+      },
+      {
+        "heading": "Sử dụng thông tin",
+        "intro": "Thông tin được sử dụng nhằm:",
+        "items": [
+          "Cung cấp dịch vụ tư vấn và hỗ trợ kỹ thuật",
+          "Gửi thông tin sản phẩm, dịch vụ và chương trình đào tạo",
+          "Cải thiện chất lượng dịch vụ và phát triển sản phẩm mới",
+          "Đáp ứng nghĩa vụ pháp lý và bảo vệ lợi ích hợp pháp"
+        ]
+      },
+      {
+        "heading": "Bảo mật thông tin",
+        "intro": "Các biện pháp bảo mật được áp dụng:",
+        "items": [
+          "Mã hóa SSL/TLS cho các giao tiếp trực tuyến",
+          "Tường lửa nhiều lớp bảo vệ máy chủ và cơ sở dữ liệu",
+          "Kiểm soát truy cập chặt chẽ, chỉ nhân sự được ủy quyền",
+          "Sao lưu dữ liệu định kỳ và quy trình khôi phục sau sự cố"
+        ]
+      },
+      {
+        "heading": "Chia sẻ thông tin",
+        "paragraphs": [
+          "iMob không bán, cho thuê hoặc trao đổi thông tin cá nhân của bạn với bên thứ ba khi chưa có sự đồng ý rõ ràng.",
+          "Việc chia sẻ chỉ diễn ra với đối tác kỹ thuật khi thực sự cần thiết để cung cấp dịch vụ, hoặc với cơ quan chức năng khi pháp luật yêu cầu."
+        ]
+      },
+      {
+        "heading": "Quyền của người dùng",
+        "intro": "Bạn có các quyền sau đối với thông tin của mình:",
+        "items": [
+          "Truy cập thông tin cá nhân đang được lưu trữ",
+          "Cập nhật hoặc chỉnh sửa dữ liệu chưa chính xác",
+          "Yêu cầu xóa dữ liệu",
+          "Từ chối nhận thông tin tiếp thị"
+        ]
+      },
+      {
+        "heading": "Lưu trữ và xóa dữ liệu",
+        "items": [
+          "Thông tin liên quan đến dịch vụ được lưu trong thời gian cần thiết",
+          "Dữ liệu dự án được lưu tối thiểu 3 năm sau khi hoàn thành",
+          "Thông tin tiếp thị được lưu đến khi bạn hủy đăng ký",
+          "Tự động xóa dữ liệu không cần thiết theo quy định"
+        ]
+      },
+      {
+        "heading": "Liên hệ",
+        "intro": "Mọi yêu cầu liên quan đến dữ liệu cá nhân, vui lòng liên hệ:",
+        "items": [
+          "Email: privacy@imob.vn",
+          "Điện thoại: +84 936 982 256",
+          "Địa chỉ: Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh"
+        ],
+        "note": "Thời gian phản hồi: yêu cầu truy cập dữ liệu 7 ngày làm việc · yêu cầu chỉnh sửa 3 ngày · yêu cầu xóa 5 ngày."
+      }
+    ]
+  },
+  "terms-of-service": {
+    "route": "/terms-of-service",
+    "eyebrow": "Pháp lý",
+    "title": "Điều khoản dịch vụ",
+    "subtitle": "Terms of Service",
+    "effective": "Hiệu lực từ 01/01/2025 · Cập nhật lần cuối 01/01/2025",
+    "intro": "Chào mừng bạn đến với iMob Solution & Technology. Các điều khoản này quy định việc sử dụng các dịch vụ công nghệ mà chúng tôi cung cấp. Vui lòng đọc kỹ trước khi sử dụng — việc sử dụng dịch vụ đồng nghĩa với việc bạn chấp nhận và đồng ý tuân thủ tất cả các điều khoản này.",
+    "sections": [
+      {
+        "heading": "Điều khoản chung",
+        "items": [
+          "Các điều khoản này áp dụng cho tất cả dịch vụ do iMob cung cấp",
+          "Bằng cách sử dụng dịch vụ, bạn đồng ý tuân thủ các điều khoản này",
+          "iMob có quyền cập nhật điều khoản và sẽ thông báo trước 30 ngày",
+          "Nếu không đồng ý với thay đổi, bạn có thể chấm dứt hợp đồng dịch vụ"
+        ]
+      },
+      {
+        "heading": "Dịch vụ cung cấp",
+        "items": [
+          "Đào tạo chuyển đổi số: chương trình đào tạo chuyên sâu về năng lực số",
+          "Phát triển Zalo MiniApp: thiết kế và triển khai ứng dụng trên nền tảng Zalo",
+          "Giải pháp Software & Hardware: phần mềm và phần cứng tùy chỉnh",
+          "Tư vấn công nghệ: hỗ trợ chiến lược chuyển đổi số cho doanh nghiệp"
+        ]
+      },
+      {
+        "heading": "Thanh toán và hoàn tiền",
+        "items": [
+          "Thanh toán theo tiến độ: 30% khi ký hợp đồng, 40% khi bàn giao demo, 30% khi hoàn thành",
+          "Phương thức thanh toán: chuyển khoản ngân hàng hoặc tiền mặt tại văn phòng",
+          "Hoàn tiền: áp dụng trong 7 ngày nếu dịch vụ không đáp ứng yêu cầu đã cam kết",
+          "Phí phát sinh: thay đổi yêu cầu ngoài phạm vi sẽ được báo giá bổ sung"
+        ]
+      },
+      {
+        "heading": "Bảo mật và quyền sở hữu",
+        "items": [
+          "Bảo mật thông tin: cam kết bảo vệ tuyệt đối thông tin dự án của khách hàng",
+          "Quyền sở hữu trí tuệ: khách hàng sở hữu hoàn toàn sản phẩm sau khi thanh toán",
+          "Source code: bàn giao đầy đủ mã nguồn và tài liệu kỹ thuật",
+          "Bảo mật dữ liệu: tuân thủ các tiêu chuẩn bảo mật quốc tế ISO 27001"
+        ]
+      },
+      {
+        "heading": "Trách nhiệm và giới hạn",
+        "items": [
+          "iMob cam kết cung cấp dịch vụ chất lượng cao theo đúng thỏa thuận",
+          "Không chịu trách nhiệm về thiệt hại gián tiếp do gián đoạn dịch vụ",
+          "Khách hàng có trách nhiệm cung cấp thông tin chính xác và đầy đủ",
+          "Bảo hành 12 tháng cho phần mềm, 24 tháng cho phần cứng"
+        ]
+      },
+      {
+        "heading": "Giải quyết tranh chấp",
+        "items": [
+          "Ưu tiên giải quyết thông qua thương lượng và hòa giải",
+          "Trọng tài: Trung tâm Trọng tài Quốc tế Việt Nam (VIAC) nếu cần",
+          "Luật áp dụng: pháp luật Việt Nam",
+          "Thẩm quyền tòa án: Tòa án nhân dân tỉnh Quảng Ninh"
+        ]
+      },
+      {
+        "heading": "Các hành vi bị cấm",
+        "items": [
+          "Sử dụng dịch vụ cho mục đích bất hợp pháp hoặc vi phạm pháp luật",
+          "Sao chép, phân phối lại sản phẩm mà không có sự đồng ý",
+          "Cố gắng truy cập trái phép vào hệ thống của iMob",
+          "Sử dụng dịch vụ để spam, phishing hoặc các hoạt động có hại",
+          "Reverse engineering sản phẩm để tạo ra sản phẩm cạnh tranh"
+        ]
+      },
+      {
+        "heading": "Cập nhật điều khoản",
+        "intro": "iMob có quyền cập nhật và thay đổi các điều khoản này khi cần thiết để phù hợp với sự phát triển của dịch vụ và yêu cầu pháp lý:",
+        "items": [
+          "Thông báo trước 30 ngày qua email và website",
+          "Khách hàng có quyền chấm dứt hợp đồng nếu không đồng ý",
+          "Phiên bản mới có hiệu lực sau thời gian thông báo"
+        ]
+      },
+      {
+        "heading": "Hỗ trợ khách hàng",
+        "intro": "Nếu bạn có câu hỏi về điều khoản dịch vụ hoặc cần hỗ trợ:",
+        "items": [
+          "Hotline 24/7: +84 936 982 256",
+          "Email hỗ trợ: support@imob.vn",
+          "Thời gian làm việc: T2–T6 8:00–17:30 · T7 8:00–12:00"
+        ]
+      }
+    ]
+  }
+}

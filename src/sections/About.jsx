@@ -12,7 +12,7 @@ import about from "../data/about.json";
 // lấy đúng những số này — sửa số ở đây thì nhớ sửa cả bên đó.)
 //
 // Map tên icon (chuỗi trong JSON) → component lucide, giống cách
-// Services.jsx và Projects.jsx đang làm: JSON không chứa được component.
+// Services.jsx đang làm: JSON không chứa được component.
 const FEATURE_ICONS = {
   handshake: Handshake,
   users: Users,

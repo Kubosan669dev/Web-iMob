@@ -13,6 +13,10 @@ const DigitalTransformationPage = lazy(() =>
   import("./pages/DigitalTransformationPage.jsx")
 );
 
+// Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
+// LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
+const LegalPage = lazy(() => import("./pages/LegalPage.jsx"));
+
 // Style-guide nội bộ: tách khỏi bundle chính bằng lazy() vì khách
 // truy cập trang chủ không bao giờ cần tới nó.
 const UiKitPage = lazy(() => import("./pages/UiKitPage.jsx"));
@@ -38,6 +42,14 @@ export default function App() {
               <Route
                 path="/digital-transformation"
                 element={<DigitalTransformationPage />}
+              />
+              <Route
+                path="/privacy-policy"
+                element={<LegalPage slug="privacy-policy" />}
+              />
+              <Route
+                path="/terms-of-service"
+                element={<LegalPage slug="terms-of-service" />}
               />
             </Route>
 
