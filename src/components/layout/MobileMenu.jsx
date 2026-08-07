@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, X } from "lucide-react";
-import BrandMark from "../icons/BrandMark.jsx";
 import Button from "../ui/Button.jsx";
 import { NAV_ITEMS, SITE } from "../../utils/constants.js";
 
@@ -57,7 +56,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
             <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-blue-500">
-                  <BrandMark className="h-4 w-4 text-white" />
+                  <img src="/logo-imob-white.png" alt="iMob" className="h-5 w-5" />
                 </div>
                 <p className="font-black text-white">{SITE.name}</p>
               </div>

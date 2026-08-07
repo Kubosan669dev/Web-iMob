@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
-import BrandMark from "../icons/BrandMark.jsx";
 import Container from "../ui/Container.jsx";
 import {
   FacebookIcon,
@@ -55,7 +54,7 @@ export default function Footer() {
           <div className="space-y-4">
             <a href="/#home" className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500">
-                <BrandMark className="h-5 w-5 text-white" />
+                <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
               </div>
               <div className="leading-tight">
                 <p className="text-lg font-black text-white">{SITE.name}</p>
@@ -128,16 +127,25 @@ export default function Footer() {
         </div>
       </Container>
 
-      {/* ---------- Copyright ---------- */}
+      {/* ---------- Copyright + liên kết pháp lý ---------- */}
       <div className="border-t border-white/5 py-5">
-        <Container className="flex flex-col items-center justify-between gap-2 text-center sm:flex-row">
+        <Container className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row">
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} {SITE.name} {SITE.tagline}. Tất cả
             quyền được bảo lưu.
           </p>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-gray-600">
-            Made with React + Tailwind
-          </p>
+          <nav
+            className="flex items-center gap-3 text-xs text-gray-400"
+            aria-label="Liên kết pháp lý"
+          >
+            <Link to="/privacy-policy" className="transition-colors hover:text-cyan-300">
+              Chính sách bảo mật
+            </Link>
+            <span aria-hidden="true" className="text-gray-700">·</span>
+            <Link to="/terms-of-service" className="transition-colors hover:text-cyan-300">
+              Điều khoản dịch vụ
+            </Link>
+          </nav>
         </Container>
       </div>
     </footer>

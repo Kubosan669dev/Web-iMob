@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Zap, ChevronDown, Menu } from "lucide-react";
-import BrandMark from "../icons/BrandMark.jsx";
 import Container from "../ui/Container.jsx";
 import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
@@ -75,7 +74,7 @@ export default function Navbar() {
         {/* ---------- Logo ---------- */}
         <a href="/#home" className="group flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 transition-shadow duration-300 group-hover:shadow-glow-purple">
-            <BrandMark className="h-5 w-5 text-white" />
+            <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
           </div>
           <div className="leading-tight">
             <p className="text-lg font-black text-white">{SITE.name}</p>
