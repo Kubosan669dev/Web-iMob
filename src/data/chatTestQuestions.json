@@ -25,6 +25,8 @@
     { "q": "Có làm chatbot AI không?", "expect": "chatbot-ai" },
     { "q": "minh muon lam con bot tra loi khach", "expect": "chatbot-ai" },
     { "q": "làm trợ lý ảo cho shop được không", "expect": "chatbot-ai" },
+    { "q": "bot có trả lời 24/7 được không", "expect": "chatbot-247" },
+    { "q": "mình muốn bot luôn trực ngoài giờ", "expect": "chatbot-247" },
 
     { "q": "Đào tạo chuyển đổi số gồm những gì?", "expect": "digital-training" },
     { "q": "co khoa hoc dao tao khong", "expect": "digital-training" },
@@ -35,6 +37,8 @@
     { "q": "làm app cho nhà hàng được không", "expect": "app-general" },
 
     { "q": "Làm Zalo MiniApp giá bao nhiêu?", "expect": "pricing" },
+    { "q": "bot có chăm sóc khách hàng được không", "expect": "zma-cskh" },
+    { "q": "tôi muốn quản lý khách hàng qua mini app", "expect": "zma-cskh" },
     { "q": "chi phí làm website khoảng nhiêu", "expect": "pricing" },
     { "q": "bao nhieu tien mot du an", "expect": "pricing" },
     { "q": "có bảng giá không", "expect": "pricing" },

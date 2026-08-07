@@ -107,3 +107,45 @@ NGUONG_CHUNK = 0.12
 Phần lõi (`imob_bot/`) đã tách khỏi giao diện dòng lệnh, nên có thể bọc lại thành
 API (FastAPI) hoặc nối vào Zalo OA sau này mà **không phải viết lại logic**. Khi cần,
 cứ nhắn để mình hướng dẫn thêm.
+
+## 9.Backend Python có chức năng gì?
+main.py cung cấp một API đơn giản:
+
+POST /api/chat
+Nhận body:
+message: câu hỏi người dùng
+history: lịch sử hội thoại (danh sách role + content)
+Trả về:
+{"response": "<câu trả lời>"}
+Backend dùng lớp ChatBot trong chatbot-python/imob_bot để trả lời dựa trên dữ liệu chatbot nội bộ (chatbot-python/data/imob_chatbot_data.json hoặc sample_data.json).
+
+## Backend Python làm được gì?
+Xử lý hội thoại bằng Python, không phải JavaScript trên frontend
+Dùng dữ liệu chatbot nội bộ để trả về câu trả lời
+Giữ logic chatbot tách biệt khỏi UI
+Cho phép mở rộng dễ hơn later:
+thêm mô hình trả lời mới
+thêm processing history
+mở rộng API nếu cần
+Khác biệt khi bật / không bật backend Python
+Khi bật VITE_USE_BACKEND=true
+Frontend sẽ:
+
+Chạy findAnswer(...) bằng local intent matching từ src/data/kienThuc.json
+Nếu khớp intent cụ thể → trả câu local ngay
+Nếu không khớp (intent là fallback) → gọi backend Python /api/chat
+Nếu backend trả được câu → dùng câu đó
+Nếu backend không trả được (lỗi / timeout / offline) → tiếp tục fallback Gemini AI nếu có VITE_GEMINI_API_KEY
+Nếu Gemini cũng không trả được → trả fallback mặc định
+Khi không bật backend
+Frontend sẽ:
+
+Chạy local intent matching
+Nếu khớp intent → trả ngay
+Nếu không khớp → bỏ qua backend, thử trực tiếp với Gemini AI nếu có API key
+Nếu không có Gemini hoặc Gemini lỗi → trả fallback mặc định
+Nói ngắn gọn
+VITE_USE_BACKEND=true -> bật “lớp backend Python” cho fallback chatbot
+VITE_USE_BACKEND=false hoặc không cấu hình -> không gọi Python backend
+Frontend vẫn hoạt động được mà không cần backend, vì nó đã có local knowledge base
+Backend chỉ tham gia khi local matching không đủ và USE_BACKEND được bật

@@ -145,6 +145,12 @@
           "answer": "Có ạ — Mini App **tích hợp được thanh toán qua ZaloPay**, khách trả tiền ngay trong Zalo mà không phải chuyển sang ứng dụng khác.\n\nPhía doanh nghiệp cần có tài khoản merchant và bộ khoá tích hợp do ZaloPay cấp; bên mình làm phần kỹ thuật và hướng dẫn bạn chuẩn bị hồ sơ.\n\nTuỳ nghiệp vụ vẫn giữ song song được các hình thức khác như chuyển khoản hay thanh toán khi nhận hàng."
         },
         {
+          "id": "zma-cskh",
+          "nguon": "soan",
+          "keywords": ["chăm sóc khách hàng", "cskh", "quản lý khách hàng", "chăm sóc khách", "CRM", "khách quay lại", "khách thân thiết"],
+          "answer": "Mini App cũng rất phù hợp để **chăm sóc khách hàng** ạ. Bên mình thiết kế luồng như sau:\n\n- Nhắn tin tự động qua Zalo khi khách có đơn hàng mới hoặc đến hạn thanh toán\n- Quản lý lịch sử giao dịch và thông tin khách quen\n- Tích điểm/khuyễn mãi tự động để khách quay lại\n\nBạn muốn tập trung vào kịch bản nào: đặt lịch, bán hàng hay chăm sóc khách cũ?"
+        },
+        {
           "id": "zma-dang-nhap",
           "nguon": "ngoai",
           "link": "https://miniapp.zaloplatforms.com/developers",
@@ -321,6 +327,12 @@
           "answer": "Có ạ — bên mình xây **trợ lý AI / chatbot** trả lời khách **24/7 bằng tiếng Việt**, học theo dữ liệu doanh nghiệp, bàn giao kèm dashboard theo dõi (chính con bot bạn đang chat là một ví dụ 😄).\n\nQuan tâm thì để lại liên hệ, bên mình tư vấn nhé!"
         },
         {
+          "id": "chatbot-247",
+          "nguon": "soan",
+          "keywords": ["24/7", "luôn trực", "mở 24/7", "trả lời 24/7", "tự động trả lời", "trợ lý tự động"],
+          "answer": "Bot của bên mình có thể hoạt động **24/7** để trả lời khách ngay lập tức, giúp bạn giữ tương tác và chăm sóc khách hàng kể cả ngoài giờ làm việc.\n\nNếu cần, mình có thể tư vấn thêm về cách dùng chatbot để tự động gợi ý khuyến mãi và chăm sóc khách cũ." 
+        },
+        {
           "id": "chatbot-du-lieu",
           "nguon": "soan",
           "keywords": ["bot học dữ liệu", "dạy bot", "train bot", "bot lấy thông tin", "bot biết gì", "cập nhật kiến thức bot"],
@@ -337,8 +349,8 @@
         {
           "id": "digital-training",
           "nguon": "web",
-          "keywords": ["đào tạo", "chuyển đổi số", "khóa học", "training", "tập huấn", "dạy nhân viên", "học công nghệ", "đào tạo nhân sự"],
-          "answer": "**Đào tạo Chuyển đổi số** 🎓\n\nChương trình thực chiến giúp đội ngũ làm chủ công cụ số và AI, áp dụng ngay vào công việc:\n\n- Lộ trình thiết kế theo từng doanh nghiệp\n- Thực hành công cụ số & AI tại chỗ\n- Đồng hành hỗ trợ sau đào tạo\n\nBên mình từng đào tạo chương trình cho **200+ nhân sự** của một doanh nghiệp. Đội ngũ bạn khoảng bao nhiêu người ạ?"
+          "keywords": ["đào tạo", "chuyển đổi số", "khóa học", "training", "tập huấn", "dạy nhân viên", "học công nghệ"],
+          "answer": "**Đào tạo Chuyển đổi số** 🎓\n\nChương trình thực chiến giúp đội ngũ làm chủ công cụ số và AI, áp dụng ngay vào công việc:\n\n- Lộ trình thiết kế theo từng doanh nghiệp\n- Thực hành công cụ số & AI tại chỗ\n- Đồng hành hỗ trợ sau đào tạo\n\nBên mình hỗ trợ chương trình này cho các doanh nghiệp với đội ngũ chuyên môn phù hợp. Đội ngũ bạn khoảng bao nhiêu người ạ?"
         },
         {
           "id": "dao-tao-noi-dung",

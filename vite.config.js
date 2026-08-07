@@ -9,4 +9,13 @@ import tailwindcss from "@tailwindcss/vite";
 // gọi API nào cả. Khi nào form Liên hệ cần backend thật thì thêm proxy lại.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });
