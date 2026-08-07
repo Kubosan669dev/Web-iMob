@@ -1,3 +1,5 @@
 # Thư viện cần cho chatbot (cài bằng: python -m pip install -r requirements.txt)
 # scikit-learn tự kéo theo numpy và scipy.
 scikit-learn>=1.4
+fastapi>=0.110.0
+uvicorn>=0.24.0

@@ -1,6 +1,39 @@
 import knowledge from "../data/kienThuc.json";
 import company from "../data/company.json";
+import { API_BASE_URL } from "../utils/constants.js";
 import { findAnswer, chongLap } from "./chatBrain.js";
+
+function buildGeminiSystemPrompt() {
+  const serviceList = [
+    "Zalo Mini App",
+    "Website",
+    "Phần mềm & Phần cứng IoT",
+    "Chatbot AI",
+    "Đào tạo Chuyển đổi số",
+  ].join(", ");
+
+  return `Bạn là trợ lý ảo AI của công ty ${company.fullName}.
+Bạn chỉ hỗ trợ thông tin về **dịch vụ công nghệ** của iMob.
+
+Thông tin quan trọng:
+- Hotline / Zalo: ${company.phone}
+- Email: ${company.email}
+- Địa chỉ: ${company.address}
+- Giờ làm việc: ${company.workingHours}
+- Dịch vụ chính: ${serviceList}
+
+Quy tắc khi trả lời:
+- Chỉ dùng tiếng Việt.
+- Trả lời khách hàng một cách lịch sự, rõ ràng và ngắn gọn.
+- Nếu câu hỏi không liên quan đến dịch vụ iMob, trả lời: "Xin lỗi bạn, phần này ngoài phạm vi hỗ trợ của mình. Mình chỉ tư vấn về dịch vụ, báo giá và liên hệ của iMob."
+- Tuyệt đối KHÔNG bịa giá, KHÔNG bịa thời gian, KHÔNG nêu mốc cụ thể.
+- Nếu khách hỏi giá hoặc quy trình chi tiết, mời khách liên hệ hotline ${company.phone} hoặc email ${company.email} để được tư vấn miễn phí.
+- Nếu cần, nhắc khách để lại số điện thoại để iMob liên hệ.
+
+Thông tin dưới đây là phần tóm tắt kho kiến thức của iMob. Hãy trả lời dựa trên các nội dung này, ưu tiên thông tin chính xác nhất:
+${knowledge.fallback}
+`;
+}
 
 // ============================================================
 // chatService: "tổng đài" — nơi DUY NHẤT giao diện gọi để lấy câu trả lời.
@@ -31,6 +64,7 @@ const DO_TRE_MS = 350;
 // Tổng thời gian tối đa dành cho bước gọi Gemini. Hết ngân sách này là dừng
 // hẳn và trả câu trả lời địa phương, KHÔNG để khách chờ mãi.
 const AI_BUDGET_MS = 8000;
+const USE_BACKEND = import.meta.env.VITE_USE_BACKEND === "true";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,24 +73,32 @@ function sleep(ms) {
 // Lấy Gemini API Key từ biến môi trường (nếu có)
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
+async function callBackendChat(message, history = []) {
+  if (!API_BASE_URL) return null;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history }),
+    });
+
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data?.response || null;
+  } catch (err) {
+    console.warn("Backend chat lỗi:", err.message);
+    return null;
+  }
+}
+
 /**
  * Gọi Google Gemini API (0đ Free Tier) với danh sách mô hình dự phòng
  */
 async function callGeminiAI(message, history = []) {
   if (!GEMINI_API_KEY) return null;
 
-  const systemContext = `
-Bạn là trợ lý ảo AI thông minh của công ty công nghệ iMob (${company.fullName}).
-Thông tin chính thức của iMob:
-- Hotline / Zalo: ${company.phone} | Email: ${company.email}
-- Địa chỉ: ${company.address} | Giờ làm việc: ${company.workingHours}
-- Các dịch vụ chính: Zalo Mini App trọn gói, Web thương mại điện tử / Bán máy tính / SEO, Phần mềm & Phần cứng IoT quản lý kho / F&B / Spa / Dịch vụ công, Đào tạo Chuyển đổi số.
-
-Nhiệm vụ của bạn:
-- Trả lời thân thiện, lịch sự, chuyên nghiệp bằng tiếng Việt.
-- Giải thích sâu và chính xác theo bối cảnh câu hỏi của khách hàng.
-- QUY TẮC BẤT BIẾN: Tuyệt đối KHÔNG tự bịa ra con số giá cụ thể hoặc thời gian cụ thể. Nếu khách hỏi giá hoặc quy trình chi tiết, hãy tư vấn khái quát và khuyên khách để lại SĐT hoặc gọi hotline ${company.phone} để được báo giá miễn phí.
-`;
+  const systemContext = buildGeminiSystemPrompt();
 
   // Chỉ giữ vài model ĐÃ XÁC NHẬN chạy với key hiện tại, xếp NHANH NHẤT lên
   // đầu (bản "lite" phản hồi nhanh hơn hẳn bản flash đầy đủ). Đã bỏ
@@ -92,14 +134,15 @@ Nhiệm vụ của bạn:
           signal: controller.signal,
           body: JSON.stringify({
             contents: [
-              { role: "user", parts: [{ text: systemContext }] },
-              { role: "model", parts: [{ text: "Tôi đã hiểu rõ nhiệm vụ và thông tin của iMob. Tôi sẵn sàng hỗ trợ khách hàng!" }] },
+              { role: "system", parts: [{ text: systemContext }] },
+              { role: "assistant", parts: [{ text: "Tôi đã hiểu rõ nhiệm vụ và thông tin của iMob. Tôi sẵn sàng hỗ trợ khách hàng!" }] },
               ...formattedHistory,
               { role: "user", parts: [{ text: message }] },
             ],
             generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 500, // câu ngắn hơn → sinh nhanh hơn
+              temperature: 0.2,
+              topP: 0.95,
+              maxOutputTokens: 300,
             },
           }),
         }
@@ -137,6 +180,13 @@ export async function sendMessage(message, history = []) {
     return { response };
   }
 
+  if (USE_BACKEND) {
+    const backendAnswer = await callBackendChat(message, history);
+    if (backendAnswer) {
+      return { response: backendAnswer };
+    }
+  }
+
   // Bước 2: Rơi vào fallback -> Thử gọi Gemini AI (nếu có cấu hình VITE_GEMINI_API_KEY)
   //         (đã giới hạn tổng thời gian, không để "khựng" chờ mãi)
   const aiAnswer = await callGeminiAI(message, history);
@@ -144,6 +194,6 @@ export async function sendMessage(message, history = []) {
     return { response: aiAnswer };
   }
 
-  // Nếu không có API Key hoặc Gemini bị lỗi -> Trả về câu fallback mặc định
+  // Nếu không có API Key hoặc Gemini bị lỗi -> trả về câu fallback mặc định
   return { response: result.answer };
 }
