@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Zap, ArrowRight, MessageCircle, Cpu, Cloud, Wifi } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Badge from "../components/ui/Badge.jsx";
@@ -17,6 +17,42 @@ const fadeUp = {
   hidden: { opacity: 0, y: 26 },
   show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
+
+/* ================= RotatingWord =================
+   Từ ở giữa dòng tiêu đề tự đổi liên tục (INNOVATION → TECHNOLOGY → ...).
+   Mỗi từ tô gradient xanh → trắng, xen giữa các dòng chữ trắng.
+   y dùng đơn vị "em" để bước trượt co giãn theo cỡ chữ khổng lồ của hero. */
+const ROTATING_WORDS = ["INNOVATION", "TECHNOLOGY", "FUTURE", "SOLUTIONS"];
+
+function RotatingWord() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setIndex((i) => (i + 1) % ROTATING_WORDS.length),
+      2200
+    );
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    // inline-block giữ chiều cao dòng ổn định khi từ cũ thoát, từ mới vào
+    <span className="inline-block align-top">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={ROTATING_WORDS[index]}
+          initial={{ opacity: 0, y: "0.4em" }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: "-0.4em" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="inline-block bg-gradient-to-r from-blue-500 via-sky-300 to-white bg-clip-text text-transparent"
+        >
+          {ROTATING_WORDS[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 /* ================= TerminalCard =================
    Giả lập terminal boot: từng dòng log hiện dần (timer),
@@ -147,9 +183,9 @@ export default function Hero() {
             variants={fadeUp}
             className="text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl xl:text-7xl"
           >
-            DIGITAL
+            THE
             <br />
-            <span className="text-gradient">FUTURE</span>
+            <RotatingWord />
             <br />
             STARTS HERE
           </motion.h1>

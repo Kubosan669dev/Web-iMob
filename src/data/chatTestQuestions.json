@@ -207,7 +207,7 @@
     { "q": "ban ten gi vay", "expect": "bot-identity" },
 
     { "q": "Cho mình xin số điện thoại tư vấn", "expect": "contact", "phai_co": ["+84"] },
-    { "q": "van phong o dau vay", "expect": "location", "phai_co": ["Hạ Long"] },
+    { "q": "van phong o dau vay", "expect": "location", "phai_co": ["Bãi Cháy"] },
 
     { "q": "Bên bạn có làm Zalo Mini App cho Dịch vụ công không?", "expect": "zma-dich-vu-cong", "phai_co": ["hành chính công", "1 cửa"] },
     { "q": "muốn làm app zalo cho UBND phường xã nộp hồ sơ", "expect": "zma-dich-vu-cong" },
