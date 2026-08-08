@@ -133,9 +133,12 @@ async function callGeminiAI(message, history = []) {
           headers: { "Content-Type": "application/json" },
           signal: controller.signal,
           body: JSON.stringify({
+            // Câu lệnh dẫn (system prompt) để ở TRƯỜNG RIÊNG systemInstruction.
+            // Gemini KHÔNG nhận role "system"/"assistant" trong contents — chỉ
+            // "user"/"model". Để sai (như trước) là dính HTTP 400 mỗi lần gọi,
+            // khiến tầng AI âm thầm chết và luôn rơi về câu fallback local.
+            systemInstruction: { parts: [{ text: systemContext }] },
             contents: [
-              { role: "system", parts: [{ text: systemContext }] },
-              { role: "assistant", parts: [{ text: "Tôi đã hiểu rõ nhiệm vụ và thông tin của iMob. Tôi sẵn sàng hỗ trợ khách hàng!" }] },
               ...formattedHistory,
               { role: "user", parts: [{ text: message }] },
             ],
