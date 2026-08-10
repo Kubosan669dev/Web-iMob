@@ -15,6 +15,21 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from .text_utils import chuan_hoa
 
+# Từ DỪNG (đã bỏ dấu): các từ chức năng / nghi vấn không mang chủ đề. Bỏ chúng
+# đi trước khi tính TF-IDF để từ khóa NỘI DUNG ("bao hanh", "dao tao"...) không
+# bị "co / khong / the / nao" lấn át khi khách hỏi câu NGẮN.
+#   Trước: "Có bảo hành không?" -> "co bao hanh khong" khớp nhầm sang đào tạo.
+#   Sau:   còn "bao hanh" -> khớp đúng chính sách bảo hành.
+# CỐ Ý GIỮ LẠI các từ có nghĩa trong ngành: "bao","nhieu" (hỏi giá),
+# "may" (câu "người hay máy"), "gia","nam" (bảo hành mấy năm). Từ 1 ký tự không
+# cần liệt kê vì bộ tách từ mặc định đã bỏ (chỉ nhận token >= 2 ký tự).
+TU_DUNG = [
+    "co", "khong", "la", "va", "cua", "cho", "voi", "duoc", "thi", "nhe",
+    "minh", "toi", "ban", "cac", "nhung", "mot", "nay", "do", "roi", "vay",
+    "ma", "de", "den", "ra", "vao", "khi", "se", "da", "dang", "cung",
+    "rat", "chi", "nao", "the", "sao", "gi", "muon", "can", "xin", "giup",
+]
+
 
 class TimKiem:
     """Đánh chỉ mục một danh sách tài liệu rồi cho phép tra câu gần nhất."""
@@ -23,7 +38,11 @@ class TimKiem:
         self.docs = docs
         # ngram_range=(1,2): xét cả từ đơn lẫn cụm 2 từ ("bao nhieu tien")
         # -> cụm dài, cụ thể sẽ ăn điểm hơn từ đơn chung chung.
-        self.vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+        # stop_words=TU_DUNG: loại từ chức năng để câu ngắn khớp đúng chủ đề.
+        # sublinear_tf: một từ lặp nhiều lần không làm điểm phồng quá mức.
+        self.vectorizer = TfidfVectorizer(
+            ngram_range=(1, 2), stop_words=TU_DUNG, sublinear_tf=True
+        )
         corpus = [chuan_hoa(d["text"]) for d in docs]
         # Nếu không có tài liệu nào thì để rỗng, tra luôn trả None.
         self.matrix = self.vectorizer.fit_transform(corpus) if corpus else None
