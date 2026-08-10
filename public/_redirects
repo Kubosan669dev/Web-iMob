@@ -1,0 +1,11 @@
+# SPA rewrite dự phòng cho Render / Netlify.
+#
+# Site này chỉ có một file index.html. Khách gõ thẳng địa chỉ /zalo-miniapp thì
+# máy chủ đi tìm file tên "zalo-miniapp", không thấy -> trả 404. Dòng dưới bảo
+# máy chủ: đường dẫn nào không phải file thật thì cứ trả index.html (mã 200),
+# để React Router tự chọn trang cần hiện.
+#
+# Vite tự chép mọi thứ trong public/ sang dist/ khi build.
+# Trùng ý với mục "routes" trong render.yaml — giữ cả hai để nếu ai tạo static
+# site bằng tay trên Render (không qua Blueprint) thì vẫn chạy đúng.
+/*    /index.html   200

@@ -73,22 +73,59 @@ function sleep(ms) {
 // Lấy Gemini API Key từ biến môi trường (nếu có)
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
+// Mã phiên trò chuyện. Backend Python NHỚ ngữ cảnh giữa các lượt (đang hỏi
+// khách họ tên hay số điện thoại), nên phải cho nó biết "câu này là của ai".
+// Dùng sessionStorage: mỗi tab một phiên riêng, đóng tab là hết — hợp với một
+// cuộc tư vấn, và không để lại dấu vết lâu dài trên máy khách.
+const KHOA_PHIEN = "imob_chat_session";
+
+function laySessionId() {
+  try {
+    let id = sessionStorage.getItem(KHOA_PHIEN);
+    if (!id) {
+      id =
+        globalThis.crypto?.randomUUID?.() ??
+        `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem(KHOA_PHIEN, id);
+    }
+    return id;
+  } catch {
+    // Trình duyệt chặn storage (chế độ ẩn danh, chặn cookie...) → không sao,
+    // để trống thì server tự cấp mã mới mỗi lượt.
+    return null;
+  }
+}
+
+// Backend free trên Render "ngủ" sau 15 phút không ai dùng, lần gọi đầu phải
+// chờ máy chủ thức dậy. Cho nó 20 giây rồi thôi, chứ không để khách chờ mãi.
+const BACKEND_TIMEOUT_MS = 20000;
+
 async function callBackendChat(message, history = []) {
   if (!API_BASE_URL) return null;
+
+  // Hủy request nếu quá lâu — nếu không, promise treo vô hạn khi mạng chết.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), BACKEND_TIMEOUT_MS);
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, history }),
+      signal: controller.signal,
+      body: JSON.stringify({ message, history, session_id: laySessionId() }),
     });
 
     if (!response.ok) return null;
     const data = await response.json();
     return data?.response || null;
   } catch (err) {
-    console.warn("Backend chat lỗi:", err.message);
+    console.warn(
+      "Backend chat lỗi:",
+      err.name === "AbortError" ? "hết giờ chờ" : err.message
+    );
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 

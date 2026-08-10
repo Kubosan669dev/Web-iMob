@@ -1,0 +1,94 @@
+# ============================================================
+# Blueprint của Render.com — khai báo SẴN toàn bộ hạ tầng của dự án iMob.
+#
+# Thay vì vào web Render bấm tạo từng dịch vụ rồi điền tay hàng chục ô, ta mô tả
+# mọi thứ trong file này. Trên Render bấm: New + -> Blueprint -> chọn repo
+# Web-iMob -> Apply. Render đọc file này và dựng đủ 2 dịch vụ.
+#
+# Dự án có 2 phần:
+#   1. imob-chatbot-api — API Python (FastAPI), thư mục chatbot-python/
+#   2. imob-web         — website React, Vite build ra thư mục dist/
+#
+# Sửa file này rồi push lên GitHub thì Render tự cập nhật theo.
+# Tài liệu: https://render.com/docs/blueprint-spec
+# ============================================================
+
+services:
+  # ----------------------------------------------------------
+  # 1) API chatbot Python (FastAPI + scikit-learn)
+  # ----------------------------------------------------------
+  - type: web
+    name: imob-chatbot-api
+    runtime: python
+    plan: free
+    region: singapore # đặt máy chủ ở Singapore cho gần khách Việt Nam
+    rootDir: chatbot-python # coi thư mục này là gốc: requirements.txt, main.py nằm ở đây
+    buildCommand: pip install -r requirements.txt
+    # $PORT do Render cấp lúc chạy, KHÔNG được ghi cứng 8000.
+    # --host 0.0.0.0 để nhận request từ bên ngoài (mặc định chỉ nghe trong máy).
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health # Render gọi đường dẫn này để biết service còn sống
+    autoDeploy: true # push lên nhánh main là tự deploy lại
+    # Chỉ build lại API khi thư mục chatbot-python/ có thay đổi — sửa giao diện
+    # web thì khỏi phải chờ cài lại scikit-learn (mất vài phút).
+    buildFilter:
+      paths:
+        - chatbot-python/**
+    envVars:
+      # Ghim phiên bản Python cho lần nào build cũng giống nhau.
+      # Nếu Render báo lỗi không tìm thấy bản này, đổi sang bản khác (vd 3.13.2)
+      # hoặc xóa hẳn biến này để Render dùng bản mặc định của nó.
+      - key: PYTHON_VERSION
+        value: "3.12.11"
+      # Danh sách website được phép gọi API này (xem phần CORS trong main.py).
+      # "*" = cho phép tất cả. Khi đã có tên miền chính thức thì nên siết lại:
+      #     https://imob-web.onrender.com,https://imob.vn
+      - key: ALLOWED_ORIGINS
+        value: "*"
+
+  # ----------------------------------------------------------
+  # 2) Website React (Vite) — chạy dạng file tĩnh trên CDN, miễn phí và
+  #    không bao giờ "ngủ" như web service.
+  # ----------------------------------------------------------
+  - type: web
+    name: imob-web
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeploy: true
+    buildFilter:
+      ignoredPaths:
+        - chatbot-python/**
+    # SPA rewrite — BẮT BUỘC với React Router.
+    # Site này chỉ có đúng một file index.html. Khách gõ thẳng
+    # /zalo-miniapp thì Render đi tìm file tên "zalo-miniapp" -> không có -> 404.
+    # Luật dưới bảo Render: đường dẫn nào không phải file thật thì cứ trả
+    # index.html, để React Router tự quyết định hiện trang nào.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      # File trong /assets đều có mã băm trong tên (index-a1b2c3.js), nội dung
+      # đổi là tên đổi -> cho trình duyệt cache thoải mái 1 năm.
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      # LƯU Ý: biến VITE_* được nhúng THẲNG vào file JS lúc build, ai xem mã
+      # nguồn trang web cũng đọc được. Tuyệt đối không để mật khẩu / khóa bí mật
+      # thật ở đây.
+      - key: VITE_USE_BACKEND
+        value: "true"
+      # Lấy tự động tên miền của API bên trên (vd imob-chatbot-api.onrender.com),
+      # khỏi phải chép tay. Giá trị này không kèm "https://" nên phía web tự
+      # thêm vào — xem src/utils/constants.js.
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: imob-chatbot-api
+          property: host
+      # Khóa Gemini (tùy chọn). sync: false = Render sẽ HỎI giá trị lúc bấm
+      # Apply. Không có khóa thì để trống, chatbot vẫn chạy bằng kho kiến thức.
+      - key: VITE_GEMINI_API_KEY
+        sync: false

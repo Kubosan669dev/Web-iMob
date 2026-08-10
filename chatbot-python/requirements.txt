@@ -1,5 +1,12 @@
-# Thư viện cần cho chatbot (cài bằng: python -m pip install -r requirements.txt)
-# scikit-learn tự kéo theo numpy và scipy.
-scikit-learn>=1.4
-fastapi>=0.110.0
-uvicorn>=0.24.0
+# Thư viện cần cho chatbot.
+# Cài ở máy:  python -m pip install -r requirements.txt
+# Trên Render: chạy tự động (xem buildCommand trong render.yaml ở thư mục gốc).
+#
+# Cận trên (<2, <1) để một bản mới có thay đổi lớn không làm hỏng deploy bất ngờ.
+
+# scikit-learn tự kéo theo numpy và scipy — dùng để tính TF-IDF (imob_bot/engine.py)
+scikit-learn>=1.4,<2
+
+# FastAPI: khung web; uvicorn: máy chủ thực sự chạy FastAPI
+fastapi>=0.110,<1
+uvicorn>=0.24,<1

@@ -48,7 +48,21 @@ export const SOCIAL_LINKS = [
 // Base URL của backend — đặt trong file .env (VITE_API_URL).
 // Để trống = gọi tương đối /api/* (đã có proxy trong vite.config.js).
 //
-// CHATBOT KHÔNG DÙNG BIẾN NÀY NỮA: bot chạy hẳn trong trình duyệt, đọc
-// data/kienThuc.json (xem services/chatService.js). Giữ lại để dành cho
-// form Liên hệ khi nào có backend nhận dữ liệu thật (services/contactService.js).
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+// Chatbot chạy TRONG TRÌNH DUYỆT là chính (đọc data/kienThuc.json). Backend
+// Python chỉ được gọi khi bật VITE_USE_BACKEND=true — xem services/chatService.js.
+// Biến này cũng dành cho form Liên hệ (services/contactService.js).
+//
+// Vì sao phải "vá" tiền tố https:// ở dưới:
+// trên Render, giá trị VITE_API_URL được lấy tự động từ dịch vụ API
+// (render.yaml -> fromService/property: host) nên nó là tên miền TRẦN
+// "imob-chatbot-api.onrender.com", không kèm https://. Nếu để nguyên thì
+// fetch() hiểu nhầm thành đường dẫn tương đối và gọi sai chỗ. Đoạn này cũng
+// tha thứ cho việc gõ thiếu https:// hoặc thừa dấu / ở cuối.
+const API_URL_THO = (import.meta.env.VITE_API_URL || "").trim();
+
+export const API_BASE_URL = API_URL_THO
+  ? (/^https?:\/\//.test(API_URL_THO) ? API_URL_THO : `https://${API_URL_THO}`).replace(
+      /\/+$/,
+      ""
+    )
+  : "";

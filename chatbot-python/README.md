@@ -108,16 +108,66 @@ Phần lõi (`imob_bot/`) đã tách khỏi giao diện dòng lệnh, nên có t
 API (FastAPI) hoặc nối vào Zalo OA sau này mà **không phải viết lại logic**. Khi cần,
 cứ nhắn để mình hướng dẫn thêm.
 
-## 9.Backend Python có chức năng gì?
-main.py cung cấp một API đơn giản:
+## 9. Backend Python có chức năng gì?
 
-POST /api/chat
-Nhận body:
-message: câu hỏi người dùng
-history: lịch sử hội thoại (danh sách role + content)
+Chạy:
+
+```bash
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --reload --port 8000
+```
+
+`main.py` cung cấp các đường dẫn:
+
+| Đường dẫn | Công dụng |
+|---|---|
+| `GET /` | Thông tin dịch vụ — mở bằng trình duyệt để kiểm tra sống/chết |
+| `GET /health` | Render gọi định kỳ để biết service còn khỏe |
+| `GET /docs` | Trang thử API tự sinh của FastAPI |
+| `POST /api/chat` | Nơi website gửi câu hỏi của khách |
+
+**`POST /api/chat`** — body gửi lên:
+
+```json
+{
+  "message": "báo giá zalo mini app",
+  "history": [],
+  "session_id": "abc123"
+}
+```
+
+- `message` — câu hỏi của khách (bắt buộc)
+- `history` — lịch sử hội thoại (danh sách `role` + `content`); hiện chưa dùng tới
+- `session_id` — mã phiên, **nên gửi**; không gửi thì server tự cấp mã mới
+
 Trả về:
-{"response": "<câu trả lời>"}
-Backend dùng lớp ChatBot trong chatbot-python/imob_bot để trả lời dựa trên dữ liệu chatbot nội bộ (chatbot-python/data/imob_chatbot_data.json hoặc sample_data.json).
+
+```json
+{ "response": "<câu trả lời>", "session_id": "abc123" }
+```
+
+### Vì sao cần `session_id`?
+
+`ChatBot` **nhớ trạng thái** giữa các lượt: đang hỏi khách họ tên hay số điện
+thoại (`self.lead`), đã trượt mấy câu liên tiếp (`self.so_lan_truot`). Nếu cả
+website dùng chung một con bot thì khách A đang để lại SĐT mà khách B nhắn vào,
+câu của B sẽ bị nuốt làm "số điện thoại của A".
+
+Nên `main.py` giữ **một bot riêng cho mỗi `session_id`**. Phần nặng (kho kiến
+thức + chỉ mục TF-IDF) vẫn dùng chung một bản trong bộ nhớ nhờ sao chép nông
+(`copy()`), chỉ phần trạng thái là riêng — tạo phiên mới gần như tức thì.
+
+Server giữ tối đa 500 phiên gần nhất, phiên cũ nhất bị đẩy ra để bộ nhớ không
+phình mãi. Website tự sinh `session_id` và lưu trong `sessionStorage` (mỗi tab
+một phiên, đóng tab là hết) — xem `src/services/chatService.js`.
+
+Backend dùng lớp `ChatBot` trong `chatbot-python/imob_bot` để trả lời dựa trên
+dữ liệu nội bộ (`chatbot-python/data/imob_chatbot_data.json`, thiếu thì dùng
+`sample_data.json`).
+
+### Deploy lên Render
+
+Xem [HUONG-DAN-DEPLOY-RENDER.md](../HUONG-DAN-DEPLOY-RENDER.md) ở thư mục gốc.
 
 ## Backend Python làm được gì?
 Xử lý hội thoại bằng Python, không phải JavaScript trên frontend
