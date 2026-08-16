@@ -119,12 +119,18 @@ python -m uvicorn main:app --reload --port 8000
 
 `main.py` cung cấp các đường dẫn:
 
-| Đường dẫn | Công dụng |
-|---|---|
-| `GET /` | Thông tin dịch vụ — mở bằng trình duyệt để kiểm tra sống/chết |
-| `GET /health` | Render gọi định kỳ để biết service còn khỏe |
-| `GET /docs` | Trang thử API tự sinh của FastAPI |
-| `POST /api/chat` | Nơi website gửi câu hỏi của khách |
+| Đường dẫn | Cần đăng nhập | Công dụng |
+|---|---|---|
+| `GET /` | — | Thông tin dịch vụ — mở bằng trình duyệt để kiểm tra sống/chết |
+| `GET /health` | — | Render gọi định kỳ; cũng cho biết database `ok`/`loi`/`tat` |
+| `GET /docs` | — | Trang thử API tự sinh của FastAPI |
+| `POST /api/chat` | — | Nơi website gửi câu hỏi của khách |
+| `POST /api/dang-nhap` | — | Đăng nhập trang quản trị → trả về "vé" JWT |
+| `GET /api/noi-dung` | — | Website lấy nội dung (thông tin công ty, trang pháp lý) |
+| `PUT /api/noi-dung/{khoa}` | ✔ | Trang admin lưu nội dung |
+| `POST /api/lien-he` | — | Form liên hệ của khách |
+| `GET /api/lien-he` | ✔ | Danh sách khách để lại thông tin |
+| `PATCH /api/lien-he/{id}` | ✔ | Tick "đã xử lý" |
 
 **`POST /api/chat`** — body gửi lên:
 
@@ -164,6 +170,51 @@ một phiên, đóng tab là hết) — xem `src/services/chatService.js`.
 Backend dùng lớp `ChatBot` trong `chatbot-python/imob_bot` để trả lời dựa trên
 dữ liệu nội bộ (`chatbot-python/data/imob_chatbot_data.json`, thiếu thì dùng
 `sample_data.json`).
+
+## 10. Phần CMS (database)
+
+Thêm từ 16/08/2026. Gồm 4 file: `db.py`, `auth.py`, `api_auth.py`,
+`api_noi_dung.py`, `api_lien_he.py`, và `cau_hinh.py` (nạp file `.env`).
+
+**DATABASE LÀ TÙY CHỌN.** Không đặt `DATABASE_URL` — hoặc đặt rồi mà kết nối
+hỏng — thì `db.co_db()` trả `False`, phần CMS tự tắt, còn **chatbot chạy y như
+cũ**. Nhờ vậy database chết cũng không kéo sập API chat.
+
+### Ba bảng
+
+| Bảng | Chứa gì |
+|---|---|
+| `noi_dung` | Nội dung website dạng JSONB, khóa `company` / `legalPages` |
+| `nguoi_dung` | Tài khoản quản trị, mật khẩu băm bcrypt |
+| `lien_he` | Khách để lại thông tin, cột `nguon` = `form` hoặc `chatbot` |
+
+Bảng **tự tạo** lúc khởi động (`CREATE TABLE IF NOT EXISTS`) và **tự nạp** nội
+dung từ `../src/data/*.json` nếu còn trống. Nạp rồi thì không ghi đè nữa
+(`ON CONFLICT DO NOTHING`), nên khởi động lại bao nhiêu lần cũng không mất
+những gì bạn đã sửa trong trang admin.
+
+Vì sao lưu nguyên cục JSON thay vì tách cột: giao diện đang vẽ cấu trúc lồng
+nhau (`legalPages → sections → items`). Tách ra thành nhiều bảng thì phải viết
+lại cả trang mà chẳng được lợi gì.
+
+### Biến môi trường
+
+| Biến | Bắt buộc | Ghi chú |
+|---|---|---|
+| `DATABASE_URL` | không | Thiếu = tắt CMS, chatbot vẫn chạy |
+| `JWT_SECRET` | **có, nếu bật CMS** | Từ 32 ký tự. Thiếu là server **từ chối khởi động** — cố ý, vì khóa mặc định nằm trong mã nguồn công khai thì ai cũng tự ký được vé admin |
+| `ADMIN_USER`, `ADMIN_PASSWORD` | không | Chỉ để TẠO tài khoản lần đầu, tối thiểu 8 ký tự |
+| `ALLOWED_ORIGINS` | không | Tên miền được phép gọi API, ngăn bằng dấu phẩy |
+
+Chạy ở máy: điền vào `chatbot-python/.env` (file này bị `.gitignore` chặn).
+Trên Render: đặt trong dashboard, đã khai báo sẵn ở `render.yaml`.
+
+### Chatbot lưu lead thế nào
+
+`ChatBot(kien_thuc, khi_co_lead=...)` nhận một hàm callback. Khi `ThuThapLead`
+thu đủ họ tên / SĐT / email, nó gọi callback đó (bọc `try/except` — database
+hỏng cũng **không** làm gãy cuộc chat của khách), `main.py` truyền vào hàm ghi
+database. Để `None` thì hành vi y như cũ: đọc lại cho khách nghe rồi bỏ.
 
 ### Deploy lên Render
 

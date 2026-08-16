@@ -11,8 +11,15 @@
 
 import company from "../data/company.json";
 
-// Giữ nguyên tên `SITE` và các khoá cũ để mọi component đang dùng
-// không phải sửa gì.
+// ⚠️ SITE giờ là GIÁ TRỊ MẶC ĐỊNH, không còn là nguồn duy nhất.
+//
+// Từ khi có trang quản trị /admin, thông tin công ty được lưu trong database và
+// website tải về lúc chạy. Component nào hiển thị thông tin công ty phải dùng
+// hook `useCongTy()` (src/context/NoiDungContext.jsx) thì mới thấy bản đã sửa.
+//
+// SITE chỉ còn dùng cho code KHÔNG PHẢI component React (không gọi hook được),
+// và làm bản dự phòng khi chưa gọi được API. ĐỪNG dùng SITE trong component —
+// sửa trong /admin sẽ không ăn.
 export const SITE = company;
 
 // Menu điều hướng.

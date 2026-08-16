@@ -5,7 +5,7 @@ import Container from "../components/ui/Container.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import AnimatedGridBackground from "../components/ui/AnimatedGridBackground.jsx";
-import { SITE } from "../utils/constants.js";
+import { useCongTy } from "../context/NoiDungContext.jsx";
 import { openChat } from "../utils/chatBus.js";
 
 /* ================= Entrance animation (stagger) ================= */
@@ -160,6 +160,8 @@ function TerminalCard() {
 
 /* ================= Hero ================= */
 export default function Hero() {
+  const congTy = useCongTy();
+
   return (
     <section
       id="home"
@@ -194,7 +196,7 @@ export default function Hero() {
             variants={fadeUp}
             className="mx-auto max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg lg:mx-0"
           >
-            {SITE.description}. Chúng tôi thiết kế và triển khai giải pháp phần
+            {congTy.description}. Chúng tôi thiết kế và triển khai giải pháp phần
             mềm, ứng dụng và AI — đồng hành từ ý tưởng đến vận hành.
           </motion.p>
 

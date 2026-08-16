@@ -7,15 +7,32 @@ không bỏ bước.
 
 ## 1. Bức tranh tổng thể
 
-Dự án có **2 phần chạy độc lập**, Render sẽ dựng thành 2 dịch vụ riêng:
+Dự án có **3 phần**, Render sẽ dựng cả 3:
 
 | # | Dịch vụ trên Render | Là gì | Nguồn | Giá |
 |---|---|---|---|---|
 | 1 | `imob-web` | Website React (Vite build ra file tĩnh) | thư mục gốc | Miễn phí, **không bao giờ ngủ** |
-| 2 | `imob-chatbot-api` | API chatbot Python (FastAPI + TF-IDF) | `chatbot-python/` | Miễn phí, **ngủ sau 15 phút** |
+| 2 | `imob-chatbot-api` | API Python: chatbot + CMS + nhận liên hệ | `chatbot-python/` | Miễn phí, **ngủ sau 15 phút** |
+| 3 | `imob-db` | PostgreSQL: nội dung CMS + khách để lại liên hệ | — | Miễn phí, **có thời hạn** |
 
-Website gọi sang API. Cả hai được khai báo sẵn trong [`render.yaml`](render.yaml)
+Website gọi sang API. Cả ba được khai báo sẵn trong [`render.yaml`](render.yaml)
 nên bạn **không phải điền tay** từng ô trên trang Render.
+
+### Nội dung website lấy từ đâu?
+
+Trang `/admin` cho bạn sửa **thông tin công ty** và **trang pháp lý** mà không
+cần đụng vào code. Nội dung lưu trong database, nhưng website **không phụ thuộc
+hoàn toàn** vào đó:
+
+```
+company.json trong bundle  ──►  hiện NGAY (luôn có, kể cả khi API chết)
+                                        │
+                          API sống? ────┴──►  thay bằng bản bạn sửa trong /admin
+```
+
+Nghĩa là **database chết hay backend ngủ thì website vẫn hiện đủ nội dung**, chỉ
+là bản trong bundle (lần build gần nhất). Đây là điều quan trọng nhất của thiết
+kế này — xem `src/context/NoiDungContext.jsx`.
 
 ### Chatbot trả lời theo 3 tầng
 
@@ -53,10 +70,16 @@ git push origin main
 
 1. Vào <https://dashboard.render.com> → bấm **New +** (góc trên phải) → **Blueprint**.
 2. Chọn repo **Web-iMob**. Render tự tìm thấy file `render.yaml`.
-3. Render hiện danh sách 2 dịch vụ nó sắp tạo. Nó sẽ **hỏi giá trị** cho biến
-   `VITE_GEMINI_API_KEY`:
-   - Có khóa Gemini → dán vào.
-   - Chưa có → **để trống cũng được**, chatbot vẫn chạy bằng kho kiến thức.
+3. Render hiện danh sách dịch vụ nó sắp tạo, và **hỏi giá trị** cho mấy biến sau:
+
+   | Biến | Điền gì |
+   |---|---|
+   | `ADMIN_USER` | Tên đăng nhập trang quản trị, ví dụ `admin` |
+   | `ADMIN_PASSWORD` | Mật khẩu, **tối thiểu 8 ký tự**. Đặt mật khẩu mạnh — đây là chìa khoá sửa nội dung website |
+   | `VITE_GEMINI_API_KEY` | Có khóa Gemini thì dán vào; chưa có thì **để trống cũng được**, chatbot vẫn chạy bằng kho kiến thức |
+
+   `JWT_SECRET` thì Render **tự sinh**, bạn không phải làm gì.
+
 4. Bấm **Apply**.
 
 Lần đầu build mất khoảng **5–10 phút** (phần Python phải cài `scikit-learn`, khá
@@ -91,6 +114,42 @@ Làm đủ 4 bước, đừng bỏ bước nào:
    `F12` mở tab **Network** → gõ một câu hỏi lạ (không có trong kho kiến thức),
    xem có request tới `/api/chat` và trả về mã `200` không.
 
+6. **Database đã kết nối chưa?** Mở `https://imob-chatbot-api.onrender.com/health`
+   → trường `database` phải là `"ok"`.
+   - `"loi"` = có đặt `DATABASE_URL` nhưng kết nối hỏng → xem tab **Logs**.
+   - `"tat"` = chưa đặt `DATABASE_URL`.
+
+7. **Trang quản trị chạy chưa?** Mở `https://imob-web.onrender.com/admin`
+   → đăng nhập bằng `ADMIN_USER` / `ADMIN_PASSWORD` vừa đặt → thử đổi số điện
+   thoại → bấm **Lưu** → mở lại trang chủ, số ở Navbar/Footer/Liên hệ phải đổi
+   theo.
+
+8. **Form liên hệ có lưu không?** Gửi thử một tin ở phần Liên hệ trang chủ, rồi
+   vào `/admin` → tab **Liên hệ** xem có thấy không.
+
+---
+
+## 4b. Dùng trang quản trị
+
+Vào `https://imob-web.onrender.com/admin` (không có trong menu — phải gõ thẳng).
+
+| Tab | Sửa được gì |
+|---|---|
+| **Thông tin công ty** | Tên, khẩu hiệu, SĐT, email, địa chỉ, giờ làm việc. Chatbot **cũng dùng chung** các thông tin này |
+| **Trang pháp lý** | Chính sách bảo mật & Điều khoản dịch vụ: tiêu đề, mở đầu, và từng mục |
+| **Liên hệ** | Xem khách để lại thông tin (từ form **và** từ chatbot), tick khi đã gọi lại |
+
+Vài điều nên biết:
+
+- Sửa xong bấm **Lưu** là ăn ngay, **không cần build lại, không cần push GitHub**.
+  Khách đang mở sẵn trang phải tải lại (F5) mới thấy.
+- Nút **Xuất JSON** tải toàn bộ nội dung về máy. **Nên bấm định kỳ** — gói
+  database miễn phí có thời hạn, mất database mà có file này thì chép đè vào
+  `src/data/` là khôi phục được ngay.
+- Ở tab Trang pháp lý, ô "Gạch đầu dòng" và "Đoạn văn" là **mỗi dòng một ý**.
+  Gõ thừa dòng trống không sao, lúc lưu tự bỏ.
+- Đăng nhập hết hạn sau 8 giờ, và đóng tab là mất phiên.
+
 ---
 
 ## 5. Những điều cần biết về gói miễn phí
@@ -121,14 +180,29 @@ Việc cần làm với khóa Gemini:
 - Đặt hạn mức (quota) để nếu bị lạm dụng cũng không phát sinh chi phí lớn.
 - Đừng dùng chung khóa này với dự án khác.
 
-**Siết CORS khi đã có tên miền chính thức.** Hiện `ALLOWED_ORIGINS` đang để `*`
-(cho mọi trang web gọi API). Khi đã ổn định:
+**Kiểm tra `ALLOWED_ORIGINS` ngay sau khi deploy.** `render.yaml` đặt sẵn
+`https://imob-web.onrender.com`. Nếu Render cấp tên miền khác (vd tên đã bị
+người khác dùng nên thành `imob-web-a1b2`), phải sửa cho khớp, không thì trình
+duyệt chặn hết và chatbot/form liên hệ/trang admin đều không chạy:
 
-Render → dịch vụ `imob-chatbot-api` → **Environment** → sửa `ALLOWED_ORIGINS`:
+Render → dịch vụ `imob-chatbot-api` → **Environment** → `ALLOWED_ORIGINS`:
 
 ```
-https://imob-web.onrender.com,https://imob.vn
+https://ten-mien-that-cua-ban.onrender.com,https://imob.vn
 ```
+
+**Về trang quản trị:**
+
+- Mật khẩu lưu dạng **băm bcrypt**, database bị lộ cũng không suy ngược ra được.
+- Sai mật khẩu **5 lần** là khoá IP đó **15 phút** — chặn dò mật khẩu tự động.
+- `ADMIN_PASSWORD` chỉ dùng để **tạo** tài khoản lần đầu. Sửa biến đó sau này
+  **không đổi được mật khẩu** (code cố ý không ghi đè). Muốn đổi mật khẩu thì
+  xoá dòng trong bảng `nguoi_dung` rồi khởi động lại service.
+- `/admin` bị `robots.txt` chặn, nhưng **giấu đường dẫn không phải bảo mật** —
+  thứ bảo vệ thật là đăng nhập. Đừng đặt mật khẩu yếu vì nghĩ "không ai biết
+  đường dẫn".
+- Danh sách **Liên hệ là dữ liệu cá nhân** của khách (Nghị định 13/2023). Chỉ
+  dùng để liên hệ lại, đừng chia sẻ ra ngoài, và xoá khi không còn cần.
 
 ---
 
@@ -159,6 +233,12 @@ git push origin main
 | Build web lỗi ở **`npm ci`** | `package-lock.json` lệch với `package.json` | Chạy ở máy: `npm install` → commit lại `package-lock.json` → push |
 | Chatbot **không gọi API**, luôn trả lời mặc định | Chưa bật backend hoặc sai URL | Render → `imob-web` → **Environment**: kiểm tra `VITE_USE_BACKEND=true` và `VITE_API_URL` → sửa xong phải bấm **Manual Deploy → Clear build cache & deploy** (biến `VITE_*` chỉ có tác dụng lúc build) |
 | API trả lời **rất chậm lần đầu** | Service đang ngủ (gói free) | Bình thường, xem mục 5 |
+| `/admin` báo **"Không kết nối được tới máy chủ"** | API ngủ, hoặc sai `VITE_API_URL`, hoặc CORS chặn | Chờ 1 phút thử lại; vẫn hỏng thì mở `/health` của API xem sống không, và kiểm tra `ALLOWED_ORIGINS` |
+| `/health` báo `"database":"loi"` | Sai `DATABASE_URL` hoặc database chưa sẵn sàng | Render → tab **Logs** của API xem lỗi thật. Kiểm tra database `imob-db` còn sống không (gói free có hạn) |
+| Đăng nhập báo **"Sai quá nhiều lần"** | Đã sai 5 lần | Chờ 15 phút, hoặc vào Render bấm **Manual Deploy** để khởi động lại (bộ đếm nằm trong bộ nhớ nên restart là xoá) |
+| Server **không khởi động**, log nói thiếu `JWT_SECRET` | Biến chưa được sinh | Render → API → **Environment** → thêm `JWT_SECRET` với chuỗi ngẫu nhiên **từ 32 ký tự** |
+| Sửa trong `/admin` xong mà **web không đổi** | Trang đang mở dùng bản cũ | Nhấn **F5** tải lại. Vẫn không đổi thì mở `/api/noi-dung` của API xem đã lưu chưa |
+| **Mất hết nội dung** đã sửa | Database free hết hạn, bị Render xoá | Website vẫn chạy bằng bản trong bundle. Khôi phục: lấy file đã **Xuất JSON**, chép nội dung vào `src/data/company.json` và `legalPages.json`, commit, push |
 
 **Xem log để biết lỗi thật:** Render → chọn dịch vụ → tab **Logs**. Đây là nơi
 đầu tiên cần nhìn khi có sự cố, đừng đoán mò.
@@ -167,7 +247,28 @@ git push origin main
 
 ## 9. Chạy thử ở máy trước khi deploy
 
-Nên làm để chắc chắn mọi thứ ổn:
+Nên làm để chắc chắn mọi thứ ổn.
+
+**Bước 1 — cấu hình backend.** File `chatbot-python/.env` đã được tạo sẵn (không
+lên GitHub). Kiểm tra `DATABASE_URL` trỏ đúng database ở máy bạn:
+
+```
+DATABASE_URL=postgresql://postgres:<mật khẩu>@localhost:5432/imob_cms
+```
+
+> ⚠️ Ở máy này dùng database **`imob_cms`**, KHÔNG phải `imob`. Database `imob`
+> đã có sẵn một hệ backend Java/Spring cũ (Flyway, 15/07/2026) — đã bỏ không
+> dùng nhưng dữ liệu còn nguyên nên để riêng cho khỏi lẫn.
+
+Chưa có database thì tạo:
+
+```bash
+"/c/Program Files/PostgreSQL/16/bin/psql" -U postgres -c "CREATE DATABASE imob_cms"
+```
+
+Bảng và dữ liệu ban đầu **tự tạo** lúc backend khởi động, không phải chạy script.
+
+**Bước 2 — chạy:**
 
 ```bash
 # Cửa sổ 1 — API Python
@@ -180,14 +281,27 @@ npm install
 npm run dev
 ```
 
-Tạo file `.env` ở thư mục gốc (chép từ `.env.example`) với nội dung:
+Ở máy **không cần** `VITE_API_URL`: `vite.config.js` đã chuyển tiếp `/api/*`
+sang cổng 8000 giúp rồi. Muốn chatbot dùng cả backend Python thì thêm
+`VITE_USE_BACKEND=true` vào file `.env` ở thư mục gốc.
 
-```
-VITE_USE_BACKEND=true
-```
+**Bước 3 — thử:**
 
-Mở <http://localhost:5173> và thử chat. Ở máy thì không cần `VITE_API_URL`:
-`vite.config.js` đã chuyển tiếp `/api/*` sang cổng 8000 giúp rồi.
+- <http://localhost:5173> — trang chủ, thử chat và gửi form liên hệ
+- <http://localhost:5173/admin> — đăng nhập bằng `ADMIN_USER` / `ADMIN_PASSWORD`
+  trong `chatbot-python/.env`
+- <http://localhost:8000/docs> — trang thử API tự sinh
+
+**Phép thử quan trọng nhất:** tắt backend (Ctrl+C ở cửa sổ 1) rồi tải lại trang
+chủ. Website **vẫn phải hiện đầy đủ** nội dung (lấy từ bundle). Nếu trang trống
+thì cơ chế dự phòng đã hỏng.
+
+Kiểm tra bản build thật (giống hệt bản chạy trên Render):
+
+```bash
+npm run build
+npm run preview
+```
 
 Kiểm tra bản build thật (giống hệt bản chạy trên Render):
 

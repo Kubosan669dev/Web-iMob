@@ -6,22 +6,29 @@ import {
   MapPin,
   Loader2,
   CheckCircle2,
+  AlertTriangle,
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Card from "../components/ui/Card.jsx";
 import Button from "../components/ui/Button.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
-import { SITE } from "../utils/constants.js";
+import { useCongTy } from "../context/NoiDungContext.jsx";
 import { submitContact } from "../services/contactService.js";
 import services from "../data/services.json";
 
-/* ---------- Thông tin liên hệ (đọc từ constants) ---------- */
-const CONTACT_INFO = [
-  { icon: Phone, label: "Điện thoại", value: SITE.phone },
-  { icon: Mail, label: "Email", value: SITE.email },
-  { icon: MapPin, label: "Địa chỉ", value: SITE.address },
-];
+/* ---------- Thông tin liên hệ ---------- */
+// CỐ Ý dựng bên trong component chứ KHÔNG phải ở cấp module như trước.
+// Bản cũ viết `const CONTACT_INFO = [...SITE.phone...]` ngoài component nên mảng
+// bị "đóng băng" ngay lúc file được nạp: sửa số điện thoại trong /admin thì
+// Navbar/Footer đổi theo, riêng khối này vẫn hiện số cũ cho tới khi build lại.
+function dungThongTinLienHe(congTy) {
+  return [
+    { icon: Phone, label: "Điện thoại", value: congTy.phone },
+    { icon: Mail, label: "Email", value: congTy.email },
+    { icon: MapPin, label: "Địa chỉ", value: congTy.address },
+  ];
+}
 
 /* ---------- Form ---------- */
 const EMPTY_FORM = { name: "", email: "", phone: "", service: "", message: "" };
@@ -45,9 +52,11 @@ function Field({ label, required = false, error, children }) {
 }
 
 function ContactForm() {
+  const congTy = useCongTy();
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle"); // idle | sending | success
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [loiGui, setLoiGui] = useState("");
 
   const setField = (key) => (e) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -75,7 +84,21 @@ function ContactForm() {
     }
 
     setStatus("sending");
-    await submitContact(form);
+    setLoiGui("");
+
+    // Bản cũ gọi submitContact rồi báo "thành công" BẤT KỂ kết quả. Với backend
+    // thật thì đó là lỗi nghiêm trọng: khách tưởng đã gửi được, yên tâm chờ, mà
+    // thực ra chẳng ai nhận được gì. Giờ phải xem kết quả trả về.
+    const ketQua = await submitContact(form);
+
+    if (!ketQua.success) {
+      setLoiGui(ketQua.error);
+      setStatus("error");
+      // CỐ Ý không xoá form: khách còn nguyên nội dung vừa gõ để bấm gửi lại,
+      // không phải nhập lại từ đầu.
+      return;
+    }
+
     setStatus("success");
     setForm(EMPTY_FORM);
     // Ẩn banner thành công sau 5s
@@ -149,10 +172,34 @@ function ContactForm() {
 
         {/* Banner thành công */}
         {status === "success" && (
-          <p className="flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300">
+          <p
+            role="status"
+            className="flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300"
+          >
             <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-            Đã gửi thành công! Chúng tôi sẽ phản hồi trong vòng 24h.
+            Đã gửi thành công! Chúng tôi sẽ phản hồi {congTy.responseTime}.
           </p>
+        )}
+
+        {/* Banner lỗi — luôn kèm hotline để khách còn đường liên lạc khác */}
+        {status === "error" && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+          >
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+              {loiGui}
+              <br />
+              <span className="text-red-200/80">
+                Bạn có thể gọi trực tiếp{" "}
+                <a href={`tel:${congTy.phone.replace(/\s/g, "")}`} className="font-semibold underline">
+                  {congTy.phone}
+                </a>
+                .
+              </span>
+            </span>
+          </div>
         )}
 
         <Button
@@ -179,6 +226,9 @@ function ContactForm() {
 
 /* ---------- Section ---------- */
 export default function Contact() {
+  const congTy = useCongTy();
+  const thongTinLienHe = dungThongTinLienHe(congTy);
+
   return (
     <section id="contact" className="relative overflow-hidden py-24 lg:py-32">
       <div
@@ -205,7 +255,7 @@ export default function Contact() {
                 Thông tin liên hệ
               </h3>
             </Reveal>
-            {CONTACT_INFO.map((info, index) => (
+            {thongTinLienHe.map((info, index) => (
               <Reveal key={info.label} delay={index * 0.1}>
                 <Card hover className="flex items-center gap-4 p-5">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-500/25 to-cyan-500/25">

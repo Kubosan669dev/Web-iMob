@@ -3,7 +3,7 @@ import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Card from "../components/ui/Card.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
-import { SITE } from "../utils/constants.js";
+import { useCongTy } from "../context/NoiDungContext.jsx";
 import about from "../data/about.json";
 
 // Nội dung section đọc từ data/about.json — trước đây hardcode ngay ở đây
@@ -20,6 +20,8 @@ const FEATURE_ICONS = {
 };
 
 export default function About() {
+  const congTy = useCongTy();
+
   return (
     <section id="about" className="relative overflow-hidden py-24 lg:py-32">
       {/* Glow nhẹ một góc — tạo chiều sâu, không dùng full grid để đổi nhịp với Hero */}
@@ -37,8 +39,8 @@ export default function About() {
               badge="Về chúng tôi"
               icon={Sparkles}
               title="GIẢI PHÁP"
-              highlight={SITE.name.toUpperCase()}
-              description={`${SITE.description} — chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mình mang lại.`}
+              highlight={congTy.name.toUpperCase()}
+              description={`${congTy.description} — chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mình mang lại.`}
             />
           </Reveal>
 

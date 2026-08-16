@@ -7,9 +7,12 @@ Chỉ hỏi những trường trong file JSON (lead_capture.required_fields).
 Không bao giờ hỏi CCCD, số thẻ, mật khẩu, OTP (theo do_not_collect).
 """
 
+import logging
 import re
 
 from .text_utils import bo_dau
+
+log = logging.getLogger("imob.lead")
 
 # Khách muốn dừng giữa chừng
 CUM_HUY = ["thoi", "huy", "bo qua", "de sau", "khong can", "khong muon", "stop"]
@@ -20,9 +23,12 @@ REGEX_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 class ThuThapLead:
     """Một phiên thu thập thông tin. Mỗi lượt chat gọi .nhan(text)."""
 
-    def __init__(self, kien_thuc, service_id=None):
+    def __init__(self, kien_thuc, service_id=None, khi_xong=None):
         self.kt = kien_thuc
         self.service_id = service_id
+        # khi_xong(da_thu: dict, service_id: str|None) — gọi khi thu ĐỦ thông tin.
+        # Để None thì thông tin chỉ đọc lại cho khách nghe rồi thôi (như trước).
+        self.khi_xong = khi_xong
         self.truong = kien_thuc.data.get("lead_capture", {}).get("required_fields", [])
         self.buoc = 0
         self.da_thu = {}
@@ -75,6 +81,15 @@ class ThuThapLead:
         return None
 
     def _xac_nhan(self):
+        # Đã thu đủ -> báo ra ngoài để lưu lại. BỌC try/except vì đây là lúc
+        # khách đang chờ câu trả lời: database hỏng hay mạng lỗi thì cùng lắm
+        # mất một lead trong sổ, TUYỆT ĐỐI không được làm gãy cuộc trò chuyện.
+        if self.khi_xong is not None:
+            try:
+                self.khi_xong(dict(self.da_thu), self.service_id)
+            except Exception:
+                log.exception("Không lưu được thông tin liên hệ từ chatbot")
+
         mau = (self.kt.data.get("lead_capture", {}).get("confirmation_message")
                or "Dạ em đã ghi nhận thông tin của anh/chị: {ho_ten} – {so_dien_thoai} – {email}. "
                   "Bên em sẽ liên hệ lại sớm nhất ạ!")

@@ -5,13 +5,34 @@
 # mọi thứ trong file này. Trên Render bấm: New + -> Blueprint -> chọn repo
 # Web-iMob -> Apply. Render đọc file này và dựng đủ 2 dịch vụ.
 #
-# Dự án có 2 phần:
-#   1. imob-chatbot-api — API Python (FastAPI), thư mục chatbot-python/
-#   2. imob-web         — website React, Vite build ra thư mục dist/
+# Dự án có 3 phần:
+#   1. imob-db          — PostgreSQL: nội dung CMS + thông tin khách để lại
+#   2. imob-chatbot-api — API Python (FastAPI), thư mục chatbot-python/
+#   3. imob-web         — website React, Vite build ra thư mục dist/
 #
 # Sửa file này rồi push lên GitHub thì Render tự cập nhật theo.
 # Tài liệu: https://render.com/docs/blueprint-spec
 # ============================================================
+
+# ----------------------------------------------------------
+# Database — nơi lưu nội dung sửa trong /admin và các liên hệ khách để lại.
+#
+# ⚠️ GÓI FREE CÓ THỜI HẠN: hết hạn Render XÓA database, tức là mất hết nội dung
+# đã sửa và toàn bộ danh sách liên hệ. Hãy kiểm tra hạn trên trang Render.
+# Hai cách phòng:
+#   • Vào /admin bấm "Xuất JSON" định kỳ, chép đè vào src/data/ rồi commit.
+#   • Hoặc dùng database bên ngoài (Neon, Supabase) có gói free dài hơi hơn —
+#     chỉ cần đổi DATABASE_URL bên dưới, code không phải sửa gì.
+#
+# Website KHÔNG chết khi mất database: nó vẫn còn bản JSON đóng gói sẵn trong
+# bundle làm mặc định (xem src/context/NoiDungContext.jsx).
+# ----------------------------------------------------------
+databases:
+  - name: imob-db
+    plan: free
+    region: singapore
+    databaseName: imob
+    user: imob
 
 services:
   # ----------------------------------------------------------
@@ -40,11 +61,34 @@ services:
       # hoặc xóa hẳn biến này để Render dùng bản mặc định của nó.
       - key: PYTHON_VERSION
         value: "3.12.11"
+
       # Danh sách website được phép gọi API này (xem phần CORS trong main.py).
-      # "*" = cho phép tất cả. Khi đã có tên miền chính thức thì nên siết lại:
-      #     https://imob-web.onrender.com,https://imob.vn
+      # Từ khi có trang quản trị thì KHÔNG nên để "*" nữa.
+      # ⚠️ SAU KHI DEPLOY: nếu Render đặt tên miền khác (vd tên đã bị dùng nên
+      # thành imob-web-a1b2), phải sửa lại đúng tên miền thật ở đây, không thì
+      # trình duyệt chặn mọi lời gọi và chatbot/form liên hệ sẽ không chạy.
       - key: ALLOWED_ORIGINS
-        value: "*"
+        value: "https://imob-web.onrender.com"
+
+      # --- Phần CMS ---
+      # Render tự điền chuỗi kết nối của database khai báo ở trên.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: imob-db
+          property: connectionString
+
+      # Khóa ký "vé" đăng nhập. generateValue: Render tự sinh chuỗi ngẫu nhiên
+      # và KHÔNG ai nhìn thấy, kể cả bạn — đúng như một khóa bí mật nên vậy.
+      # Đổi giá trị này = mọi người đang đăng nhập bị đá ra, phải vào lại.
+      - key: JWT_SECRET
+        generateValue: true
+
+      # Tài khoản quản trị, chỉ dùng để TẠO lần đầu. sync: false = Render hỏi
+      # bạn lúc bấm Apply. Mật khẩu phải từ 8 ký tự trở lên.
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
 
   # ----------------------------------------------------------
   # 2) Website React (Vite) — chạy dạng file tĩnh trên CDN, miễn phí và

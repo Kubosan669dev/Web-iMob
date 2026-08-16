@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Zap, X } from "lucide-react";
 import Button from "../ui/Button.jsx";
-import { NAV_ITEMS, SITE } from "../../utils/constants.js";
+import { NAV_ITEMS } from "../../utils/constants.js";
+import { useCongTy } from "../../context/NoiDungContext.jsx";
 
 // Hiệu ứng panel + stagger từng item
 const panelVariants = {
@@ -22,6 +23,8 @@ const itemVariants = {
 
 // MobileMenu: panel trượt từ phải, chỉ hiển thị < md (hamburger ở Navbar).
 export default function MobileMenu({ open, onClose, activeId }) {
+  const congTy = useCongTy();
+
   // Khóa scroll body khi menu đang mở
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -58,7 +61,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-blue-500">
                   <img src="/logo-imob-white.png" alt="iMob" className="h-5 w-5" />
                 </div>
-                <p className="font-black text-white">{SITE.name}</p>
+                <p className="font-black text-white">{congTy.name}</p>
               </div>
               <button
                 type="button"

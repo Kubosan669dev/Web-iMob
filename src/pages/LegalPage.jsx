@@ -2,15 +2,16 @@ import { Link } from "react-router-dom";
 import { ShieldCheck, ChevronLeft } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
-import legalPages from "../data/legalPages.json";
-import { SITE } from "../utils/constants.js";
+import { useCongTy, useTrangPhapLy } from "../context/NoiDungContext.jsx";
 
 // LegalPage: trang văn bản pháp lý (Chính sách bảo mật / Điều khoản dịch vụ).
 // Một component dùng chung, chọn nội dung theo `slug` — dữ liệu ở legalPages.json.
 // prose-style tự viết (không dùng plugin) cho hợp nền tối của site.
 export default function LegalPage({ slug }) {
+  const congTy = useCongTy();
+  const legalPages = useTrangPhapLy();
   const page = legalPages[slug];
-  useDocumentTitle(page ? `${page.title} — ${SITE.name}` : SITE.name);
+  useDocumentTitle(page ? `${page.title} — ${congTy.name}` : congTy.name);
 
   // Slug lạ (không có trong dữ liệu) — hiếm khi xảy ra, nhưng chặn cho chắc.
   if (!page) {

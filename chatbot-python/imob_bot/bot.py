@@ -26,13 +26,17 @@ DICH_VU_HOP_LE = {"digital_transformation", "zalo_miniapp", "software_hardware"}
 
 
 class ChatBot:
-    def __init__(self, kien_thuc: KienThuc):
+    def __init__(self, kien_thuc: KienThuc, khi_co_lead=None):
         self.kt = kien_thuc
         # FAQ và smalltalk chung một bộ tìm kiếm (đều là câu hỏi -> trả lời)
         self.tim_faq = TimKiem(kien_thuc.faq_docs + kien_thuc.smalltalk_docs)
         self.tim_chunk = TimKiem(kien_thuc.chunk_docs)
         self.lead = None            # phiên ThuThapLead đang chạy (nếu có)
         self.so_lan_truot = 0       # đếm số lượt liên tiếp không trả lời được
+        # khi_co_lead(da_thu, service_id) — gọi khi khách để lại đủ thông tin.
+        # main.py truyền vào hàm ghi database. Để None thì thông tin chỉ được
+        # đọc lại cho khách nghe rồi bỏ (đúng như hành vi cũ khi chạy dòng lệnh).
+        self.khi_co_lead = khi_co_lead
 
     # ================= API chính =================
     def tra_loi(self, text: str) -> str:
@@ -73,7 +77,9 @@ class ChatBot:
             # ...còn lại: câu báo giá chuẩn + mở phiên thu thập liên hệ.
             self.so_lan_truot = 0
             service = self._doan_dich_vu(doc if khop_faq else None)
-            self.lead = ThuThapLead(self.kt, service_id=service)
+            self.lead = ThuThapLead(
+                self.kt, service_id=service, khi_xong=self.khi_co_lead
+            )
             return self.kt.cau_tra_loi_gia_chuan()
 
         # 3. Khớp FAQ / smalltalk
@@ -98,7 +104,11 @@ class ChatBot:
         """Trả câu trả lời của một tài liệu; mở phiên lead nếu cần."""
         self.so_lan_truot = 0
         if doc.get("action") == "collect_lead":
-            self.lead = ThuThapLead(self.kt, service_id=self._doan_dich_vu(doc))
+            self.lead = ThuThapLead(
+                self.kt,
+                service_id=self._doan_dich_vu(doc),
+                khi_xong=self.khi_co_lead,
+            )
         return doc["answer"]
 
     def _doan_dich_vu(self, doc):

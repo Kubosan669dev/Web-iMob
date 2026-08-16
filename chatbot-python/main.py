@@ -1,19 +1,30 @@
-"""API chatbot iMob — FastAPI, deploy trên Render.com.
+"""API iMob — FastAPI, deploy trên Render.com.
 
 Chạy local:   python -m uvicorn main:app --reload --port 8000
 Trên Render:  uvicorn main:app --host 0.0.0.0 --port $PORT   (xem render.yaml)
 
-Các đường dẫn:
-  GET  /         — thông tin dịch vụ (mở bằng trình duyệt để kiểm tra sống/chết)
-  GET  /health   — Render gọi định kỳ để biết service còn khỏe
-  POST /api/chat — nơi website gửi câu hỏi của khách
-  GET  /docs     — trang thử API tự sinh của FastAPI
+Các nhóm đường dẫn:
+  GET  /              — thông tin dịch vụ (mở bằng trình duyệt để kiểm tra sống/chết)
+  GET  /health        — Render gọi định kỳ để biết service còn khỏe
+  GET  /docs          — trang thử API tự sinh của FastAPI
+  POST /api/chat      — nơi website gửi câu hỏi của khách
+  POST /api/dang-nhap — đăng nhập trang quản trị        (api_auth.py)
+  /api/noi-dung       — nội dung website cho CMS         (api_noi_dung.py)
+  /api/lien-he        — khách để lại thông tin           (api_lien_he.py)
+
+NGUYÊN TẮC: database là TÙY CHỌN. Không có (hoặc chết) thì CMS và việc lưu liên
+hệ tự tắt, còn chatbot vẫn chạy y như cũ. Website cũng có bản JSON đóng gói sẵn
+làm mặc định nên khách không bao giờ thấy trang trống.
 """
 
+import cau_hinh  # noqa: F401  — phải nạp .env TRƯỚC khi đọc os.getenv bên dưới
+
+import logging
 import os
 import threading
 import uuid
 from collections import OrderedDict
+from contextlib import asynccontextmanager
 from copy import copy
 from pathlib import Path
 
@@ -21,9 +32,68 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import api_auth
+import api_lien_he
+import api_noi_dung
+import auth
+import db
 from imob_bot import ChatBot, KienThuc
 
-app = FastAPI(title="iMob Chatbot API", version="1.0.0")
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger("imob")
+
+# ============================================================
+# Nạp kho kiến thức MỘT LẦN lúc khởi động
+#
+# Dựng ChatBot khá tốn sức: nó phải "học" toàn bộ kho kiến thức bằng TF-IDF
+# (xem imob_bot/engine.py). Làm việc này mỗi lần khách nhắn tin thì API sẽ ì.
+# Nên ở đây dựng sẵn MỘT con bot "gốc", rồi mỗi khách sao chép lại từ nó.
+# ============================================================
+DATA_DIR = Path(__file__).resolve().parent / "data"
+DATA_FILE = DATA_DIR / "imob_chatbot_data.json"
+if not DATA_FILE.exists():
+    DATA_FILE = DATA_DIR / "sample_data.json"
+
+
+def _luu_lead_tu_chatbot(da_thu: dict, service_id: str | None) -> None:
+    """Khách chat xong để lại đủ họ tên / SĐT / email -> ghi vào database.
+
+    Trước đây thông tin này chỉ được đọc lại cho khách nghe rồi bỏ đi — khách
+    thật để lại số mà không ai biết. Các khóa (ho_ten, so_dien_thoai, email)
+    lấy từ lead_capture.required_fields trong file dữ liệu chatbot.
+    """
+    db.them_lien_he(
+        nguon="chatbot",
+        ho_ten=da_thu.get("ho_ten"),
+        email=da_thu.get("email"),
+        so_dien_thoai=da_thu.get("so_dien_thoai"),
+        dich_vu=KienThuc.ten_dich_vu(service_id) if service_id else None,
+    )
+
+
+_bot_goc = ChatBot(KienThuc.tu_file(DATA_FILE), khi_co_lead=_luu_lead_tu_chatbot)
+
+
+# ============================================================
+# Vòng đời ứng dụng: mở database lúc bật, đóng lúc tắt
+# ============================================================
+@asynccontextmanager
+async def vong_doi(app: FastAPI):
+    if db.DA_CAU_HINH:
+        # Có ý định dùng CMS -> bắt buộc phải có JWT_SECRET tử tế.
+        # Chỗ này CỐ Ý ném lỗi làm sập luôn: chạy CMS mà không có khóa ký thì
+        # ai cũng tự làm được vé admin, thà không chạy còn hơn.
+        auth.kiem_tra_cau_hinh()
+        db.khoi_tao()
+
+    if db.DA_CAU_HINH and not db.co_db():
+        log.warning("Đã đặt DATABASE_URL nhưng kết nối hỏng — CMS đang TẮT.")
+
+    yield
+    db.dong()
+
+
+app = FastAPI(title="iMob API", version="2.0.0", lifespan=vong_doi)
 
 # ============================================================
 # CORS — cho phép website gọi sang API này
@@ -32,10 +102,8 @@ app = FastAPI(title="iMob Chatbot API", version="1.0.0")
 # Mặc định trình duyệt CHẶN việc trang web ở miền A gọi API ở miền B, trừ khi
 # API tự khai báo "tôi cho phép miền A". Đó là việc của đoạn dưới đây.
 #
-# Đặt biến môi trường ALLOWED_ORIGINS trên Render để siết lại cho an toàn, ví dụ:
+# Đặt ALLOWED_ORIGINS trên Render, ngăn cách bằng dấu phẩy, ví dụ:
 #     ALLOWED_ORIGINS=https://imob-web.onrender.com,https://imob.vn
-# Để "*" nghĩa là cho phép mọi trang web gọi (chấp nhận được vì API này không
-# dùng cookie/đăng nhập, nhưng nên siết lại khi đã có tên miền chính thức).
 # ============================================================
 def _chuan_hoa_origin(o: str) -> str:
     """Thêm https:// nếu người dùng chỉ ghi tên miền trần (imob.onrender.com)."""
@@ -51,40 +119,35 @@ ALLOWED_ORIGINS = [
     if o.strip()
 ] or ["*"]
 
+if db.DA_CAU_HINH and ALLOWED_ORIGINS == ["*"]:
+    # Không ném lỗi (sẽ làm hỏng deploy đang chạy), nhưng phải kêu to.
+    log.warning(
+        "ALLOWED_ORIGINS đang để '*' trong khi đã bật CMS. Nên siết lại thành "
+        "tên miền thật của website, ví dụ: https://imob-web.onrender.com"
+    )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,  # không dùng cookie -> để False mới được phép dùng "*"
-    allow_methods=["GET", "POST"],
+    allow_credentials=False,  # dùng vé Bearer, không dùng cookie
+    allow_methods=["GET", "POST", "PUT", "PATCH"],
     allow_headers=["*"],
 )
 
-# ============================================================
-# Nạp kho kiến thức MỘT LẦN lúc khởi động
-#
-# Dựng ChatBot khá tốn sức: nó phải "học" toàn bộ kho kiến thức bằng TF-IDF
-# (xem imob_bot/engine.py). Làm việc này mỗi lần khách nhắn tin thì API sẽ ì.
-# Nên ở đây dựng sẵn MỘT con bot "gốc", rồi mỗi khách sao chép lại từ nó.
-# ============================================================
-DATA_DIR = Path(__file__).resolve().parent / "data"
-DATA_FILE = DATA_DIR / "imob_chatbot_data.json"
-if not DATA_FILE.exists():
-    DATA_FILE = DATA_DIR / "sample_data.json"
-
-_bot_goc = ChatBot(KienThuc.tu_file(DATA_FILE))
+app.include_router(api_auth.router)
+app.include_router(api_noi_dung.router)
+app.include_router(api_lien_he.router)
 
 # ============================================================
-# Mỗi khách một phiên riêng
+# Mỗi khách một phiên chat riêng
 #
 # VÌ SAO CẦN: ChatBot NHỚ trạng thái giữa các lượt — đang hỏi khách họ tên hay
 # số điện thoại (self.lead), đã trượt mấy câu liên tiếp (self.so_lan_truot).
 # Nếu cả website dùng chung một con bot thì khách A đang để lại SĐT mà khách B
-# nhắn vào, câu của B sẽ bị nuốt làm "số điện thoại của A". Chạy một mình ở máy
-# thì không thấy, nhưng lên mạng thật là lỗi ngay.
+# nhắn vào, câu của B sẽ bị nuốt làm "số điện thoại của A".
 #
 # copy() ở đây là "sao chép nông": phần nặng (kho kiến thức + chỉ mục TF-IDF)
-# vẫn dùng chung một bản trong bộ nhớ, chỉ có phần trạng thái là riêng. Nhờ vậy
-# tạo phiên mới gần như tức thì và không tốn thêm RAM đáng kể.
+# vẫn dùng chung một bản trong bộ nhớ, chỉ có phần trạng thái là riêng.
 #
 # OrderedDict + MAX_PHIEN: giữ tối đa 500 phiên gần nhất, phiên cũ nhất bị đẩy
 # ra. Không có bước này thì bộ nhớ cứ phình mãi cho tới khi Render giết service.
@@ -110,9 +173,6 @@ def lay_bot(session_id: str) -> ChatBot:
         return bot
 
 
-# ============================================================
-# Kiểu dữ liệu vào / ra
-# ============================================================
 class ChatRequest(BaseModel):
     message: str
     history: list[dict[str, str]] = []
@@ -126,18 +186,19 @@ class ChatResponse(BaseModel):
     session_id: str
 
 
-# ============================================================
-# Các đường dẫn
-# ============================================================
 @app.get("/")
 def root():
-    return {"service": "iMob Chatbot API", "status": "ok", "docs": "/docs"}
+    return {"service": "iMob API", "status": "ok", "docs": "/docs"}
 
 
 @app.get("/health")
 def health():
     """Render gọi đường dẫn này để biết service còn sống (xem healthCheckPath)."""
-    return {"status": "ok", "so_phien": len(_phien)}
+    return {
+        "status": "ok",
+        "so_phien": len(_phien),
+        "database": "ok" if db.co_db() else ("loi" if db.DA_CAU_HINH else "tat"),
+    }
 
 
 # Hàm này cố ý viết `def` chứ KHÔNG phải `async def`: việc tính TF-IDF là việc

@@ -7,7 +7,8 @@ import {
   LinkedinIcon,
   GithubIcon,
 } from "../icons/BrandIcons.jsx";
-import { NAV_ITEMS, SITE, SOCIAL_LINKS } from "../../utils/constants.js";
+import { NAV_ITEMS, SOCIAL_LINKS } from "../../utils/constants.js";
+import { useCongTy } from "../../context/NoiDungContext.jsx";
 
 // Map id social (từ constants) → icon thương hiệu (SVG inline —
 // lucide v1 đã bỏ brand icons, xem components/icons/BrandIcons.jsx)
@@ -46,6 +47,10 @@ function FooterLink({ href, to, children }) {
 }
 
 export default function Footer() {
+  // Thông tin công ty lấy từ context: mặc định là company.json trong bundle,
+  // sẽ tự đổi sang bản sửa trong /admin khi API trả về. Xem NoiDungContext.jsx.
+  const congTy = useCongTy();
+
   return (
     <footer className="relative border-t border-white/5 bg-gradient-to-b from-transparent to-blue-950/10">
       <Container className="py-14">
@@ -57,14 +62,14 @@ export default function Footer() {
                 <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
               </div>
               <div className="leading-tight">
-                <p className="text-lg font-black text-white">{SITE.name}</p>
+                <p className="text-lg font-black text-white">{congTy.name}</p>
                 <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400">
-                  {SITE.tagline}
+                  {congTy.tagline}
                 </p>
               </div>
             </a>
             <p className="max-w-xs text-sm leading-relaxed text-gray-400">
-              {SITE.description}. Sẵn sàng đồng hành cùng bạn trong hành trình
+              {congTy.description}. Sẵn sàng đồng hành cùng bạn trong hành trình
               chuyển đổi số.
             </p>
           </div>
@@ -112,15 +117,15 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-gray-400">
               <p className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                {SITE.phone}
+                {congTy.phone}
               </p>
               <p className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                <span className="break-all">{SITE.email}</span>
+                <span className="break-all">{congTy.email}</span>
               </p>
               <p className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                {SITE.address}
+                {congTy.address}
               </p>
             </div>
           </div>
@@ -131,7 +136,7 @@ export default function Footer() {
       <div className="border-t border-white/5 py-5">
         <Container className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} {SITE.name} {SITE.tagline}. Tất cả
+            © {new Date().getFullYear()} {congTy.name} {congTy.tagline}. Tất cả
             quyền được bảo lưu.
           </p>
           <nav

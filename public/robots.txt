@@ -1,0 +1,8 @@
+# Cho phép Google lập chỉ mục toàn bộ website, TRỪ trang quản trị.
+#
+# Lưu ý: robots.txt chỉ là LỜI ĐỀ NGHỊ với các công cụ tìm kiếm tử tế, KHÔNG
+# phải hàng rào bảo mật — ai gõ thẳng địa chỉ vẫn vào được. Thứ thật sự bảo vệ
+# /admin là đăng nhập + vé JWT ở phía máy chủ (chatbot-python/auth.py).
+User-agent: *
+Disallow: /admin
+Disallow: /ui-kit

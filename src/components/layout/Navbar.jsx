@@ -6,7 +6,8 @@ import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
 import useScrollPosition from "../../hooks/useScrollPosition.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
-import { NAV_ITEMS, SITE } from "../../utils/constants.js";
+import { NAV_ITEMS } from "../../utils/constants.js";
+import { useCongTy } from "../../context/NoiDungContext.jsx";
 
 // Mảng id section — khai báo ngoài component để tham chiếu ổn định
 // (useActiveSection phụ thuộc vào nó, xem comment trong hook)
@@ -57,6 +58,8 @@ function NavItem({ item, active }) {
 }
 
 export default function Navbar() {
+  const congTy = useCongTy();
+
   const scrolled = useScrollPosition(24);
   const activeId = useActiveSection(SECTION_IDS);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -77,9 +80,9 @@ export default function Navbar() {
             <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
           </div>
           <div className="leading-tight">
-            <p className="text-lg font-black text-white">{SITE.name}</p>
+            <p className="text-lg font-black text-white">{congTy.name}</p>
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400">
-              {SITE.tagline}
+              {congTy.tagline}
             </p>
           </div>
         </a>

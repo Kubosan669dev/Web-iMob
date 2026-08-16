@@ -1,9 +1,13 @@
 import knowledge from "../data/kienThuc.json";
-import company from "../data/company.json";
+import companyMacDinh from "../data/company.json";
 import { API_BASE_URL } from "../utils/constants.js";
 import { findAnswer, chongLap } from "./chatBrain.js";
 
-function buildGeminiSystemPrompt() {
+// Thông tin công ty giờ sửa được ở trang /admin, nên KHÔNG được đọc cứng từ
+// company.json nữa — bot sẽ đọc số điện thoại cũ cho khách nghe. Component
+// truyền bản mới nhất vào qua tham số `congTy` (lấy từ useCongTy).
+// Vẫn để companyMacDinh làm bản dự phòng cho các chỗ gọi không truyền gì.
+function buildGeminiSystemPrompt(company) {
   const serviceList = [
     "Zalo Mini App",
     "Website",
@@ -132,10 +136,10 @@ async function callBackendChat(message, history = []) {
 /**
  * Gọi Google Gemini API (0đ Free Tier) với danh sách mô hình dự phòng
  */
-async function callGeminiAI(message, history = []) {
+async function callGeminiAI(message, history = [], company) {
   if (!GEMINI_API_KEY) return null;
 
-  const systemContext = buildGeminiSystemPrompt();
+  const systemContext = buildGeminiSystemPrompt(company);
 
   // Chỉ giữ vài model ĐÃ XÁC NHẬN chạy với key hiện tại, xếp NHANH NHẤT lên
   // đầu (bản "lite" phản hồi nhanh hơn hẳn bản flash đầy đủ). Đã bỏ
@@ -203,7 +207,14 @@ async function callGeminiAI(message, history = []) {
   return null;
 }
 
-export async function sendMessage(message, history = []) {
+/**
+ * @param congTy Thông tin công ty MỚI NHẤT (từ useCongTy). Bot điền nó vào các
+ *   chỗ {{cong_ty.*}} trong kho kiến thức, nên sửa SĐT ở /admin là bot nói theo
+ *   ngay. Không truyền thì dùng bản đóng gói sẵn.
+ */
+export async function sendMessage(message, history = [], congTy) {
+  const company = congTy ?? companyMacDinh;
+
   // Bước 1: Khớp kho kiến thức local trước (Tốc độ 0ms, 100% chuẩn xác, 0đ token)
   const result = findAnswer(message, knowledge, company);
 
@@ -229,7 +240,7 @@ export async function sendMessage(message, history = []) {
 
   // Bước 2: Rơi vào fallback -> Thử gọi Gemini AI (nếu có cấu hình VITE_GEMINI_API_KEY)
   //         (đã giới hạn tổng thời gian, không để "khựng" chờ mãi)
-  const aiAnswer = await callGeminiAI(message, history);
+  const aiAnswer = await callGeminiAI(message, history, company);
   if (aiAnswer) {
     return { response: aiAnswer };
   }

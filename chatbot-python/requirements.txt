@@ -10,3 +10,18 @@ scikit-learn>=1.4,<2
 # FastAPI: khung web; uvicorn: máy chủ thực sự chạy FastAPI
 fastapi>=0.110,<1
 uvicorn>=0.24,<1
+
+# --- Phần CMS (db.py, auth.py, api_*.py) ---
+# Không đặt DATABASE_URL thì các thư viện này vẫn cài nhưng không dùng tới,
+# chatbot chạy y như cũ.
+#
+# psycopg 3: nói chuyện với PostgreSQL bằng SQL thuần (không ORM).
+#   [binary] = kèm sẵn bản biên dịch, khỏi phải cài trình biên dịch C
+#   [pool]   = giữ sẵn vài kết nối dùng lại, khỏi mở/đóng liên tục
+psycopg[binary,pool]>=3.1,<4
+PyJWT>=2.8,<3      # tạo/kiểm "vé" đăng nhập
+bcrypt>=4.1,<6     # băm mật khẩu
+
+# Đọc file .env khi chạy ở máy. Trên Render không có file .env (biến đặt thẳng
+# trong dashboard) — thiếu file thì thư viện lặng lẽ bỏ qua, không lỗi.
+python-dotenv>=1.0,<2
