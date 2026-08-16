@@ -236,7 +236,8 @@ git push origin main
 | `/admin` báo **"Không kết nối được tới máy chủ"** | API ngủ, hoặc sai `VITE_API_URL`, hoặc CORS chặn | Chờ 1 phút thử lại; vẫn hỏng thì mở `/health` của API xem sống không, và kiểm tra `ALLOWED_ORIGINS` |
 | `/health` báo `"database":"loi"` | Sai `DATABASE_URL` hoặc database chưa sẵn sàng | Render → tab **Logs** của API xem lỗi thật. Kiểm tra database `imob-db` còn sống không (gói free có hạn) |
 | Đăng nhập báo **"Sai quá nhiều lần"** | Đã sai 5 lần | Chờ 15 phút, hoặc vào Render bấm **Manual Deploy** để khởi động lại (bộ đếm nằm trong bộ nhớ nên restart là xoá) |
-| Server **không khởi động**, log nói thiếu `JWT_SECRET` | Biến chưa được sinh | Render → API → **Environment** → thêm `JWT_SECRET` với chuỗi ngẫu nhiên **từ 32 ký tự** |
+| Mở API ra thấy **502 Bad Gateway** | Service chết hẳn hoặc đang khởi động | 502 = ứng dụng KHÔNG chạy, nên không đọc được lỗi qua HTTP. **Bắt buộc xem Render → dịch vụ → tab Logs** — dòng đỏ cuối cùng nói lý do. Hay gặp: build hỏng (thiếu thư viện, sai `PYTHON_VERSION`), hoặc service vừa deploy chưa xong (chờ 1–2 phút) |
+| Log nói `CMS bị TẮT do cấu hình sai` | `JWT_SECRET` thiếu hoặc ngắn hơn 32 ký tự | Render → API → **Environment** → đặt `JWT_SECRET` bằng chuỗi ngẫu nhiên **từ 32 ký tự**. Lưu ý: đây **không** làm sập API — chatbot vẫn chạy, chỉ trang quản trị là tắt |
 | Sửa trong `/admin` xong mà **web không đổi** | Trang đang mở dùng bản cũ | Nhấn **F5** tải lại. Vẫn không đổi thì mở `/api/noi-dung` của API xem đã lưu chưa |
 | **Mất hết nội dung** đã sửa | Database free hết hạn, bị Render xoá | Website vẫn chạy bằng bản trong bundle. Khôi phục: lấy file đã **Xuất JSON**, chép nội dung vào `src/data/company.json` và `legalPages.json`, commit, push |
 

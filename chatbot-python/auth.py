@@ -32,20 +32,27 @@ SO_GIO_HAN_VE = 8
 GIOI_HAN_BYTE_MAT_KHAU = 72
 
 
-def kiem_tra_cau_hinh() -> None:
-    """Gọi lúc khởi động khi có bật CMS. Thiếu JWT_SECRET là dừng hẳn.
+def kiem_tra_cau_hinh() -> str | None:
+    """Kiểm tra JWT_SECRET. Trả về câu mô tả lỗi, hoặc None nếu ổn.
 
-    CỐ Ý không đặt giá trị mặc định: một khóa mặc định nằm trong mã nguồn công
-    khai thì ai cũng tự ký được vé admin cho mình.
+    CỐ Ý không đặt giá trị mặc định cho JWT_SECRET: một khóa mặc định nằm trong
+    mã nguồn công khai thì ai cũng tự ký được vé admin cho mình.
+
+    CỐ Ý KHÔNG ném lỗi làm sập ứng dụng. Bản đầu có ném, và đó là sai: một biến
+    môi trường điền thiếu sẽ giết luôn cả API chatbot (Render trả 502 cho mọi
+    thứ) chỉ vì phần quản trị cấu hình hỏng. Giờ trả lỗi về cho nơi gọi để nó
+    TẮT RIÊNG phần CMS, còn chatbot vẫn phục vụ khách bình thường — đúng nguyên
+    tắc đã dùng cho database ở db.py.
     """
     if not JWT_SECRET:
-        raise RuntimeError(
+        return (
             "Thiếu biến môi trường JWT_SECRET. Sinh một chuỗi ngẫu nhiên dài "
-            "(vd: python -c \"import secrets; print(secrets.token_urlsafe(48))\") "
+            '(vd: python -c "import secrets; print(secrets.token_urlsafe(48))") '
             "rồi đặt vào JWT_SECRET."
         )
     if len(JWT_SECRET) < 32:
-        raise RuntimeError("JWT_SECRET quá ngắn — cần ít nhất 32 ký tự.")
+        return f"JWT_SECRET quá ngắn ({len(JWT_SECRET)} ký tự) — cần ít nhất 32."
+    return None
 
 
 # ============================================================

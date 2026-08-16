@@ -79,15 +79,19 @@ _bot_goc = ChatBot(KienThuc.tu_file(DATA_FILE), khi_co_lead=_luu_lead_tu_chatbot
 # ============================================================
 @asynccontextmanager
 async def vong_doi(app: FastAPI):
+    # NGUYÊN TẮC: hỏng phần nào tắt phần đó, KHÔNG kéo sập cả ứng dụng.
+    # Chatbot phải phục vụ được khách kể cả khi CMS hỏng hoàn toàn.
     if db.DA_CAU_HINH:
-        # Có ý định dùng CMS -> bắt buộc phải có JWT_SECRET tử tế.
-        # Chỗ này CỐ Ý ném lỗi làm sập luôn: chạy CMS mà không có khóa ký thì
-        # ai cũng tự làm được vé admin, thà không chạy còn hơn.
-        auth.kiem_tra_cau_hinh()
-        db.khoi_tao()
-
-    if db.DA_CAU_HINH and not db.co_db():
-        log.warning("Đã đặt DATABASE_URL nhưng kết nối hỏng — CMS đang TẮT.")
+        loi_cau_hinh = auth.kiem_tra_cau_hinh()
+        if loi_cau_hinh:
+            # Không mở database luôn -> không ai đăng nhập được (lay_nguoi_dung
+            # trả None), nên không có chuyện ký vé bằng khóa yếu.
+            log.error("CMS bị TẮT do cấu hình sai: %s", loi_cau_hinh)
+            log.error("Chatbot vẫn chạy bình thường. Sửa biến môi trường rồi khởi động lại.")
+        else:
+            db.khoi_tao()
+            if not db.co_db():
+                log.warning("Đã đặt DATABASE_URL nhưng kết nối hỏng — CMS đang TẮT.")
 
     yield
     db.dong()
