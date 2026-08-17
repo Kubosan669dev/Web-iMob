@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import companyMacDinh from "../data/company.json";
 import legalPagesMacDinh from "../data/legalPages.json";
+import heroMacDinh from "../data/hero.json";
+import aboutMacDinh from "../data/about.json";
 import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
@@ -31,6 +33,8 @@ const NoiDungContext = createContext(null);
 const MAC_DINH = {
   company: companyMacDinh,
   legalPages: legalPagesMacDinh,
+  hero: heroMacDinh,
+  about: aboutMacDinh,
 };
 
 // Không để khách chờ lâu vì nội dung: quá hạn này thì dùng bản mặc định.
@@ -110,6 +114,18 @@ export function useCongTy() {
 export function useTrangPhapLy() {
   const noiDung = useNoiDung();
   return noiDung.legalPages ?? legalPagesMacDinh;
+}
+
+/** Nội dung khối Hero ở đầu trang chủ. */
+export function useHero() {
+  const noiDung = useNoiDung();
+  return noiDung.hero ?? heroMacDinh;
+}
+
+/** Nội dung khối Giới thiệu. */
+export function useAbout() {
+  const noiDung = useNoiDung();
+  return noiDung.about ?? aboutMacDinh;
 }
 
 export { NoiDungContext, MAC_DINH };

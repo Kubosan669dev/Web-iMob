@@ -5,7 +5,7 @@ import Container from "../components/ui/Container.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import AnimatedGridBackground from "../components/ui/AnimatedGridBackground.jsx";
-import { useCongTy } from "../context/NoiDungContext.jsx";
+import { useHero } from "../context/NoiDungContext.jsx";
 import { openChat } from "../utils/chatBus.js";
 
 /* ================= Entrance animation (stagger) ================= */
@@ -22,32 +22,40 @@ const fadeUp = {
    Từ ở giữa dòng tiêu đề tự đổi liên tục (INNOVATION → TECHNOLOGY → ...).
    Mỗi từ tô gradient xanh → trắng, xen giữa các dòng chữ trắng.
    y dùng đơn vị "em" để bước trượt co giãn theo cỡ chữ khổng lồ của hero. */
-const ROTATING_WORDS = ["INNOVATION", "TECHNOLOGY", "FUTURE", "SOLUTIONS"];
-
-function RotatingWord() {
+// Danh sách từ do trang /admin quyết định (tab Hero). Truyền vào qua prop chứ
+// không đọc cứng, để sửa trong admin là đổi ngay.
+function RotatingWord({ tu }) {
   const [index, setIndex] = useState(0);
+  // Rỗng thì vẫn phải có một từ, không thì tiêu đề trang chủ hụt mất một dòng.
+  const danhSach = tu?.length ? tu : ["INNOVATION"];
 
   useEffect(() => {
+    // Danh sách đổi (vừa tải xong nội dung từ API) -> quay lại từ đầu, tránh
+    // index cũ trỏ ra ngoài mảng mới.
+    setIndex(0);
+    if (danhSach.length < 2) return;
     const timer = setInterval(
-      () => setIndex((i) => (i + 1) % ROTATING_WORDS.length),
+      () => setIndex((i) => (i + 1) % danhSach.length),
       2200
     );
     return () => clearInterval(timer);
-  }, []);
+  }, [danhSach.length]);
+
+  const tuHienTai = danhSach[index % danhSach.length];
 
   return (
     // inline-block giữ chiều cao dòng ổn định khi từ cũ thoát, từ mới vào
     <span className="inline-block align-top">
       <AnimatePresence mode="wait">
         <motion.span
-          key={ROTATING_WORDS[index]}
+          key={tuHienTai}
           initial={{ opacity: 0, y: "0.4em" }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: "-0.4em" }}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="inline-block bg-gradient-to-r from-blue-500 via-sky-300 to-white bg-clip-text text-transparent"
         >
-          {ROTATING_WORDS[index]}
+          {tuHienTai}
         </motion.span>
       </AnimatePresence>
     </span>
@@ -160,7 +168,7 @@ function TerminalCard() {
 
 /* ================= Hero ================= */
 export default function Hero() {
-  const congTy = useCongTy();
+  const hero = useHero();
 
   return (
     <section
@@ -178,26 +186,25 @@ export default function Hero() {
           className="space-y-7 text-center lg:text-left"
         >
           <motion.div variants={fadeUp}>
-            <Badge icon={Zap}>Giải pháp số thế hệ mới</Badge>
+            <Badge icon={Zap}>{hero.badge}</Badge>
           </motion.div>
 
           <motion.h1
             variants={fadeUp}
             className="text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl xl:text-7xl"
           >
-            THE
+            {hero.tieuDeTruoc}
             <br />
-            <RotatingWord />
+            <RotatingWord tu={hero.tuKhoaDong} />
             <br />
-            STARTS HERE
+            {hero.tieuDeSau}
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
             className="mx-auto max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg lg:mx-0"
           >
-            {congTy.description}. Chúng tôi thiết kế và triển khai giải pháp phần
-            mềm, ứng dụng và AI — đồng hành từ ý tưởng đến vận hành.
+            {hero.moTa}
           </motion.p>
 
           <motion.div
@@ -205,10 +212,10 @@ export default function Hero() {
             className="flex flex-wrap items-center justify-center gap-4 lg:justify-start"
           >
             <Button href="#contact" size="lg">
-              Liên hệ <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              {hero.nutChinh} <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
             <Button onClick={openChat} variant="outline" size="lg">
-              <MessageCircle className="h-4 w-4" aria-hidden="true" /> Chat AI
+              <MessageCircle className="h-4 w-4" aria-hidden="true" /> {hero.nutPhu}
             </Button>
           </motion.div>
         </motion.div>

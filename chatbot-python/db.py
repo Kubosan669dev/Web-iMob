@@ -47,6 +47,8 @@ THU_MUC_DATA = GOC_DU_AN / "src" / "data"
 NGUON_NAP = {
     "company": THU_MUC_DATA / "company.json",
     "legalPages": THU_MUC_DATA / "legalPages.json",
+    "hero": THU_MUC_DATA / "hero.json",
+    "about": THU_MUC_DATA / "about.json",
 }
 
 _pool: ConnectionPool | None = None

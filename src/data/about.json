@@ -1,5 +1,8 @@
 {
   "_note": "Nội dung section GIỚI THIỆU. Trước đây hardcode trong src/sections/About.jsx nên chatbot không đọc được — giờ tách ra thành dữ liệu. Số liệu ở đây là nguồn cho các câu trả lời 'about-stats' và 'strengths' trong kienThuc.json, sửa thì nhớ sửa cả hai. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component).",
+  "phuDe": "Về chúng tôi",
+  "tieuDe": "GIẢI PHÁP",
+  "moTa": "chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mình mang lại.",
   "philosophy": "Từ website, ứng dụng, phần mềm quản trị đến trợ lý AI — mỗi sản phẩm đều được xây trên một nền tảng: hiểu đúng bài toán của bạn trước, chọn công nghệ sau. Bắt đầu nhỏ, chạy thật, mở rộng dần.",
   "stats": [
     { "value": "50+", "label": "Dự án triển khai" },

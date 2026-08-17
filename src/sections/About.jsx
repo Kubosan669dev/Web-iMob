@@ -3,8 +3,7 @@ import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Card from "../components/ui/Card.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
-import { useCongTy } from "../context/NoiDungContext.jsx";
-import about from "../data/about.json";
+import { useAbout, useCongTy } from "../context/NoiDungContext.jsx";
 
 // Nội dung section đọc từ data/about.json — trước đây hardcode ngay ở đây
 // nên chatbot không biết gì về số liệu và điểm mạnh của công ty.
@@ -21,6 +20,7 @@ const FEATURE_ICONS = {
 
 export default function About() {
   const congTy = useCongTy();
+  const about = useAbout();
 
   return (
     <section id="about" className="relative overflow-hidden py-24 lg:py-32">
@@ -36,11 +36,11 @@ export default function About() {
           <Reveal>
             <SectionTitle
               align="left"
-              badge="Về chúng tôi"
+              badge={about.phuDe}
               icon={Sparkles}
-              title="GIẢI PHÁP"
+              title={about.tieuDe}
               highlight={congTy.name.toUpperCase()}
-              description={`${congTy.description} — chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mình mang lại.`}
+              description={`${congTy.description} — ${about.moTa}`}
             />
           </Reveal>
 

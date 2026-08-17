@@ -1,0 +1,10 @@
+{
+  "_note": "Nội dung khối HERO (màn hình đầu trang chủ). Sửa được ở /admin — tab Hero. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. CỐ Ý không có số điện thoại/email ở đây: hai thứ đó nằm ở company.json để cả website lẫn chatbot dùng chung một nguồn, chép ra 2 nơi là sớm muộn lệch nhau.",
+  "badge": "Giải pháp số thế hệ mới",
+  "tieuDeTruoc": "THE",
+  "tuKhoaDong": ["INNOVATION", "TECHNOLOGY", "FUTURE", "SOLUTIONS"],
+  "tieuDeSau": "STARTS HERE",
+  "moTa": "Đơn vị tiên phong chuyển đổi số trong mọi lĩnh vực. Chúng tôi thiết kế và triển khai giải pháp phần mềm, ứng dụng và AI — đồng hành từ ý tưởng đến vận hành.",
+  "nutChinh": "Liên hệ",
+  "nutPhu": "Chat AI"
+}
