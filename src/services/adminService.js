@@ -111,6 +111,26 @@ async function goi(duongDan, { method = "GET", than, canVe = true } = {}) {
   }
 
   if (res.status === 204) return null;
+
+  // Máy chủ trả HTML thay vì JSON = gần như chắc chắn request đã đi nhầm sang
+  // chính website tĩnh chứ không tới API.
+  //
+  // Vì sao lỗi này khó đoán nếu không bắt riêng: trang tĩnh có luật SPA rewrite
+  // (/* -> /index.html) nên mọi đường dẫn lạ đều trả index.html kèm mã 200 —
+  // trông y như thành công, chỉ vỡ ở bước đọc JSON với một câu lỗi vô nghĩa
+  // kiểu "Unexpected token '<'". Bắt ở đây để nói thẳng nguyên nhân.
+  const kieu = res.headers.get("content-type") || "";
+  if (!kieu.includes("application/json")) {
+    throw new LoiApi(
+      API_BASE_URL
+        ? `Máy chủ ở ${API_BASE_URL} không trả về dữ liệu. Kiểm tra địa chỉ API có đúng không.`
+        : "Website chưa biết địa chỉ máy chủ API. Trên Render: mở dịch vụ website " +
+          "→ Environment → đặt VITE_API_URL trỏ tới địa chỉ API, rồi Manual Deploy " +
+          "→ Clear build cache & deploy.",
+      0
+    );
+  }
+
   return res.json();
 }
 

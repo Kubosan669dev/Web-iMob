@@ -28,7 +28,20 @@ export async function submitContact(formData) {
       body: JSON.stringify(formData),
     });
 
-    if (res.ok) return { success: true };
+    // Trang tĩnh có luật SPA rewrite nên mọi đường dẫn lạ đều trả index.html
+    // kèm mã 200. Không kiểm tra kiểu nội dung thì ta sẽ báo "gửi thành công"
+    // trong khi thật ra chẳng có máy chủ nào nhận — đúng cái lỗi báo thành công
+    // giả mà bản trước đã mắc.
+    const laJson = (res.headers.get("content-type") || "").includes("application/json");
+
+    if (res.ok && laJson) return { success: true };
+
+    if (res.ok && !laJson) {
+      return {
+        success: false,
+        error: "Hệ thống nhận liên hệ chưa sẵn sàng. Bạn gọi hotline giúp mình nhé.",
+      };
+    }
 
     // Máy chủ từ chối: hiện đúng câu của nó nếu đọc được (vd "Bạn đã gửi khá
     // nhiều lần…"), vì câu đó nói rõ khách cần làm gì hơn là lỗi chung chung.
