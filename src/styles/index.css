@@ -8,7 +8,9 @@
    ============================================================ */
 @theme {
   /* --- Fonts (self-host qua @fontsource, import trong main.jsx) --- */
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Be Vietnam Pro — thiết kế riêng cho tiếng Việt, dấu đặt đúng chỗ.
+     Đổi từ Inter ngày 17/08/2026. Xem ghi chú trong src/main.jsx. */
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", monospace;
 
   /* --- Nền & bề mặt --- */

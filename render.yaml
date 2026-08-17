@@ -136,3 +136,10 @@ services:
       # Apply. Không có khóa thì để trống, chatbot vẫn chạy bằng kho kiến thức.
       - key: VITE_GEMINI_API_KEY
         sync: false
+
+      # Dòng gợi ý tài khoản hiện trên trang /admin.
+      # ⚠️ ĐỂ TRỐNG trên website thật — có đặt là ai vào /admin cũng đọc được
+      # mật khẩu và sửa được nội dung. Chỉ điền khi đây là bản trình diễn, và
+      # điền đúng cặp ADMIN_USER / ADMIN_PASSWORD bạn vừa đặt ở trên.
+      - key: VITE_DEMO_LOGIN
+        sync: false

@@ -4,7 +4,6 @@ import {
   AlertTriangle,
   ArrowUpRight,
   CheckCircle2,
-  ChevronLeft,
   Download,
   Inbox,
   Loader2,
@@ -12,10 +11,10 @@ import {
   RefreshCw,
   RotateCcw,
   Save,
-  ShieldCheck,
 } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
+import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
 
 // ============================================================
@@ -109,96 +108,6 @@ function Khung({ children }) {
 }
 
 const LUOI = "grid gap-x-6 gap-y-5 sm:grid-cols-2";
-
-/* ================= Đăng nhập ================= */
-function ManHinhDangNhap({ khiXong }) {
-  const [ten, setTen] = useState("");
-  const [matKhau, setMatKhau] = useState("");
-  const [loi, setLoi] = useState("");
-  const [dangGui, setDangGui] = useState(false);
-
-  const guiDi = async (e) => {
-    e.preventDefault();
-    setLoi("");
-    setDangGui(true);
-    try {
-      khiXong(await api.dangNhap(ten.trim(), matKhau));
-    } catch (err) {
-      setLoi(err.message);
-    } finally {
-      setDangGui(false);
-    }
-  };
-
-  return (
-    <div className="flex min-h-screen items-center justify-center px-5 py-16">
-      <div className="w-full max-w-[22rem]">
-        <div className="mb-8">
-          <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gray-600">
-            <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
-            Khu vực quản trị
-          </span>
-          <h1 className="mt-3 text-2xl font-bold tracking-tight text-white">
-            Nội dung website iMob
-          </h1>
-          <p className="mt-1.5 text-sm text-gray-500">
-            Đăng nhập để sửa nội dung hiển thị trên trang.
-          </p>
-        </div>
-
-        <form onSubmit={guiDi} className="space-y-4">
-          <O
-            nhan="Tên đăng nhập"
-            giaTri={ten}
-            doi={setTen}
-            autoComplete="username"
-            autoFocus
-            required
-          />
-          <O
-            nhan="Mật khẩu"
-            type="password"
-            giaTri={matKhau}
-            doi={setMatKhau}
-            autoComplete="current-password"
-            required
-          />
-
-          <Bang loai="loi">{loi}</Bang>
-
-          <button
-            type="submit"
-            disabled={dangGui}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-neon px-5 py-2.5 text-sm font-semibold text-night transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {dangGui ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                Đang đăng nhập…
-              </>
-            ) : (
-              "Đăng nhập"
-            )}
-          </button>
-
-          {dangGui && (
-            <p className="text-center text-xs text-gray-600">
-              Lần đầu trong ngày có thể chờ 30–50 giây để máy chủ thức dậy.
-            </p>
-          )}
-        </form>
-
-        <Link
-          to="/"
-          className="mt-10 inline-flex items-center gap-1.5 text-sm text-gray-600 transition-colors hover:text-neon"
-        >
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          Về trang chủ
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 /* ================= Các mục nội dung ================= */
 function MucHero({ d, doi, daSua }) {
