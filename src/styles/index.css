@@ -20,9 +20,9 @@
    • Card bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng — chính chênh lệch
      sắc độ giữa card và nền làm nhiệm vụ phân tách.
 
-   ⚠️ --color-night / --color-surface GIỮ NGUYÊN màu tối: chúng chỉ còn phục vụ
-   trang quản trị /admin. Công cụ nội bộ để nền tối là cố ý — nhìn vào là biết
-   ngay mình đang ở khu quản trị chứ không phải trang khách xem.
+   Trang quản trị /admin dùng CHUNG bảng màu này (đổi 17/08/2026). Trước đó nó
+   giữ nền tối riêng theo lối "xưởng sau cửa hàng"; hai token --color-night và
+   --color-surface đã xoá hẳn vì không còn chỗ nào dùng.
    ============================================================ */
 @theme {
   /* --- Fonts (self-host qua @fontsource, import trong main.jsx) --- */
@@ -53,10 +53,6 @@
   --color-brand: #4b31d4;
   --color-brand-deep: #2f1d96; /* trạng thái hover / nhấn */
   --color-brand-soft: #eeeafc; /* nền nhạt cho nhãn, ô icon */
-
-  /* --- Nền trang quản trị /admin (giữ tối, xem ghi chú đầu file) --- */
-  --color-night: #05050a;
-  --color-surface: #0b0b14;
 
   /* --- Bo góc ---
      Apple bo góc rất lớn: thẻ nội dung ~18px, khối lớn ~28px. Bo góc lớn là

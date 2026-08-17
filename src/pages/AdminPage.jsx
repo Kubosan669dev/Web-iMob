@@ -28,6 +28,9 @@ import * as api from "../services/adminService.js";
 //    chứ không phải trang trí. Tin nhắn và Trang pháp lý không nằm trên trang
 //    chủ nên tách nhóm riêng, KHÔNG đánh số. Rail dọc cũng đọc tên mục dễ hơn
 //    hàng tab ngang khi có nhiều mục.
+//    Lưu ý: giữa ba mục này trên trang chủ còn có Sản phẩm và Dịch vụ, nhưng
+//    hai khối đó chưa đưa vào CMS (còn nằm trong src/data/). Số 01/02/03 vì
+//    vậy là THỨ TỰ TƯƠNG ĐỐI, không phải vị trí thứ mấy trên trang.
 //
 // 2. THANH LƯU CHỈ HIỆN KHI CÓ THAY ĐỔI, và nói rõ đang sửa những gì.
 //    Nút "Lưu" lúc nào cũng sáng thì không cho biết điều gì: bấm rồi cũng không
@@ -63,13 +66,13 @@ function Bang({ loai, children }) {
   if (!children) return null;
   const kieu =
     loai === "loi"
-      ? "border-red-500/30 bg-red-500/10 text-red-200"
-      : "border-emerald-500/30 bg-emerald-500/10 text-emerald-200";
+      ? "bg-red-50 text-red-700"
+      : "bg-brand-soft text-brand";
   const Icon = loai === "loi" ? AlertTriangle : CheckCircle2;
   return (
     <div
       role={loai === "loi" ? "alert" : "status"}
-      className={`flex items-start gap-2.5 rounded-lg border px-4 py-3 text-sm ${kieu}`}
+      className={`flex items-start gap-2.5 rounded-xl px-4 py-3 text-sm ${kieu}`}
     >
       <Icon className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
       <span>{children}</span>
@@ -79,16 +82,16 @@ function Bang({ loai, children }) {
 
 function TieuDeMuc({ children, ghiChu, neo }) {
   return (
-    <div className="mb-7 flex flex-wrap items-end justify-between gap-3 border-b border-white/[0.07] pb-4">
+    <div className="mb-7 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">{children}</h2>
-        {ghiChu && <p className="mt-1 text-sm text-gray-500">{ghiChu}</p>}
+        <h2 className="tieu-de-lon text-xl text-ink">{children}</h2>
+        {ghiChu && <p className="mt-1 text-sm text-ink-soft">{ghiChu}</p>}
       </div>
       {neo && (
         <Link
           to={neo}
           target="_blank"
-          className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.12em] text-gray-500 transition-colors hover:text-neon"
+          className="inline-flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-brand"
         >
           Xem trên web
           <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -98,10 +101,11 @@ function TieuDeMuc({ children, ghiChu, neo }) {
   );
 }
 
-/** Khung một mục: card tối, viền mảnh, không glow. */
+/** Khung một mục: thẻ trắng bo góc lớn đặt trên nền xám nhạt của trang.
+    Không viền, không bóng — chênh lệch sắc độ trắng/xám là đủ để tách. */
 function Khung({ children }) {
   return (
-    <section className="rounded-xl border border-white/[0.07] bg-surface/60 p-6 sm:p-8">
+    <section className="rounded-block bg-panel p-6 sm:p-8">
       {children}
     </section>
   );
@@ -156,9 +160,9 @@ function MucHero({ d, doi, daSua }) {
           />
         </div>
 
-        <p className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
+        <p className="rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
           Số điện thoại và email của khối này lấy từ mục{" "}
-          <span className="text-gray-300">Liên hệ</span> — cố ý không cho nhập lại ở
+          <span className="font-medium text-ink">Liên hệ</span> — cố ý không cho nhập lại ở
           đây, vì cùng một thông tin để ở hai chỗ thì sớm muộn cũng lệch nhau.
         </p>
       </div>
@@ -199,10 +203,10 @@ function MucAbout({ d, doi, daSua }) {
           daSua={daSua}
           dongToiThieu={4}
         />
-        <p className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
+        <p className="rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
           Ba con số thống kê, bốn giá trị cốt lõi và dải năng lực nổi bật bên
           dưới khối này chưa sửa được ở đây — còn nằm trong{" "}
-          <span className="font-mono text-gray-400">src/data/about.json</span>.
+          <span className="font-mono text-ink">src/data/about.json</span>.
         </p>
       </div>
     </Khung>
@@ -270,7 +274,7 @@ function MucPhapLy({ d, doi, daSua }) {
   if (!trang) {
     return (
       <Khung>
-        <p className="text-sm text-gray-500">Chưa có dữ liệu trang pháp lý.</p>
+        <p className="text-sm text-ink-soft">Chưa có dữ liệu trang pháp lý.</p>
       </Khung>
     );
   }
@@ -292,10 +296,10 @@ function MucPhapLy({ d, doi, daSua }) {
             type="button"
             onClick={() => setSlug(s)}
             className={
-              "rounded-md px-3 py-1.5 text-xs font-medium transition-colors " +
+              "rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors " +
               (s === slug
-                ? "bg-white/[0.08] text-white"
-                : "text-gray-500 hover:bg-white/[0.04] hover:text-gray-300")
+                ? "bg-brand-soft text-brand"
+                : "text-ink-soft hover:bg-mist hover:text-ink")
             }
           >
             {d[s].title ?? s}
@@ -313,15 +317,19 @@ function MucPhapLy({ d, doi, daSua }) {
         <ODai nhan="Mở đầu" giaTri={trang.intro} doi={(v) => doiTrang({ intro: v })} daSua={daSua} />
       </div>
 
-      <div className="mt-8 space-y-4 border-t border-white/[0.07] pt-7">
-        <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-gray-500">
+      <div className="mt-8 space-y-4 border-t border-line pt-7">
+        <h3 className="text-sm font-medium text-ink-soft">
           {trang.sections?.length ?? 0} mục nội dung
         </h3>
 
+        {/* Hộp gộp mỗi mục dùng VIỀN chứ không dùng nền xám: ô nhập bên trong
+            đã là nền xám (xem Fields.jsx), để hộp cũng nền xám thì hai thứ
+            trùng màu và ô nhập biến mất. Đây là chỗ duy nhất trong trang quản
+            trị có khối lồng khối nên cũng là chỗ duy nhất cần đường viền. */}
         {(trang.sections ?? []).map((muc, i) => (
-          <div key={i} className="rounded-lg border border-white/[0.07] bg-black/20 p-5">
+          <div key={i} className="rounded-card border border-line p-5">
             <div className="mb-4 flex items-baseline gap-3">
-              <span className="font-mono text-xs text-gray-600">
+              <span className="font-mono text-xs text-ink-faint">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="flex-1">
@@ -396,14 +404,14 @@ function MucTinNhan() {
       <TieuDeMuc ghiChu="Khách để lại từ form liên hệ và từ chatbot">Tin nhắn</TieuDeMuc>
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-gray-500">
+        <p className="text-sm font-medium text-ink-soft">
           {ds === null ? "Đang tải…" : `${ds.length} tin · ${chuaXuLy} chưa xử lý`}
         </p>
         <button
           type="button"
           onClick={tai}
           disabled={dangTai}
-          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-gray-500 transition-colors hover:bg-white/[0.04] hover:text-gray-200 disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-50"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${dangTai ? "animate-spin" : ""}`} aria-hidden="true" />
           Tải lại
@@ -413,10 +421,10 @@ function MucTinNhan() {
       <Bang loai="loi">{loi}</Bang>
 
       {ds !== null && ds.length === 0 && (
-        <div className="rounded-lg border border-dashed border-white/10 px-6 py-14 text-center">
-          <Inbox className="mx-auto h-7 w-7 text-gray-700" aria-hidden="true" />
-          <p className="mt-3 text-sm text-gray-400">Chưa có ai để lại thông tin</p>
-          <p className="mx-auto mt-1.5 max-w-sm text-xs leading-relaxed text-gray-600">
+        <div className="rounded-card border border-dashed border-line px-6 py-14 text-center">
+          <Inbox className="mx-auto h-7 w-7 text-ink-faint" aria-hidden="true" />
+          <p className="mt-3 text-sm text-ink">Chưa có ai để lại thông tin</p>
+          <p className="mx-auto mt-1.5 max-w-sm text-[0.8125rem] leading-relaxed text-ink-soft">
             Tin nhắn sẽ xuất hiện ở đây khi khách gửi form Liên hệ ở trang chủ,
             hoặc để lại số điện thoại cho chatbot.
           </p>
@@ -427,7 +435,7 @@ function MucTinNhan() {
         <div className="-mx-2 overflow-x-auto">
           <table className="w-full min-w-[44rem] border-collapse text-left text-sm">
             <thead>
-              <tr className="border-b border-white/[0.07] font-mono text-[10px] uppercase tracking-[0.12em] text-gray-600">
+              <tr className="border-b border-line text-xs font-medium text-ink-faint">
                 <th className="px-2 py-2.5 font-medium">Thời điểm</th>
                 <th className="px-2 py-2.5 font-medium">Nguồn</th>
                 <th className="px-2 py-2.5 font-medium">Họ tên</th>
@@ -436,19 +444,19 @@ function MucTinNhan() {
                 <th className="px-2 py-2.5 font-medium">Xong</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.05]">
+            <tbody className="divide-y divide-line">
               {ds.map((r) => (
-                <tr key={r.id} className={r.da_xu_ly ? "text-gray-600" : "text-gray-300"}>
-                  <td className="whitespace-nowrap px-2 py-3 font-mono text-xs text-gray-600">
+                <tr key={r.id} className={r.da_xu_ly ? "text-ink-faint" : "text-ink"}>
+                  <td className="whitespace-nowrap px-2 py-3 font-mono text-xs text-ink-faint">
                     {new Date(r.tao_luc).toLocaleString("vi-VN")}
                   </td>
                   <td className="px-2 py-3">
                     <span
                       className={
-                        "rounded px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide " +
+                        "rounded-md px-2 py-0.5 text-xs font-medium " +
                         (r.nguon === "chatbot"
-                          ? "bg-purple-500/15 text-purple-300"
-                          : "bg-cyan-500/15 text-cyan-300")
+                          ? "bg-brand-soft text-brand"
+                          : "bg-mist text-ink-soft")
                       }
                     >
                       {r.nguon}
@@ -457,11 +465,11 @@ function MucTinNhan() {
                   <td className="px-2 py-3">{r.ho_ten || "—"}</td>
                   <td className="px-2 py-3 text-xs">
                     {r.so_dien_thoai && <div>{r.so_dien_thoai}</div>}
-                    {r.email && <div className="break-all text-gray-500">{r.email}</div>}
+                    {r.email && <div className="break-all text-ink-soft">{r.email}</div>}
                     {!r.so_dien_thoai && !r.email && "—"}
                   </td>
                   <td className="max-w-sm px-2 py-3 text-xs">
-                    {r.dich_vu && <div className="mb-0.5 text-cyan-400">{r.dich_vu}</div>}
+                    {r.dich_vu && <div className="mb-0.5 font-medium text-brand">{r.dich_vu}</div>}
                     {r.loi_nhan || (r.dich_vu ? "" : "—")}
                   </td>
                   <td className="px-2 py-3">
@@ -470,7 +478,7 @@ function MucTinNhan() {
                       checked={r.da_xu_ly}
                       onChange={(e) => danhDau(r.id, e.target.checked)}
                       aria-label={`Đánh dấu đã xử lý tin của ${r.ho_ten || r.id}`}
-                      className="h-4 w-4 cursor-pointer accent-neon"
+                      className="h-4 w-4 cursor-pointer accent-brand"
                     />
                   </td>
                 </tr>
@@ -617,44 +625,45 @@ export default function AdminPage() {
         onClick={() => setMuc(m.id)}
         aria-current={dangChon ? "page" : undefined}
         className={
-          "flex w-full items-center gap-3 rounded-lg border-l-2 px-3 py-2 text-left text-sm transition-colors " +
+          "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors " +
           (dangChon
-            ? "border-neon bg-white/[0.06] text-white"
-            : "border-transparent text-gray-500 hover:bg-white/[0.03] hover:text-gray-300")
+            ? "bg-brand-soft font-medium text-brand"
+            : "text-ink-soft hover:bg-panel hover:text-ink")
         }
       >
-        {so && <span className="font-mono text-[11px] text-gray-600">{so}</span>}
+        {so && <span className="font-mono text-xs text-ink-faint">{so}</span>}
         <span className="flex-1 font-medium">{m.nhan}</span>
         {m.khoa && suaKhoa(m.khoa) && (
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Chưa lưu" />
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-500" title="Chưa lưu" />
         )}
       </button>
     );
   };
 
   return (
-    // bg-night ĐẶT NGAY ĐÂY, không dựa vào <body> nữa: từ 17/08/2026 body đổi
-    // sang nền giấy cho trang khách, còn khu quản trị cố ý giữ nền tối — nhìn
-    // vào là biết ngay mình đang ở công cụ nội bộ chứ không phải trang khách xem.
-    <div className="min-h-screen bg-night pb-28 text-gray-200">
+    // Nền xám nhạt cho khung trang, thẻ nội dung nền trắng — kiểu trang cài
+    // đặt của Apple. Trước đây khu quản trị để nền tối theo lối "xưởng sau cửa
+    // hàng"; bỏ đi để cả site chỉ còn MỘT hệ thiết kế, đỡ phải nhớ hai bộ quy
+    // tắc và mắt không phải thích nghi lại mỗi lần chuyển giữa hai khu.
+    <div className="min-h-screen bg-mist pb-28 text-ink">
       {/* ---------- Thanh trên ---------- */}
-      <header className="sticky top-0 z-20 border-b border-white/[0.07] bg-night/85 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
           <div className="flex items-baseline gap-3">
-            <span className="text-sm font-bold tracking-tight text-white">iMob</span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-gray-600">
+            <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">iMob</span>
+            <span className="text-sm text-ink-faint">
               Quản trị nội dung
             </span>
           </div>
 
           <div className="flex items-center gap-1">
-            <span className="mr-2 hidden text-xs text-gray-600 sm:inline">{ten}</span>
+            <span className="mr-2 hidden text-sm text-ink-faint sm:inline">{ten}</span>
             <button
               type="button"
               onClick={xuatJson}
               disabled={!noiDung}
               title="Tải nội dung về máy để sao lưu"
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-gray-500 transition-colors hover:bg-white/[0.04] hover:text-gray-200 disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40"
             >
               <Download className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Xuất JSON</span>
@@ -662,7 +671,7 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={thoat}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-gray-500 transition-colors hover:bg-white/[0.04] hover:text-red-300"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-red-600"
             >
               <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Thoát</span>
@@ -675,7 +684,7 @@ export default function AdminPage() {
         {/* ---------- Rail trái ---------- */}
         <nav aria-label="Mục nội dung" className="mb-8 lg:mb-0">
           <div className="lg:sticky lg:top-24">
-            <p className="mb-2 px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-gray-700">
+            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-ink-faint">
               Trang chủ
             </p>
             <div className="space-y-0.5">
@@ -684,7 +693,7 @@ export default function AdminPage() {
               ))}
             </div>
 
-            <p className="mb-2 mt-6 px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-gray-700">
+            <p className="mb-2 mt-6 px-3 text-xs font-semibold uppercase tracking-wider text-ink-faint">
               Khác
             </p>
             <div className="space-y-0.5">
@@ -703,13 +712,13 @@ export default function AdminPage() {
           {muc === "tin-nhan" ? (
             <MucTinNhan />
           ) : dangTai ? (
-            <p className="flex items-center gap-2 py-10 text-sm text-gray-500">
+            <p className="flex items-center gap-2 py-10 text-sm text-ink-soft">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
               Đang tải nội dung…
             </p>
           ) : !noiDung?.[TAT_CA_MUC.find((m) => m.id === muc)?.khoa] ? (
             <Khung>
-              <p className="text-sm leading-relaxed text-amber-200">
+              <p className="text-sm leading-relaxed text-amber-700">
                 Máy chủ chưa có dữ liệu cho mục này. Kiểm tra database đã kết nối
                 chưa — mở <span className="font-mono">/health</span> của API, trường{" "}
                 <span className="font-mono">database</span> phải là{" "}
@@ -741,12 +750,12 @@ export default function AdminPage() {
 
       {/* ---------- Thanh lưu: CHỈ hiện khi có thay đổi ---------- */}
       {khoaDaSua.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-night/95 backdrop-blur">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper/95 backdrop-blur-xl">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3.5">
-            <p className="flex items-center gap-2 text-sm text-gray-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+            <p className="flex items-center gap-2 text-sm text-ink-soft">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
               Chưa lưu:{" "}
-              <span className="text-gray-200">
+              <span className="font-medium text-ink">
                 {khoaDaSua
                   .map((k) => TAT_CA_MUC.find((m) => m.khoa === k)?.nhan ?? k)
                   .join(", ")}
@@ -758,7 +767,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={boThayDoi}
                 disabled={dangLuu}
-                className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-xs text-gray-500 transition-colors hover:bg-white/[0.04] hover:text-gray-200 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-50"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Bỏ thay đổi
@@ -767,7 +776,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={luuTatCa}
                 disabled={dangLuu}
-                className="inline-flex items-center gap-2 rounded-lg bg-neon px-4 py-2 text-sm font-semibold text-night transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {dangLuu ? (
                   <>

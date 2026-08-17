@@ -4,35 +4,35 @@ import { X } from "lucide-react";
 // ============================================================
 // Bộ ô nhập của trang quản trị.
 //
-// HƯỚNG THIẾT KẾ — "xưởng sau cửa hàng":
-// Trang chủ là gian trưng bày: tối, gradient, hiệu ứng. Trang quản trị là chỗ
-// làm việc, nên cùng tông tối cho quen mắt nhưng CẮT gần hết hiệu ứng — không
-// gradient, không glow, không animation thừa. Chỉ giữ đúng một màu nhấn (cyan
-// --color-neon của site) và chỉ dùng cho thứ đang được chọn / đang gõ. Nhìn
-// vào là biết ngay con trỏ đang ở đâu.
+// ĐỔI 17/08/2026 — dùng CHUNG hệ thiết kế sáng với trang khách.
 //
-// Nhãn dùng chữ MONO viết hoa, giãn chữ: nhãn là siêu dữ liệu (nói về ô nhập),
-// khác hẳn nội dung thật bạn gõ vào — cho hai thứ hai kiểu chữ khác nhau thì
-// mắt phân biệt được ngay mà không cần kẻ khung.
+// Trước đây trang quản trị cố ý để nền tối theo lối "xưởng sau cửa hàng", và
+// nhãn dùng chữ MONO VIẾT HOA giãn rộng để phân biệt nhãn với nội dung. Giờ bỏ
+// cả hai. Lý do: một hệ thiết kế thì dễ nhớ hơn hai, và người ngồi soạn nội
+// dung cho trang sáng mà cứ phải nhảy qua lại giữa hai tông màu thì mỗi lần
+// chuyển là mắt phải thích nghi lại.
+//
+// Ô nhập giống hệt form Liên hệ ngoài trang chủ: nền xám nhạt, KHÔNG viền,
+// viền chỉ hiện lúc đang gõ. Một form 20 ô là bớt được 20 đường kẻ.
 // ============================================================
 
 const O_NHAP =
-  "w-full rounded-lg border bg-black/40 px-3.5 py-2.5 text-sm text-gray-100 " +
-  "placeholder-gray-600 outline-none transition-colors duration-150 " +
-  "border-white/10 hover:border-white/20 " +
-  "focus:border-neon/70 focus:bg-black/60 focus:ring-1 focus:ring-neon/40";
+  "w-full rounded-xl border border-transparent bg-mist px-3.5 py-2.5 text-[0.9375rem] " +
+  "text-ink placeholder-ink-faint outline-none transition-colors duration-150 " +
+  "focus:border-brand focus:bg-panel";
 
-const NHAN =
-  "mb-1.5 flex items-center gap-2 font-mono text-[11px] font-medium uppercase " +
-  "tracking-[0.12em] text-gray-500";
+const NHAN = "mb-1.5 flex items-center gap-2 text-sm font-medium text-ink-soft";
 
-/** Chấm tròn báo ô này đã sửa mà chưa lưu. */
+/** Chấm tròn báo ô này đã sửa mà chưa lưu.
+    Giữ màu hổ phách chứ không đổi sang màu thương hiệu: đây là tín hiệu CẢNH
+    BÁO ("còn dở dang"), không phải màu trang trí. Dùng đúng một màu khác với
+    màu thương hiệu để mắt bắt được ngay. */
 function ChamDoi({ hien }) {
   if (!hien) return null;
   return (
     <span
       title="Đã sửa, chưa lưu"
-      className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400"
+      className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"
     />
   );
 }
@@ -48,7 +48,11 @@ function Nhan({ children, doi }) {
 
 function MoTa({ children }) {
   if (!children) return null;
-  return <span className="mt-1.5 block text-xs text-gray-600">{children}</span>;
+  return (
+    <span className="mt-1.5 block text-[0.8125rem] leading-relaxed text-ink-faint">
+      {children}
+    </span>
+  );
 }
 
 /** Ô nhập một dòng. */
@@ -123,26 +127,32 @@ export function ODanhSach({ nhan, danhSach, doi, moTa, daSua = false, dongToiThi
 /**
  * Ô nhập TỪ KHOÁ ĐỘNG của tiêu đề trang chủ.
  *
- * Bản tham chiếu để đây là một ô text "cách nhau bằng dấu phẩy" — người dùng
- * phải tự tưởng tượng cái danh sách đó trông ra sao, và một dấu phẩy thừa là
- * sinh ra từ rỗng mà không ai thấy. Ở đây mỗi từ là một thẻ nhìn thấy được, xoá
- * được, kèm ô xem thử chạy đúng như ngoài trang chủ — thứ trừu tượng nhất của
- * cả trang quản trị được cho nhìn tận mắt.
+ * Mỗi từ là một thẻ nhìn thấy được, xoá được, kèm ô xem thử chạy đúng nhịp như
+ * ngoài trang chủ — thứ trừu tượng nhất của cả trang quản trị được cho nhìn tận
+ * mắt. (Bản tham chiếu để đây là một ô text "cách nhau bằng dấu phẩy": người
+ * dùng phải tự tưởng tượng danh sách trông ra sao, và một dấu phẩy thừa là sinh
+ * ra từ rỗng mà không ai thấy.)
+ *
+ * ⚠️ ĐÃ BỎ .toUpperCase() (17/08/2026). Trước đây từ mới bị ép viết hoa vì
+ * tiêu đề trang chủ hồi đó là tiếng Anh in hoa ("INNOVATION", "TECHNOLOGY").
+ * Tiêu đề giờ là tiếng Việt viết thường ("chính quyền số", "di sản Yên Tử") —
+ * ép viết hoa sẽ làm hỏng dấu và sai hẳn kiểu chữ của trang.
  */
 export function OTuKhoa({ nhan, danhSach, doi, moTa, daSua = false }) {
   const tu = danhSach ?? [];
   const [dangGo, setDangGo] = useState("");
   const [xem, setXem] = useState(0);
 
-  // Ô xem thử: đổi từ mỗi 2.2 giây, đúng nhịp của trang chủ (Hero.jsx).
+  // Ô xem thử: đổi từ mỗi 2.6 giây, đúng nhịp của trang chủ (Hero.jsx).
+  // Sửa nhịp ở Hero.jsx thì nhớ sửa cả đây, không thì xem thử nói dối.
   useEffect(() => {
     if (tu.length < 2) return;
-    const timer = setInterval(() => setXem((i) => (i + 1) % tu.length), 2200);
+    const timer = setInterval(() => setXem((i) => (i + 1) % tu.length), 2600);
     return () => clearInterval(timer);
   }, [tu.length]);
 
   const them = () => {
-    const moi = dangGo.trim().toUpperCase();
+    const moi = dangGo.trim();
     if (!moi || tu.includes(moi)) {
       setDangGo("");
       return;
@@ -165,19 +175,19 @@ export function OTuKhoa({ nhan, danhSach, doi, moTa, daSua = false }) {
     <div>
       <Nhan doi={daSua}>{nhan}</Nhan>
 
-      <div className="rounded-lg border border-white/10 bg-black/40 p-2.5 transition-colors focus-within:border-neon/70 focus-within:ring-1 focus-within:ring-neon/40">
+      <div className="rounded-xl border border-transparent bg-mist p-2.5 transition-colors focus-within:border-brand focus-within:bg-panel">
         <div className="flex flex-wrap gap-1.5">
           {tu.map((t) => (
             <span
               key={t}
-              className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.06] py-1 pl-2.5 pr-1 font-mono text-xs text-gray-200"
+              className="inline-flex items-center gap-1 rounded-lg bg-brand-soft py-1 pl-2.5 pr-1 text-[0.8125rem] font-medium text-brand"
             >
               {t}
               <button
                 type="button"
                 onClick={() => doi(tu.filter((x) => x !== t))}
                 aria-label={`Bỏ từ ${t}`}
-                className="rounded p-0.5 text-gray-500 transition-colors hover:bg-white/10 hover:text-red-300"
+                className="rounded p-0.5 text-brand/60 transition-colors hover:bg-brand/15 hover:text-brand"
               >
                 <X className="h-3 w-3" aria-hidden="true" />
               </button>
@@ -191,7 +201,7 @@ export function OTuKhoa({ nhan, danhSach, doi, moTa, daSua = false }) {
             onBlur={them}
             placeholder={tu.length ? "Thêm từ…" : "Gõ một từ rồi Enter"}
             aria-label="Thêm từ khoá mới"
-            className="min-w-[9rem] flex-1 bg-transparent px-1.5 py-1 text-sm text-gray-100 placeholder-gray-600 outline-none"
+            className="min-w-[9rem] flex-1 bg-transparent px-1.5 py-1 text-[0.9375rem] text-ink placeholder-ink-faint outline-none"
           />
         </div>
       </div>
@@ -199,14 +209,10 @@ export function OTuKhoa({ nhan, danhSach, doi, moTa, daSua = false }) {
       <MoTa>{moTa ?? "Enter hoặc dấu phẩy để thêm. Backspace khi ô trống để xoá từ cuối."}</MoTa>
 
       {tu.length > 0 && (
-        <div className="mt-3 flex items-baseline gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3.5 py-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-gray-600">
-            Xem thử
-          </span>
-          <span className="text-lg font-black tracking-tight text-white">
-            <span className="bg-gradient-to-r from-blue-500 via-sky-300 to-white bg-clip-text text-transparent">
-              {tu[xem % tu.length]}
-            </span>
+        <div className="mt-3 flex items-baseline gap-3 rounded-xl bg-mist px-3.5 py-3">
+          <span className="text-[0.8125rem] text-ink-faint">Xem thử</span>
+          <span className="tieu-de-lon text-xl text-brand">
+            {tu[xem % tu.length]}
           </span>
         </div>
       )}

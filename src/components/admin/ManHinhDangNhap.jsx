@@ -14,10 +14,14 @@ import * as api from "../../services/adminService.js";
 // ============================================================
 // Màn hình đăng nhập trang quản trị.
 //
+// Dùng chung hệ thiết kế sáng với trang khách (đổi 17/08/2026): thẻ trắng bo
+// góc lớn đặt trên nền xám nhạt, không viền không đổ bóng nặng, nút viên thuốc
+// màu thương hiệu.
+//
 // Ô nhập ở đây CỐ Ý khác bộ ô trong Fields.jsx: chỗ này có biểu tượng nằm
-// trong ô và nút hiện/ẩn mật khẩu, nhãn viết thường cho thân thiện. Fields.jsx
-// dùng nhãn mono viết hoa vì ở đó có hàng chục ô, cần phân biệt nhanh nhãn với
-// nội dung; còn ở đây chỉ có hai ô nên ưu tiên vẻ mềm mại, dễ tiếp cận.
+// trong ô và nút hiện/ẩn mật khẩu. Fields.jsx có hàng chục ô nên phải gọn hết
+// mức; còn ở đây chỉ có hai ô, thêm biểu tượng làm màn hình đăng nhập dễ tiếp
+// cận và bớt trống trải.
 // ============================================================
 
 // Dòng gợi ý tài khoản dùng thử. Lấy từ biến môi trường VITE_DEMO_LOGIN,
@@ -29,18 +33,17 @@ import * as api from "../../services/adminService.js";
 const DEMO_LOGIN = (import.meta.env.VITE_DEMO_LOGIN || "").trim();
 
 const O_NHAP =
-  "w-full rounded-xl border border-white/10 bg-black/40 py-3 pl-11 text-sm " +
-  "text-gray-100 placeholder-gray-600 outline-none transition-colors " +
-  "hover:border-white/20 focus:border-primary/70 focus:bg-black/60 " +
-  "focus:ring-1 focus:ring-primary/40";
+  "w-full rounded-xl border border-transparent bg-mist py-3 pl-11 text-[0.9375rem] " +
+  "text-ink placeholder-ink-faint outline-none transition-colors " +
+  "focus:border-brand focus:bg-panel";
 
 function O({ nhan, icon: Icon, dungSau, ...props }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-gray-300">{nhan}</span>
+      <span className="mb-2 block text-sm font-medium text-ink-soft">{nhan}</span>
       <div className="relative">
         <Icon
-          className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600"
+          className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint"
           aria-hidden="true"
         />
         <input className={`${O_NHAP} ${dungSau ? "pr-11" : "pr-4"}`} {...props} />
@@ -71,26 +74,25 @@ export default function ManHinhDangNhap({ khiXong }) {
   };
 
   return (
-    // bg-night đặt ngay đây — xem ghi chú cùng nội dung trong AdminPage.jsx.
-    <div className="flex min-h-screen items-center justify-center bg-night px-5 py-12 text-gray-200">
+    <div className="flex min-h-screen items-center justify-center bg-mist px-5 py-12 text-ink">
       <div className="w-full max-w-[26rem]">
-        <div className="rounded-2xl border border-white/[0.08] bg-surface/70 p-7 sm:p-9">
+        <div className="rounded-block bg-panel p-7 sm:p-9">
           {/* ---------- Thương hiệu ---------- */}
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-5 flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600/40 to-blue-600/30 ring-1 ring-white/10">
+            {/* Ô logo nền chàm tím đặc, dùng file logo TRẮNG — logo màu đặt
+                trên nền trắng sẽ chìm. */}
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-block bg-brand">
               <img
-                src="/logo-imob.png"
+                src="/logo-imob-white.png"
                 alt=""
-                className="h-10 w-10 object-contain"
+                className="h-9 w-9 object-contain"
               />
             </div>
 
-            <h1 className="text-2xl font-bold tracking-tight text-white">
-              iMob <span className="text-primary">Admin</span>
+            <h1 className="tieu-de-lon text-2xl text-ink">
+              iMob <span className="text-brand">Admin</span>
             </h1>
-            <p className="mt-1.5 text-xs uppercase tracking-[0.18em] text-gray-500">
-              Quản trị hệ thống
-            </p>
+            <p className="mt-1.5 text-sm text-ink-faint">Quản trị nội dung</p>
           </div>
 
           {/* ---------- Form ---------- */}
@@ -120,7 +122,7 @@ export default function ManHinhDangNhap({ khiXong }) {
                   type="button"
                   onClick={() => setHienMatKhau((v) => !v)}
                   aria-label={hienMatKhau ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-gray-600 transition-colors hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-ink-faint transition-colors hover:text-ink"
                 >
                   {hienMatKhau ? (
                     <EyeOff className="h-4 w-4" aria-hidden="true" />
@@ -134,7 +136,7 @@ export default function ManHinhDangNhap({ khiXong }) {
             {loi && (
               <p
                 role="alert"
-                className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                className="flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
               >
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 {loi}
@@ -144,7 +146,7 @@ export default function ManHinhDangNhap({ khiXong }) {
             <button
               type="submit"
               disabled={dangGui}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-[1.0625rem] font-medium text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
             >
               {dangGui ? (
                 <>
@@ -157,13 +159,13 @@ export default function ManHinhDangNhap({ khiXong }) {
             </button>
 
             {dangGui && (
-              <p className="text-center text-xs text-gray-600">
+              <p className="text-center text-[0.8125rem] text-ink-faint">
                 Lần đầu trong ngày có thể chờ 30–50 giây để máy chủ thức dậy.
               </p>
             )}
 
             {DEMO_LOGIN && (
-              <p className="rounded-xl border border-white/[0.08] bg-black/30 px-4 py-3 text-center text-xs text-primary">
+              <p className="rounded-xl bg-brand-soft px-4 py-3 text-center text-[0.8125rem] text-brand">
                 {DEMO_LOGIN}
               </p>
             )}
@@ -173,7 +175,7 @@ export default function ManHinhDangNhap({ khiXong }) {
         <div className="mt-6 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-600 transition-colors hover:text-gray-300"
+            className="inline-flex items-center gap-1 text-sm text-ink-soft transition-colors hover:text-brand"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             Về trang chủ
