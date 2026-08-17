@@ -82,6 +82,40 @@ git push origin main
 
 4. Bấm **Apply**.
 
+---
+
+## 3b. ⚠️ BẮT BUỘC: nối hai dịch vụ lại với nhau
+
+**Đừng bỏ qua bước này.** Deploy xong mà không làm thì trang chủ vẫn hiện bình
+thường (nhờ nội dung có sẵn trong bundle) nhưng **`/admin` sẽ báo lỗi**, form
+liên hệ không gửi được, và chatbot không gọi được backend.
+
+Lý do: Render cấp tên miền **có hậu tố ngẫu nhiên** khi tên đã bị người khác
+dùng — `imob-web` có thể thành `imob-web-fqhq`. Không đoán trước được lúc viết
+`render.yaml`, nên phải nối tay một lần.
+
+**Bước 1 — lấy 2 địa chỉ.** Trên dashboard, bấm vào từng dịch vụ, copy địa chỉ
+ở đầu trang:
+
+- Website: `https://imob-web-____.onrender.com`
+- API: `https://imob-chatbot-api-____.onrender.com`
+
+**Bước 2 — cho API biết website nào được phép gọi.**
+Render → dịch vụ **API** → **Environment** → `ALLOWED_ORIGINS` = địa chỉ
+**website**. Lưu xong service tự khởi động lại, không cần build lại.
+
+**Bước 3 — cho website biết API ở đâu.**
+Render → dịch vụ **website** → **Environment** → `VITE_API_URL` = địa chỉ
+**API**.
+
+**Bước 4 — build lại website.** Bắt buộc, vì mọi biến `VITE_*` được nhúng vào
+file JavaScript **lúc build**, sửa xong mà không build lại thì không ăn:
+
+Render → dịch vụ website → **Manual Deploy** → **Clear build cache & deploy**
+
+**Bước 5 — kiểm tra.** Mở `https://<địa-chỉ-API>/health`, phải thấy
+`{"status":"ok", ... "database":"ok"}`. Rồi mở `/admin` của website và đăng nhập.
+
 Lần đầu build mất khoảng **5–10 phút** (phần Python phải cài `scikit-learn`, khá
 nặng). Các lần sau nhanh hơn nhiều.
 

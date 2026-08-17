@@ -62,13 +62,14 @@ services:
       - key: PYTHON_VERSION
         value: "3.12.11"
 
-      # Danh sách website được phép gọi API này (xem phần CORS trong main.py).
-      # Từ khi có trang quản trị thì KHÔNG nên để "*" nữa.
-      # ⚠️ SAU KHI DEPLOY: nếu Render đặt tên miền khác (vd tên đã bị dùng nên
-      # thành imob-web-a1b2), phải sửa lại đúng tên miền thật ở đây, không thì
-      # trình duyệt chặn mọi lời gọi và chatbot/form liên hệ sẽ không chạy.
+      # ⚠️ TÊN MIỀN WEBSITE — PHẢI ĐIỀN TAY SAU LẦN DEPLOY ĐẦU TIÊN.
+      # Render hay thêm hậu tố ngẫu nhiên (imob-web -> imob-web-fqhq) nên không
+      # đoán trước được. Điền sai thì trình duyệt chặn hết: chatbot, form liên
+      # hệ và trang quản trị đều không chạy.
+      # Dạng: https://imob-web-xxxx.onrender.com (nhiều tên miền thì cách nhau
+      # bằng dấu phẩy). Sửa xong service tự khởi động lại, KHÔNG cần build lại.
       - key: ALLOWED_ORIGINS
-        value: "https://imob-web.onrender.com"
+        sync: false
 
       # --- Phần CMS ---
       # Render tự điền chuỗi kết nối của database khai báo ở trên.
@@ -124,14 +125,21 @@ services:
       # thật ở đây.
       - key: VITE_USE_BACKEND
         value: "true"
-      # Lấy tự động tên miền của API bên trên (vd imob-chatbot-api.onrender.com),
-      # khỏi phải chép tay. Giá trị này không kèm "https://" nên phía web tự
-      # thêm vào — xem src/utils/constants.js.
+      # ⚠️ ĐỊA CHỈ API — PHẢI ĐIỀN TAY SAU LẦN DEPLOY ĐẦU TIÊN.
+      #
+      # Bản trước dùng `fromService` để Render tự lấy tên miền của API, nhưng
+      # thực tế nó KHÔNG điền được: bundle build ra không có địa chỉ nào, website
+      # gọi /api/* tương đối rồi rơi vào chính trang tĩnh -> trang /admin chết.
+      #
+      # Thêm nữa, Render hay thêm hậu tố ngẫu nhiên khi tên đã bị dùng
+      # (imob-chatbot-api -> imob-chatbot-api-a1b2), nên không thể đoán trước
+      # tên miền lúc viết file này.
+      #
+      # sync: false = Render hỏi bạn giá trị. Lần đầu chưa biết thì cứ để tạm,
+      # deploy xong copy đúng địa chỉ API rồi quay lại sửa và bấm
+      # "Clear build cache & deploy" — biến VITE_* chỉ có tác dụng LÚC BUILD.
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: imob-chatbot-api
-          property: host
+        sync: false
       # Khóa Gemini (tùy chọn). sync: false = Render sẽ HỎI giá trị lúc bấm
       # Apply. Không có khóa thì để trống, chatbot vẫn chạy bằng kho kiến thức.
       - key: VITE_GEMINI_API_KEY
