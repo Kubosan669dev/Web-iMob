@@ -3,6 +3,11 @@
 Tài liệu này viết cho người **chưa deploy bao giờ**. Làm lần lượt từ trên xuống,
 không bỏ bước.
 
+> **Nếu bạn đưa website sang Vercel** thì đọc
+> [HUONG-DAN-DEPLOY-VERCEL.md](HUONG-DAN-DEPLOY-VERCEL.md) thay cho tài liệu này.
+> Khi đó Render chỉ còn giữ **API Python + database** — phần đó vẫn theo đúng
+> tài liệu này, chỉ bỏ qua dịch vụ `imob-web`.
+
 ---
 
 ## 1. Bức tranh tổng thể

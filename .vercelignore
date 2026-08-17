@@ -1,0 +1,7 @@
+# Vercel chỉ dựng WEBSITE (React/Vite). API Python vẫn chạy trên Render.
+# Bỏ qua thư mục này cho đỡ phải tải lên vài chục MB mỗi lần deploy, và để
+# Vercel không nhìn thấy requirements.txt rồi tưởng đây là dự án Python.
+chatbot-python/
+
+# Script kiểm thử — chỉ chạy ở máy, không dính gì tới bản build.
+scripts/
