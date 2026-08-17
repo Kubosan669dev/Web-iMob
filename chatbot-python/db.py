@@ -161,6 +161,12 @@ def _nap_noi_dung_lan_dau() -> None:
 
     Chỉ nạp khi THIẾU, nên chạy lại nhiều lần cũng không ghi đè nội dung bạn
     đã sửa trong trang admin.
+
+    Mặt trái của việc "chỉ nạp khi thiếu": sửa file JSON trong mã nguồn rồi
+    deploy thì database VẪN GIỮ BẢN CŨ, và website lấy database phủ lên bản
+    mặc định nên khách thấy nội dung cũ dù mã nguồn đã đúng. Muốn ép lấy bản
+    mới thì vào /admin bấm "Nạp lại từ file gốc" — nút đó đọc JSON từ bundle
+    của website (luôn mới) rồi PUT đè, không cần chạy tay câu DELETE ở đây.
     """
     for khoa, duong_dan in NGUON_NAP.items():
         if not duong_dan.exists():

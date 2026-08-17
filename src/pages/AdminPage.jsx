@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   CheckCircle2,
   Download,
+  FileDown,
   Inbox,
   Loader2,
   LogOut,
@@ -16,6 +17,7 @@ import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
 import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
+import { MAC_DINH } from "../context/NoiDungContext.jsx";
 
 // ============================================================
 // AdminPage — trang quản trị nội dung (/admin).
@@ -597,6 +599,42 @@ export default function AdminPage() {
 
   const boThayDoi = () => setNoiDung(goc);
 
+  /**
+   * Nạp lại toàn bộ nội dung từ file JSON gốc trong mã nguồn.
+   *
+   * VÌ SAO CẦN NÚT NÀY: database chỉ được đổ dữ liệu từ file JSON đúng MỘT
+   * LẦN, lúc khóa đó còn trống (db.py dùng ON CONFLICT DO NOTHING, cố ý — để
+   * khởi động lại máy chủ không xóa mất nội dung bạn vừa sửa ở đây). Hệ quả:
+   * sau này sửa file JSON trong mã nguồn rồi deploy, database vẫn giữ bản cũ
+   * và phủ đè lên bản mới — website hiện nội dung cũ dù mã nguồn đã đúng. Trước
+   * khi có nút này, cách sửa duy nhất là chạy tay câu DELETE trong database.
+   *
+   * LẤY TỪ ĐÂU: MAC_DINH, tức file JSON nằm trong bundle của chính trang này.
+   * KHÔNG nhờ máy chủ đọc file, dù nghe có vẻ đúng chỗ hơn. Lý do: website
+   * được dựng lại ở MỌI lần deploy nên bundle luôn là bản JSON mới nhất, còn
+   * dịch vụ API có buildFilter chỉ chạy khi thư mục chatbot-python/ đổi — sửa
+   * src/data thì nó không deploy lại, file trên ổ đĩa của nó vẫn là bản cũ.
+   *
+   * KHÔNG tự lưu: chỉ đặt vào ô nhập để các chấm "chưa lưu" sáng lên đúng
+   * những mục sắp bị thay, xem lại rồi mới bấm Lưu.
+   */
+  const napLaiTuFileGoc = () => {
+    const dong = window.confirm(
+      "Nạp lại nội dung từ file gốc trong mã nguồn?\n\n" +
+        "Mọi chỉnh sửa bạn từng làm trong trang quản trị sẽ bị thay bằng bản " +
+        "trong mã nguồn. Danh sách tin nhắn của khách KHÔNG bị ảnh hưởng.\n\n" +
+        "Chưa lưu ngay — bạn xem lại rồi mới bấm Lưu thay đổi."
+    );
+    if (!dong) return;
+
+    setNoiDung((t) => ({ ...t, ...MAC_DINH }));
+    setLoi("");
+    setXong(
+      "Đã nạp bản trong mã nguồn vào các ô. Xem lại rồi bấm Lưu thay đổi. " +
+        "Không mục nào sáng chấm vàng nghĩa là database vốn đã khớp sẵn."
+    );
+  };
+
   const xuatJson = () => {
     const blob = new Blob([JSON.stringify(noiDung, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -658,6 +696,16 @@ export default function AdminPage() {
 
           <div className="flex items-center gap-1">
             <span className="mr-2 hidden text-sm text-ink-faint sm:inline">{ten}</span>
+            <button
+              type="button"
+              onClick={napLaiTuFileGoc}
+              disabled={!noiDung}
+              title="Thay nội dung đang lưu bằng bản JSON trong mã nguồn"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40"
+            >
+              <FileDown className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden lg:inline">Nạp lại từ file gốc</span>
+            </button>
             <button
               type="button"
               onClick={xuatJson}
