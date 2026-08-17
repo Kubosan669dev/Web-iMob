@@ -1,16 +1,15 @@
 import { useState } from "react";
 import {
-  Send,
   Phone,
   Mail,
   MapPin,
+  Clock,
   Loader2,
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
-import Card from "../components/ui/Card.jsx";
 import Button from "../components/ui/Button.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
 import { useCongTy } from "../context/NoiDungContext.jsx";
@@ -22,31 +21,41 @@ import services from "../data/services.json";
 // Bản cũ viết `const CONTACT_INFO = [...SITE.phone...]` ngoài component nên mảng
 // bị "đóng băng" ngay lúc file được nạp: sửa số điện thoại trong /admin thì
 // Navbar/Footer đổi theo, riêng khối này vẫn hiện số cũ cho tới khi build lại.
+//
+// Ô "Điện thoại" và "Email" bấm được — trên điện thoại là gọi/soạn thư ngay.
 function dungThongTinLienHe(congTy) {
   return [
-    { icon: Phone, label: "Điện thoại", value: congTy.phone },
-    { icon: Mail, label: "Email", value: congTy.email },
-    { icon: MapPin, label: "Địa chỉ", value: congTy.address },
+    {
+      icon: Phone,
+      label: "Điện thoại",
+      value: congTy.phone,
+      href: `tel:${congTy.phone.replace(/\s/g, "")}`,
+    },
+    { icon: Mail, label: "Email", value: congTy.email, href: `mailto:${congTy.email}` },
+    { icon: MapPin, label: "Văn phòng", value: congTy.address },
+    { icon: Clock, label: "Giờ làm việc", value: congTy.workingHours },
   ];
 }
 
 /* ---------- Form ---------- */
 const EMPTY_FORM = { name: "", email: "", phone: "", service: "", message: "" };
 
+// Ô nhập kiểu Apple: nền xám nhạt, KHÔNG viền, bo góc vừa. Viền chỉ xuất hiện
+// khi ô được chọn. Bớt được một đường kẻ trên mỗi ô — form 5 ô là bớt 5 đường.
 const INPUT_CLS =
-  "w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm " +
-  "text-white placeholder-gray-500 outline-none transition-colors " +
-  "focus:border-purple-500/60 focus:bg-purple-500/[0.04]";
+  "w-full rounded-xl border border-transparent bg-mist px-4 py-3.5 text-[1.0625rem] " +
+  "text-ink placeholder-ink-faint outline-none transition-colors " +
+  "focus:border-brand focus:bg-panel";
 
 // Ô nhập có nhãn + thông báo lỗi bên dưới
 function Field({ label, required = false, error, children }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">
-        {label} {required && <span className="text-purple-400">*</span>}
+      <span className="mb-2 block text-sm font-medium text-ink-soft">
+        {label} {required && <span className="text-brand">*</span>}
       </span>
       {children}
-      {error && <span className="mt-1.5 block text-xs text-red-400">{error}</span>}
+      {error && <span className="mt-2 block text-sm text-red-600">{error}</span>}
     </label>
   );
 }
@@ -106,12 +115,13 @@ function ContactForm() {
   };
 
   return (
-    <Card className="p-7 sm:p-8">
-      <h3 className="mb-6 text-xl font-bold text-white">
-        Gửi tin nhắn cho chúng tôi
-      </h3>
+    <div className="rounded-block bg-panel p-8 sm:p-10">
+      <h3 className="tieu-de-lon text-2xl text-ink">Gửi yêu cầu tư vấn</h3>
+      <p className="mt-2 text-[0.9375rem] text-ink-soft">
+        Chúng tôi phản hồi {congTy.responseTime}.
+      </p>
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Họ và tên" required error={errors.name}>
             <input
@@ -143,24 +153,27 @@ function ContactForm() {
           />
         </Field>
 
-        <Field label="Dịch vụ quan tâm">
+        <Field label="Bạn quan tâm tới">
           <select
             value={form.service}
             onChange={setField("service")}
-            className={`${INPUT_CLS} appearance-none [&>option]:bg-surface`}
+            className={`${INPUT_CLS} appearance-none`}
           >
-            <option value="">— Chọn dịch vụ —</option>
+            <option value="">— Chọn một mục —</option>
             {services.map((s) => (
               <option key={s.id} value={s.title}>
                 {s.title}
               </option>
             ))}
+            <option value="Khảo sát & đánh giá app/website">
+              Khảo sát &amp; đánh giá app/website
+            </option>
             <option value="Tư vấn công nghệ">Tư vấn công nghệ</option>
             <option value="Khác">Khác</option>
           </select>
         </Field>
 
-        <Field label="Tin nhắn" required error={errors.message}>
+        <Field label="Nội dung" required error={errors.message}>
           <textarea
             rows={4}
             value={form.message}
@@ -174,9 +187,9 @@ function ContactForm() {
         {status === "success" && (
           <p
             role="status"
-            className="flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300"
+            className="flex items-center gap-2.5 rounded-xl bg-brand-soft px-4 py-3.5 text-[0.9375rem] text-brand"
           >
-            <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" />
             Đã gửi thành công! Chúng tôi sẽ phản hồi {congTy.responseTime}.
           </p>
         )}
@@ -185,19 +198,20 @@ function ContactForm() {
         {status === "error" && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+            className="flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3.5 text-[0.9375rem] text-red-700"
           >
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
             <span>
               {loiGui}
               <br />
-              <span className="text-red-200/80">
-                Bạn có thể gọi trực tiếp{" "}
-                <a href={`tel:${congTy.phone.replace(/\s/g, "")}`} className="font-semibold underline">
-                  {congTy.phone}
-                </a>
-                .
-              </span>
+              Bạn có thể gọi trực tiếp{" "}
+              <a
+                href={`tel:${congTy.phone.replace(/\s/g, "")}`}
+                className="font-semibold underline"
+              >
+                {congTy.phone}
+              </a>
+              .
             </span>
           </div>
         )}
@@ -214,13 +228,11 @@ function ContactForm() {
               Đang gửi...
             </>
           ) : (
-            <>
-              <Send className="h-4 w-4" aria-hidden="true" /> Gửi tin nhắn
-            </>
+            "Gửi yêu cầu"
           )}
         </Button>
       </form>
-    </Card>
+    </div>
   );
 }
 
@@ -230,59 +242,57 @@ export default function Contact() {
   const thongTinLienHe = dungThongTinLienHe(congTy);
 
   return (
-    <section id="contact" className="relative overflow-hidden py-24 lg:py-32">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-purple-600/10 blur-3xl"
-      />
-
-      <Container className="relative space-y-14">
+    <section id="contact" className="bg-mist py-24 lg:py-32">
+      <Container className="space-y-14">
         <Reveal>
           <SectionTitle
             badge="Liên hệ"
-            icon={Send}
-            title="CONNECT WITH"
-            highlight="FUTURE"
-            description="Sẵn sàng đồng hành cùng bạn trong hành trình chuyển đổi số. Để lại lời nhắn — chúng tôi phản hồi trong 24h."
+            title="Bắt đầu bằng một"
+            highlight="buổi khảo sát miễn phí."
+            description="Kể cho chúng tôi nghe đơn vị bạn đang vướng ở đâu. Không cần chuẩn bị gì trước."
           />
         </Reveal>
 
-        <div className="grid gap-10 lg:grid-cols-5">
+        <div className="grid gap-5 lg:grid-cols-5">
           {/* ---------- Cột trái: thông tin ---------- */}
-          <div className="space-y-5 lg:col-span-2">
-            <Reveal>
-              <h3 className="font-mono text-sm font-semibold uppercase tracking-[0.2em] text-gray-400">
-                Thông tin liên hệ
-              </h3>
-            </Reveal>
-            {thongTinLienHe.map((info, index) => (
-              <Reveal key={info.label} delay={index * 0.1}>
-                <Card hover className="flex items-center gap-4 p-5">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-500/25 to-cyan-500/25">
-                    <info.icon className="h-5 w-5 text-cyan-300" aria-hidden="true" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-wider text-gray-500">
-                      {info.label}
-                    </p>
-                    <p className="truncate text-sm font-semibold text-white">
-                      {info.value}
-                    </p>
-                  </div>
-                </Card>
-              </Reveal>
-            ))}
-            <Reveal delay={0.3}>
-              <p className="rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
-                💡 Cần trả lời ngay? Hỏi nhanh trợ lý{" "}
-                <strong className="text-gray-300">Chat AI</strong> ở góc màn
-                hình — hoạt động 24/7.
+          <Reveal className="lg:col-span-2">
+            <div className="flex h-full flex-col rounded-block bg-panel p-8 sm:p-10">
+              <ul className="space-y-7">
+                {thongTinLienHe.map((info) => (
+                  <li key={info.label} className="flex items-start gap-4">
+                    <info.icon
+                      className="mt-1 h-5 w-5 shrink-0 text-brand"
+                      aria-hidden="true"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm text-ink-faint">{info.label}</p>
+                      {info.href ? (
+                        <a
+                          href={info.href}
+                          className="text-[1.0625rem] font-medium text-ink hover:text-brand"
+                        >
+                          {info.value}
+                        </a>
+                      ) : (
+                        <p className="text-[1.0625rem] font-medium leading-snug text-ink">
+                          {info.value}
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-auto pt-10 text-[0.9375rem] leading-relaxed text-ink-soft">
+                Cần trả lời ngay? Hỏi nhanh trợ lý{" "}
+                <strong className="font-medium text-ink">Chat AI</strong> ở góc
+                màn hình — hoạt động 24/7.
               </p>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
 
           {/* ---------- Cột phải: form ---------- */}
-          <Reveal delay={0.15} className="lg:col-span-3">
+          <Reveal delay={0.1} className="lg:col-span-3">
             <ContactForm />
           </Reveal>
         </div>

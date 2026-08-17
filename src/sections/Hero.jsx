@@ -1,33 +1,54 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Zap, ArrowRight, MessageCircle, Cpu, Cloud, Wifi } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
-import AnimatedGridBackground from "../components/ui/AnimatedGridBackground.jsx";
-import { useHero } from "../context/NoiDungContext.jsx";
+import Anh from "../components/ui/Anh.jsx";
+import { useHero, useCongTy } from "../context/NoiDungContext.jsx";
 import { openChat } from "../utils/chatBus.js";
 
-/* ================= Entrance animation (stagger) ================= */
+/* ================= Entrance animation ================= */
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 const fadeUp = {
-  hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
 /* ================= RotatingWord =================
-   Từ ở giữa dòng tiêu đề tự đổi liên tục (INNOVATION → TECHNOLOGY → ...).
-   Mỗi từ tô gradient xanh → trắng, xen giữa các dòng chữ trắng.
+   Từ ở giữa dòng tiêu đề tự đổi liên tục (chính quyền số → doanh nghiệp → ...).
+   Danh sách từ do trang /admin quyết định (tab Hero) — truyền vào qua prop chứ
+   không đọc cứng, để sửa trong admin là đổi ngay.
+
+   ---- Vì sao có LỚP GIỮ CHỖ (sửa 17/08/2026) ----
+   Bản trước chỉ có đúng một <span> chứa từ đang hiện. Hai lỗi kéo theo:
+
+   1. `mode="wait"` gỡ từ CŨ ra rồi mới gắn từ MỚI. Trong khoảng giữa, khung
+      rỗng hoàn toàn → dòng chữ tụt lên rồi rơi xuống. Đây là cái "nhếch lên
+      một chút" nhìn thấy được.
+   2. Mỗi từ có chiều cao thật khác nhau vì dấu tiếng Việt: "chính quyền số"
+      có dấu sắc/huyền vươn lên, "doanh nghiệp" có dấu nặng thụt xuống. Cộng
+      với `align-top`, mỗi lần đổi từ là chiều cao dòng đổi theo.
+
+   Cách chữa: xếp CHỒNG toàn bộ các từ vào cùng MỘT ô lưới (col-start-1
+   row-start-1). Các bản sao vô hình luôn có mặt nên ô lưới luôn lấy kích thước
+   của từ RỘNG NHẤT và CAO NHẤT — đo bằng chữ thật chứ không đoán theo số ký
+   tự. Từ đang hiện nằm chồng lên cùng ô đó và chỉ chạy `transform`, mà
+   transform thì không đụng tới bố cục. Kết quả: khung đứng yên tuyệt đối, chỉ
+   có chữ trượt.
+
+   Đổi lại: chiều rộng khung luôn bằng từ dài nhất, nên từ ngắn sẽ có khoảng
+   trống hai bên. Ở tiêu đề căn giữa thì đó lại là điểm cộng — dòng chữ không
+   co giãn ngang mỗi lần đổi từ nữa.
+
    y dùng đơn vị "em" để bước trượt co giãn theo cỡ chữ khổng lồ của hero. */
-// Danh sách từ do trang /admin quyết định (tab Hero). Truyền vào qua prop chứ
-// không đọc cứng, để sửa trong admin là đổi ngay.
 function RotatingWord({ tu }) {
   const [index, setIndex] = useState(0);
   // Rỗng thì vẫn phải có một từ, không thì tiêu đề trang chủ hụt mất một dòng.
-  const danhSach = tu?.length ? tu : ["INNOVATION"];
+  const danhSach = tu?.length ? tu : ["chính quyền số"];
 
   useEffect(() => {
     // Danh sách đổi (vừa tải xong nội dung từ API) -> quay lại từ đầu, tránh
@@ -36,7 +57,7 @@ function RotatingWord({ tu }) {
     if (danhSach.length < 2) return;
     const timer = setInterval(
       () => setIndex((i) => (i + 1) % danhSach.length),
-      2200
+      2600
     );
     return () => clearInterval(timer);
   }, [danhSach.length]);
@@ -44,16 +65,30 @@ function RotatingWord({ tu }) {
   const tuHienTai = danhSach[index % danhSach.length];
 
   return (
-    // inline-block giữ chiều cao dòng ổn định khi từ cũ thoát, từ mới vào
-    <span className="inline-block align-top">
-      <AnimatePresence mode="wait">
+    <span className="inline-grid text-brand">
+      {/* Lớp giữ chỗ — vô hình nhưng vẫn chiếm chỗ (visibility: hidden, KHÔNG
+          phải display: none). aria-hidden để trình đọc màn hình không đọc lặp
+          lại cả danh sách từ. */}
+      {danhSach.map((t) => (
+        <span
+          key={`cho-${t}`}
+          aria-hidden="true"
+          className="invisible col-start-1 row-start-1 whitespace-nowrap"
+        >
+          {t}
+        </span>
+      ))}
+
+      {/* Lớp hiển thị — nằm chồng đúng ô đó. Không bao giờ lớn hơn lớp giữ chỗ
+          (nó là một trong các từ đã tính ở trên) nên không làm khung đổi cỡ. */}
+      <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={tuHienTai}
-          initial={{ opacity: 0, y: "0.4em" }}
+          initial={{ opacity: 0, y: "0.28em" }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: "-0.4em" }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="inline-block bg-gradient-to-r from-blue-500 via-sky-300 to-white bg-clip-text text-transparent"
+          exit={{ opacity: 0, y: "-0.28em" }}
+          transition={{ duration: 0.32, ease: "easeOut" }}
+          className="col-start-1 row-start-1 whitespace-nowrap"
         >
           {tuHienTai}
         </motion.span>
@@ -62,136 +97,44 @@ function RotatingWord({ tu }) {
   );
 }
 
-/* ================= TerminalCard =================
-   Giả lập terminal boot: từng dòng log hiện dần (timer),
-   xong hết → hiện "SYSTEM ONLINE" + chips trạng thái.  */
-const BOOT_LINES = [
-  "Khởi tạo hệ thống...",
-  "Nạp modules AI...",
-  "Kết nối mạng lưới...",
-  "Đồng bộ cloud...",
-];
+/* ================= Hero =================
+   Dựng lại theo cách apple.com mở đầu một trang: CĂN GIỮA, chữ khổng lồ,
+   nền phẳng tuyệt đối, một câu phụ, hai nút. Hết. Không lưới, không quầng
+   sáng, không hạt bay, không khối minh hoạ bên cạnh.
 
-const STATUS_CHIPS = [
-  { icon: Cpu, label: "AI PROCESSING", color: "text-blue-400" },
-  { icon: Cloud, label: "CLOUD SYNC", color: "text-purple-400" },
-  { icon: Wifi, label: "IOT NETWORK", color: "text-cyan-400" },
-];
+   Bỏ hết lớp nền trang trí là thay đổi lớn nhất so với các bản trước, và cũng
+   là thứ khiến trang Apple trông sạch. Khi không còn gì để nhìn ngoài chữ,
+   chữ buộc phải nói được điều đáng nói — nên tiêu đề phải là định vị thật:
+   iMob làm công nghệ cho CẢ chính quyền lẫn doanh nghiệp, ngay tại Quảng Ninh.
 
-function TerminalCard() {
-  // Số dòng log đang hiển thị; tăng dần mỗi 550ms cho tới hết
-  const [visibleCount, setVisibleCount] = useState(0);
-  const booted = visibleCount >= BOOT_LINES.length;
-
-  useEffect(() => {
-    if (booted) return;
-    const timer = setTimeout(() => setVisibleCount((c) => c + 1), 550);
-    return () => clearTimeout(timer);
-  }, [visibleCount, booted]);
-
-  return (
-    <div className="relative">
-      {/* Glow phía sau card */}
-      <div
-        aria-hidden="true"
-        className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-blue-600/25 via-purple-600/15 to-cyan-500/20 blur-2xl animate-glow-pulse"
-      />
-
-      <div className="glass relative animate-float rounded-2xl font-mono text-sm shadow-2xl shadow-black/40">
-        {/* Title bar kiểu macOS */}
-        <div className="flex items-center gap-2 border-b border-white/5 px-5 py-3.5">
-          <span className="h-3 w-3 rounded-full bg-red-500/80" />
-          <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
-          <span className="h-3 w-3 rounded-full bg-green-500/80" />
-          <p className="ml-3 text-xs text-gray-500">imob@system: ~</p>
-        </div>
-
-        {/* Body */}
-        <div className="space-y-2.5 px-5 py-5">
-          <p className="text-cyan-300">
-            <span className="text-purple-400">$</span> imob --status
-          </p>
-
-          {BOOT_LINES.slice(0, visibleCount).map((line) => (
-            <motion.p
-              key={line}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-gray-400"
-            >
-              <span className="text-green-400">✓</span> {line}
-            </motion.p>
-          ))}
-
-          {booted && (
-            <>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-center gap-2 pt-1 font-semibold text-cyan-300"
-              >
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400" />
-                </span>
-                SYSTEM ONLINE
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-gray-500"
-              >
-                <span className="animate-pulse text-purple-400">▊</span> Sẵn
-                sàng nhận lệnh của bạn...
-              </motion.p>
-            </>
-          )}
-        </div>
-
-        {/* Chips trạng thái */}
-        <div className="flex flex-wrap items-center gap-2 border-t border-white/5 px-5 py-4">
-          {STATUS_CHIPS.map(({ icon: Icon, label, color }) => (
-            <span
-              key={label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[10px] font-semibold tracking-wider text-gray-300"
-            >
-              <Icon className={`h-3 w-3 ${color}`} aria-hidden="true" />
-              {label}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ================= Hero ================= */
+   Dưới cùng là dòng sứ mệnh thật của công ty, cỡ nhỏ, màu nhạt — kiểu chú
+   thích chân màn hình mà Apple hay dùng. */
 export default function Hero() {
   const hero = useHero();
+  const congTy = useCongTy();
 
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden"
+      className="flex min-h-[92vh] items-center justify-center py-32 lg:py-40"
     >
-      <AnimatedGridBackground />
-
-      <Container className="relative z-10 grid items-center gap-14 py-28 lg:grid-cols-2 lg:gap-10 lg:py-32">
-        {/* ---------- Cột trái ---------- */}
+      <Container>
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="space-y-7 text-center lg:text-left"
+          className="mx-auto max-w-4xl text-center"
         >
           <motion.div variants={fadeUp}>
-            <Badge icon={Zap}>{hero.badge}</Badge>
+            <Badge>{hero.badge}</Badge>
           </motion.div>
 
+          {/* Cỡ chữ co theo bề rộng màn hình: 2.5rem trên điện thoại →
+              5.5rem trên màn hình rộng. `tieu-de-lon` siết khoảng cách chữ cái
+              (xem ghi chú của utility đó trong styles/index.css). */}
           <motion.h1
             variants={fadeUp}
-            className="text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl xl:text-7xl"
+            className="tieu-de-lon mt-5 text-[clamp(2.5rem,6.5vw,5.5rem)] text-ink"
           >
             {hero.tieuDeTruoc}
             <br />
@@ -202,32 +145,48 @@ export default function Hero() {
 
           <motion.p
             variants={fadeUp}
-            className="mx-auto max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg lg:mx-0"
+            className="mx-auto mt-7 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft sm:text-[1.3125rem]"
           >
             {hero.moTa}
           </motion.p>
 
           <motion.div
             variants={fadeUp}
-            className="flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+            className="mt-9 flex flex-wrap items-center justify-center gap-3"
           >
             <Button href="#contact" size="lg">
-              {hero.nutChinh} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              {hero.nutChinh}
             </Button>
             <Button onClick={openChat} variant="outline" size="lg">
-              <MessageCircle className="h-4 w-4" aria-hidden="true" /> {hero.nutPhu}
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              {hero.nutPhu}
             </Button>
           </motion.div>
-        </motion.div>
 
-        {/* ---------- Cột phải: terminal ---------- */}
-        <motion.div
-          initial={{ opacity: 0, y: 32, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
-          className="mx-auto w-full max-w-lg lg:max-w-none"
-        >
-          <TerminalCard />
+          {/* Ảnh minh hoạ dưới lời kêu gọi — đúng chỗ apple.com đặt ảnh sản
+              phẩm. Để trống trường `anh` trong /admin thì khối này tự ẩn và
+              Hero trở về đúng dáng chữ-thuần; component Anh còn tự biến mất
+              nếu file không tải được, nên không bao giờ lòi ra ô ảnh vỡ. */}
+          <motion.div variants={fadeUp}>
+            <Anh
+              src={hero.anh}
+              alt={hero.anhMoTa || ""}
+              boc="mx-auto mt-16 max-w-4xl overflow-hidden rounded-block"
+              className="w-full"
+            />
+          </motion.div>
+
+          {/* Sứ mệnh — lấy từ company.json, cùng nguồn với chatbot.
+              `?.` phòng trường hợp database đã seed bản company cũ chưa có
+              trường này: thiếu thì cả dòng biến mất, không vỡ trang. */}
+          {congTy.suMenh && (
+            <motion.p
+              variants={fadeUp}
+              className="mx-auto mt-14 max-w-md text-sm leading-relaxed text-ink-faint"
+            >
+              {congTy.suMenh}
+            </motion.p>
+          )}
         </motion.div>
       </Container>
     </section>

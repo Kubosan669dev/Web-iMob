@@ -21,17 +21,17 @@ export default function ChatWindow({ onClose }) {
   }, [messages, isWaiting, isTyping]);
 
   return (
-    <div className="glass flex h-full flex-col overflow-hidden shadow-2xl shadow-black/50 sm:rounded-2xl">
+    <div className="flex h-full flex-col overflow-hidden bg-panel shadow-lift sm:rounded-block">
       {/* ---------- Header ---------- */}
-      <div className="flex items-center justify-between border-b border-white/5 px-4 py-3.5">
+      <div className="flex items-center justify-between border-b border-line px-4 py-3.5">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand">
             <Bot className="h-4.5 w-4.5 text-white" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-sm font-bold text-white">iMob Assistant</p>
-            <p className="flex items-center gap-1.5 text-xs text-gray-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+            <p className="text-sm font-bold text-ink">iMob Assistant</p>
+            <p className="flex items-center gap-1.5 text-xs text-ink-soft">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
               Đang hoạt động
             </p>
           </div>
@@ -43,7 +43,7 @@ export default function ChatWindow({ onClose }) {
             disabled={isTyping}
             title="Làm mới hội thoại"
             aria-label="Xóa lịch sử trò chuyện"
-            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-40"
+            className="rounded-lg p-1.5 text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40"
           >
             <RotateCcw className="h-4.5 w-4.5" />
           </button>
@@ -51,7 +51,7 @@ export default function ChatWindow({ onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Đóng khung chat"
-            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+            className="rounded-lg p-1.5 text-ink-soft transition-colors hover:bg-mist hover:text-ink"
           >
             <X className="h-5 w-5" />
           </button>

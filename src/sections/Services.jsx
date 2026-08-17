@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import { Layers, Smartphone, Cpu, GraduationCap, Check, ArrowRight } from "lucide-react";
+import { Layers, Smartphone, Cpu, GraduationCap, Check, ChevronRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
-import Card from "../components/ui/Card.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
-import AnimatedGridBackground from "../components/ui/AnimatedGridBackground.jsx";
 import services from "../data/services.json";
 
 // Map chuỗi icon trong services.json → component lucide
@@ -15,65 +13,71 @@ const SERVICE_ICONS = {
   "graduation-cap": GraduationCap,
 };
 
-// Card một dịch vụ — flex-col + mt-auto để nút luôn ghim đáy, 3 card đều nhau
-function ServiceCard({ service }) {
+/* Thẻ dịch vụ kiểu Apple: bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng.
+   Liên kết cuối thẻ dùng dấu › thay cho mũi tên → và bỏ chữ IN HOA — đó là
+   kiểu liên kết đặc trưng của apple.com, nhẹ hơn hẳn một cái nút.
+
+   CỐ Ý KHÔNG đánh số 01/02/03 cho ba dịch vụ: đánh số ngụ ý có thứ tự phải đi
+   qua, mà ba dịch vụ này song song, khách chọn cái nào cũng được. Số ở đó chỉ
+   là trang trí giả vờ mang thông tin. (Khối Quy trình trên trang dịch vụ con
+   thì có đánh số, vì đó mới thật sự là các bước nối tiếp nhau.) */
+function TheDichVu({ service }) {
   const Icon = SERVICE_ICONS[service.icon] ?? Layers;
 
   return (
-    <Card hover className="flex h-full flex-col">
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-purple-400/30 bg-gradient-to-br from-purple-500/25 to-blue-500/25">
-        <Icon className="h-7 w-7 text-cyan-300" aria-hidden="true" />
-      </div>
+    <article className="flex h-full flex-col rounded-block bg-mist p-8 sm:p-9">
+      <Icon className="h-9 w-9 text-brand" aria-hidden="true" />
 
-      <h3 className="mb-3 text-xl font-bold text-white">{service.title}</h3>
-      <p className="mb-5 text-sm leading-relaxed text-gray-400">
+      <h3 className="tieu-de-lon mt-6 text-2xl text-ink">{service.title}</h3>
+      <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">
         {service.description}
       </p>
 
-      <ul className="mb-6 space-y-2.5">
+      <ul className="mt-6 space-y-2.5">
         {service.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5 text-sm text-gray-300">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-400" aria-hidden="true" />
+          <li
+            key={feature}
+            className="flex items-start gap-2.5 text-[0.9375rem] text-ink-soft"
+          >
+            <Check className="mt-1 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
             {feature}
           </li>
         ))}
       </ul>
 
+      {/* mt-auto ghim liên kết xuống đáy để ba thẻ cao bằng nhau vẫn thẳng hàng */}
       <Link
         to={service.route}
-        className="group/link mt-auto inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-cyan-300 transition-colors hover:text-white"
+        className="group/link mt-auto inline-flex items-center pt-8 text-[1.0625rem] font-medium text-brand hover:underline"
       >
         Tìm hiểu thêm
-        <ArrowRight
-          className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1"
+        <ChevronRight
+          className="h-5 w-5 transition-transform group-hover/link:translate-x-0.5"
           aria-hidden="true"
         />
       </Link>
-    </Card>
+    </article>
   );
 }
 
 export default function Services() {
   return (
-    <section id="services" className="relative overflow-hidden py-24 lg:py-32">
-      {/* Dùng lại nền grid của Hero nhưng dịu hơn (opacity thấp, không particles) */}
-      <AnimatedGridBackground particles={false} className="opacity-60" />
-
-      <Container className="relative space-y-14">
+    // Nền trắng — xen kẽ với dải nền xám của section Sản phẩm phía trên.
+    <section id="services" className="py-24 lg:py-32">
+      <Container className="space-y-14">
         <Reveal>
           <SectionTitle
-            badge="Dịch vụ của chúng tôi"
-            icon={Layers}
-            title="COMPREHENSIVE"
-            highlight="SOLUTIONS"
-            description="Ba nhóm giải pháp cốt lõi — thiết kế may đo theo bài toán của bạn, triển khai nhanh và đồng hành dài hạn."
+            badge="Dịch vụ"
+            title="Từ bài toán của bạn"
+            highlight="đến hệ thống chạy thật."
+            description="Ba nhóm giải pháp cốt lõi, thiết kế may đo theo quy mô và nghiệp vụ của từng đơn vị — không bán gói sẵn."
           />
         </Reveal>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3">
           {services.map((service, index) => (
-            <Reveal key={service.id} delay={index * 0.12} className="h-full">
-              <ServiceCard service={service} />
+            <Reveal key={service.id} delay={index * 0.1} className="h-full">
+              <TheDichVu service={service} />
             </Reveal>
           ))}
         </div>

@@ -1,10 +1,18 @@
 {
-  "_note": "Nội dung khối HERO (màn hình đầu trang chủ). Sửa được ở /admin — tab Hero. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. CỐ Ý không có số điện thoại/email ở đây: hai thứ đó nằm ở company.json để cả website lẫn chatbot dùng chung một nguồn, chép ra 2 nơi là sớm muộn lệch nhau.",
-  "badge": "Giải pháp số thế hệ mới",
-  "tieuDeTruoc": "THE",
-  "tuKhoaDong": ["INNOVATION", "TECHNOLOGY", "FUTURE", "SOLUTIONS"],
-  "tieuDeSau": "STARTS HERE",
-  "moTa": "Đơn vị tiên phong chuyển đổi số trong mọi lĩnh vực. Chúng tôi thiết kế và triển khai giải pháp phần mềm, ứng dụng và AI — đồng hành từ ý tưởng đến vận hành.",
-  "nutChinh": "Liên hệ",
-  "nutPhu": "Chat AI"
+  "_note": "Nội dung khối HERO (màn hình đầu trang chủ). Sửa được ở /admin — tab Hero. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. CỐ Ý không có số điện thoại/email ở đây: hai thứ đó nằm ở company.json để cả website lẫn chatbot dùng chung một nguồn. CẬP NHẬT 17/08/2026: chữ lấy theo định vị chính thức trong ấn phẩm công ty — iMob phục vụ CẢ doanh nghiệp LẪN chính quyền địa phương ở Quảng Ninh, đó mới là điểm không ai thay được, nên đưa thẳng lên tiêu đề. Nút chính đổi thành 'Nhận khảo sát miễn phí' vì đó là chào mời có thật trong ấn phẩm giải pháp, cụ thể hơn hẳn 'Liên hệ'.",
+  "badge": "iMob Solution & Technology",
+  "tieuDeTruoc": "Công nghệ cho",
+  "tuKhoaDong": [
+    "chính quyền số",
+    "doanh nghiệp",
+    "di sản Yên Tử",
+    "dịch vụ công"
+  ],
+  "tieuDeSau": "ở Quảng Ninh.",
+  "moTa": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững.",
+  "nutChinh": "Nhận khảo sát miễn phí",
+  "nutPhu": "Chat với AI",
+  "_huongdan_anh": "Trường `anh` để trống là khối ảnh tự ẩn, Hero vẫn đẹp như hiện nay. Điền vào là tự hiện. Bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png'. Nên dùng ảnh ngang, rộng tối thiểu 1600px. Xem HUONG-DAN-ANH.md.",
+  "anh": "",
+  "anhMoTa": ""
 }

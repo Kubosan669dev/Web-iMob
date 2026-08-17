@@ -26,17 +26,17 @@ export default function ProcessSteps({
               <li className="flex gap-5">
                 {/* Cột số + đường nối */}
                 <div className="flex flex-col items-center">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-purple-400/40 bg-gradient-to-br from-purple-500/25 to-blue-500/25 font-mono text-sm font-black text-cyan-300">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-soft font-mono text-sm font-black text-brand">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   {index < steps.length - 1 && (
-                    <span className="mt-2 w-px flex-1 bg-gradient-to-b from-purple-400/40 to-transparent" />
+                    <span className="mt-2 w-px flex-1 bg-brand/30" />
                   )}
                 </div>
                 {/* Nội dung bước */}
                 <div className="pb-2 pt-1.5">
-                  <h3 className="text-base font-bold text-white">{step.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-400">
+                  <h3 className="text-base font-bold text-ink">{step.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-soft">
                     {step.desc}
                   </p>
                 </div>

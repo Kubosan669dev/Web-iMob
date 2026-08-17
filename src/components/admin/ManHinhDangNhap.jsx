@@ -71,7 +71,8 @@ export default function ManHinhDangNhap({ khiXong }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-5 py-12">
+    // bg-night đặt ngay đây — xem ghi chú cùng nội dung trong AdminPage.jsx.
+    <div className="flex min-h-screen items-center justify-center bg-night px-5 py-12 text-gray-200">
       <div className="w-full max-w-[26rem]">
         <div className="rounded-2xl border border-white/[0.08] bg-surface/70 p-7 sm:p-9">
           {/* ---------- Thương hiệu ---------- */}

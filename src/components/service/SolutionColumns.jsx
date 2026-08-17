@@ -27,18 +27,18 @@ export default function SolutionColumns({
           return (
             <Reveal key={col.title} delay={index * 0.1} className="h-full">
               <Card hover className="flex h-full flex-col">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-purple-400/30 bg-gradient-to-br from-purple-500/25 to-blue-500/25">
-                  <Icon className="h-7 w-7 text-cyan-300" aria-hidden="true" />
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft">
+                  <Icon className="h-7 w-7 text-brand" aria-hidden="true" />
                 </div>
-                <h3 className="mb-4 text-lg font-bold text-white">{col.title}</h3>
+                <h3 className="mb-4 text-lg font-bold text-ink">{col.title}</h3>
                 <ul className="space-y-2.5">
                   {col.items.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2.5 text-sm text-gray-300"
+                      className="flex items-start gap-2.5 text-sm text-ink-soft"
                     >
                       <Check
-                        className="mt-0.5 h-4 w-4 shrink-0 text-green-400"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-brand"
                         aria-hidden="true"
                       />
                       {item}

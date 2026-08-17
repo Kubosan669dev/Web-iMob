@@ -26,6 +26,16 @@ import {
   Target,
   Brain,
   Presentation,
+  CalendarCheck,
+  Landmark,
+  Library,
+  Building2,
+  Map,
+  Globe,
+  Database,
+  LayoutDashboard,
+  ShieldCheck,
+  MonitorSmartphone,
   Layers,
 } from "lucide-react";
 
@@ -55,6 +65,18 @@ export const SERVICE_ICONS = {
   target: Target,
   brain: Brain,
   presentation: Presentation,
+  "calendar-check": CalendarCheck,
+  // Dùng cho lưới Sản phẩm đã triển khai (data/projects.json)
+  landmark: Landmark,
+  library: Library,
+  "building-2": Building2,
+  map: Map,
+  globe: Globe,
+  // Dùng cho dải Năng lực nổi bật (data/about.json → nangLuc)
+  database: Database,
+  "layout-dashboard": LayoutDashboard,
+  "shield-check": ShieldCheck,
+  "monitor-smartphone": MonitorSmartphone,
 };
 
 // Lấy component icon theo tên; không có thì trả Layers để không vỡ giao diện.

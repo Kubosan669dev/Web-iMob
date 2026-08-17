@@ -37,15 +37,20 @@ export default function CardGrid({
           const Icon = iconOf(card.icon);
           return (
             <Reveal key={card.title} delay={(index % 3) * 0.1} className="h-full">
-              <Card hover className="flex h-full flex-col">
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-500/25 to-cyan-500/25">
-                  <Icon className="h-6 w-6 text-cyan-300" aria-hidden="true" />
+              <Card
+                hover
+                className={
+                  "flex h-full flex-col " + (tinted ? "bg-panel" : "")
+                }
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-soft">
+                  <Icon className="h-6 w-6 text-brand" aria-hidden="true" />
                 </div>
-                <h3 className="mb-2 text-base font-bold text-white">
+                <h3 className="mb-2 text-base font-bold text-ink">
                   {card.title}
                 </h3>
                 {card.desc && (
-                  <p className="text-sm leading-relaxed text-gray-400">
+                  <p className="text-sm leading-relaxed text-ink-soft">
                     {card.desc}
                   </p>
                 )}
@@ -54,10 +59,10 @@ export default function CardGrid({
                     {card.items.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2 text-sm text-gray-300"
+                        className="flex items-start gap-2 text-sm text-ink-soft"
                       >
                         <Check
-                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-400"
+                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand"
                           aria-hidden="true"
                         />
                         {item}

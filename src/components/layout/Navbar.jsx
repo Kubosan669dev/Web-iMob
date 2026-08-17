@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Zap, ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, Menu, Phone, Mail, Clock } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
-import useScrollPosition from "../../hooks/useScrollPosition.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
 import { NAV_ITEMS } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
@@ -13,6 +12,48 @@ import { useCongTy } from "../../context/NoiDungContext.jsx";
 // (useActiveSection phụ thuộc vào nó, xem comment trong hook)
 const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
+/* ---------- Thanh liên hệ trên cùng ----------
+   Số điện thoại và giờ làm việc là hai thứ khách doanh nghiệp và cán bộ cơ
+   quan tìm nhiều nhất, mà trước đây chỉ có ở tận chân trang.
+
+   Đây là chỗ CỐ Ý đi lệch khỏi apple.com: Apple không có thanh này vì họ bán
+   hàng qua cửa hàng và website, còn iMob bán qua gặp gỡ và điện thoại. Bù lại
+   thanh được làm đúng tinh thần Apple — mỏng, nền xám nhạt, chữ 12px, không
+   viền không màu mè, để nó không tranh chỗ với nội dung.
+
+   Luôn hiện chứ không ẩn khi cuộn: ẩn/hiện làm header co giãn, trang nhấp
+   nháy mỗi lần cuộn qua ngưỡng. Cao 32px thì để luôn cho yên.
+   Ẩn dưới sm vì ba mục xếp ngang không đủ chỗ trên màn hình hẹp — ở đó đã có
+   nút gọi trong menu di động. */
+function ThanhLienHe({ congTy }) {
+  return (
+    <div className="hidden border-b border-line bg-mist sm:block">
+      <Container className="flex h-8 items-center justify-between gap-6 text-xs text-ink-soft">
+        <div className="flex items-center gap-5">
+          <a
+            href={`tel:${congTy.phone.replace(/\s/g, "")}`}
+            className="flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand"
+          >
+            <Phone className="h-3.5 w-3.5" aria-hidden="true" />
+            {congTy.phone}
+          </a>
+          <a
+            href={`mailto:${congTy.email}`}
+            className="hidden items-center gap-1.5 transition-colors hover:text-brand md:flex"
+          >
+            <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+            {congTy.email}
+          </a>
+        </div>
+        <p className="flex items-center gap-1.5">
+          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+          {congTy.workingHours}
+        </p>
+      </Container>
+    </div>
+  );
+}
+
 // Một item trên menu desktop; item có children sẽ kèm dropdown (mở bằng CSS group-hover)
 function NavItem({ item, active }) {
   return (
@@ -20,14 +61,10 @@ function NavItem({ item, active }) {
       <a
         href={item.href}
         className={
-          "flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold tracking-wider transition-all duration-300 " +
-          (active
-            ? "border-purple-500/50 bg-purple-500/10 text-white"
-            : "border-transparent text-gray-300 hover:bg-white/5 hover:text-white")
+          "flex items-center gap-1 px-3 py-2 text-[0.8125rem] transition-colors duration-200 " +
+          (active ? "font-medium text-ink" : "text-ink-soft hover:text-ink")
         }
       >
-        {/* Icon tia sét chỉ hiện ở item đang active (theo spec) */}
-        {active && <Zap className="h-3 w-3 text-cyan-300" aria-hidden="true" />}
         {item.label}
         {item.children && (
           <ChevronDown
@@ -40,12 +77,12 @@ function NavItem({ item, active }) {
       {/* Dropdown (chỉ item có children). pt-2 tạo "cầu" hover không bị hụt */}
       {item.children && (
         <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div className="glass w-64 rounded-xl p-2 shadow-xl shadow-black/40">
+          <div className="w-72 rounded-2xl bg-panel p-2 shadow-lift">
             {item.children.map((child) => (
               <Link
                 key={child.label}
                 to={child.to}
-                className="block rounded-lg px-4 py-2.5 text-sm text-gray-300 transition-colors hover:bg-purple-500/10 hover:text-white"
+                className="block rounded-xl px-4 py-2.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink"
               >
                 {child.label}
               </Link>
@@ -59,56 +96,55 @@ function NavItem({ item, active }) {
 
 export default function Navbar() {
   const congTy = useCongTy();
-
-  const scrolled = useScrollPosition(24);
   const activeId = useActiveSection(SECTION_IDS);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header
-      className={
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300 " +
-        (scrolled
-          ? "border-b border-blue-500/15 bg-night/80 shadow-lg shadow-black/30 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent")
-      }
-    >
-      <Container className="flex h-16 items-center justify-between lg:h-[72px]">
-        {/* ---------- Logo ---------- */}
-        <a href="/#home" className="group flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 transition-shadow duration-300 group-hover:shadow-glow-purple">
-            <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
-          </div>
-          <div className="leading-tight">
-            <p className="text-lg font-black text-white">{congTy.name}</p>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400">
-              {congTy.tagline}
-            </p>
-          </div>
-        </a>
+    <header className="fixed inset-x-0 top-0 z-50">
+      <ThanhLienHe congTy={congTy} />
 
-        {/* ---------- Menu desktop ---------- */}
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Menu chính">
-          {NAV_ITEMS.map((item) => (
-            <NavItem key={item.id} item={item} active={item.id === activeId} />
-          ))}
-        </nav>
+      {/* Thanh điều hướng LUÔN mờ đục, không đổi trạng thái theo cuộn — giống
+          apple.com. Bản trước để trong suốt khi ở đầu trang rồi mới hiện nền
+          lúc cuộn; đổi trạng thái như vậy làm header nhấp nháy mỗi lần cuộn
+          qua ngưỡng, và ở đầu trang thì menu chữ xám nằm trên nền trắng trơn
+          trông như bị bỏ quên. */}
+      <div className="border-b border-line bg-paper/80 backdrop-blur-xl">
+        <Container className="flex h-14 items-center justify-between">
+          {/* ---------- Logo ----------
+              Ô logo để nền chàm tím đặc vì file logo-imob-white.png là logo
+              TRẮNG — đặt lên nền sáng sẽ mất hút. */}
+          <a href="/#home" className="flex items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand">
+              <img src="/logo-imob-white.png" alt="" className="h-5 w-5" />
+            </span>
+            <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">
+              {congTy.name}
+            </span>
+          </a>
 
-        {/* ---------- Bên phải: CTA + hamburger ---------- */}
-        <div className="flex items-center gap-3">
-          <Button href="/#contact" size="sm" className="hidden md:inline-flex">
-            Liên hệ
-          </Button>
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            className="rounded-lg p-2 text-gray-300 transition-colors hover:bg-white/5 hover:text-white md:hidden"
-            aria-label="Mở menu"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-        </div>
-      </Container>
+          {/* ---------- Menu desktop ---------- */}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu chính">
+            {NAV_ITEMS.map((item) => (
+              <NavItem key={item.id} item={item} active={item.id === activeId} />
+            ))}
+          </nav>
+
+          {/* ---------- Bên phải: CTA + hamburger ---------- */}
+          <div className="flex items-center gap-3">
+            <Button href="/#contact" size="sm" className="hidden lg:inline-flex">
+              Nhận tư vấn
+            </Button>
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              className="-mr-2 rounded-lg p-2 text-ink-soft transition-colors hover:text-ink lg:hidden"
+              aria-label="Mở menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+        </Container>
+      </div>
 
       {/* ---------- Menu mobile (slide panel) ---------- */}
       <MobileMenu

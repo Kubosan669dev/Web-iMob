@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import {
   FacebookIcon,
@@ -19,30 +18,38 @@ const SOCIAL_ICONS = {
   github: GithubIcon,
 };
 
-// Link cột LINKS lấy từ menu chính; cột SERVICES lấy từ dropdown SERVICES
+// Link cột Dịch vụ lấy từ dropdown SERVICES của menu chính
 // → một nguồn dữ liệu duy nhất trong constants.js
 const serviceLinks = NAV_ITEMS.find((item) => item.id === "services")?.children ?? [];
 
-function FooterHeading({ children }) {
+/* Chân trang kiểu Apple: CHỮ RẤT NHỎ (12–13px), nhiều cột link, một vạch kẻ
+   mảnh, rồi dòng pháp lý dưới cùng. Không icon to, không ô màu, không đổ bóng.
+   Chân trang là nơi tra cứu chứ không phải nơi gây ấn tượng, nên nó nhường hết
+   sự chú ý cho phần nội dung phía trên. */
+
+function CotLink({ tieuDe, children }) {
   return (
-    <h4 className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-      {children}
-    </h4>
+    <div>
+      <h4 className="mb-3 text-xs font-semibold text-ink">{tieuDe}</h4>
+      <ul className="space-y-2.5">{children}</ul>
+    </div>
   );
 }
 
-// FooterLink: dùng <Link> khi là route thật (to), <a> khi là mục hash trang chủ (href).
-function FooterLink({ href, to, children }) {
-  const cls =
-    "block py-1.5 text-sm text-gray-400 transition-colors hover:text-cyan-300";
-  return to ? (
-    <Link to={to} className={cls}>
-      {children}
-    </Link>
-  ) : (
-    <a href={href} className={cls}>
-      {children}
-    </a>
+function DongLink({ href, to, children }) {
+  const cls = "text-xs text-ink-soft transition-colors hover:text-brand";
+  return (
+    <li>
+      {to ? (
+        <Link to={to} className={cls}>
+          {children}
+        </Link>
+      ) : (
+        <a href={href} className={cls}>
+          {children}
+        </a>
+      )}
+    </li>
   );
 }
 
@@ -50,107 +57,105 @@ export default function Footer() {
   // Thông tin công ty lấy từ context: mặc định là company.json trong bundle,
   // sẽ tự đổi sang bản sửa trong /admin khi API trả về. Xem NoiDungContext.jsx.
   const congTy = useCongTy();
+  const soDienThoaiGoi = congTy.phone.replace(/\s/g, "");
 
   return (
-    <footer className="relative border-t border-white/5 bg-gradient-to-b from-transparent to-blue-950/10">
+    <footer className="border-t border-line bg-paper">
       <Container className="py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* ---------- Cột 1: Brand ---------- */}
-          <div className="space-y-4">
-            <a href="/#home" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500">
-                <img src="/logo-imob-white.png" alt="iMob" className="h-6 w-6" />
-              </div>
-              <div className="leading-tight">
-                <p className="text-lg font-black text-white">{congTy.name}</p>
-                <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400">
-                  {congTy.tagline}
-                </p>
-              </div>
-            </a>
-            <p className="max-w-xs text-sm leading-relaxed text-gray-400">
-              {congTy.description}. Sẵn sàng đồng hành cùng bạn trong hành trình
-              chuyển đổi số.
-            </p>
-          </div>
-
-          {/* ---------- Cột 2: Links ---------- */}
-          <div>
-            <FooterHeading>Links</FooterHeading>
+          {/* ---------- Cột 1: Điều hướng ---------- */}
+          <CotLink tieuDe="Khám phá">
             {NAV_ITEMS.map((item) => (
-              <FooterLink key={item.id} href={item.href}>
-                {item.label.charAt(0) + item.label.slice(1).toLowerCase()}
-              </FooterLink>
+              <DongLink key={item.id} href={item.href}>
+                {item.label}
+              </DongLink>
             ))}
-          </div>
+          </CotLink>
 
-          {/* ---------- Cột 3: Services ---------- */}
-          <div>
-            <FooterHeading>Services</FooterHeading>
+          {/* ---------- Cột 2: Dịch vụ ---------- */}
+          <CotLink tieuDe="Dịch vụ">
             {serviceLinks.map((service) => (
-              <FooterLink key={service.label} to={service.to}>
+              <DongLink key={service.label} to={service.to}>
                 {service.label}
-              </FooterLink>
+              </DongLink>
             ))}
-          </div>
+          </CotLink>
 
-          {/* ---------- Cột 4: Liên hệ + Social ---------- */}
-          <div>
-            <FooterHeading>Follow us</FooterHeading>
-            <div className="mb-5 flex items-center gap-3">
-              {SOCIAL_LINKS.map(({ id, label, href }) => {
-                const Icon = SOCIAL_ICONS[id];
-                return (
-                  <a
-                    key={id}
-                    href={href}
-                    aria-label={label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-400 transition-all duration-300 hover:border-purple-500/50 hover:text-white hover:shadow-glow-purple"
-                  >
-                    {Icon && <Icon className="h-4 w-4" />}
-                  </a>
-                );
-              })}
-            </div>
-            {/* shrink-0 + mt-0.5: icon giữ nguyên kích thước và neo ở dòng đầu
-                khi chữ dài phải xuống dòng (địa chỉ trên màn hình hẹp) */}
-            <div className="space-y-2 text-sm text-gray-400">
-              <p className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                {congTy.phone}
-              </p>
-              <p className="flex items-start gap-2">
-                <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                <span className="break-all">{congTy.email}</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" aria-hidden="true" />
-                {congTy.address}
-              </p>
-            </div>
-          </div>
+          {/* ---------- Cột 3: Liên hệ ---------- */}
+          <CotLink tieuDe="Liên hệ">
+            <DongLink href={`tel:${soDienThoaiGoi}`}>{congTy.phone}</DongLink>
+            <DongLink href={`mailto:${congTy.email}`}>{congTy.email}</DongLink>
+            {/* Email hỗ trợ chỉ hiện khi dữ liệu có — trường này mới thêm
+                17/08/2026, website chạy với database seed cũ có thể chưa có. */}
+            {congTy.emailHoTro && (
+              <DongLink href={`mailto:${congTy.emailHoTro}`}>
+                {congTy.emailHoTro}
+              </DongLink>
+            )}
+            <li className="text-xs leading-relaxed text-ink-soft">
+              {congTy.workingHours}
+            </li>
+          </CotLink>
+
+          {/* ---------- Cột 4: Địa chỉ + mạng xã hội ---------- */}
+          <CotLink tieuDe="Văn phòng">
+            <li className="text-xs leading-relaxed text-ink-soft">
+              {congTy.address}
+            </li>
+            <li className="pt-3">
+              <div className="flex items-center gap-4">
+                {SOCIAL_LINKS.map(({ id, label, href }) => {
+                  const Icon = SOCIAL_ICONS[id];
+                  return (
+                    <a
+                      key={id}
+                      href={href}
+                      aria-label={label}
+                      className="text-ink-faint transition-colors hover:text-brand"
+                    >
+                      {Icon && <Icon className="h-4 w-4" />}
+                    </a>
+                  );
+                })}
+              </div>
+            </li>
+          </CotLink>
         </div>
       </Container>
 
-      {/* ---------- Copyright + liên kết pháp lý ---------- */}
-      <div className="border-t border-white/5 py-5">
-        <Container className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row">
-          <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} {congTy.name} {congTy.tagline}. Tất cả
-            quyền được bảo lưu.
+      {/* ---------- Dòng pháp lý ---------- */}
+      <div className="border-t border-line py-6">
+        <Container className="space-y-3">
+          {/* Tên pháp nhân và địa chỉ ĐĂNG KÝ KINH DOANH — khác địa chỉ văn
+              phòng ở trên, theo đúng ấn phẩm công ty. Chỉ hiện khi dữ liệu có. */}
+          <p className="text-xs leading-relaxed text-ink-faint">
+            {congTy.fullName}
+            {congTy.diaChiDangKy && <> · {congTy.diaChiDangKy}</>}
           </p>
-          <nav
-            className="flex items-center gap-3 text-xs text-gray-400"
-            aria-label="Liên kết pháp lý"
-          >
-            <Link to="/privacy-policy" className="transition-colors hover:text-cyan-300">
-              Chính sách bảo mật
-            </Link>
-            <span aria-hidden="true" className="text-gray-700">·</span>
-            <Link to="/terms-of-service" className="transition-colors hover:text-cyan-300">
-              Điều khoản dịch vụ
-            </Link>
-          </nav>
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs text-ink-faint">
+              © {new Date().getFullYear()} {congTy.name}. Tất cả quyền được bảo
+              lưu.
+            </p>
+            <nav
+              className="flex items-center gap-4 text-xs"
+              aria-label="Liên kết pháp lý"
+            >
+              <Link
+                to="/privacy-policy"
+                className="text-ink-soft transition-colors hover:text-brand"
+              >
+                Chính sách bảo mật
+              </Link>
+              <Link
+                to="/terms-of-service"
+                className="text-ink-soft transition-colors hover:text-brand"
+              >
+                Điều khoản dịch vụ
+              </Link>
+            </nav>
+          </div>
         </Container>
       </div>
     </footer>

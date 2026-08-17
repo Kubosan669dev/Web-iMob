@@ -1,11 +1,4 @@
-import {
-  Zap,
-  Sparkles,
-  MessageCircle,
-  ArrowRight,
-  Cpu,
-  Rocket,
-} from "lucide-react";
+import { MessageCircle, Cpu, Rocket, Zap } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
 import Badge from "../components/ui/Badge.jsx";
@@ -14,14 +7,14 @@ import SectionTitle from "../components/ui/SectionTitle.jsx";
 
 // ------------------------------------------------------------------
 // UiKitPage: style-guide NỘI BỘ (route /ui-kit) — không link ra ngoài.
-// Dùng để duyệt design tokens & components trước khi xây các section.
+// Cập nhật 17/08/2026 theo hệ thiết kế kiểu Apple + màu thương hiệu thật
+// lấy từ logo và ấn phẩm chính thức của iMob.
 // ------------------------------------------------------------------
 
-// Khối tiêu đề nhóm demo
 function DemoBlock({ title, children }) {
   return (
-    <section className="space-y-6">
-      <h3 className="border-l-2 border-purple-500 pl-3 font-mono text-sm uppercase tracking-widest text-gray-400">
+    <section className="space-y-6 border-t border-line pt-10">
+      <h3 className="font-mono text-xs uppercase tracking-widest text-ink-faint">
         {title}
       </h3>
       {children}
@@ -30,109 +23,117 @@ function DemoBlock({ title, children }) {
 }
 
 // Ô màu trong palette
-function Swatch({ name, varName, hex }) {
+function Swatch({ name, varName, hex, ghiChu }) {
   return (
     <div className="space-y-2">
       <div
-        className="h-20 rounded-xl border border-white/10"
+        className="h-20 rounded-card border border-line"
         style={{ backgroundColor: hex }}
       />
-      <p className="text-sm font-semibold text-white">{name}</p>
-      <p className="font-mono text-xs text-gray-500">
+      <p className="text-sm font-semibold text-ink">{name}</p>
+      <p className="font-mono text-xs text-ink-faint">
         {varName} · {hex}
       </p>
+      {ghiChu && <p className="text-xs leading-snug text-ink-soft">{ghiChu}</p>}
     </div>
   );
 }
 
 export default function UiKitPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden py-16">
-      {/* Preview nền grid công nghệ (component hoàn chỉnh sẽ làm ở bước Hero) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(59,130,246,0.35) 1px, transparent 1px)," +
-            "linear-gradient(90deg, rgba(59,130,246,0.35) 1px, transparent 1px)",
-          backgroundSize: "50px 50px",
-        }}
-      />
-      {/* Glow blob demo */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-purple-600/20 blur-3xl animate-glow-pulse"
-      />
-
-      <Container className="relative space-y-16">
+    <div className="min-h-screen py-20">
+      <Container className="space-y-14">
         {/* ---------- Header ---------- */}
-        <header className="space-y-3">
-          <p className="font-mono text-xs uppercase tracking-widest text-cyan-400">
+        <header className="space-y-4">
+          <p className="font-mono text-xs uppercase tracking-widest text-brand">
             /ui-kit · internal style guide
           </p>
-          <h1 className="text-5xl font-black text-white">
-            iMob <span className="text-gradient">Design System</span>
+          <h1 className="tieu-de-lon text-[clamp(2rem,5vw,3.5rem)] text-ink">
+            iMob <span className="text-brand">Design System</span>
           </h1>
-          <p className="max-w-xl text-gray-400">
-            Duyệt tông màu, chữ và component gốc tại đây trước khi xây các
-            section. Trang này chỉ dùng nội bộ trong quá trình phát triển.
+          <p className="max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft">
+            Trang nội bộ, dùng để duyệt tông màu, chữ và component gốc. Hệ thiết
+            kế lấy ngôn ngữ của apple.com — nền phẳng, khoảng trắng rộng, một
+            màu nhấn duy nhất — nhưng dùng đúng màu chàm tím trong logo iMob.
           </p>
         </header>
 
         {/* ---------- Palette ---------- */}
         <DemoBlock title="01 · Palette">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            <Swatch name="Night (nền)" varName="--color-night" hex="#05050a" />
-            <Swatch name="Surface (panel)" varName="--color-surface" hex="#0b0b14" />
-            <Swatch name="Primary" varName="--color-primary" hex="#3b82f6" />
-            <Swatch name="Accent" varName="--color-accent" hex="#a855f7" />
-            <Swatch name="Neon" varName="--color-neon" hex="#22d3ee" />
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+            <Swatch name="Paper" varName="--color-paper" hex="#ffffff" ghiChu="Nền chính" />
+            <Swatch name="Mist" varName="--color-mist" hex="#f5f5f7" ghiChu="Dải nền xen kẽ · mặt card" />
+            <Swatch name="Ink" varName="--color-ink" hex="#1a1a2e" ghiChu="Chữ chính · 17:1" />
+            <Swatch name="Ink soft" varName="--color-ink-soft" hex="#55556b" ghiChu="Chữ phụ · 7.1:1" />
+            <Swatch name="Ink faint" varName="--color-ink-faint" hex="#6f6f80" ghiChu="Chú thích · 4.9:1" />
+            <Swatch
+              name="Brand"
+              varName="--color-brand"
+              hex="#4b31d4"
+              ghiChu="Màu logo. 7.8:1 trên nền trắng — dùng được cả làm chữ lẫn làm nền nút"
+            />
+            <Swatch name="Brand deep" varName="--color-brand-deep" hex="#2f1d96" ghiChu="Trạng thái hover" />
+            <Swatch name="Line" varName="--color-line" hex="#e5e5ea" ghiChu="Đường kẻ phân cách" />
+          </div>
+          <div className="rounded-block bg-mist p-6 text-[0.9375rem] leading-relaxed text-ink-soft">
+            <strong className="font-semibold text-ink">Chỉ một màu nhấn.</strong>{" "}
+            Bảng màu cũ có thêm màu phụ vàng cát; đã bỏ. Muốn nhấn mạnh thì tăng
+            cỡ chữ hoặc thêm khoảng trắng, đừng thêm màu — thêm màu thứ hai là
+            mất ngay vẻ điềm tĩnh của cả trang.
           </div>
         </DemoBlock>
 
         {/* ---------- Typography ---------- */}
         <DemoBlock title="02 · Typography">
-          <div className="space-y-4">
-            <h2 className="text-6xl font-black leading-tight text-white">
-              DIGITAL <span className="text-gradient">FUTURE</span>
+          <div className="space-y-6">
+            <h2 className="tieu-de-lon text-[clamp(2.5rem,6.5vw,5.5rem)] text-ink">
+              Công nghệ cho
               <br />
-              STARTS HERE
+              <span className="text-brand">chính quyền số</span>
+              <br />
+              ở Quảng Ninh.
             </h2>
-            <p className="max-w-2xl leading-relaxed text-gray-400">
-              Font chính: Inter Variable — dùng cho toàn bộ nội dung. Đoạn mô
-              tả dài dùng text-gray-400 để dịu mắt trên nền tối.
+            <p className="max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft sm:text-[1.3125rem]">
+              Font chính: Be Vietnam Pro — thiết kế riêng cho tiếng Việt, dấu đặt
+              đúng chỗ. Đây là chỗ cố ý không bắt chước Apple: font của họ không
+              có bản web dùng được, và cũng không được vẽ cho dấu tiếng Việt.
             </p>
-            <p className="font-mono text-sm text-cyan-300">
-              $ font-mono: JetBrains Mono — dùng cho terminal, badge kỹ thuật
+            <p className="max-w-2xl text-[0.9375rem] leading-relaxed text-ink-soft">
+              Tiêu đề dùng utility <code className="font-mono text-brand">tieu-de-lon</code>:
+              chữ càng to thì khoảng cách giữa các chữ cái càng phải siết lại
+              (-0.022em), không thì dòng chữ trông rời rạc. Không viết hoa toàn
+              bộ tiêu đề — tiếng Việt viết hoa bị chồng dấu, đọc chậm hơn hẳn.
             </p>
           </div>
         </DemoBlock>
 
-        {/* ---------- Badges ---------- */}
-        <DemoBlock title="03 · Badges">
-          <div className="flex flex-wrap items-center gap-4">
-            <Badge icon={Zap}>Giải pháp số thế hệ mới</Badge>
-            <Badge icon={Sparkles}>Về chúng tôi</Badge>
-            <Badge>Không icon</Badge>
+        {/* ---------- Badge (dòng dẫn) ---------- */}
+        <DemoBlock title="03 · Dòng dẫn trên tiêu đề">
+          <div className="space-y-3">
+            <Badge>Sản phẩm</Badge>
+            <Badge>Về chúng tôi</Badge>
+            <p className="max-w-2xl text-[0.9375rem] leading-relaxed text-ink-soft">
+              Trước đây đây là viên thuốc có viền, có nền, có icon, chữ IN HOA
+              giãn rộng. Giờ chỉ là một câu ngắn tô màu thương hiệu. Bớt một
+              viền, một mảng nền và một icon trên mỗi section — cộng lại là khác
+              biệt lớn về độ sạch của cả trang. Prop <code className="font-mono">icon</code> đã bỏ.
+            </p>
           </div>
         </DemoBlock>
 
         {/* ---------- Buttons ---------- */}
         <DemoBlock title="04 · Buttons">
           <div className="space-y-5">
-            <div className="flex flex-wrap items-center gap-4">
-              <Button size="lg">
-                Liên hệ <ArrowRight className="h-4 w-4" />
-              </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="lg">Nhận khảo sát miễn phí</Button>
               <Button variant="outline" size="lg">
-                <MessageCircle className="h-4 w-4" /> Chat AI
+                <MessageCircle className="h-4 w-4" /> Chat với AI
               </Button>
               <Button variant="ghost" size="lg">
-                Ghost
+                Tìm hiểu thêm
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               <Button size="md">Size md</Button>
               <Button variant="outline" size="md">
                 Size md
@@ -142,33 +143,36 @@ export default function UiKitPage() {
                 Size sm
               </Button>
             </div>
+            <p className="max-w-2xl text-[0.9375rem] leading-relaxed text-ink-soft">
+              Viên thuốc bo tròn hoàn toàn, không viền, không bóng. Nút phụ là
+              một viên xám nhạt chứ không phải nút viền rỗng — viền rỗng tạo
+              thêm một đường kẻ nữa trên trang. Hover chỉ đổi màu nền.
+            </p>
           </div>
         </DemoBlock>
 
         {/* ---------- Cards ---------- */}
-        <DemoBlock title="05 · Cards (glassmorphism)">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <DemoBlock title="05 · Cards">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
-              <Cpu className="mb-4 h-8 w-8 text-blue-400" />
-              <h4 className="mb-2 text-lg font-bold text-white">Card thường</h4>
-              <p className="text-sm leading-relaxed text-gray-400">
-                Nền kính mờ (glass) + viền xanh nhạt. Dùng cho khối thông tin
-                tĩnh.
+              <Cpu className="h-8 w-8 text-brand" />
+              <h4 className="tieu-de-lon mt-5 text-xl text-ink">Card thường</h4>
+              <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">
+                Bo góc lớn, nền xám nhạt, không viền không bóng. Thứ tách card
+                khỏi nền là chênh lệch sắc độ, chỉ vậy thôi.
               </p>
             </Card>
             <Card hover>
-              <Rocket className="mb-4 h-8 w-8 text-purple-400" />
-              <h4 className="mb-2 text-lg font-bold text-white">Card hover</h4>
-              <p className="text-sm leading-relaxed text-gray-400">
-                Di chuột vào đây: nhấc nhẹ + viền tím + glow. Dùng cho card
-                dịch vụ / dự án.
+              <Rocket className="h-8 w-8 text-brand" />
+              <h4 className="tieu-de-lon mt-5 text-xl text-ink">Card hover</h4>
+              <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">
+                Di chuột vào: nền đậm thêm một bậc. Không phóng to, không nhấc
+                lên — chuyển động thừa làm giao diện trông rẻ tiền.
               </p>
             </Card>
-            <Card hover className="flex flex-col items-center justify-center text-center">
-              <div className="mb-3 flex h-14 w-14 animate-float items-center justify-center rounded-2xl border border-purple-400/30 bg-gradient-to-br from-purple-500/30 to-blue-500/30">
-                <Zap className="h-6 w-6 text-cyan-300" />
-              </div>
-              <p className="font-mono text-xs uppercase tracking-widest text-gray-400">
+            <Card className="flex flex-col items-center justify-center text-center">
+              <Zap className="h-8 w-8 animate-float text-brand" />
+              <p className="mt-4 font-mono text-xs uppercase tracking-widest text-ink-soft">
                 animate-float
               </p>
             </Card>
@@ -177,21 +181,19 @@ export default function UiKitPage() {
 
         {/* ---------- SectionTitle ---------- */}
         <DemoBlock title="06 · SectionTitle">
-          <div className="space-y-12">
+          <div className="space-y-16">
             <SectionTitle
-              badge="Dịch vụ của chúng tôi"
-              icon={Sparkles}
-              title="Comprehensive"
-              highlight="Solutions"
-              description="Đây là khối tiêu đề chuẩn dùng cho mọi section: badge nhỏ phía trên, tiêu đề trắng + phần nhấn gradient, mô tả xám bên dưới."
+              badge="Sản phẩm"
+              title="Đã chạy thật,"
+              highlight="ở Quảng Ninh."
+              description="Mặc định CĂN GIỮA — apple.com căn giữa gần như mọi tiêu đề section, và đó là một phần lý do trang họ trông cân."
             />
             <SectionTitle
               align="left"
               badge="Căn trái"
-              icon={Zap}
-              title="Về"
-              highlight="iMob"
-              description="Biến thể căn trái dùng cho section bố cục 2 cột."
+              title="Biến thể"
+              highlight="hai cột."
+              description="Chỉ dùng cho bố cục hai cột, nơi tiêu đề phải thẳng hàng với đoạn văn bên dưới."
             />
           </div>
         </DemoBlock>

@@ -2,36 +2,77 @@
 
 /* ============================================================
    DESIGN TOKENS — nguồn duy nhất cho màu / font / hiệu ứng.
-   Palette lấy theo phân tích imob.vn:
-   nền đen + blue-500 (#3b82f6) + purple-500 (#a855f7) + cyan-400 (#22d3ee)
    Component chỉ dùng token/utility, KHÔNG hardcode mã màu.
+
+   ĐỔI 17/08/2026 (lần 2) — hướng "Apple", màu thương hiệu THẬT.
+
+   Vì sao đổi tiếp: bảng màu ngọc bích ở bản trước là do tôi tự nghĩ ra khi
+   chưa được xem nhận diện thật của công ty. Ba tờ tài liệu chính thức của iMob
+   (logo, ấn phẩm giới thiệu, ấn phẩm giải pháp) đều dùng một màu duy nhất:
+   CHÀM TÍM. Website phải dùng đúng màu đó, không thì in ấn một kiểu, web một
+   kiểu — khách nhìn không nhận ra cùng một công ty.
+
+   Ngôn ngữ thiết kế lấy theo apple.com:
+   • Chỉ hai nền: trắng tinh và xám rất nhạt, xen kẽ nhau. KHÔNG lưới, KHÔNG
+     quầng sáng, KHÔNG hạt bay — Apple sạch được là nhờ nền phẳng tuyệt đối.
+   • MỘT màu nhấn duy nhất. Bỏ hẳn màu phụ vàng cát của bản trước.
+   • Nhấn mạnh bằng CỠ CHỮ và KHOẢNG TRẮNG, không bằng viền, bóng hay gradient.
+   • Card bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng — chính chênh lệch
+     sắc độ giữa card và nền làm nhiệm vụ phân tách.
+
+   ⚠️ --color-night / --color-surface GIỮ NGUYÊN màu tối: chúng chỉ còn phục vụ
+   trang quản trị /admin. Công cụ nội bộ để nền tối là cố ý — nhìn vào là biết
+   ngay mình đang ở khu quản trị chứ không phải trang khách xem.
    ============================================================ */
 @theme {
   /* --- Fonts (self-host qua @fontsource, import trong main.jsx) --- */
   /* Be Vietnam Pro — thiết kế riêng cho tiếng Việt, dấu đặt đúng chỗ.
-     Đổi từ Inter ngày 17/08/2026. Xem ghi chú trong src/main.jsx. */
+     Đây là chỗ ta CỐ Ý không bắt chước Apple: font của họ (SF Pro) không có
+     bản web dùng được, và quan trọng hơn là nó không được vẽ cho dấu tiếng
+     Việt. Chữ đúng dấu quan trọng hơn giống Apple. */
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", monospace;
 
-  /* --- Nền & bề mặt --- */
-  --color-night: #05050a; /* nền chính: đen ánh xanh */
-  --color-surface: #0b0b14; /* nền panel / card */
+  /* --- Nền trang khách: chỉ hai bậc, xen kẽ nhau --- */
+  --color-paper: #ffffff;
+  --color-mist: #f5f5f7; /* xám rất nhạt — dải nền xen kẽ VÀ mặt card */
+  --color-panel: #ffffff;
 
-  /* --- Màu thương hiệu (alias ngữ nghĩa của thang Tailwind) --- */
-  --color-primary: #3b82f6; /* = blue-500 */
-  --color-accent: #a855f7; /* = purple-500 */
-  --color-neon: #22d3ee; /* = cyan-400 */
+  /* --- Mực (chữ & viền) — đã kiểm tra tương phản trên nền trắng ---
+     ink 17:1 · ink-soft 7.1:1 · ink-faint 4.9:1 (vẫn đạt chuẩn AA, cố ý đậm
+     hơn màu xám nhạt Apple hay dùng vì màu đó chỉ đạt ~3.5:1). */
+  --color-ink: #1a1a2e;
+  --color-ink-soft: #55556b;
+  --color-ink-faint: #6f6f80;
+  --color-line: #e5e5ea;
 
-  /* --- Glow shadows (dùng: shadow-glow-blue, hover:shadow-glow-purple...) --- */
-  --shadow-glow-blue: 0 0 24px rgba(59, 130, 246, 0.35);
-  --shadow-glow-purple: 0 0 24px rgba(168, 85, 247, 0.35);
-  --shadow-glow-cyan: 0 0 24px rgba(34, 211, 238, 0.3);
+  /* --- Chàm tím: màu thương hiệu, lấy từ logo iMob ---
+     Khác bản trước ở một điểm quan trọng: màu này đạt 7.8:1 trên nền trắng,
+     nên DÙNG ĐƯỢC CẢ làm chữ lẫn làm nền nút. Không phải chia đôi thành hai
+     biến "màu để tô" và "màu để viết" như bảng ngọc bích cũ. */
+  --color-brand: #4b31d4;
+  --color-brand-deep: #2f1d96; /* trạng thái hover / nhấn */
+  --color-brand-soft: #eeeafc; /* nền nhạt cho nhãn, ô icon */
 
-  /* --- Animations (dùng: animate-float, animate-glow-pulse...) --- */
+  /* --- Nền trang quản trị /admin (giữ tối, xem ghi chú đầu file) --- */
+  --color-night: #05050a;
+  --color-surface: #0b0b14;
+
+  /* --- Bo góc ---
+     Apple bo góc rất lớn: thẻ nội dung ~18px, khối lớn ~28px. Bo góc lớn là
+     một trong vài chi tiết làm giao diện của họ nhận ra ngay. */
+  --radius-card: 1.125rem;
+  --radius-block: 1.75rem;
+
+  /* --- Đổ bóng ---
+     Dùng RẤT dè. Card Apple không có bóng; bóng chỉ dành cho thứ thật sự nổi
+     lên trên mặt phẳng trang (khung chat, menu xổ xuống). */
+  --shadow-soft: 0 1px 2px rgba(26, 26, 46, 0.04), 0 8px 24px -12px rgba(26, 26, 46, 0.1);
+  --shadow-lift: 0 4px 12px rgba(26, 26, 46, 0.06), 0 24px 48px -20px rgba(26, 26, 46, 0.2);
+  --shadow-brand: 0 8px 24px -10px rgba(75, 49, 212, 0.5);
+
+  /* --- Animations --- */
   --animate-float: float 6s ease-in-out infinite;
-  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
-  --animate-gradient-x: gradient-x 6s ease infinite;
-  --animate-spin-slow: spin-slow 14s linear infinite;
 
   @keyframes float {
     0%,
@@ -42,29 +83,6 @@
       transform: translateY(-14px);
     }
   }
-  @keyframes glow-pulse {
-    0%,
-    100% {
-      opacity: 0.35;
-    }
-    50% {
-      opacity: 0.7;
-    }
-  }
-  @keyframes gradient-x {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-  @keyframes spin-slow {
-    to {
-      transform: rotate(360deg);
-    }
-  }
 }
 
 /* ---------------- Base ---------------- */
@@ -73,25 +91,31 @@
     scroll-behavior: smooth;
   }
 
-  /* Anchor không bị navbar (fixed, cao 64-72px) che mất tiêu đề section */
+  /* Anchor không bị navbar (fixed) che mất tiêu đề section */
   section[id] {
     scroll-margin-top: 80px;
   }
 
   body {
-    @apply bg-night font-sans text-gray-200 antialiased;
+    @apply bg-paper font-sans text-ink antialiased;
   }
 
   ::selection {
-    @apply bg-purple-500/40 text-white;
+    @apply bg-brand/20 text-ink;
+  }
+
+  /* Viền focus thấy rõ — bắt buộc cho người dùng bàn phím. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 
   /* ---- Tôn trọng "giảm chuyển động" của hệ điều hành ----
      Người bị say chuyển động / nhạy cảm với hiệu ứng có thể bật tuỳ chọn này
      (Windows: Cài đặt → Trợ năng → Hiệu ứng hình ảnh → Hiệu ứng động).
-     Khi đó tắt hết animation CSS lặp vô hạn (float, glow-pulse, ping, spin)
-     và cuộn mượt. Hiệu ứng của thư viện motion đã được xử lý riêng
-     bằng <MotionConfig reducedMotion="user"> trong App.jsx.
+     Hiệu ứng của thư viện motion đã được xử lý riêng bằng
+     <MotionConfig reducedMotion="user"> trong App.jsx.
      Lưu ý: KHÔNG dùng animation:none — vài hiệu ứng cần chạy tới khung hình
      cuối để hiện đúng; rút còn 0.01ms là cách an toàn, phổ biến. */
   @media (prefers-reduced-motion: reduce) {
@@ -108,39 +132,31 @@
     }
   }
 
-  /* Scrollbar tối giản hợp dark theme */
   ::-webkit-scrollbar {
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-night);
+    background: var(--color-mist);
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      to bottom,
-      rgba(59, 130, 246, 0.6),
-      rgba(168, 85, 247, 0.6)
-    );
+    background: #c7c7d1;
     border-radius: 8px;
+    border: 2px solid var(--color-mist);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-faint);
   }
 }
 
 /* ---------------- Custom utilities ---------------- */
 
-/* Chữ gradient thương hiệu: blue-400 → purple-400 → cyan-400 (giống heading imob) */
-@utility text-gradient {
-  background-image: linear-gradient(90deg, #60a5fa, #c084fc, #22d3ee);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Nền kính mờ (glassmorphism) cho card / navbar / panel */
-@utility glass {
-  background-color: color-mix(in srgb, var(--color-surface) 72%, transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(59, 130, 246, 0.18);
+/* Chữ tiêu đề cỡ lớn kiểu Apple: chữ càng to thì khoảng cách giữa các CHỮ CÁI
+   phải càng SIẾT lại, không thì dòng chữ trông rời rạc và loãng. Đây là một
+   trong những thứ khiến tiêu đề của họ nhìn "chắc" hơn tiêu đề mặc định. */
+@utility tieu-de-lon {
+  letter-spacing: -0.022em;
+  line-height: 1.08;
+  font-weight: 700;
 }
 
 /* ---------------- Chatbot markdown ----------------
@@ -152,7 +168,7 @@
     @apply mb-2 last:mb-0;
   }
   .chat-markdown strong {
-    @apply font-semibold text-white;
+    @apply font-semibold text-ink;
   }
   .chat-markdown ul {
     @apply mb-2 list-disc space-y-1 pl-5 last:mb-0;
@@ -161,9 +177,9 @@
     @apply mb-2 list-decimal space-y-1 pl-5 last:mb-0;
   }
   .chat-markdown code {
-    @apply rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.85em] text-cyan-300;
+    @apply rounded bg-brand-soft px-1.5 py-0.5 font-mono text-[0.85em] text-brand-deep;
   }
   .chat-markdown a {
-    @apply text-cyan-300 underline underline-offset-2 hover:text-cyan-200;
+    @apply text-brand underline underline-offset-2 hover:text-brand-deep;
   }
 }

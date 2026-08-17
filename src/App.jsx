@@ -32,7 +32,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage.jsx"));
 // MotionConfig reducedMotion="user" — MỘT dòng, áp cho MỌI component motion
 // trong site: ai bật "giảm chuyển động" trong cài đặt hệ điều hành thì các
 // hiệu ứng trượt/phóng to tự tắt (chỉ còn fade), không phải sửa từng file.
-// (Hiệu ứng CSS thuần — float, glow-pulse, ping — chặn riêng trong index.css.)
+// (Hiệu ứng CSS thuần — float, drift — chặn riêng trong index.css.)
 export default function App() {
   return (
     <MotionConfig reducedMotion="user">

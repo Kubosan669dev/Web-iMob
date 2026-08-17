@@ -12,8 +12,8 @@ const ChatWindow = lazy(() => import("./ChatWindow.jsx"));
 // Giữ đúng hình dạng panel để không bị "giật" bố cục khi nội dung hiện ra.
 function ChatWindowSkeleton() {
   return (
-    <div className="glass flex h-full items-center justify-center sm:rounded-2xl">
-      <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-purple-400" />
+    <div className="flex h-full items-center justify-center bg-panel shadow-lift sm:rounded-block">
+      <span className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-brand" />
       <span className="sr-only">Đang mở khung chat…</span>
     </div>
   );
@@ -52,13 +52,13 @@ export default function ChatWidget() {
         // đè trúng nút Gửi của ô nhập (40px, cách mép 12px) — khách bấm Gửi
         // lại hoá ra bấm đóng chat. Đóng chat đã có dấu X trên header rồi.
         className={
-          "fixed bottom-5 right-5 z-50 h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-900/40 transition-transform duration-300 hover:scale-110 hover:shadow-glow-purple sm:bottom-6 sm:right-6 sm:flex " +
+          "fixed bottom-5 right-5 z-50 h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-brand transition-transform duration-300 hover:scale-110 hover:shadow-lift sm:bottom-6 sm:right-6 sm:flex " +
           (open ? "hidden sm:flex" : "flex")
         }
       >
         {/* Vòng pulse mời gọi — chỉ hiện khi đang ĐÓNG, tránh rối mắt lúc chat */}
         {!open && (
-          <span className="absolute inset-0 animate-ping rounded-full bg-purple-500 opacity-40" />
+          <span className="absolute inset-0 animate-ping rounded-full bg-brand opacity-40" />
         )}
         <AnimatePresence mode="wait" initial={false}>
           <motion.span

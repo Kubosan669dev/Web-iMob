@@ -66,12 +66,23 @@ export function NoiDungProvider({ children }) {
         // Chỉ ghi đè những khóa mà server THẬT SỰ có dữ liệu. Server trả {}
         // (chưa cấu hình database) hoặc thiếu khóa nào thì khóa đó giữ bản
         // mặc định — không bao giờ để website trống vì thiếu dữ liệu.
+        //
+        // TRỘN THEO TỪNG TRƯỜNG, không thay nguyên khối (sửa 17/08/2026).
+        // Bản trước gán `moi[khoa] = v` nên dữ liệu database che sạch bản mặc
+        // định. Hậu quả: mỗi lần thêm một trường mới vào file JSON (vd sứ mệnh,
+        // slogan), website đã chạy với database seed từ trước sẽ KHÔNG có
+        // trường đó — component đọc ra undefined và khối nội dung biến mất.
+        // Lỗi này rất khó lần ra vì ở máy (chưa có database) mọi thứ vẫn đúng.
+        //
+        // Trộn nông là đủ: các khóa đều là object một tầng, còn legalPages là
+        // map slug → trang nên trộn nông cũng cho kết quả đúng (trang nào
+        // database có thì lấy của database, trang mới thêm vẫn còn).
         setNoiDung((truoc) => {
           const moi = { ...truoc };
           for (const khoa of Object.keys(MAC_DINH)) {
             const v = duLieu?.[khoa];
             if (v && typeof v === "object" && Object.keys(v).length > 0) {
-              moi[khoa] = v;
+              moi[khoa] = { ...MAC_DINH[khoa], ...v };
             }
           }
           return moi;

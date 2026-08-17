@@ -11,7 +11,7 @@ const SUGGESTED_CHIPS = [
 export default function QuickChips({ onSelect, disabled }) {
   return (
     <div className="my-2 space-y-1.5 px-1">
-      <p className="text-[11px] font-medium text-gray-400">💡 Gợi ý câu hỏi phổ biến:</p>
+      <p className="text-[11px] font-medium text-ink-soft">💡 Gợi ý câu hỏi phổ biến:</p>
       <div className="flex flex-wrap gap-1.5">
         {SUGGESTED_CHIPS.map((chip, idx) => (
           <button
@@ -19,7 +19,7 @@ export default function QuickChips({ onSelect, disabled }) {
             type="button"
             disabled={disabled}
             onClick={() => onSelect(chip.query)}
-            className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-1 text-xs font-medium text-purple-200 transition-all hover:border-purple-400 hover:bg-purple-500/25 hover:text-white disabled:opacity-50"
+            className="rounded-full border border-brand/30 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand transition-all hover:border-brand hover:bg-brand hover:text-white disabled:opacity-50"
           >
             {chip.label}
           </button>

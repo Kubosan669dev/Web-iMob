@@ -23,15 +23,15 @@ export default function FeatureList({
       <div className="grid gap-5 md:grid-cols-2">
         {items.map((item, index) => (
           <Reveal key={item.title} delay={(index % 2) * 0.1} className="h-full">
-            <Card hover className="flex h-full items-start gap-5">
-              <span className="shrink-0 font-mono text-2xl font-black text-gradient">
+            <Card hover className="flex h-full items-start gap-5 bg-panel">
+              <span className="shrink-0 font-mono text-2xl font-black text-brand">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>
-                <h3 className="mb-1.5 text-base font-bold text-white">
+                <h3 className="mb-1.5 text-base font-bold text-ink">
                   {item.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-gray-400">
+                <p className="text-sm leading-relaxed text-ink-soft">
                   {item.desc}
                 </p>
               </div>

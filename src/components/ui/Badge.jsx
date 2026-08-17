@@ -1,16 +1,19 @@
-// Badge: nhãn nhỏ đầu section / hero (vd: ⚡ GIẢI PHÁP SỐ THẾ HỆ MỚI).
-//   icon: component icon của lucide-react
-export default function Badge({ icon: Icon, children, className = "" }) {
+// Badge: dòng chữ nhỏ màu thương hiệu đặt NGAY TRÊN tiêu đề section
+// (vd: "Sản phẩm", "Về chúng tôi").
+//
+// Trước đây đây là một viên thuốc có viền, có nền, có icon, chữ IN HOA giãn
+// rộng. Bỏ hết: kiểu Apple thì dòng này chỉ là một câu ngắn tô màu thương hiệu,
+// cùng cỡ với chữ thường. Nó dẫn vào tiêu đề chứ không tranh chỗ với tiêu đề.
+// Bớt một viền, một mảng nền và một icon trên mỗi section — cộng lại là khác
+// biệt lớn về độ sạch của cả trang.
+//
+// Bỏ luôn prop `icon`. Nơi gọi đừng truyền nữa.
+export default function Badge({ children, className = "" }) {
   return (
-    <span
-      className={
-        "inline-flex items-center gap-2 rounded-full border border-purple-500/40 " +
-        "bg-purple-500/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] " +
-        `text-purple-300 ${className}`
-      }
+    <p
+      className={`text-[1.0625rem] font-semibold leading-tight text-brand ${className}`}
     >
-      {Icon && <Icon className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />}
       {children}
-    </span>
+    </p>
   );
 }

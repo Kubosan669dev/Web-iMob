@@ -27,12 +27,16 @@ export const SITE = company;
 //     để bấm từ trang con (vd /zalo-miniapp) vẫn quay về đúng section trang chủ.
 //   children[].to = ROUTE thật của trang dịch vụ riêng (React Router <Link>).
 // Navbar/MobileMenu/Footer đều đọc từ đây → một nguồn dữ liệu duy nhất.
+// Nhãn menu đổi từ TIẾNG ANH IN HOA (HOME / ABOUT / SERVICES) sang tiếng Việt
+// ngày 17/08/2026. Khách của iMob là chủ doanh nghiệp vừa và nhỏ ở Việt Nam;
+// bắt họ đọc menu tiếng Anh là dựng thêm một rào cản chẳng để làm gì.
+// Thứ tự cũng đổi cho khớp thứ tự section mới của trang chủ.
 export const NAV_ITEMS = [
-  { id: "home", label: "HOME", href: "/#home" },
-  { id: "about", label: "ABOUT", href: "/#about" },
+  { id: "home", label: "Trang chủ", href: "/#home" },
+  { id: "projects", label: "Sản phẩm", href: "/#projects" },
   {
     id: "services",
-    label: "SERVICES",
+    label: "Dịch vụ",
     href: "/#services",
     children: [
       { label: "Phát triển Zalo MiniApp", to: "/zalo-miniapp" },
@@ -40,7 +44,8 @@ export const NAV_ITEMS = [
       { label: "Đào tạo Chuyển đổi số", to: "/digital-transformation" },
     ],
   },
-  { id: "contact", label: "CONTACT", href: "/#contact" },
+  { id: "about", label: "Về chúng tôi", href: "/#about" },
+  { id: "contact", label: "Liên hệ", href: "/#contact" },
 ];
 
 // Mạng xã hội hiển thị ở Footer — id khớp với icon map trong Footer.jsx,

@@ -19,15 +19,13 @@ function MessageBubble({ role, text, done = true, plain = false }) {
       <div
         className={
           "flex h-8 w-8 shrink-0 items-center justify-center rounded-full " +
-          (isBot
-            ? "bg-gradient-to-br from-purple-500 to-blue-500"
-            : "bg-white/10")
+          (isBot ? "bg-brand" : "bg-mist")
         }
       >
         {isBot ? (
           <Bot className="h-4 w-4 text-white" aria-hidden="true" />
         ) : (
-          <User className="h-4 w-4 text-gray-300" aria-hidden="true" />
+          <User className="h-4 w-4 text-ink-soft" aria-hidden="true" />
         )}
       </div>
 
@@ -35,8 +33,8 @@ function MessageBubble({ role, text, done = true, plain = false }) {
         className={
           "max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap " +
           (isBot
-            ? "rounded-bl-sm bg-white/[0.06] text-gray-200"
-            : "rounded-br-sm bg-gradient-to-br from-purple-500 to-blue-500 text-white")
+            ? "rounded-bl-sm bg-mist text-ink"
+            : "rounded-br-sm bg-brand text-white")
         }
       >
         {dungMarkdown ? (

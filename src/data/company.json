@@ -1,12 +1,24 @@
 {
-  "_note": "THÔNG TIN CÔNG TY — NGUỒN DUY NHẤT. Cả website (qua utils/constants.js) và chatbot (qua services/chatBrain.js, điền vào chỗ {{cong_ty.*}} trong kienThuc.json) đều đọc file này. Trước đây thông tin bị chép ở 2 nơi nên dễ lệch nhau. Sửa ở đây là cả web lẫn bot cùng cập nhật. Số liệu lấy từ imob.vn.",
+  "_note": "THÔNG TIN CÔNG TY — NGUỒN DUY NHẤT. Cả website (qua utils/constants.js) và chatbot (qua services/chatBrain.js, điền vào chỗ {{cong_ty.*}} trong kienThuc.json) đều đọc file này. Sửa ở đây là cả web lẫn bot cùng cập nhật. CẬP NHẬT 17/08/2026: lấy theo ba ấn phẩm chính thức của công ty (tờ giới thiệu, tờ giải pháp, tờ sản phẩm 2026). ⚠️ Hai chỗ trong ấn phẩm ghi khác nhau, xem ghi chú _cankiemtra bên dưới.",
+  "_cankiemtra": "1) EMAIL: tờ giới thiệu và tờ giải pháp ghi admin@imob.vn, tờ sản phẩm ghi hotro@imob.vn. Đang dùng admin@imob.vn làm email chính. 2) ĐỊA CHỈ: tờ giới thiệu và tờ giải pháp ghi văn phòng HL68 Building (phường Hạ Long), tờ sản phẩm ghi Tổ 8 khu 3 phường Bãi Cháy. Đang hiểu là địa chỉ VĂN PHÒNG và địa chỉ ĐĂNG KÝ KINH DOANH khác nhau — nếu sai thì sửa lại ở đây.",
+
   "name": "iMob",
   "tagline": "Solution & Technology",
-  "fullName": "iMob Solution & Technology",
-  "description": "Đơn vị tiên phong chuyển đổi số trong mọi lĩnh vực",
-  "phone": "+84 936 982 256",
-  "email": "hotro@imob.vn",
-  "address": "Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh",
+  "fullName": "Công ty Cổ phần Công nghệ và Giải pháp iMob",
+  "description": "Công ty sản xuất phần mềm tại Quảng Ninh",
+  "positioning": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững.",
+
+  "phone": "0936 982 256",
+  "email": "admin@imob.vn",
+  "emailHoTro": "hotro@imob.vn",
+  "website": "www.imob.vn",
+
+  "address": "Văn phòng tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, phường Hạ Long, tỉnh Quảng Ninh",
+  "diaChiDangKy": "Tổ 8, khu 3, phường Bãi Cháy, tỉnh Quảng Ninh",
+
   "workingHours": "8h00 – 17h30, Thứ 2 – Thứ 7",
-  "responseTime": "trong vòng 24 giờ"
+  "responseTime": "trong vòng 24 giờ",
+
+  "suMenh": "Mang công nghệ đến gần hơn, xây dựng cuộc sống thông minh hơn.",
+  "slogan": "Giải pháp công nghệ thông minh, kiến tạo tương lai số."
 }

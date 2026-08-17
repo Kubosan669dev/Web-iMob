@@ -139,6 +139,23 @@ function MucHero({ d, doi, daSua }) {
           <O nhan="Chữ trên nút phụ" giaTri={d.nutPhu} doi={s("nutPhu")} daSua={daSua} />
         </div>
 
+        <div className={LUOI}>
+          <O
+            nhan="Ảnh minh hoạ"
+            giaTri={d.anh}
+            doi={s("anh")}
+            daSua={daSua}
+            moTa="Bỏ file vào thư mục public/anh/ rồi gõ /anh/ten-file.png — để trống thì khối ảnh tự ẩn"
+          />
+          <O
+            nhan="Mô tả ảnh"
+            giaTri={d.anhMoTa}
+            doi={s("anhMoTa")}
+            daSua={daSua}
+            moTa="Câu tả nội dung ảnh, dành cho người khiếm thị và cho Google"
+          />
+        </div>
+
         <p className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
           Số điện thoại và email của khối này lấy từ mục{" "}
           <span className="text-gray-300">Liên hệ</span> — cố ý không cho nhập lại ở
@@ -161,6 +178,13 @@ function MucAbout({ d, doi, daSua }) {
           <O nhan="Nhãn nhỏ" giaTri={d.phuDe} doi={s("phuDe")} daSua={daSua} />
           <O nhan="Tiêu đề" giaTri={d.tieuDe} doi={s("tieuDe")} daSua={daSua} />
         </div>
+        <O
+          nhan="Phần tiêu đề tô màu"
+          giaTri={d.tieuDeNhan}
+          doi={s("tieuDeNhan")}
+          daSua={daSua}
+          moTa="Nối ngay sau Tiêu đề và được tô màu thương hiệu."
+        />
         <ODai
           nhan="Mô tả"
           giaTri={d.moTa}
@@ -176,8 +200,9 @@ function MucAbout({ d, doi, daSua }) {
           dongToiThieu={4}
         />
         <p className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-4 py-3 text-xs leading-relaxed text-gray-500">
-          Ba con số thống kê và ba thẻ thế mạnh bên dưới khối này chưa sửa được ở
-          đây — còn nằm trong <span className="font-mono text-gray-400">src/data/about.json</span>.
+          Ba con số thống kê, bốn giá trị cốt lõi và dải năng lực nổi bật bên
+          dưới khối này chưa sửa được ở đây — còn nằm trong{" "}
+          <span className="font-mono text-gray-400">src/data/about.json</span>.
         </p>
       </div>
     </Khung>
@@ -189,11 +214,22 @@ const TRUONG_CONG_TY = [
   { khoa: "tagline", nhan: "Khẩu hiệu" },
   { khoa: "fullName", nhan: "Tên đầy đủ", rong: true },
   { khoa: "description", nhan: "Mô tả ngắn", dai: true },
+  { khoa: "positioning", nhan: "Câu định vị", dai: true, moTa: "Hiện dưới tiêu đề Hero" },
   { khoa: "phone", nhan: "Điện thoại", moTa: "Chatbot cũng đọc số này" },
-  { khoa: "email", nhan: "Email" },
-  { khoa: "address", nhan: "Địa chỉ", dai: true },
+  { khoa: "email", nhan: "Email chính" },
+  { khoa: "emailHoTro", nhan: "Email hỗ trợ", moTa: "Để trống thì không hiện ở chân trang" },
+  { khoa: "website", nhan: "Website" },
+  { khoa: "address", nhan: "Địa chỉ văn phòng", dai: true, moTa: "Nơi khách tới gặp" },
+  {
+    khoa: "diaChiDangKy",
+    nhan: "Địa chỉ đăng ký kinh doanh",
+    dai: true,
+    moTa: "Chỉ hiện ở dòng pháp lý cuối chân trang",
+  },
   { khoa: "workingHours", nhan: "Giờ làm việc" },
   { khoa: "responseTime", nhan: "Thời gian phản hồi", moTa: 'Ví dụ: "trong vòng 24 giờ"' },
+  { khoa: "suMenh", nhan: "Sứ mệnh", dai: true, moTa: "Hiện cuối khối Hero" },
+  { khoa: "slogan", nhan: "Slogan", dai: true, moTa: "Hiện cuối khối Giới thiệu" },
 ];
 
 function MucLienHe({ d, doi, daSua }) {
@@ -597,7 +633,10 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen pb-28">
+    // bg-night ĐẶT NGAY ĐÂY, không dựa vào <body> nữa: từ 17/08/2026 body đổi
+    // sang nền giấy cho trang khách, còn khu quản trị cố ý giữ nền tối — nhìn
+    // vào là biết ngay mình đang ở công cụ nội bộ chứ không phải trang khách xem.
+    <div className="min-h-screen bg-night pb-28 text-gray-200">
       {/* ---------- Thanh trên ---------- */}
       <header className="sticky top-0 z-20 border-b border-white/[0.07] bg-night/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">

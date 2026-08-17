@@ -32,7 +32,7 @@ export default function ChatInput({ onSend, disabled }) {
   }
 
   return (
-    <div className="flex items-end gap-2 border-t border-white/5 p-3">
+    <div className="flex items-end gap-2 border-t border-line p-3">
       <textarea
         ref={textareaRef}
         rows={1}
@@ -41,14 +41,14 @@ export default function ChatInput({ onSend, disabled }) {
         onKeyDown={handleKeyDown}
         disabled={disabled}
         placeholder="Nhập câu hỏi của bạn..."
-        className="max-h-[120px] flex-1 resize-none rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition-colors focus:border-purple-500/60 disabled:opacity-50"
+        className="max-h-[120px] flex-1 resize-none rounded-xl border border-line bg-panel px-3.5 py-2.5 text-sm text-ink placeholder-ink-faint outline-none transition-colors focus:border-brand disabled:opacity-50"
       />
       <button
         type="button"
         onClick={submit}
         disabled={disabled || !value.trim()}
         aria-label="Gửi tin nhắn"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 text-white transition-all duration-300 hover:shadow-glow-purple disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand text-white transition-all duration-300 hover:shadow-lift disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
       >
         <Send className="h-4 w-4" aria-hidden="true" />
       </button>

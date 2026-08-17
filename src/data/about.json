@@ -1,29 +1,47 @@
 {
-  "_note": "Nội dung section GIỚI THIỆU. Trước đây hardcode trong src/sections/About.jsx nên chatbot không đọc được — giờ tách ra thành dữ liệu. Số liệu ở đây là nguồn cho các câu trả lời 'about-stats' và 'strengths' trong kienThuc.json, sửa thì nhớ sửa cả hai. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component).",
+  "_note": "Nội dung section GIỚI THIỆU. Sửa được ở /admin — tab Giới thiệu. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. Số liệu ở đây là nguồn cho các câu trả lời 'about-stats' và 'strengths' trong kienThuc.json — sửa thì nhớ sửa cả hai. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component). CẬP NHẬT 17/08/2026: toàn bộ chữ lấy từ ba ấn phẩm chính thức của công ty. ⚠️ Riêng khối `stats` là số liệu có sẵn từ trước, TÔI KHÔNG XÁC MINH ĐƯỢC — ấn phẩm không có con số nào. Kiểm lại trước khi công bố.",
+
   "phuDe": "Về chúng tôi",
-  "tieuDe": "GIẢI PHÁP",
-  "moTa": "chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mình mang lại.",
-  "philosophy": "Từ website, ứng dụng, phần mềm quản trị đến trợ lý AI — mỗi sản phẩm đều được xây trên một nền tảng: hiểu đúng bài toán của bạn trước, chọn công nghệ sau. Bắt đầu nhỏ, chạy thật, mở rộng dần.",
+  "tieuDe": "Mang công nghệ đến gần hơn,",
+  "tieuDeNhan": "xây dựng cuộc sống thông minh hơn.",
+  "moTa": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững.",
+
+  "philosophy": "iMob không chỉ bán sản phẩm, mà cung cấp giải pháp toàn diện và đồng hành lâu dài. Từ khâu lên ý tưởng, tư vấn, thiết kế đến triển khai và đào tạo vận hành. Chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mà iMob mang lại.",
+
   "stats": [
     { "value": "50+", "label": "Dự án triển khai" },
     { "value": "30+", "label": "Khách hàng đồng hành" },
     { "value": "99%", "label": "Mức độ hài lòng" }
   ],
+
   "features": [
     {
-      "icon": "handshake",
-      "title": "Đối tác tin cậy",
-      "description": "Đồng hành lâu dài từ khâu ý tưởng, tư vấn, thiết kế đến triển khai và đào tạo vận hành."
-    },
-    {
       "icon": "users",
-      "title": "Đội ngũ chuyên môn",
-      "description": "Kỹ sư giàu kinh nghiệm thực chiến trong phát triển sản phẩm số và tích hợp AI."
+      "title": "Đơn vị công nghệ hàng đầu",
+      "description": "Công ty sản xuất phần mềm tại Quảng Ninh, phục vụ cả doanh nghiệp lẫn cơ quan nhà nước trên địa bàn."
     },
     {
-      "icon": "wrench",
-      "title": "Giải pháp may đo",
-      "description": "Không rập khuôn — mỗi giải pháp được thiết kế đúng theo bài toán và quy mô của bạn."
+      "icon": "shield",
+      "title": "Giải pháp toàn diện",
+      "description": "Chuyển đổi số hiệu quả và bền vững — từ khảo sát, thiết kế đến triển khai và đào tạo vận hành."
+    },
+    {
+      "icon": "brain",
+      "title": "Ứng dụng công nghệ mới",
+      "description": "AI, Big Data và Cloud, đưa vào đúng chỗ theo nhu cầu thực tế của từng đơn vị."
+    },
+    {
+      "icon": "handshake",
+      "title": "Đồng hành và uy tín",
+      "description": "Tư vấn – triển khai – hỗ trợ chuyên nghiệp, đi cùng khách hàng lâu dài sau khi bàn giao."
     }
+  ],
+
+  "nangLuc": [
+    { "icon": "monitor-smartphone", "label": "Ứng dụng & Website" },
+    { "icon": "database", "label": "Hệ thống & Cơ sở dữ liệu" },
+    { "icon": "bot", "label": "AI Chatbot & Tự động hoá" },
+    { "icon": "layout-dashboard", "label": "Dashboard & Báo cáo thông minh" },
+    { "icon": "shield-check", "label": "An toàn thông tin & Bảo mật" }
   ]
 }

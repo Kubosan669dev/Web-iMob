@@ -1,22 +1,26 @@
 // Button: nút dùng chung toàn site.
-//   variant : "primary" (gradient tím → xanh) | "outline" | "ghost"
+//   variant : "primary" (chàm tím đặc) | "outline" (xám nhạt) | "ghost" (chữ)
 //   size    : "sm" | "md" | "lg"
 //   href    : nếu truyền → render thẻ <a> (dùng cho anchor #section)
+//
+// Kiểu nút theo apple.com:
+// • Viên thuốc bo tròn hoàn toàn (rounded-full), KHÔNG viền, KHÔNG bóng.
+// • Nút phụ là một viên xám nhạt, không phải nút viền rỗng — viền rỗng tạo
+//   thêm một đường kẻ nữa trên trang, mà cả hệ thiết kế này đang cố giảm số
+//   đường kẻ xuống ít nhất có thể.
+// • Hover chỉ đổi màu nền, không nhấc lên không đổ bóng. Chuyển động thừa làm
+//   giao diện trông rẻ tiền.
+// • Chữ thường, không IN HOA: tiếng Việt viết hoa toàn bộ bị chồng dấu.
 const VARIANTS = {
-  primary:
-    "bg-gradient-to-r from-purple-500 to-blue-500 text-white " +
-    "hover:shadow-glow-purple hover:scale-[1.04] hover:brightness-110 active:scale-95",
-  outline:
-    "border border-blue-500/40 bg-blue-500/5 text-blue-300 " +
-    "hover:border-cyan-400/60 hover:bg-blue-500/10 hover:text-cyan-300 " +
-    "hover:shadow-glow-blue hover:scale-[1.04] active:scale-95",
-  ghost: "text-gray-300 hover:bg-white/5 hover:text-white",
+  primary: "bg-brand text-white hover:bg-brand-deep",
+  outline: "bg-mist text-ink hover:bg-line",
+  ghost: "text-brand hover:underline underline-offset-4",
 };
 
 const SIZES = {
-  sm: "px-4 py-2 text-xs",
-  md: "px-6 py-2.5 text-sm",
-  lg: "px-8 py-3.5 text-base",
+  sm: "px-4 py-2 text-sm",
+  md: "px-5 py-2.5 text-[0.9375rem]",
+  lg: "px-7 py-3.5 text-[1.0625rem]",
 };
 
 export default function Button({
@@ -33,7 +37,7 @@ export default function Button({
       href={href}
       className={
         "inline-flex cursor-pointer select-none items-center justify-center gap-2 " +
-        "rounded-full font-semibold uppercase tracking-wider transition-all duration-300 " +
+        "rounded-full font-medium transition-colors duration-200 " +
         `${VARIANTS[variant]} ${SIZES[size]} ${className}`
       }
       {...props}
