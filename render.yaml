@@ -127,9 +127,13 @@ services:
         value: "true"
       # ⚠️ ĐỊA CHỈ API — PHẢI ĐIỀN TAY SAU LẦN DEPLOY ĐẦU TIÊN.
       #
-      # Bản trước dùng `fromService` để Render tự lấy tên miền của API, nhưng
-      # thực tế nó KHÔNG điền được: bundle build ra không có địa chỉ nào, website
-      # gọi /api/* tương đối rồi rơi vào chính trang tĩnh -> trang /admin chết.
+      # Bản trước dùng `fromService` + `property: host`. Nó CÓ điền, nhưng điền
+      # tên miền NỘI BỘ — đúng bằng tên dịch vụ, ví dụ "imob-chatbot-api".
+      # Tên đó chỉ dùng được khi hai dịch vụ trên Render gọi nhau bên trong;
+      # trình duyệt của khách không phân giải nổi "https://imob-chatbot-api"
+      # nên mọi lời gọi API đều chết và trang /admin không đăng nhập được.
+      # Website là trang TĨNH chạy trên máy khách, nên bắt buộc phải dùng tên
+      # miền CÔNG KHAI (…onrender.com).
       #
       # Thêm nữa, Render hay thêm hậu tố ngẫu nhiên khi tên đã bị dùng
       # (imob-chatbot-api -> imob-chatbot-api-a1b2), nên không thể đoán trước
