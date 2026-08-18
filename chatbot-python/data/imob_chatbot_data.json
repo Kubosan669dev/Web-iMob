@@ -214,8 +214,7 @@
       ],
       "statistics": {
         "_ghi_chu": "ĐÃ BỎ 500+ học viên / 95% hài lòng / 50+ doanh nghiệp (18/08/2026): không ấn phẩm nào của công ty có các con số đó và không có khảo sát nào để đối chiếu. KHÔNG điền số ước lượng vào đây.",
-        "san_pham_dang_chay": "6",
-        "co_quan_don_vi": "6"
+        "don_vi_dang_dung": "Khu di tích danh thắng Yên Tử, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh, Đông Triều, Xã Quảng Tân, Phường Yên Tử"
       },
       "cta": [
         "ĐĂNG KÝ NGAY",
@@ -420,8 +419,7 @@
       ],
       "statistics": {
         "_ghi_chu": "ĐÃ BỎ 50+ MiniApp / 100.000+ người dùng / 98% hoàn thành (18/08/2026): không xác minh được. Số dưới đây ĐẾM từ danh sách sản phẩm thật trên imob.vn.",
-        "zalo_mini_app_dang_chay": "3",
-        "ten_san_pham": "Yên Tử Số, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số"
+        "zalo_mini_app_dang_chay": "Yên Tử Số, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số"
       },
       "demo_flow_preview": [
         "Đăng ký dịch vụ",
@@ -662,8 +660,7 @@
       ],
       "statistics": {
         "_ghi_chu": "ĐÃ BỎ 200+ dự án / 150+ hệ thống / uptime 99.9% (18/08/2026): không xác minh được. Uptime là CAM KẾT theo hợp đồng từng dự án, không phải thành tích chung — đừng đưa lại vào đây.",
-        "san_pham_dang_chay": "6",
-        "co_quan_don_vi": "6"
+        "don_vi_dang_dung": "Khu di tích danh thắng Yên Tử, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh, Đông Triều, Xã Quảng Tân, Phường Yên Tử"
       },
       "cta": [
         "BẮT ĐẦU DỰ ÁN",
@@ -723,10 +720,7 @@
     "source": "website + derived"
   },
   "statistics_all": {
-    "_ghi_chu": "VIẾT LẠI 18/08/2026. Bản cũ ghi 500+ học viên, 100.000+ người dùng, 200+ dự án phần mềm, 150+ hệ thống phần cứng và source là 'website' — nhưng website chưa bao giờ có những con số đó, và không ấn phẩm nào của công ty có. Chỉ để lại thứ ĐẾM ĐƯỢC.",
-    "san_pham_dang_chay": "6",
-    "co_quan_don_vi": "6",
-    "nhom_giai_phap": "3",
+    "_ghi_chu": "VIẾT LẠI 18/08/2026, rồi BỎ HẲN SỐ ĐẾM cùng ngày — công ty góp ý: kê rõ số lượng thì một phần khách sẽ nghĩ công ty nhỏ, chưa làm được nhiều. Chỉ nêu TÊN đơn vị đang dùng, không nêu tổng số. Bản cũ ghi 500+ học viên, 100.000+ người dùng, 200+ dự án phần mềm, 150+ hệ thống phần cứng và source là 'website' — nhưng website chưa bao giờ có những con số đó, và không ấn phẩm nào của công ty có. Chỉ để lại thứ ĐẾM ĐƯỢC.",
     "danh_sach": "Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử",
     "khong_cong_bo": "Tỷ lệ hài lòng, số người dùng và tỷ lệ hoàn thành dự án: KHÔNG có khảo sát nào để dẫn, nên không công bố.",
     "source": "đếm từ danh sách sản phẩm thật đang chạy trên imob.vn"
@@ -1255,7 +1249,7 @@
         "năng lực công ty",
         "đã triển khai bao nhiêu dự án"
       ],
-      "answer": "iMob chỉ công bố số đếm được từ sản phẩm đang chạy thật: 6 sản phẩm cho 6 cơ quan, đơn vị tại Quảng Ninh, thuộc 3 nhóm giải pháp (Zalo Mini App, bản đồ số, website). Cụ thể: Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử. Về tỷ lệ hài lòng, số người dùng hay tỷ lệ hoàn thành dự án thì iMob không công bố, vì chưa có khảo sát độc lập nào để dẫn — anh/chị mở thử trực tiếp từng sản phẩm để tự đánh giá ạ."
+      "answer": "iMob không công bố số liệu tổng, mà nêu thẳng những nơi đang dùng sản phẩm thật của mình tại Quảng Ninh: Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử. Về tỷ lệ hài lòng, số người dùng hay tỷ lệ hoàn thành dự án thì iMob không công bố, vì chưa có khảo sát độc lập nào để dẫn — anh/chị mở thử trực tiếp từng sản phẩm để tự đánh giá ạ."
     },
     {
       "id": "F005",

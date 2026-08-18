@@ -35,7 +35,7 @@
           "nguon": "web",
           "_note": "PHẢI đứng TRƯỚC intent 'pricing': câu 'bao nhiêu dự án' cũng chứa 'bao nhiêu' của pricing. Ngoài ra pricing còn có danh sách 'tru' chặn lần hai.",
           "keywords": ["bao nhiêu dự án", "mấy dự án", "số dự án", "bao nhiêu khách hàng", "bao nhiêu khách", "bao nhiêu năm", "đã làm bao nhiêu", "làm được bao nhiêu", "kinh nghiệm bao nhiêu", "quy mô", "hài lòng", "mức độ hài lòng", "uy tín không", "có đáng tin"],
-          "answer": "Hiện iMob có **{{so_lieu.san_pham}} sản phẩm đang chạy thật** cho **{{so_lieu.don_vi}} cơ quan, đơn vị** tại Quảng Ninh, thuộc **{{so_lieu.nhom}} nhóm giải pháp** ạ.\n\nBên mình không đưa ra con số phần trăm hài lòng, mà mời bạn tự kiểm: các sản phẩm đều đang mở công khai, bạn dùng thử được ngay. Bạn muốn mình gửi liên kết sản phẩm nào không ạ?"
+          "answer": "iMob có sản phẩm đang chạy thật cho khu di tích, bảo tàng và chính quyền địa phương tại Quảng Ninh:\n\n{{so_lieu.danh_sach}}\n\nBên mình không đưa ra con số phần trăm hài lòng, mà mời bạn tự kiểm: các sản phẩm đều mở công khai, bạn dùng thử được ngay ạ."
         },
         {
           "id": "company-intro",

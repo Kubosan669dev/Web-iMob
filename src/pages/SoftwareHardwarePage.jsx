@@ -2,7 +2,7 @@ import ServiceHero from "../components/service/ServiceHero.jsx";
 import SolutionColumns from "../components/service/SolutionColumns.jsx";
 import CardGrid from "../components/service/CardGrid.jsx";
 import ProcessSteps from "../components/service/ProcessSteps.jsx";
-import StatsBand from "../components/service/StatsBand.jsx";
+import DaiKhachHang from "../components/service/DaiKhachHang.jsx";
 import Contact from "../sections/Contact.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import pages from "../data/servicePages.json";
@@ -20,7 +20,7 @@ export default function SoftwareHardwarePage() {
       <CardGrid {...data.benefits} />
       <CardGrid {...data.industries} tinted />
       <ProcessSteps {...data.process} />
-      <StatsBand />
+      <DaiKhachHang />
       <Contact />
     </>
   );

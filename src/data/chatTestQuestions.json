@@ -104,8 +104,8 @@
     { "q": "tien do du an the nao", "expect": "process-time" },
     { "q": "bao gio xong vay ban", "expect": "process-time" },
 
-    { "q": "Bên bạn đã làm được bao nhiêu dự án rồi?", "expect": "about-stats", "phai_co": ["sản phẩm"] },
-    { "q": "da lam cho bao nhieu khach hang", "expect": "about-stats", "phai_co": ["cơ quan"] },
+    { "q": "Bên bạn đã làm được bao nhiêu dự án rồi?", "expect": "about-stats", "phai_co": ["Yên Tử"] },
+    { "q": "da lam cho bao nhieu khach hang", "expect": "about-stats", "phai_co": ["chính quyền địa phương"] },
     { "q": "quy mô công ty thế nào", "expect": "about-stats" },
     { "q": "khách hàng có hài lòng không", "expect": "about-stats", "phai_co": ["dùng thử"] },
 

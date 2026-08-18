@@ -74,7 +74,7 @@ export default function SlideSanPham({ danhSach }) {
   return (
     <div
       role="group"
-      aria-label="Sản phẩm đang chạy thật"
+      aria-label="Sản phẩm nổi bật"
       onMouseEnter={() => setDung(true)}
       onMouseLeave={() => setDung(false)}
       onFocusCapture={() => setDung(true)}
@@ -83,7 +83,7 @@ export default function SlideSanPham({ danhSach }) {
     >
       <div className="flex items-center justify-between gap-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand">
-          Sản phẩm đang chạy thật
+          Sản phẩm nổi bật
         </p>
 
         {tong > 1 && (
@@ -104,9 +104,6 @@ export default function SlideSanPham({ danhSach }) {
             >
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>
-            <p className="ml-1 text-xs font-medium tabular-nums text-ink-faint">
-              {chiSo + 1}/{tong}
-            </p>
           </div>
         )}
       </div>

@@ -54,12 +54,19 @@ export function danhSachMarkdown(sanPham) {
     .join("\n");
 }
 
-/** Ba ô số cho dải thống kê (trang chủ và các trang dịch vụ dùng chung). */
-export function soLieuHienThi(sanPham) {
-  const s = demSoLieu(sanPham);
+/**
+ * Tên các ĐƠN VỊ đang dùng sản phẩm, đã bỏ trùng, giữ đúng thứ tự trong CMS.
+ *
+ * THAY CHO VIỆC KHOE SỐ LƯỢNG (18/08/2026). Công ty góp ý: kê rõ "6 sản phẩm"
+ * thì một số khách sẽ nghĩ công ty nhỏ, chưa làm được nhiều. Nói đúng và nói
+ * mạnh là hai việc khác nhau — bỏ con số đi, đọc thẳng tên khách hàng.
+ * "Khu di tích danh thắng Yên Tử · Bảo tàng – Thư viện tỉnh Quảng Ninh" nặng
+ * hơn bất cứ con số nào, mà vẫn không thêm một lời nào không kiểm được.
+ */
+export function danhSachDonVi(sanPham) {
   return [
-    { value: String(s.sanPham), label: "Sản phẩm đang chạy" },
-    { value: String(s.donVi), label: "Cơ quan, đơn vị" },
-    { value: String(s.nhom), label: "Nhóm giải pháp" },
+    ...new Set(
+      (sanPham ?? []).map((s) => (s?.khachHang ?? "").trim()).filter(Boolean)
+    ),
   ];
 }

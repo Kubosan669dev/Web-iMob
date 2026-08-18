@@ -3,7 +3,7 @@ import SolutionColumns from "../components/service/SolutionColumns.jsx";
 import FeatureList from "../components/service/FeatureList.jsx";
 import CardGrid from "../components/service/CardGrid.jsx";
 import ProcessSteps from "../components/service/ProcessSteps.jsx";
-import StatsBand from "../components/service/StatsBand.jsx";
+import DaiKhachHang from "../components/service/DaiKhachHang.jsx";
 import Contact from "../sections/Contact.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import pages from "../data/servicePages.json";
@@ -23,7 +23,7 @@ export default function ZaloMiniAppPage() {
       <FeatureList {...data.features} />
       <CardGrid {...data.benefits} />
       <ProcessSteps {...data.process} />
-      <StatsBand />
+      <DaiKhachHang />
       <Contact />
     </>
   );

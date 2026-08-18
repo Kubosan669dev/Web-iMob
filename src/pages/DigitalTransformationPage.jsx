@@ -1,7 +1,7 @@
 import ServiceHero from "../components/service/ServiceHero.jsx";
 import CardGrid from "../components/service/CardGrid.jsx";
 import FeatureList from "../components/service/FeatureList.jsx";
-import StatsBand from "../components/service/StatsBand.jsx";
+import DaiKhachHang from "../components/service/DaiKhachHang.jsx";
 import Contact from "../sections/Contact.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import pages from "../data/servicePages.json";
@@ -19,7 +19,7 @@ export default function DigitalTransformationPage() {
       <CardGrid {...data.audience} tinted />
       <FeatureList {...data.modules} />
       <CardGrid {...data.formats} />
-      <StatsBand />
+      <DaiKhachHang />
       <Contact />
     </>
   );

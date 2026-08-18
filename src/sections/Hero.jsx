@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router-dom";
-import { ChevronRight, MessageCircle, Package, Phone } from "lucide-react";
+import {
+  Bot,
+  ChevronRight,
+  GraduationCap,
+  MessageCircle,
+  MonitorSmartphone,
+  Package,
+  Phone,
+  PlaneTakeoff,
+  Radar,
+  ShieldCheck,
+} from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
 import Anh from "../components/ui/Anh.jsx";
 import SlideSanPham from "../components/ui/SlideSanPham.jsx";
-import { iconOf } from "../components/service/icons.js";
 import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
-import { demSoLieu } from "../utils/soLieu.js";
+import { danhSachDonVi } from "../utils/soLieu.js";
 import { openChat } from "../utils/chatBus.js";
-import services from "../data/services.json";
 
 /* ================= RotatingWord =================
    Từ ở giữa dòng tiêu đề tự đổi liên tục (chính quyền số → doanh nghiệp → ...).
@@ -93,11 +102,6 @@ function DongMuc({ muc }) {
         <span className="block text-[0.9375rem] font-medium text-ink">{muc.nhan}</span>
         <span className="block truncate text-[0.8125rem] text-ink-soft">{muc.phu}</span>
       </span>
-      {muc.so != null && (
-        <span className="shrink-0 rounded-full bg-brand-soft px-2 py-0.5 text-xs font-semibold text-brand">
-          {muc.so}
-        </span>
-      )}
       <ChevronRight
         className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-brand"
         aria-hidden="true"
@@ -142,6 +146,65 @@ function DongMuc({ muc }) {
   );
 }
 
+/* ================= Cột danh mục =================
+   BẢY MỤC do công ty chốt (18/08/2026) — đây là danh mục chào hàng chính thức,
+   không phải ba dịch vụ cũ trong services.json nữa.
+
+   Chữ đã RÚT NGẮN so với bản gốc: một dòng điều hướng chỉ đọc lướt, câu như
+   "Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh
+   mạng cấp độ 2 trở lên" dài 20 chữ thì không ai đọc hết. Ý đầy đủ chuyển
+   xuống dòng phụ.
+
+   ⚠️ BỐN MỤC CHƯA CÓ TRANG RIÊNG — an toàn thông tin, robot/UAV/Drone, giám
+   sát 24/7 — nên tạm dẫn về form Liên hệ. Đó là đích ĐÚNG cho dịch vụ phải
+   khảo sát trước khi báo giá, nhưng nếu muốn mỗi mục một trang như ba dịch vụ
+   cũ thì phải có nội dung thật cho từng mục; tôi không tự viết được vì không
+   kiểm chứng được năng lực cụ thể của công ty ở ba mảng đó. */
+const MUC = [
+  {
+    nhan: "Sản phẩm nổi bật trong năm",
+    phu: "Đã bàn giao và đang chạy tại Quảng Ninh",
+    den: "/#projects",
+    icon: Package,
+  },
+  {
+    nhan: "Thiết kế app/web theo yêu cầu",
+    phu: "Zalo Mini App · website · phần mềm quản lý",
+    den: "/#services",
+    icon: MonitorSmartphone,
+  },
+  {
+    nhan: "Nâng chuẩn an toàn thông tin",
+    phu: "Khảo sát và nâng cấp hệ thống đang có lên cấp độ 2 trở lên",
+    den: "/#contact",
+    icon: ShieldCheck,
+  },
+  {
+    nhan: "Robot, UAV & Drone",
+    phu: "Robot tuần tra, robot lễ tân, thiết bị bay theo yêu cầu",
+    den: "/#contact",
+    icon: PlaneTakeoff,
+  },
+  {
+    nhan: "Tập huấn chuyển đổi số",
+    phu: "Chương trình đào tạo theo từng đơn vị",
+    den: "/digital-transformation",
+    icon: GraduationCap,
+  },
+  {
+    nhan: "Xây dựng trợ lý AI doanh nghiệp",
+    phu: "Bấm thử chính trợ lý đang chạy trên trang này",
+    bam: openChat,
+    icon: Bot,
+  },
+  {
+    nhan: "Giám sát an ninh mạng 24/7",
+    phu: "Vận hành và ứng cứu sự cố, không cần đội ngũ nội bộ",
+    den: "/#contact",
+    icon: Radar,
+  },
+];
+
 /* ================= Hero =================
    DỰNG LẠI 18/08/2026 theo góp ý: "một ông chủ bận rộn vào 30 giây là hiểu
    hết", và "chào hàng lần đầu thì 4–5 slide là tối đa, không phải hồ sơ năng
@@ -157,43 +220,14 @@ function DongMuc({ muc }) {
    đọc được đủ: làm gì, đã chạy ở đâu, gọi số nào.
 
    KHÔNG bê nguyên ô tìm kiếm của TopCV. TopCV có hàng chục nghìn tin tuyển
-   dụng nên ô tìm kiếm là thứ đáng đặt to nhất; iMob có 6 sản phẩm, dựng ô tìm
-   kiếm ở đây là dựng một cái ô rỗng. Chỗ đó thay bằng hàng hành động thật:
+   dụng nên ô tìm kiếm là thứ đáng đặt to nhất; ở đây không có kho gì để tìm,
+   dựng ô tìm kiếm là dựng một cái ô rỗng. Chỗ đó thay bằng hàng hành động thật:
    khảo sát miễn phí · chat AI · số hotline bấm gọi được. */
 export default function Hero() {
   const hero = useHero();
   const congTy = useCongTy();
   const sanPham = useSanPham();
-
-  const soLieu = demSoLieu(sanPham);
-
-  // Cột danh mục = đúng mục lục của bộ "slide" trang chủ. Không có file dữ
-  // liệu riêng cho nó: sản phẩm đếm từ CMS, ba dịch vụ lấy từ services.json.
-  // Thêm một nguồn nữa chỉ là thêm một chỗ để quên cập nhật.
-  const MUC = [
-    {
-      nhan: "Sản phẩm đã chạy thật",
-      phu: sanPham
-        .slice(0, 3)
-        .map((s) => s.khachHang || s.title)
-        .join(" · "),
-      so: soLieu.sanPham,
-      den: "/#projects",
-      icon: Package,
-    },
-    ...services.map((dv) => ({
-      nhan: dv.title,
-      phu: dv.features?.[0] ?? "",
-      den: dv.route,
-      icon: iconOf(dv.icon),
-    })),
-    {
-      nhan: "Trợ lý AI",
-      phu: "Hỏi thử ngay — trả lời trong vài giây",
-      bam: openChat,
-      icon: MessageCircle,
-    },
-  ];
+  const donVi = danhSachDonVi(sanPham);
 
   return (
     <section id="home" className="relative">
@@ -305,16 +339,21 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ---------- Số liệu ----------
-            ĐẾM từ danh sách sản phẩm, không gõ tay (xem utils/soLieu.js).
-            Đặt ngay dưới thẻ để người dừng lại ở khung hình đầu vẫn nắm được
-            quy mô, khỏi phải cuộn xuống mới biết. */}
-        <p className="mt-5 text-center text-sm text-ink-soft">
-          <span className="font-semibold text-ink">{soLieu.sanPham} sản phẩm</span> đang
-          chạy cho{" "}
-          <span className="font-semibold text-ink">{soLieu.donVi} cơ quan, đơn vị</span>{" "}
-          tại Quảng Ninh · {soLieu.nhom} nhóm giải pháp
-        </p>
+        {/* ---------- Đơn vị đang dùng ----------
+            BỎ CON SỐ (18/08/2026). Bản trước ghi "6 sản phẩm đang chạy cho 6
+            cơ quan, đơn vị". Công ty góp ý đúng: kê rõ số lượng thì một số
+            khách sẽ nghĩ công ty nhỏ, chưa làm được nhiều.
+
+            Thay bằng TÊN khách hàng, đọc thẳng từ danh sách sản phẩm trong
+            CMS. Không bỏ đi thông tin nào, cũng không thêm lời nào không kiểm
+            được — mà "Bảo tàng – Thư viện tỉnh Quảng Ninh" thì nặng hơn hẳn
+            một con số. */}
+        {donVi.length > 0 && (
+          <p className="mx-auto mt-5 max-w-3xl text-center text-sm leading-relaxed text-ink-soft">
+            <span className="font-semibold text-ink">Đang phục vụ</span>{" "}
+            {donVi.join(" · ")}
+          </p>
+        )}
       </Container>
     </section>
   );
