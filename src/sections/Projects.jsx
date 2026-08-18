@@ -100,9 +100,13 @@ function TheSanPham({ sp, noiBat = false }) {
    Trên máy tính thì ngược lại, quét bằng điện thoại là cách nhanh nhất để mở
    ứng dụng Zalo. Khách dùng điện thoại đã có liên kết bấm thẳng ở mỗi thẻ.
 
-   Cả dải tự ẩn khi chưa sản phẩm nào điền `qr`. */
+   Ảnh QR KHÔNG nằm trong dữ liệu: nó sinh ra từ chính `lienKet` bằng lệnh
+   `npm run qr` và luôn ở đường dẫn /qr/<id>.svg. Nhờ vậy địa chỉ chỉ tồn tại
+   ở MỘT chỗ — đổi địa chỉ mà quên thay ảnh QR là chuyện không xảy ra được.
+
+   Cả dải tự ẩn khi chưa sản phẩm nào có `lienKet`. */
 function DaiMaQR({ danhSach }) {
-  const coQR = danhSach.filter((sp) => sp.qr);
+  const coQR = danhSach.filter((sp) => sp.lienKet);
   if (coQR.length === 0) return null;
 
   return (
@@ -115,7 +119,7 @@ function DaiMaQR({ danhSach }) {
           {coQR.map((sp) => (
             <li key={sp.id} className="w-36 text-center">
               <Anh
-                src={sp.qr}
+                src={`/qr/${sp.id}.svg`}
                 alt={`Mã QR mở ${sp.title}`}
                 boc="rounded-card bg-white p-2 ring-1 ring-line"
                 className="aspect-square w-full object-contain"

@@ -21,20 +21,30 @@ có. Nên phần cắt/xuất file phải do bạn làm.
 
 Mở file thiết kế gốc (Canva / Photoshop / Illustrator) và xuất từng phần:
 
-### Mã QR — quan trọng nhất
+### Mã QR — KHÔNG phải cắt ảnh nữa
 
-Từ tờ **"iMob 2026 — Các sản phẩm nổi bật"**, cắt riêng **5 mã QR**.
+Trước đây hướng dẫn này bảo bạn cắt 5 mã QR từ ấn phẩm ra file PNG. **Bỏ cách
+đó đi.** Giờ website tự sinh mã QR từ chính địa chỉ của sản phẩm:
 
-| Cắt mã của | Lưu thành |
-|---|---|
-| Yên Tử Số | `public/qr/yen-tu-so.png` |
-| Bảo tàng – Thư viện tỉnh Quảng Ninh | `public/qr/bao-tang-thu-vien-quang-ninh.png` |
-| Phường An Sinh Số | `public/qr/phuong-an-sinh-so.png` |
-| Bản đồ số Đông Triều | `public/qr/ban-do-so-dong-trieu.png` |
-| Website phường Yên Tử | `public/qr/website-phuong-yen-tu.png` |
+```
+npm run qr
+```
 
-Yêu cầu: **cắt vuông**, chỉ lấy phần mã, **nền trắng**, tối thiểu **400×400px**.
-Đừng cắt kèm chữ tên sản phẩm phía dưới — website tự in tên rồi.
+Lệnh này đọc trường `lienKet` trong `src/data/projects.json` rồi ghi ra
+`public/qr/<id>.svg`. Nó cũng chạy tự động mỗi lần `npm run build`, nên mã QR
+không bao giờ lệch với địa chỉ.
+
+Vì sao sinh ra tốt hơn cắt ảnh:
+
+| | Cắt ảnh từ ấn phẩm | Sinh từ địa chỉ |
+|---|---|---|
+| Độ nét | Bitmap, phóng to là răng cưa, máy quét chậm | SVG, nét ở mọi cỡ |
+| Dung lượng | 30–80 KB mỗi mã | ~1–2 KB mỗi mã |
+| Đổi địa chỉ | Phải nhớ thay ảnh, quên là khách quét vào trang chết | Sửa một chỗ, chạy lại lệnh |
+| Người dùng điện thoại | Không dùng được gì | Bấm thẳng vào thẻ sản phẩm |
+
+Nghĩa là thứ **duy nhất** bạn cần cung cấp cho phần QR là **địa chỉ** — xem
+Bước 3.
 
 ### Ảnh minh hoạ Hero (tuỳ chọn)
 
@@ -58,14 +68,13 @@ nên đừng để nội dung quan trọng sát mép.
 
 ## Bước 2 — Điền đường dẫn
 
-Mở `src/data/projects.json`, với mỗi sản phẩm điền vào ba ô đang để trống:
+Mở `src/data/projects.json`, với mỗi sản phẩm điền vào hai ô đang để trống:
 
 ```json
 {
   "id": "yen-tu-so",
   "title": "Yên Tử Số",
   "anh": "/anh/yen-tu-so.png",
-  "qr": "/qr/yen-tu-so.png",
   "lienKet": "https://zalo.me/s/..."
 }
 ```
@@ -74,17 +83,18 @@ Mở `src/data/projects.json`, với mỗi sản phẩm điền vào ba ô đang
 `/anh/hero.png`. Nhớ điền cả ô **Mô tả ảnh** — người khiếm thị và Google đọc ô đó.
 
 > Đường dẫn **bắt đầu bằng dấu `/`** và **không có chữ `public`**.
-> File `public/qr/yen-tu-so.png` → viết là `/qr/yen-tu-so.png`.
+> File `public/anh/yen-tu-so.png` → viết là `/anh/yen-tu-so.png`.
 
 ---
 
-## Bước 3 — Địa chỉ web của 5 sản phẩm
+## Bước 3 — Địa chỉ web của 5 sản phẩm (THỨ QUAN TRỌNG NHẤT)
 
 Đây là thứ tôi **không lấy được từ ảnh**: mã QR chứa một đường dẫn, nhưng nhìn
 bằng mắt thì không giải mã ra được.
 
 Bạn quét thử 5 mã bằng điện thoại rồi chép địa chỉ hiện ra, gửi cho tôi hoặc tự
-điền vào ô `lienKet`. Điền xong thì **cả thẻ sản phẩm bấm được**.
+điền vào ô `lienKet`. Điền xong thì được **cả hai thứ cùng lúc**: thẻ sản phẩm
+bấm được, và mã QR tự sinh ra cho người xem trên máy tính.
 
 Điều này quan trọng hơn mã QR: khách xem website **bằng điện thoại** không quét
 được mã trên màn hình chính máy mình. Với họ chỉ có liên kết bấm được mới dùng
@@ -99,9 +109,8 @@ hữu ích.
 |---|---|
 | Không điền gì | Trang y như hiện nay, không có ô trống nào |
 | Chỉ `anh` | Thẻ sản phẩm có ảnh minh hoạ |
-| Chỉ `qr` | Hiện dải "Quét mã để mở ngay trên điện thoại" ở cuối phần Sản phẩm (chỉ trên máy tính) |
-| Chỉ `lienKet` | Cả thẻ bấm được, có mũi tên ↗ |
-| Điền hết | Có đủ ba |
+| Chỉ `lienKet` | Cả thẻ bấm được (có mũi tên ↗) **và** hiện dải "Quét mã để mở ngay trên điện thoại" ở cuối phần Sản phẩm — dải này chỉ hiện trên máy tính |
+| Điền cả hai | Có đủ |
 
 Ảnh dùng `loading="lazy"` nên chỉ tải khi khách cuộn tới — thêm ảnh không làm
 trang chủ nặng thêm lúc mở.

@@ -1,6 +1,6 @@
 {
   "_note": "SẢN PHẨM ĐÃ TRIỂN KHAI. Lấy từ ấn phẩm 'iMob 2026 — Các sản phẩm nổi bật'. MÔ TẢ CỐ Ý NGẮN: ấn phẩm chỉ cho tên sản phẩm và mã QR, không nói tính năng — viết dài hơn là bịa.",
-  "_huongdan_anh": "Ba trường ảnh/liên kết bên dưới ĐỂ TRỐNG là phần đó tự ẩn, trang vẫn đẹp. Điền vào là tự hiện, KHÔNG phải sửa code. • anh: ảnh chụp màn hình sản phẩm, bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png'. Tỉ lệ 16:10, rộng khoảng 1200px. • qr: ảnh mã QR cắt từ ấn phẩm, bỏ vào public/qr/ rồi ghi '/qr/ten-file.png'. Cắt vuông, nền trắng, tối thiểu 400×400px. • lienKet: địa chỉ web hoặc link Zalo — điền vào là cả thẻ bấm được. Xem HUONG-DAN-ANH.md.",
+  "_huongdan_anh": "• lienKet: QUAN TRỌNG NHẤT — địa chỉ web hoặc link Zalo của sản phẩm. Điền vào thì cả thẻ bấm được, VÀ chạy `npm run qr` là tự sinh mã QR ở public/qr/<id>.svg cho dải QR trên máy tính. Không cần cắt ảnh QR từ ấn phẩm. • anh: ảnh chụp màn hình sản phẩm, bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png'. Tỉ lệ 16:10, rộng khoảng 1200px. • Để trống trường nào thì phần đó tự ẩn, trang vẫn đẹp. Xem HUONG-DAN-ANH.md.",
   "danhSach": [
     {
       "id": "yen-tu-so",
@@ -10,7 +10,6 @@
       "title": "Yên Tử Số",
       "description": "Zalo Mini App phục vụ khu di tích danh thắng Yên Tử.",
       "anh": "",
-      "qr": "",
       "lienKet": ""
     },
     {
@@ -21,7 +20,6 @@
       "title": "Bảo tàng – Thư viện tỉnh Quảng Ninh",
       "description": "Zalo Mini App của Bảo tàng – Thư viện tỉnh Quảng Ninh.",
       "anh": "",
-      "qr": "",
       "lienKet": ""
     },
     {
@@ -32,7 +30,6 @@
       "title": "Phường An Sinh Số",
       "description": "Zalo Mini App chính quyền số của phường An Sinh.",
       "anh": "",
-      "qr": "",
       "lienKet": ""
     },
     {
@@ -43,7 +40,6 @@
       "title": "Bản đồ số Đông Triều",
       "description": "Bản đồ số địa bàn Đông Triều.",
       "anh": "",
-      "qr": "",
       "lienKet": ""
     },
     {
@@ -54,7 +50,6 @@
       "title": "Website phường Yên Tử",
       "description": "Website chính thức của phường Yên Tử.",
       "anh": "",
-      "qr": "",
       "lienKet": ""
     }
   ]

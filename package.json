@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run qr && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test:chat": "node scripts/test-chatbot.mjs",
     "test:chat:flow": "node scripts/test-chatbot-flow.mjs",
     "test:congty": "node scripts/kiem-tra-congty-dong.mjs",
-    "bangmau": "node scripts/kiem-tra-bang-mau.mjs"
+    "bangmau": "node scripts/kiem-tra-bang-mau.mjs",
+    "qr": "node scripts/tao-ma-qr.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
@@ -31,6 +32,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4.3.2",
     "vite": "^8.1.4"
   }
