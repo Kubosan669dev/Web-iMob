@@ -92,7 +92,14 @@ async function goi(duongDan, { method = "GET", than, canVe = true } = {}) {
     clearTimeout(hetGio);
   }
 
-  if (res.status === 401) {
+  // 401 trên request CÓ gửi vé = vé hỏng hoặc hết hạn -> đá về màn hình đăng nhập.
+  //
+  // Nhưng 401 trên chính request ĐĂNG NHẬP (canVe: false) thì KHÔNG phải hết
+  // phiên, mà là sai tên đăng nhập hoặc mật khẩu. Bản trước bắt chung cả hai nên
+  // người vừa gõ sai mật khẩu lại đọc được câu "Phiên đăng nhập đã hết hạn" —
+  // trong khi họ còn chưa đăng nhập được lần nào. Để rơi xuống nhánh !res.ok
+  // bên dưới cho nó hiện đúng câu của máy chủ.
+  if (res.status === 401 && canVe) {
     dangXuat();
     throw new LoiApi("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", 401);
   }

@@ -138,7 +138,7 @@ def khoi_tao() -> bool:
             conn.execute(SQL_TAO_BANG)
 
         _nap_noi_dung_lan_dau()
-        _tao_admin_lan_dau()
+        _dat_tai_khoan_admin()
     except Exception:
         log.exception(
             "Không kết nối được database — CMS và lưu liên hệ sẽ TẮT, "
@@ -190,8 +190,21 @@ def _nap_noi_dung_lan_dau() -> None:
             )
 
 
-def _tao_admin_lan_dau() -> None:
-    """Tạo tài khoản admin từ ADMIN_USER / ADMIN_PASSWORD nếu chưa có ai."""
+def _dat_tai_khoan_admin() -> None:
+    """Đặt tài khoản quản trị theo ADMIN_USER / ADMIN_PASSWORD.
+
+    ADMIN_PASSWORD là NGUỒN SỰ THẬT của mật khẩu: đặt lại biến đó rồi khởi động
+    lại máy chủ là mật khẩu đổi theo. Bỏ trống biến thì không đụng gì tới tài
+    khoản đang có.
+
+    Trước đây câu lệnh dùng ON CONFLICT DO NOTHING, nghĩa là mật khẩu chỉ được
+    ghi đúng MỘT LẦN lúc tạo tài khoản. Hậu quả: quên mật khẩu là kẹt hẳn — sửa
+    ADMIN_PASSWORD trên Render không có tác dụng gì, cách vào lại duy nhất là
+    chạy tay câu SQL xóa dòng trong bảng nguoi_dung.
+
+    Đánh đổi: nếu sau này làm chức năng "đổi mật khẩu" ngay trong trang admin
+    thì mỗi lần khởi động lại máy chủ sẽ kéo mật khẩu về đúng giá trị của biến
+    môi trường. Lúc đó phải sửa lại chỗ này. Hiện chưa có chức năng đó."""
     from auth import bam_mat_khau  # import tại chỗ cho khỏi vòng lặp import
 
     ten = os.getenv("ADMIN_USER", "").strip()
@@ -215,7 +228,8 @@ def _tao_admin_lan_dau() -> None:
             """
             INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash)
             VALUES (%s, %s)
-            ON CONFLICT (ten_dang_nhap) DO NOTHING
+            ON CONFLICT (ten_dang_nhap) DO UPDATE
+                SET mat_khau_hash = EXCLUDED.mat_khau_hash
             """,
             (ten, bam_mat_khau(mat_khau)),
         )
