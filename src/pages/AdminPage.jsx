@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Loader2,
   LogOut,
+  MessageCircle,
   Package,
   Palette,
   Phone,
@@ -283,15 +284,76 @@ function MucLienHe({ d, doi, daSua }) {
   );
 }
 
-/**
- * Bảng màu CHÍNH THỨC của website.
- *
- * Khác hẳn nút chọn màu ngoài trang chủ: nút đó chỉ đổi màu trên máy người bấm
- * để xem thử, còn ô chọn ở đây mới quyết định màu KHÁCH nhìn thấy.
- */
-function MucGiaoDien({ d, doi, daSua }) {
-  const dangChon = d?.bangMau ?? "cham-tim";
+/** Công tắc hai trạng thái.
+    role="switch" chứ không phải checkbox: trình đọc màn hình sẽ đọc ra
+    "bật / tắt" thay vì "đã chọn" — đúng với thứ mà nó điều khiển. */
+function CongTac({ bat, doi, nhan, moTa, daSua = false }) {
   return (
+    <div className="flex items-start justify-between gap-4 rounded-card bg-mist p-4">
+      <div className="min-w-0">
+        <span className="flex items-center gap-2 text-sm font-medium text-ink">
+          {nhan}
+          {daSua && (
+            <span
+              title="Đã sửa, chưa lưu"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-canhbao-cham"
+            />
+          )}
+        </span>
+        {moTa && (
+          <span className="mt-1 block text-[0.8125rem] leading-relaxed text-ink-soft">
+            {moTa}
+          </span>
+        )}
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={bat}
+        aria-label={nhan}
+        onClick={() => doi(!bat)}
+        className={
+          "relative mt-0.5 h-6 w-11 shrink-0 rounded-full transition-colors " +
+          (bat ? "bg-brand" : "bg-line")
+        }
+      >
+        <span
+          className={
+            "absolute top-0.5 h-5 w-5 rounded-full bg-panel shadow-lift transition-transform " +
+            (bat ? "translate-x-[1.375rem]" : "translate-x-0.5")
+          }
+        />
+      </button>
+    </div>
+  );
+}
+
+/* Chờ mấy giây rồi mới chào. Cho chọn trong vài mốc sẵn chứ không cho gõ số:
+   chênh nhau 3 hay 4 giây thì không ai nhận ra, còn một ô số trống thì có
+   người gõ vào 300. */
+const MOC_TRE = [1, 3, 6, 10];
+
+/**
+ * Giao diện: bảng màu CHÍNH THỨC + cách khung chat chào khách.
+ *
+ * Bảng màu ở đây khác hẳn nút chọn màu ngoài trang chủ: nút đó chỉ đổi màu trên
+ * máy người bấm để xem thử, còn ô chọn ở đây mới quyết định màu KHÁCH nhìn thấy.
+ */
+function MucGiaoDien({ d, goc, doi }) {
+  const dangChon = d?.bangMau ?? "cham-tim";
+  const suaMau = dangChon !== (goc?.bangMau ?? "cham-tim");
+
+  // Database đã seed từ trước khi có khoá `chat` thì trường này thiếu — lấp
+  // bằng bản mặc định trong bundle, không để người dùng nhìn thấy ô trống.
+  const chuan = MAC_DINH.giaoDien.chat;
+  const chat = { ...chuan, ...(d?.chat ?? {}) };
+  const chatGoc = { ...chuan, ...(goc?.chat ?? {}) };
+  const suaChat = JSON.stringify(chat) !== JSON.stringify(chatGoc);
+  const doiChat = (v) => doi({ ...d, chat: { ...chat, ...v } });
+  const tuMo = chat.tuMo !== false;
+
+  return (
+    <>
     <Khung>
       <TieuDeMuc ghiChu="Bảng màu khách nhìn thấy khi vào website" neo="/">
         Giao diện
@@ -299,7 +361,7 @@ function MucGiaoDien({ d, doi, daSua }) {
 
       <div className="mb-5 flex items-center gap-2">
         <span className="text-sm font-medium text-ink-soft">Bảng màu chính thức</span>
-        {daSua && (
+        {suaMau && (
           <span
             title="Đã sửa, chưa lưu"
             className="h-1.5 w-1.5 shrink-0 rounded-full bg-canhbao-cham"
@@ -370,6 +432,80 @@ function MucGiaoDien({ d, doi, daSua }) {
         chối ghi file.
       </p>
     </Khung>
+
+    <Khung>
+      <TieuDeMuc ghiChu="Chatbot chào khách ngay khi họ vừa vào trang" neo="/">
+        Khung chat
+      </TieuDeMuc>
+
+      <CongTac
+        bat={tuMo}
+        doi={(v) => doiChat({ tuMo: v })}
+        nhan="Tự chào khách khi vào trang"
+        moTa="Tắt đi thì khung chat chỉ mở khi khách tự bấm nút."
+        daSua={suaChat}
+      />
+
+      {tuMo && (
+        <div className="mt-5 space-y-5">
+          <div>
+            <span className="mb-1.5 block text-sm font-medium text-ink-soft">
+              Chờ bao lâu rồi mới chào
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {MOC_TRE.map((giay) => {
+                const chon = Number(chat.tre) === giay;
+                return (
+                  <button
+                    key={giay}
+                    type="button"
+                    onClick={() => doiChat({ tre: giay })}
+                    aria-pressed={chon}
+                    className={
+                      "rounded-full px-4 py-2 text-sm font-medium transition-colors " +
+                      (chon
+                        ? "bg-brand text-tren-brand"
+                        : "bg-mist text-ink-soft hover:text-ink")
+                    }
+                  >
+                    {giay} giây
+                  </button>
+                );
+              })}
+            </div>
+            <span className="mt-1.5 block text-[0.8125rem] leading-relaxed text-ink-faint">
+              Chào ngay lúc trang vừa hiện thì khách chưa kịp đọc gì. Vài giây là đủ
+              để họ nhìn qua trang chủ trước.
+            </span>
+          </div>
+
+          <ODai
+            nhan="Lời chào trên điện thoại"
+            giaTri={chat.loiChao}
+            doi={(v) => doiChat({ loiChao: v })}
+            dongToiThieu={2}
+            moTa="Một câu ngắn. Để trống thì trên điện thoại không chào gì cả."
+          />
+        </div>
+      )}
+
+      <p className="mt-6 flex items-start gap-2.5 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
+        <MessageCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+        <span>
+          Máy tính và điện thoại chào{" "}
+          <span className="font-medium text-ink">khác nhau</span>. Máy tính: mở sẵn
+          khung chat ở góc phải, trang vẫn nhìn thấy gần hết. Điện thoại: chỉ hiện lời
+          chào nhỏ cạnh nút — khung chat trên điện thoại chiếm trọn màn hình, tự mở là
+          che sạch website ngay giây đầu tiên.
+        </span>
+      </p>
+
+      <p className="mt-3 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
+        Khách tự tay đóng thì cả lần duyệt web đó sẽ không chào lại nữa, dù họ mở thêm
+        bao nhiêu trang. Đóng tab rồi hôm sau quay lại vẫn được chào như thường.
+      </p>
+    </Khung>
+    </>
   );
 }
 
@@ -912,8 +1048,8 @@ export default function AdminPage() {
               {muc === "giao-dien" && (
                 <MucGiaoDien
                   d={noiDung.giaoDien}
+                  goc={goc?.giaoDien}
                   doi={dat("giaoDien")}
-                  daSua={suaKhoa("giaoDien")}
                 />
               )}
               {muc === "phap-ly" && (
