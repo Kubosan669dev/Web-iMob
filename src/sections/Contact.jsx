@@ -40,12 +40,17 @@ function dungThongTinLienHe(congTy) {
 /* ---------- Form ---------- */
 const EMPTY_FORM = { name: "", email: "", phone: "", service: "", message: "" };
 
-// Ô nhập kiểu Apple: nền xám nhạt, KHÔNG viền, bo góc vừa. Viền chỉ xuất hiện
-// khi ô được chọn. Bớt được một đường kẻ trên mỗi ô — form 5 ô là bớt 5 đường.
+// Ô nhập kiểu Apple: KHÔNG viền, bo góc vừa. Viền chỉ xuất hiện khi ô được
+// chọn. Bớt được một đường kẻ trên mỗi ô — form 5 ô là bớt 5 đường.
+//
+// ĐỔI 18/08/2026: nền ô từ xám sang TRẮNG. Khối Liên hệ giờ nằm trên nền
+// trắng (để không dính liền khối "Về iMob" cũng nền xám), nên thẻ bao ngoài
+// thành xám — ô nhập mà vẫn xám nữa thì chìm hẳn vào thẻ, không thấy đâu là
+// chỗ gõ chữ.
 const INPUT_CLS =
-  "w-full rounded-xl border border-transparent bg-mist px-4 py-3.5 text-[1.0625rem] " +
+  "w-full rounded-xl border border-transparent bg-panel px-4 py-3.5 text-[1.0625rem] " +
   "text-ink placeholder-ink-faint outline-none transition-colors " +
-  "focus:border-brand focus:bg-panel";
+  "focus:border-brand";
 
 // Ô nhập có nhãn + thông báo lỗi bên dưới
 function Field({ label, required = false, error, children }) {
@@ -115,7 +120,7 @@ function ContactForm() {
   };
 
   return (
-    <div className="rounded-block bg-panel p-8 sm:p-10">
+    <div className="rounded-block bg-mist p-8 sm:p-10">
       <h3 className="tieu-de-lon text-2xl text-ink">Gửi yêu cầu tư vấn</h3>
       <p className="mt-2 text-[0.9375rem] text-ink-soft">
         Chúng tôi phản hồi {congTy.responseTime}.
@@ -242,7 +247,7 @@ export default function Contact() {
   const thongTinLienHe = dungThongTinLienHe(congTy);
 
   return (
-    <section id="contact" className="bg-mist py-24 lg:py-32">
+    <section id="contact" className="py-24 lg:py-32">
       <Container className="space-y-14">
         <Reveal>
           <SectionTitle
@@ -256,7 +261,7 @@ export default function Contact() {
         <div className="grid gap-5 lg:grid-cols-5">
           {/* ---------- Cột trái: thông tin ---------- */}
           <Reveal className="lg:col-span-2">
-            <div className="flex h-full flex-col rounded-block bg-panel p-8 sm:p-10">
+            <div className="flex h-full flex-col rounded-block bg-mist p-8 sm:p-10">
               <ul className="space-y-7">
                 {thongTinLienHe.map((info) => (
                   <li key={info.label} className="flex items-start gap-4">

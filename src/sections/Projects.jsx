@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
@@ -6,6 +5,7 @@ import Reveal from "../components/ui/Reveal.jsx";
 import Anh from "../components/ui/Anh.jsx";
 import MaQR from "../components/ui/MaQR.jsx";
 import { iconOf } from "../components/service/icons.js";
+import useManHinhRong from "../hooks/useManHinhRong.js";
 import { useSanPham } from "../context/NoiDungContext.jsx";
 
 /* ================= Sản phẩm đã triển khai =================
@@ -104,23 +104,6 @@ function TheSanPham({ sp, noiBat = false }) {
    CMS, vì thêm sản phẩm trong /admin thì không có lần build nào chạy.
 
    Cả dải tự ẩn khi chưa sản phẩm nào có `lienKet`. */
-/** Màn hình có đủ rộng để hiện dải mã QR không?
-    Dùng matchMedia chứ không dùng class `hidden lg:block`: nếu chỉ ẩn bằng CSS
-    thì component vẫn gắn, vẫn tải thư viện qrcode và vẫn vẽ đủ mã — tốn băng
-    thông của đúng nhóm người không dùng được nó. */
-function useManHinhRong() {
-  const [rong, setRong] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
-  );
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const doi = (e) => setRong(e.matches);
-    mq.addEventListener("change", doi);
-    return () => mq.removeEventListener("change", doi);
-  }, []);
-  return rong;
-}
-
 function DaiMaQR({ danhSach }) {
   const rong = useManHinhRong();
   const coQR = danhSach.filter((sp) => sp.lienKet);

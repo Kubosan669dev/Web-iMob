@@ -170,11 +170,11 @@ function MucHero({ d, doi, daSua }) {
 
         <div className={LUOI}>
           <O
-            nhan="Ảnh minh hoạ"
+            nhan="Ảnh banner (ô bên phải)"
             giaTri={d.anh}
             doi={s("anh")}
             daSua={daSua}
-            moTa="Bỏ file vào thư mục public/anh/ rồi gõ /anh/ten-file.png — để trống thì khối ảnh tự ẩn"
+            moTa="Bỏ file vào public/anh/ rồi gõ /anh/ten-file.png. Để TRỐNG thì ô đó hiện sản phẩm đứng đầu mục Sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
           />
           <O
             nhan="Mô tả ảnh"
