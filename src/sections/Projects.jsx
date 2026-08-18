@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
 import Anh from "../components/ui/Anh.jsx";
+import MaQR from "../components/ui/MaQR.jsx";
 import { iconOf } from "../components/service/icons.js";
-import duLieu from "../data/projects.json";
+import { useSanPham } from "../context/NoiDungContext.jsx";
 
 /* ================= Sản phẩm đã triển khai =================
-   Năm sản phẩm THẬT trong ấn phẩm "iMob 2026 — Các sản phẩm nổi bật".
+   Danh sách lấy từ CMS (khoá `projects`), sửa được trong /admin → mục Sản phẩm.
+   Bản JSON trong src/data/projects.json là giá trị mặc định đóng gói sẵn: nó
+   hiện ngay khi trang vừa mở và vẫn còn đó nếu máy chủ chết.
 
    Đặt ngay sau Hero, TRƯỚC cả phần Dịch vụ. Lý do: khách hàng lớn nhất của
    iMob là cơ quan nhà nước, và với nhóm khách đó câu hỏi đầu tiên luôn là
@@ -15,8 +19,9 @@ import duLieu from "../data/projects.json";
    được câu đó thì mọi lời tự giới thiệu phía sau mới có sức nặng.
 
    Bố cục kiểu Apple: sản phẩm đầu tiên chiếm trọn bề ngang như một "sản phẩm
-   chủ lực", bốn cái còn lại xếp lưới 2×2 bên dưới. Cách này vừa xử lý gọn con
-   số 5 lẻ (lưới 3 cột sẽ hụt mất một ô), vừa tạo được thứ bậc.
+   chủ lực", số còn lại xếp lưới 2 cột bên dưới, và thẻ cuối cũng chiếm trọn
+   hàng nếu số đó là số lẻ. Nhờ vậy thêm bớt sản phẩm bao nhiêu cũng không hở
+   ô trống, mà vẫn giữ được thứ bậc.
 
    Thẻ KHÔNG viền KHÔNG bóng — nền trắng đặt trên dải nền xám nhạt là đủ tách.
 
@@ -27,7 +32,6 @@ import duLieu from "../data/projects.json";
    tự biến mất nếu file ảnh không tải được, nên gõ nhầm tên file cũng không để
    lại ô ảnh vỡ giữa trang. */
 
-const { danhSach: SAN_PHAM } = duLieu;
 
 function TheSanPham({ sp, noiBat = false }) {
   const Icon = iconOf(sp.icon);
@@ -95,35 +99,53 @@ function TheSanPham({ sp, noiBat = false }) {
 }
 
 /* ---------- Dải mã QR ----------
-   CHỈ hiện từ màn hình lg trở lên. Lý do rất thực tế: mã QR trên website mở
-   bằng điện thoại là vô dụng — không ai quét được màn hình của chính máy mình.
-   Trên máy tính thì ngược lại, quét bằng điện thoại là cách nhanh nhất để mở
-   ứng dụng Zalo. Khách dùng điện thoại đã có liên kết bấm thẳng ở mỗi thẻ.
-
-   Ảnh QR KHÔNG nằm trong dữ liệu: nó sinh ra từ chính `lienKet` bằng lệnh
-   `npm run qr` và luôn ở đường dẫn /qr/<id>.svg. Nhờ vậy địa chỉ chỉ tồn tại
-   ở MỘT chỗ — đổi địa chỉ mà quên thay ảnh QR là chuyện không xảy ra được.
+   Mã QR sinh NGAY TRONG TRÌNH DUYỆT từ trường `lienKet` (xem ui/MaQR.jsx).
+   Bản trước sinh sẵn ra file lúc build; cách đó chết khi sản phẩm chuyển vào
+   CMS, vì thêm sản phẩm trong /admin thì không có lần build nào chạy.
 
    Cả dải tự ẩn khi chưa sản phẩm nào có `lienKet`. */
+/** Màn hình có đủ rộng để hiện dải mã QR không?
+    Dùng matchMedia chứ không dùng class `hidden lg:block`: nếu chỉ ẩn bằng CSS
+    thì component vẫn gắn, vẫn tải thư viện qrcode và vẫn vẽ đủ mã — tốn băng
+    thông của đúng nhóm người không dùng được nó. */
+function useManHinhRong() {
+  const [rong, setRong] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const doi = (e) => setRong(e.matches);
+    mq.addEventListener("change", doi);
+    return () => mq.removeEventListener("change", doi);
+  }, []);
+  return rong;
+}
+
 function DaiMaQR({ danhSach }) {
+  const rong = useManHinhRong();
   const coQR = danhSach.filter((sp) => sp.lienKet);
-  if (coQR.length === 0) return null;
+
+  // CHỈ hiện trên máy tính. Lý do rất thực tế: mã QR trên website mở bằng điện
+  // thoại là vô dụng — không ai quét được màn hình của chính máy mình. Khách
+  // dùng điện thoại đã có liên kết bấm thẳng ở mỗi thẻ.
+  if (!rong || coQR.length === 0) return null;
 
   return (
     <Reveal>
-      <div className="hidden rounded-block bg-panel px-8 py-10 lg:block">
+      <div className="rounded-block bg-panel px-8 py-10">
         <p className="text-center text-sm font-semibold text-ink-faint">
           Quét mã để mở ngay trên điện thoại
         </p>
         <ul className="mt-8 flex flex-wrap items-start justify-center gap-10">
           {coQR.map((sp) => (
             <li key={sp.id} className="w-36 text-center">
-              <Anh
-                src={`/qr/${sp.id}.svg`}
-                alt={`Mã QR mở ${sp.title}`}
-                boc="rounded-card bg-white p-2 ring-1 ring-line"
-                className="aspect-square w-full object-contain"
-              />
+              <div className="rounded-card bg-white p-2 ring-1 ring-line">
+                <MaQR
+                  noiDung={sp.lienKet}
+                  alt={`Mã QR mở ${sp.title}`}
+                  className="aspect-square w-full object-contain"
+                />
+              </div>
               <p className="mt-3 text-[0.8125rem] leading-snug text-ink-soft">
                 {sp.title}
               </p>
@@ -136,7 +158,12 @@ function DaiMaQR({ danhSach }) {
 }
 
 export default function Projects() {
-  const [noiBat, ...conLai] = SAN_PHAM;
+  const sanPham = useSanPham();
+  const [noiBat, ...conLai] = sanPham;
+
+  // Xoá hết sản phẩm trong /admin thì cả khối tự biến mất, không để lại tiêu
+  // đề treo lơ lửng trên một khoảng trắng.
+  if (!noiBat) return null;
 
   return (
     <section id="projects" className="bg-mist py-24 lg:py-32">
@@ -171,7 +198,7 @@ export default function Projects() {
           </div>
         </Reveal>
 
-        <DaiMaQR danhSach={SAN_PHAM} />
+        <DaiMaQR danhSach={sanPham} />
       </Container>
     </section>
   );

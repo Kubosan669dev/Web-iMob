@@ -29,6 +29,3 @@ npm-debug.log*
 # ...trừ file mẫu, file này CẦN nằm trong repo để người mới biết phải điền gì.
 !.env.example
 
-# Mã QR sinh tự động từ trường lienKet trong projects.json (npm run qr).
-# KHÔNG commit: lệnh build tự sinh lại, nên không bao giờ lệch với địa chỉ.
-public/qr/*.svg

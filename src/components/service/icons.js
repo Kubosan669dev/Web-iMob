@@ -80,6 +80,11 @@ export const SERVICE_ICONS = {
 };
 
 // Lấy component icon theo tên; không có thì trả Layers để không vỡ giao diện.
+/** Danh sách tên biểu tượng dùng được, để trang quản trị dựng ô chọn.
+    Lấy thẳng từ SERVICE_ICONS nên thêm biểu tượng mới là ô chọn tự có, không
+    phải nhớ cập nhật hai chỗ. */
+export const TEN_ICON = Object.keys(SERVICE_ICONS);
+
 export function iconOf(name) {
   return SERVICE_ICONS[name] ?? Layers;
 }

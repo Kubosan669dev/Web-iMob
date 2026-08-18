@@ -4,6 +4,7 @@ import legalPagesMacDinh from "../data/legalPages.json";
 import heroMacDinh from "../data/hero.json";
 import aboutMacDinh from "../data/about.json";
 import giaoDienMacDinh from "../data/giaoDien.json";
+import projectsMacDinh from "../data/projects.json";
 import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
@@ -37,6 +38,7 @@ const MAC_DINH = {
   hero: heroMacDinh,
   about: aboutMacDinh,
   giaoDien: giaoDienMacDinh,
+  projects: projectsMacDinh,
 };
 
 // Không để khách chờ lâu vì nội dung: quá hạn này thì dùng bản mặc định.
@@ -151,6 +153,20 @@ export function useAbout() {
 export function useGiaoDien() {
   const noiDung = useNoiDung();
   return noiDung.giaoDien ?? giaoDienMacDinh;
+}
+
+/**
+ * Danh sách sản phẩm đã triển khai.
+ *
+ * Trả về MẢNG, không phải cả cục JSON — nơi gọi không cần biết trong file còn
+ * mấy dòng ghi chú. Lọc bỏ phần tử hỏng ngay tại đây: dữ liệu này giờ do người
+ * dùng nhập trong /admin, một sản phẩm lỡ để trống tên không được phép làm
+ * trắng cả khối Sản phẩm của trang chủ.
+ */
+export function useSanPham() {
+  const noiDung = useNoiDung();
+  const ds = noiDung.projects?.danhSach ?? projectsMacDinh.danhSach ?? [];
+  return ds.filter((sp) => sp && sp.id && sp.title);
 }
 
 export { NoiDungContext, MAC_DINH };

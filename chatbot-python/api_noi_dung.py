@@ -14,7 +14,7 @@ router = APIRouter(tags=["noi-dung"])
 
 # Chỉ chấp nhận đúng các khóa này. Không cho tự đặt khóa mới — tránh việc trang
 # admin (hoặc ai đó gọi thẳng API) nhét dữ liệu rác vào bảng.
-KHOA_HOP_LE = {"company", "legalPages", "hero", "about", "giaoDien"}
+KHOA_HOP_LE = {"company", "legalPages", "hero", "about", "giaoDien", "projects"}
 
 
 class GhiNoiDung(BaseModel):

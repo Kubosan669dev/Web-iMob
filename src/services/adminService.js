@@ -161,6 +161,13 @@ export function ghiNoiDung(khoa, duLieu) {
   return goi(`/api/noi-dung/${khoa}`, { method: "PUT", than: { du_lieu: duLieu } });
 }
 
+/** Trạng thái máy chủ cho màn hình Tổng quan.
+    Gọi /health — đường dẫn CÔNG KHAI, không cần vé, nên vẫn xem được kể cả khi
+    phiên đăng nhập vừa hết hạn. */
+export function trangThaiMayChu() {
+  return goi("/health", { canVe: false });
+}
+
 // ---------- Liên hệ ----------
 export function danhSachLienHe() {
   return goi("/api/lien-he");

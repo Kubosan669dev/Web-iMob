@@ -21,30 +21,24 @@ có. Nên phần cắt/xuất file phải do bạn làm.
 
 Mở file thiết kế gốc (Canva / Photoshop / Illustrator) và xuất từng phần:
 
-### Mã QR — KHÔNG phải cắt ảnh nữa
+### Mã QR — không phải làm gì cả
 
-Trước đây hướng dẫn này bảo bạn cắt 5 mã QR từ ấn phẩm ra file PNG. **Bỏ cách
-đó đi.** Giờ website tự sinh mã QR từ chính địa chỉ của sản phẩm:
+Mã QR sinh **ngay trong trình duyệt** từ địa chỉ sản phẩm. Bạn chỉ cần điền
+địa chỉ vào ô **Địa chỉ sản phẩm** trong `/admin` → mục **Sản phẩm**; mã QR
+hiện ra ngay bên dưới ô đó để xem thử.
 
-```
-npm run qr
-```
-
-Lệnh này đọc trường `lienKet` trong `src/data/projects.json` rồi ghi ra
-`public/qr/<id>.svg`. Nó cũng chạy tự động mỗi lần `npm run build`, nên mã QR
-không bao giờ lệch với địa chỉ.
-
-Vì sao sinh ra tốt hơn cắt ảnh:
+Không cắt ảnh, không chạy lệnh, không cần deploy lại.
 
 | | Cắt ảnh từ ấn phẩm | Sinh từ địa chỉ |
 |---|---|---|
 | Độ nét | Bitmap, phóng to là răng cưa, máy quét chậm | SVG, nét ở mọi cỡ |
-| Dung lượng | 30–80 KB mỗi mã | ~1–2 KB mỗi mã |
-| Đổi địa chỉ | Phải nhớ thay ảnh, quên là khách quét vào trang chết | Sửa một chỗ, chạy lại lệnh |
+| Đổi địa chỉ | Phải nhớ thay ảnh, quên là khách quét vào trang chết | Tự đổi theo |
+| Sản phẩm thêm từ /admin | Không có mã | Có ngay |
 | Người dùng điện thoại | Không dùng được gì | Bấm thẳng vào thẻ sản phẩm |
 
-Nghĩa là thứ **duy nhất** bạn cần cung cấp cho phần QR là **địa chỉ** — xem
-Bước 3.
+Mã QR chỉ hiện trên **máy tính**, và thư viện sinh mã cũng chỉ tải trên máy
+tính — khách xem bằng điện thoại không tải một byte nào của nó. Lý do: không ai
+quét được mã QR trên màn hình của chính máy mình.
 
 ### Ảnh minh hoạ Hero (tuỳ chọn)
 

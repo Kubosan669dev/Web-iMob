@@ -5,20 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run qr && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test:chat": "node scripts/test-chatbot.mjs",
     "test:chat:flow": "node scripts/test-chatbot-flow.mjs",
     "test:congty": "node scripts/kiem-tra-congty-dong.mjs",
-    "bangmau": "node scripts/kiem-tra-bang-mau.mjs",
-    "qr": "node scripts/tao-ma-qr.mjs"
+    "bangmau": "node scripts/kiem-tra-bang-mau.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource/be-vietnam-pro": "^5.3.0",
     "lucide-react": "^1.24.0",
     "motion": "^12.42.2",
+    "qrcode": "^1.5.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",
@@ -32,7 +32,6 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
-    "qrcode": "^1.5.4",
     "tailwindcss": "^4.3.2",
     "vite": "^8.1.4"
   }

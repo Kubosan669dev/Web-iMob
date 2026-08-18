@@ -3,15 +3,22 @@ import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   ArrowUpRight,
+  Building2,
   CheckCircle2,
   Download,
   FileDown,
+  FileText,
   Inbox,
+  LayoutDashboard,
   Loader2,
   LogOut,
+  Package,
+  Palette,
+  Phone,
   RefreshCw,
   RotateCcw,
   Save,
+  Sparkles,
 } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
@@ -19,6 +26,8 @@ import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
+import MucSanPham from "../components/admin/MucSanPham.jsx";
+import MucTongQuan from "../components/admin/MucTongQuan.jsx";
 
 // ============================================================
 // AdminPage — trang quản trị nội dung (/admin).
@@ -50,20 +59,31 @@ import { BANG_MAU } from "../data/bangMau.js";
 // đường dẫn" KHÔNG phải là bảo mật.
 // ============================================================
 
-/* Mục nào sửa khoá nội dung nào, và nằm ở đâu trên website. */
+/* Mục nào sửa khoá nội dung nào, và nằm ở đâu trên website.
+   Ba nhóm này chính là thứ tự trong cột điều hướng bên trái.
+
+   Bản trước đánh số 01/02/03 cho các mục trang chủ. Bỏ số đi khi thêm biểu
+   tượng: trong một danh sách DỌC thì vị trí trên dưới đã nói đúng thứ tự rồi,
+   con số chỉ lặp lại điều mắt đã thấy. Biểu tượng thì ngược lại — nó giúp nhận
+   ra mục cần tìm mà không phải đọc chữ. */
+const MUC_CHINH = [
+  { id: "tong-quan", nhan: "Tổng quan", khoa: null, icon: LayoutDashboard },
+];
+
 const MUC_TRANG_CHU = [
-  { id: "hero", nhan: "Hero", khoa: "hero", neo: "/#home", ghiChu: "Màn hình đầu tiên khách nhìn thấy" },
-  { id: "about", nhan: "Giới thiệu", khoa: "about", neo: "/#about", ghiChu: "Khối About" },
-  { id: "lien-he", nhan: "Liên hệ", khoa: "company", neo: "/#contact", ghiChu: "Website và chatbot dùng chung" },
+  { id: "hero", nhan: "Hero", khoa: "hero", icon: Sparkles, neo: "/#home" },
+  { id: "san-pham", nhan: "Sản phẩm", khoa: "projects", icon: Package, neo: "/#projects" },
+  { id: "about", nhan: "Giới thiệu", khoa: "about", icon: Building2, neo: "/#about" },
+  { id: "lien-he", nhan: "Liên hệ", khoa: "company", icon: Phone, neo: "/#contact" },
 ];
 
 const MUC_KHAC = [
-  { id: "tin-nhan", nhan: "Tin nhắn", khoa: null },
-  { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", neo: "/" },
-  { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", neo: "/privacy-policy" },
+  { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
+  { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
+  { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", icon: FileText, neo: "/privacy-policy" },
 ];
 
-const TAT_CA_MUC = [...MUC_TRANG_CHU, ...MUC_KHAC];
+const TAT_CA_MUC = [...MUC_CHINH, ...MUC_TRANG_CHU, ...MUC_KHAC];
 
 /* ================= Mảnh dùng chung ================= */
 function Bang({ loai, children }) {
@@ -583,7 +603,7 @@ export default function AdminPage() {
   useDocumentTitle("Quản trị nội dung — iMob");
 
   const [ten, setTen] = useState(api.layTenDangNhap());
-  const [muc, setMuc] = useState("hero");
+  const [muc, setMuc] = useState("tong-quan");
 
   const [goc, setGoc] = useState(null); // bản đã lưu trên máy chủ
   const [noiDung, setNoiDung] = useState(null); // bản đang sửa
@@ -740,21 +760,22 @@ export default function AdminPage() {
   const suaKhoa = (khoa) => khoaDaSua.includes(khoa);
 
   /* --------- Rail trái --------- */
-  const NutMuc = ({ m, so }) => {
+  const NutMuc = ({ m }) => {
     const dangChon = muc === m.id;
+    const Icon = m.icon;
     return (
       <button
         type="button"
         onClick={() => setMuc(m.id)}
         aria-current={dangChon ? "page" : undefined}
         className={
-          "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors " +
+          "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm transition-colors " +
           (dangChon
             ? "bg-brand-soft font-medium text-brand"
             : "text-ink-soft hover:bg-panel hover:text-ink")
         }
       >
-        {so && <span className="font-mono text-xs text-ink-faint">{so}</span>}
+        <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
         <span className="flex-1 font-medium">{m.nhan}</span>
         {m.khoa && suaKhoa(m.khoa) && (
           <span className="h-1.5 w-1.5 rounded-full bg-canhbao-cham" title="Chưa lưu" />
@@ -817,12 +838,18 @@ export default function AdminPage() {
         {/* ---------- Rail trái ---------- */}
         <nav aria-label="Mục nội dung" className="mb-8 lg:mb-0">
           <div className="lg:sticky lg:top-24">
+            <div className="mb-6 space-y-0.5">
+              {MUC_CHINH.map((m) => (
+                <NutMuc key={m.id} m={m} />
+              ))}
+            </div>
+
             <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-ink-faint">
               Trang chủ
             </p>
             <div className="space-y-0.5">
-              {MUC_TRANG_CHU.map((m, i) => (
-                <NutMuc key={m.id} m={m} so={String(i + 1).padStart(2, "0")} />
+              {MUC_TRANG_CHU.map((m) => (
+                <NutMuc key={m.id} m={m} />
               ))}
             </div>
 
@@ -842,7 +869,9 @@ export default function AdminPage() {
           <Bang loai="loi">{loi}</Bang>
           <Bang loai="xong">{xong}</Bang>
 
-          {muc === "tin-nhan" ? (
+          {muc === "tong-quan" ? (
+            <MucTongQuan noiDung={noiDung} diChuyen={setMuc} />
+          ) : muc === "tin-nhan" ? (
             <MucTinNhan />
           ) : dangTai ? (
             <p className="flex items-center gap-2 py-10 text-sm text-ink-soft">
@@ -868,6 +897,17 @@ export default function AdminPage() {
               )}
               {muc === "lien-he" && (
                 <MucLienHe d={noiDung.company} doi={dat("company")} daSua={suaKhoa("company")} />
+              )}
+              {muc === "san-pham" && (
+                <Khung>
+                  <TieuDeMuc
+                    ghiChu="Thêm, sửa, xoá và đổi thứ tự sản phẩm trên trang chủ"
+                    neo="/#projects"
+                  >
+                    Sản phẩm
+                  </TieuDeMuc>
+                  <MucSanPham d={noiDung.projects} doi={dat("projects")} />
+                </Khung>
               )}
               {muc === "giao-dien" && (
                 <MucGiaoDien
