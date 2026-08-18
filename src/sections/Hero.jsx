@@ -32,9 +32,10 @@ import services from "../data/services.json";
    tự. Từ đang hiện nằm chồng lên cùng ô đó và chỉ chạy `transform`, mà
    transform thì không đụng tới bố cục.
 
-   `mau` truyền từ ngoài vào vì tiêu đề giờ nằm TRÊN DẢI MÀU THƯƠNG HIỆU —
-   để nguyên `text-brand` như bản cũ là chữ tím trên nền tím, mất hút. */
-function RotatingWord({ tu, mau = "text-brand" }) {
+   `lop` truyền từ ngoài vào vì tiêu đề giờ nằm TRÊN DẢI MÀU THƯƠNG HIỆU — để
+   nguyên `text-brand` như bản cũ là chữ tím trên nền tím, mất hút. Nơi gọi
+   quyết định luôn cả ô nền bọc quanh từ (xem chỗ dùng trong Hero). */
+function RotatingWord({ tu, lop = "text-brand" }) {
   const [index, setIndex] = useState(0);
   // Rỗng thì vẫn phải có một từ, không thì tiêu đề trang chủ hụt mất một dòng.
   const danhSach = tu?.length ? tu : ["chính quyền số"];
@@ -54,7 +55,7 @@ function RotatingWord({ tu, mau = "text-brand" }) {
   const tuHienTai = danhSach[index % danhSach.length];
 
   return (
-    <span className={`inline-grid ${mau}`}>
+    <span className={`inline-grid ${lop}`}>
       {danhSach.map((t) => (
         <span
           key={`cho-${t}`}
@@ -208,7 +209,21 @@ export default function Hero() {
             <h1 className="tieu-de-lon mt-3 text-[clamp(1.75rem,3.6vw,2.75rem)] text-tren-brand">
               {hero.tieuDeTruoc}
               <br />
-              <RotatingWord tu={hero.tuKhoaDong} mau="text-tren-brand" />
+              {/* TỪ KHOÁ NẰM TRONG Ô NỀN ĐẢO MÀU.
+                  Trên dải màu thương hiệu chỉ có ĐÚNG MỘT màu chữ đọc được
+                  (--color-tren-brand, đã đo tương phản cho cả 9 bảng màu), nên
+                  không thể tô từ khoá bằng màu khác để cho nổi. Cách còn lại
+                  là đảo nền: ô nền sáng + chữ mang màu thương hiệu — vẫn đúng
+                  một cặp màu đã được kiểm, mà tách hẳn khỏi nền.
+
+                  overflow-hidden biến ô này thành một khe: từ cũ trượt lên
+                  khuất mép trên, từ mới trồi lên từ mép dưới. leading rộng hơn
+                  tiêu đề (1.25 so với 1.08) vì dấu tiếng Việt vươn cao và thụt
+                  sâu — chật là cụt mất dấu trong một ô có cắt viền. */}
+              <RotatingWord
+                tu={hero.tuKhoaDong}
+                lop="overflow-hidden rounded-2xl bg-panel px-5 py-1.5 leading-[1.25] text-brand"
+              />
               <br />
               {hero.tieuDeSau}
             </h1>
