@@ -3,5 +3,9 @@
 # Vercel không nhìn thấy requirements.txt rồi tưởng đây là dự án Python.
 chatbot-python/
 
-# Script kiểm thử — chỉ chạy ở máy, không dính gì tới bản build.
-scripts/
+# ⚠️ ĐỪNG loại trừ scripts/ ở đây.
+# Trước đây thư mục này bị loại vì "chỉ là script kiểm thử". Sau đó `npm run
+# build` được cho chạy scripts/tao-ma-qr.mjs, và build trên Vercel chết ngay với
+# "Cannot find module" — trong khi ở máy vẫn chạy tốt nên rất khó đoán ra.
+# Vercel giữ bản deploy tốt gần nhất khi build hỏng, nên website vẫn trả HTTP 200
+# như thường: nhìn bên ngoài không thấy gì sai, mà thay đổi thì không bao giờ lên.
