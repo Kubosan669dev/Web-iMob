@@ -6,6 +6,20 @@ nhất nếu bỏ qua.
 
 ---
 
+> **Đã dựng xong ngày 18/08/2026** — dự án này không phải làm lại từ đầu nữa.
+> Các bước bên dưới giữ để tra cứu và để dựng lại khi cần.
+>
+> | Mục | Giá trị thật |
+> |---|---|
+> | Project trên Vercel | `kubosan669devs-projects/imob-web` |
+> | Tên miền chính | <https://imob-web-five.vercel.app> |
+> | Tên miền phụ | <https://imob-web-kubosan669devs-projects.vercel.app> |
+> | API (vẫn ở Render) | <https://imob-chatbot-api.onrender.com> |
+>
+> GitHub đã nối sẵn: đẩy lên `main` là Vercel tự deploy, không phải chạy lệnh gì.
+
+---
+
 ## 1. Bức tranh tổng thể — cái gì nằm ở đâu
 
 Dự án có 3 phần. **Vercel chỉ nhận phần 1.**
@@ -153,7 +167,7 @@ Xong bấm **Deploy**. Chờ khoảng 1–2 phút.
 Deploy xong Vercel cho bạn một địa chỉ, dạng:
 
 ```
-https://web-imob.vercel.app
+https://imob-web-five.vercel.app
 ```
 
 **Ngay lúc này website đã hiện ra bình thường, nhưng chatbot, form liên hệ và
@@ -168,14 +182,14 @@ Sửa như sau:
 3. Tìm biến `ALLOWED_ORIGINS` → sửa giá trị thành địa chỉ Vercel:
 
    ```
-   https://web-imob.vercel.app
+   https://imob-web-five.vercel.app
    ```
 
    Muốn giữ luôn cả website cũ trên Render thì ngăn cách bằng dấu phẩy, **không
    có khoảng trắng thừa**:
 
    ```
-   https://web-imob.vercel.app,https://imob-web-xxxx.onrender.com
+   https://imob-web-five.vercel.app,https://imob-web-xxxx.onrender.com
    ```
 
 4. Bấm **Save Changes**. Render tự khởi động lại dịch vụ (khoảng 1 phút),
@@ -200,7 +214,7 @@ Database đang giữ nội dung **cũ** từ đợt trước, và lớp database
 JSON mới trong bundle. Nếu không làm bước này, trang chủ sẽ ra một bản pha trộn:
 bố cục mới nhưng chữ cũ.
 
-1. Mở `https://web-imob.vercel.app/admin` → đăng nhập.
+1. Mở `https://imob-web-five.vercel.app/admin` → đăng nhập.
    (Lần đầu chờ 30–50 giây cho API thức dậy — màn hình có báo.)
 2. Nếu từng sửa gì trong admin muốn giữ thì bấm **Xuất JSON** trước.
 3. Bấm **Nạp lại từ file gốc** (góc trên bên phải) → xác nhận.
@@ -230,6 +244,21 @@ Việc **3, 4, 5** hỏng ⇒ gần như chắc chắn là CORS ở bước 7, h
 ---
 
 ## 10. Những chỗ hay sai
+
+**`vercel link` báo lỗi "the owning service is ambiguous".**
+Vercel CLI 59 tự dò thư mục, thấy `chatbot-python/` có `requirements.txt` nên
+tưởng đây là dự án hai dịch vụ (FastAPI + Vite), rồi từ chối các khoá
+`framework` / `buildCommand` / `outputDirectory` ở cấp cao nhất.
+`.vercelignore` **không** chặn được bước dò này.
+
+Cách xử lý: lúc chạy `vercel link` thì tạm để `vercel.json` chỉ còn `rewrites`
+và `headers`. CLI sẽ tự ghi một khối `services` vào file — **xoá khối đó đi** và
+trả lại cấu hình thường. Bước `deploy` không dò services nên chạy bình thường.
+
+Đừng để lại khối `services` của CLI: nó khai báo cả dịch vụ FastAPI, tức là
+Vercel sẽ cố dựng scikit-learn thành serverless function — đúng thứ không chạy
+được (mục 2). Và nếu khai `services` mà thiếu luật rewrite trỏ vào service thì
+**mọi đường dẫn trả 404**, kể cả trang chủ.
 
 **Sửa biến môi trường xong mà không thấy gì đổi.**
 Biến `VITE_*` chỉ có tác dụng **lúc build**, không phải lúc chạy. Sửa xong phải:

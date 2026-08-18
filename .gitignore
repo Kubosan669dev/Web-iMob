@@ -23,3 +23,8 @@ npm-debug.log*
 !.vscode/extensions.json
 .idea
 .DS_Store
+
+.vercel
+.env*
+# ...trừ file mẫu, file này CẦN nằm trong repo để người mới biết phải điền gì.
+!.env.example
