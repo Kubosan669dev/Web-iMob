@@ -193,18 +193,29 @@ export default function Hero() {
           xuống dưới nó. Thanh đó cao 3.5rem trên điện thoại, và 5.5rem từ 640px
           trở lên (có thêm dải liên hệ ở trên). Sửa chiều cao Navbar thì phải
           sửa cả đây. */}
-      <div className="bg-brand pb-28 pt-20 sm:pt-28 lg:pt-32">
+      <div className="bg-brand pb-28 pt-20 sm:pt-28">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium text-tren-brand/75">{hero.badge}</p>
 
-            <h1 className="tieu-de-lon mt-2.5 text-[clamp(1.75rem,3.6vw,2.75rem)] text-tren-brand/80">
-              {hero.tieuDeTruoc}{" "}
-              <RotatingWord tu={hero.tuKhoaDong} mau="text-tren-brand" />{" "}
+            {/* BA DÒNG XẾP CHỒNG, không viết liền một câu.
+                Đã thử viết liền rồi bỏ: RotatingWord có lớp giữ chỗ để khung
+                không nhảy, nên bề rộng của nó LUÔN bằng từ dài nhất
+                ("chính quyền số"). Nằm giữa câu thì từ ngắn như "doanh nghiệp"
+                để hở hai khoảng trắng to hai bên, và chữ "ở" bị đẩy rớt lại
+                cuối dòng trên. Cho mỗi phần một dòng riêng thì phần thừa đó
+                thành lề của một dòng căn giữa — không ai thấy nữa. */}
+            <h1 className="tieu-de-lon mt-3 text-[clamp(1.75rem,3.6vw,2.75rem)] text-tren-brand">
+              {hero.tieuDeTruoc}
+              <br />
+              <RotatingWord tu={hero.tuKhoaDong} mau="text-tren-brand" />
+              <br />
               {hero.tieuDeSau}
             </h1>
 
-            <p className="mx-auto mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-tren-brand/75 sm:text-[1.0625rem]">
+            {/* max-w hẹp hơn tiêu đề: một dòng văn xuôi dài quá 65-70 ký tự là
+                mắt khó bắt được đầu dòng kế tiếp. */}
+            <p className="mx-auto mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-tren-brand/75 sm:text-base">
               {hero.moTa}
             </p>
           </div>
