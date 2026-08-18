@@ -5,13 +5,16 @@ import Layout from "./components/layout/Layout.jsx";
 import ScrollToTop from "./components/util/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
+import { BangMauProvider } from "./context/BangMauContext.jsx";
 
 // Các trang dịch vụ tách bundle bằng lazy() — khách vào trang chủ không tải
 // kèm. Nội dung từng trang đọc từ data/servicePages.json.
 const ZaloMiniAppPage = lazy(() => import("./pages/ZaloMiniAppPage.jsx"));
-const SoftwareHardwarePage = lazy(() => import("./pages/SoftwareHardwarePage.jsx"));
-const DigitalTransformationPage = lazy(() =>
-  import("./pages/DigitalTransformationPage.jsx")
+const SoftwareHardwarePage = lazy(
+  () => import("./pages/SoftwareHardwarePage.jsx"),
+);
+const DigitalTransformationPage = lazy(
+  () => import("./pages/DigitalTransformationPage.jsx"),
 );
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
@@ -39,40 +42,45 @@ export default function App() {
       {/* NoiDungProvider bọc NGOÀI router: nội dung (thông tin công ty, trang
           pháp lý) chỉ tải một lần cho cả site, chuyển trang không tải lại. */}
       <NoiDungProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <Suspense fallback={null}>
-            <Routes>
-              {/* Các trang chính dùng chung Layout (Navbar + Footer) */}
-              <Route element={<Layout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/zalo-miniapp" element={<ZaloMiniAppPage />} />
-                <Route
-                  path="/software-hardware"
-                  element={<SoftwareHardwarePage />}
-                />
-                <Route
-                  path="/digital-transformation"
-                  element={<DigitalTransformationPage />}
-                />
-                <Route
-                  path="/privacy-policy"
-                  element={<LegalPage slug="privacy-policy" />}
-                />
-                <Route
-                  path="/terms-of-service"
-                  element={<LegalPage slug="terms-of-service" />}
-                />
-              </Route>
+        {/* BangMauProvider nằm TRONG NoiDungProvider vì nó đọc bảng màu chính
+            thức từ nội dung, và nằm NGOÀI router vì màu áp cho cả site — kể cả
+            trang /admin, để không phải nhớ hai bộ màu. */}
+        <BangMauProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <Suspense fallback={null}>
+              <Routes>
+                {/* Các trang chính dùng chung Layout (Navbar + Footer) */}
+                <Route element={<Layout />}>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/zalo-miniapp" element={<ZaloMiniAppPage />} />
+                  <Route
+                    path="/software-hardware"
+                    element={<SoftwareHardwarePage />}
+                  />
+                  <Route
+                    path="/digital-transformation"
+                    element={<DigitalTransformationPage />}
+                  />
+                  <Route
+                    path="/privacy-policy"
+                    element={<LegalPage slug="privacy-policy" />}
+                  />
+                  <Route
+                    path="/terms-of-service"
+                    element={<LegalPage slug="terms-of-service" />}
+                  />
+                </Route>
 
-              {/* Style-guide nội bộ — không Navbar/Footer */}
-              <Route path="/ui-kit" element={<UiKitPage />} />
+                {/* Style-guide nội bộ — không Navbar/Footer */}
+                <Route path="/ui-kit" element={<UiKitPage />} />
 
-              {/* Trang quản trị nội dung — không Navbar/Footer, không có trong menu */}
-              <Route path="/admin" element={<AdminPage />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
+                {/* Trang quản trị nội dung — không Navbar/Footer, không có trong menu */}
+                <Route path="/admin" element={<AdminPage />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </BangMauProvider>
       </NoiDungProvider>
     </MotionConfig>
   );

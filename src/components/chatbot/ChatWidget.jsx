@@ -52,7 +52,7 @@ export default function ChatWidget() {
         // đè trúng nút Gửi của ô nhập (40px, cách mép 12px) — khách bấm Gửi
         // lại hoá ra bấm đóng chat. Đóng chat đã có dấu X trên header rồi.
         className={
-          "fixed bottom-5 right-5 z-50 h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-brand transition-transform duration-300 hover:scale-110 hover:shadow-lift sm:bottom-6 sm:right-6 sm:flex " +
+          "fixed bottom-5 right-5 z-50 h-14 w-14 items-center justify-center rounded-full bg-brand text-tren-brand shadow-brand transition-transform duration-300 hover:scale-110 hover:shadow-lift sm:bottom-6 sm:right-6 sm:flex " +
           (open ? "hidden sm:flex" : "flex")
         }
       >

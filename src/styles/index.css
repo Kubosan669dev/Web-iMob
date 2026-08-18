@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Các bảng màu thay thế. File này SINH TỰ ĐỘNG (npm run bangmau).
+   Theo chuẩn CSS, @import bắt buộc nằm trên cùng nên nó đứng TRƯỚC khối @theme
+   bên dưới — nhưng vẫn thắng, vì bộ chọn trong đó là `html[data-bang-mau=...]`
+   có độ ưu tiên (0,1,1), cao hơn `:root` (0,1,0) mà Tailwind sinh ra.
+   Không có thuộc tính data-bang-mau thì trang chạy bằng đúng khối @theme, tức
+   là chàm tím. */
+@import "./bangMau.css";
+
 /* ============================================================
    DESIGN TOKENS — nguồn duy nhất cho màu / font / hiệu ứng.
    Component chỉ dùng token/utility, KHÔNG hardcode mã màu.
@@ -53,6 +61,21 @@
   --color-brand: #4b31d4;
   --color-brand-deep: #2f1d96; /* trạng thái hover / nhấn */
   --color-brand-soft: #eeeafc; /* nền nhạt cho nhãn, ô icon */
+
+  /* Chữ đặt TRÊN nền màu thương hiệu.
+     Bản trước viết cứng text-white ở 8 chỗ. Chỉ đúng chừng nào màu thương hiệu
+     còn đậm. Bảng màu nền tối có màu nhấn là hồng sáng — chữ trắng trên đó
+     không đọc nổi, phải là chữ tối. Tách thành biến để mỗi bảng màu tự khai. */
+  --color-tren-brand: #ffffff;
+
+  /* --- Màu mang NGHĨA, không phải màu trang trí ---
+     Lỗi và cảnh báo phải giữ được ý nghĩa ở mọi bảng màu, nên chúng KHÔNG đổi
+     theo màu thương hiệu. Trước đây viết cứng bg-red-50 / text-red-700 /
+     bg-amber-500 — sang bảng nền tối là đỏ nhạt trên nền đen, chói và bẩn. */
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405; /* chữ cảnh báo */
+  --color-canhbao-cham: #d97706; /* chấm tròn "chưa lưu" */
 
   /* --- Bo góc ---
      Apple bo góc rất lớn: thẻ nội dung ~18px, khối lớn ~28px. Bo góc lớn là
@@ -135,7 +158,7 @@
     background: var(--color-mist);
   }
   ::-webkit-scrollbar-thumb {
-    background: #c7c7d1;
+    background: var(--color-line);
     border-radius: 8px;
     border: 2px solid var(--color-mist);
   }

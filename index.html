@@ -1,8 +1,32 @@
 <!doctype html>
-<html lang="vi" style="background-color: #05050a">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ===== Áp bảng màu TRƯỚC khi trình duyệt vẽ khung hình đầu tiên =====
+         Đoạn này phải nằm TRONG thẻ head và chạy đồng bộ. Nếu để React làm thì
+         nó chỉ chạy sau khi tải xong bundle JS — người xem sẽ thấy trang hiện
+         màu mặc định rồi mới nhảy sang bảng màu thật, chói mắt nhất là khi
+         bảng màu là nền tối.
+
+         Đọc hai khoá, theo đúng thứ tự ưu tiên:
+           imob_bang_mau      — bảng người xem tự chọn ở widget ngoài trang chủ
+           imob_bang_mau_web  — bảng CHÍNH THỨC của lần vào trước, React ghi lại
+                                mỗi lần tải (xem src/context/BangMauContext.jsx)
+
+         Không có khoá nào thì bỏ qua, trang chạy bằng bảng chàm tím mặc định
+         khai trong @theme. Cố ý viết bằng JS thuần, không đụng tới mã màu nào. -->
+    <script>
+      try {
+        var _bm =
+          localStorage.getItem("imob_bang_mau") ||
+          localStorage.getItem("imob_bang_mau_web");
+        if (_bm) document.documentElement.dataset.bangMau = _bm;
+      } catch (e) {
+        /* trình duyệt chặn storage — bỏ qua, dùng bảng mặc định */
+      }
+    </script>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
@@ -19,8 +43,10 @@
     />
     <meta name="robots" content="index, follow" />
 
-    <!-- Màu thanh trình duyệt trên điện thoại — khớp nền tối của site -->
-    <meta name="theme-color" content="#05050a" />
+    <!-- Màu thanh trình duyệt trên điện thoại.
+         Giá trị ở đây chỉ là mặc định (chàm tím). BangMauContext ghi đè theo
+         đúng bảng màu đang dùng, nên đổi bảng màu là thanh trình duyệt đổi theo. -->
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- ===== Open Graph (Facebook, Zalo, LinkedIn) =====
          Quyết định "thẻ xem trước" khi ai đó dán link lên mạng xã hội.

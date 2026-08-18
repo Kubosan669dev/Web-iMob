@@ -3,6 +3,7 @@ import companyMacDinh from "../data/company.json";
 import legalPagesMacDinh from "../data/legalPages.json";
 import heroMacDinh from "../data/hero.json";
 import aboutMacDinh from "../data/about.json";
+import giaoDienMacDinh from "../data/giaoDien.json";
 import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
@@ -35,6 +36,7 @@ const MAC_DINH = {
   legalPages: legalPagesMacDinh,
   hero: heroMacDinh,
   about: aboutMacDinh,
+  giaoDien: giaoDienMacDinh,
 };
 
 // Không để khách chờ lâu vì nội dung: quá hạn này thì dùng bản mặc định.
@@ -137,6 +139,18 @@ export function useHero() {
 export function useAbout() {
   const noiDung = useNoiDung();
   return noiDung.about ?? aboutMacDinh;
+}
+
+/**
+ * Cài đặt giao diện — hiện chỉ có khoá bảng màu.
+ *
+ * Đây là khoá nội dung DUY NHẤT có mặt ngay ở lần vẽ đầu tiên và ảnh hưởng tới
+ * TOÀN BỘ màu của trang. Vì vậy nó lấy từ bản JSON đóng gói sẵn trước, rồi mới
+ * để API ghi đè — nếu chờ API thì người xem thấy trang đổi màu giữa chừng.
+ */
+export function useGiaoDien() {
+  const noiDung = useNoiDung();
+  return noiDung.giaoDien ?? giaoDienMacDinh;
 }
 
 export { NoiDungContext, MAC_DINH };

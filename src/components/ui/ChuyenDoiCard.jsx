@@ -67,7 +67,7 @@ export default function ChuyenDoiCard({ className = "" }) {
 
       {/* ---------- Mũi tên chuyển đổi ---------- */}
       <div className="flex justify-center py-3">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-tren-brand">
           <ArrowDown className="h-4 w-4" aria-hidden="true" />
           iMob
         </span>

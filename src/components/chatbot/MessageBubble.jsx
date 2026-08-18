@@ -23,7 +23,7 @@ function MessageBubble({ role, text, done = true, plain = false }) {
         }
       >
         {isBot ? (
-          <Bot className="h-4 w-4 text-white" aria-hidden="true" />
+          <Bot className="h-4 w-4 text-tren-brand" aria-hidden="true" />
         ) : (
           <User className="h-4 w-4 text-ink-soft" aria-hidden="true" />
         )}
@@ -34,7 +34,7 @@ function MessageBubble({ role, text, done = true, plain = false }) {
           "max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap " +
           (isBot
             ? "rounded-bl-sm bg-mist text-ink"
-            : "rounded-br-sm bg-brand text-white")
+            : "rounded-br-sm bg-brand text-tren-brand")
         }
       >
         {dungMarkdown ? (

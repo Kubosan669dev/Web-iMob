@@ -136,7 +136,7 @@ export default function ManHinhDangNhap({ khiXong }) {
             {loi && (
               <p
                 role="alert"
-                className="flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+                className="flex items-start gap-2.5 rounded-xl bg-loi-nen px-4 py-3 text-sm text-loi"
               >
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 {loi}
@@ -146,7 +146,7 @@ export default function ManHinhDangNhap({ khiXong }) {
             <button
               type="submit"
               disabled={dangGui}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-[1.0625rem] font-medium text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-[1.0625rem] font-medium text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
             >
               {dangGui ? (
                 <>

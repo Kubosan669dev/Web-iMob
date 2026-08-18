@@ -1,0 +1,184 @@
+/* ============================================================
+   BẢNG MÀU — sinh tự động, ĐỪNG sửa tay.
+   Nguồn: scripts/kiem-tra-bang-mau.mjs  ·  chạy lại: npm run bangmau
+   ============================================================ */
+
+/* Chàm tím iMob — Màu trong logo, mặc định */
+html[data-bang-mau="cham-tim"] {
+  color-scheme: light;
+  --color-paper: #ffffff;
+  --color-mist: #f5f5f7;
+  --color-panel: #ffffff;
+  --color-ink: #1a1a2e;
+  --color-ink-soft: #55556b;
+  --color-ink-faint: #6f6f80;
+  --color-line: #e5e5ea;
+  --color-brand: #4b31d4;
+  --color-brand-deep: #2f1d96;
+  --color-brand-soft: #eeeafc;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Paper Heritage — Sang, sáng, dễ đọc */
+html[data-bang-mau="paper-heritage"] {
+  color-scheme: light;
+  --color-paper: #fdfbf6;
+  --color-mist: #f4efe2;
+  --color-panel: #ffffff;
+  --color-ink: #241f16;
+  --color-ink-soft: #5a5142;
+  --color-ink-faint: #6f6555;
+  --color-line: #e6dcc6;
+  --color-brand: #7a5d18;
+  --color-brand-deep: #5c460f;
+  --color-brand-soft: #f6efdc;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Coral Sunrise — San hô ấm, năng động */
+html[data-bang-mau="coral-sunrise"] {
+  color-scheme: light;
+  --color-paper: #fffaf8;
+  --color-mist: #ffeee7;
+  --color-panel: #ffffff;
+  --color-ink: #26160f;
+  --color-ink-soft: #6a5246;
+  --color-ink-faint: #82675a;
+  --color-line: #f4ddd1;
+  --color-brand: #c03d10;
+  --color-brand-deep: #96300b;
+  --color-brand-soft: #ffe9de;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Teal Paradise — Xanh ngọc tươi */
+html[data-bang-mau="teal-paradise"] {
+  color-scheme: light;
+  --color-paper: #f9fefd;
+  --color-mist: #e6f6f2;
+  --color-panel: #ffffff;
+  --color-ink: #10231f;
+  --color-ink-soft: #475e59;
+  --color-ink-faint: #566d67;
+  --color-line: #cde8e2;
+  --color-brand: #0e6f67;
+  --color-brand-deep: #0a534d;
+  --color-brand-soft: #d2f1eb;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Hạ Long Blue — Xanh biển vịnh Hạ Long */
+html[data-bang-mau="ha-long-blue"] {
+  color-scheme: light;
+  --color-paper: #f9fcff;
+  --color-mist: #e8f1fb;
+  --color-panel: #ffffff;
+  --color-ink: #101c28;
+  --color-ink-soft: #475868;
+  --color-ink-faint: #5c6f80;
+  --color-line: #d2e1f0;
+  --color-brand: #125da6;
+  --color-brand-deep: #0d4881;
+  --color-brand-soft: #dbe9fb;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Forest Zen — Ngọc lục rừng thiền */
+html[data-bang-mau="forest-zen"] {
+  color-scheme: light;
+  --color-paper: #fafdf9;
+  --color-mist: #eaf4e8;
+  --color-panel: #ffffff;
+  --color-ink: #14210f;
+  --color-ink-soft: #4c5c47;
+  --color-ink-faint: #60715b;
+  --color-line: #d6e5d2;
+  --color-brand: #2b6630;
+  --color-brand-deep: #204d24;
+  --color-brand-soft: #dcedd9;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Rose Lotus — Hồng sen mềm */
+html[data-bang-mau="rose-lotus"] {
+  color-scheme: light;
+  --color-paper: #fffafc;
+  --color-mist: #fce9f0;
+  --color-panel: #ffffff;
+  --color-ink: #26101a;
+  --color-ink-soft: #684755;
+  --color-ink-faint: #805c6b;
+  --color-line: #f2d5df;
+  --color-brand: #b81a5c;
+  --color-brand-deep: #93144a;
+  --color-brand-soft: #fbdde9;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Zen Neutral — Trung tính, tối giản */
+html[data-bang-mau="zen-neutral"] {
+  color-scheme: light;
+  --color-paper: #fbfbfa;
+  --color-mist: #efefed;
+  --color-panel: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #54545a;
+  --color-ink-faint: #6c6c73;
+  --color-line: #e1e1df;
+  --color-brand: #465166;
+  --color-brand-deep: #333c4d;
+  --color-brand-soft: #e3e5ea;
+  --color-tren-brand: #ffffff;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Midnight Crimson — Nền tối, đỏ trầm */
+html[data-bang-mau="midnight-crimson"] {
+  color-scheme: dark;
+  --color-paper: #101017;
+  --color-mist: #1a1a24;
+  --color-panel: #1a1a24;
+  --color-ink: #f2f2f7;
+  --color-ink-soft: #a9a9bb;
+  --color-ink-faint: #8e8ea0;
+  --color-line: #2c2c3a;
+  --color-brand: #ff6b7f;
+  --color-brand-deep: #ff94a3;
+  --color-brand-soft: #33161d;
+  --color-tren-brand: #1a0409;
+  --color-loi: #ff8a80;
+  --color-loi-nen: #33161a;
+  --color-canhbao: #ffb74d;
+  --color-canhbao-cham: #ffb74d;
+}

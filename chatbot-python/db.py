@@ -49,6 +49,7 @@ NGUON_NAP = {
     "legalPages": THU_MUC_DATA / "legalPages.json",
     "hero": THU_MUC_DATA / "hero.json",
     "about": THU_MUC_DATA / "about.json",
+    "giaoDien": THU_MUC_DATA / "giaoDien.json",
 }
 
 _pool: ConnectionPool | None = None

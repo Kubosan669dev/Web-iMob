@@ -32,7 +32,7 @@ function ChamDoi({ hien }) {
   return (
     <span
       title="Đã sửa, chưa lưu"
-      className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"
+      className="h-1.5 w-1.5 shrink-0 rounded-full bg-canhbao-cham"
     />
   );
 }

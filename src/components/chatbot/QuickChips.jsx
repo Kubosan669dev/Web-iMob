@@ -19,7 +19,7 @@ export default function QuickChips({ onSelect, disabled }) {
             type="button"
             disabled={disabled}
             onClick={() => onSelect(chip.query)}
-            className="rounded-full border border-brand/30 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand transition-all hover:border-brand hover:bg-brand hover:text-white disabled:opacity-50"
+            className="rounded-full border border-brand/30 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand transition-all hover:border-brand hover:bg-brand hover:text-tren-brand disabled:opacity-50"
           >
             {chip.label}
           </button>

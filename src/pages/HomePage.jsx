@@ -4,6 +4,7 @@ import Services from "../sections/Services.jsx";
 import About from "../sections/About.jsx";
 import ChatbotIntro from "../sections/ChatbotIntro.jsx";
 import Contact from "../sections/Contact.jsx";
+import ChonBangMau from "../components/ui/ChonBangMau.jsx";
 
 // HomePage: ghép các section của trang chủ.
 //
@@ -27,6 +28,11 @@ export default function HomePage() {
       <About />
       <ChatbotIntro />
       <Contact />
+
+      {/* Nút đổi bảng màu, góc dưới bên trái. CỐ Ý chỉ đặt ở trang chủ: đây là
+          chỗ để xem thử thiết kế, không phải một tính năng của website. Bảng
+          màu đã chọn lưu trong máy nên đi sang trang khác vẫn giữ nguyên. */}
+      <ChonBangMau />
     </>
   );
 }

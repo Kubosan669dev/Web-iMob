@@ -12,7 +12,7 @@
 //   giao diện trông rẻ tiền.
 // • Chữ thường, không IN HOA: tiếng Việt viết hoa toàn bộ bị chồng dấu.
 const VARIANTS = {
-  primary: "bg-brand text-white hover:bg-brand-deep",
+  primary: "bg-brand text-tren-brand hover:bg-brand-deep",
   outline: "bg-mist text-ink hover:bg-line",
   ghost: "text-brand hover:underline underline-offset-4",
 };

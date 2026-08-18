@@ -55,7 +55,7 @@ function Field({ label, required = false, error, children }) {
         {label} {required && <span className="text-brand">*</span>}
       </span>
       {children}
-      {error && <span className="mt-2 block text-sm text-red-600">{error}</span>}
+      {error && <span className="mt-2 block text-sm text-loi">{error}</span>}
     </label>
   );
 }
@@ -198,7 +198,7 @@ function ContactForm() {
         {status === "error" && (
           <div
             role="alert"
-            className="flex items-start gap-2.5 rounded-xl bg-red-50 px-4 py-3.5 text-[0.9375rem] text-red-700"
+            className="flex items-start gap-2.5 rounded-xl bg-loi-nen px-4 py-3.5 text-[0.9375rem] text-loi"
           >
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
             <span>

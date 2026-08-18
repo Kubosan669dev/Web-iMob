@@ -48,7 +48,7 @@ export default function ChatInput({ onSend, disabled }) {
         onClick={submit}
         disabled={disabled || !value.trim()}
         aria-label="Gửi tin nhắn"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand text-white transition-all duration-300 hover:shadow-lift disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand text-tren-brand transition-all duration-300 hover:shadow-lift disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
       >
         <Send className="h-4 w-4" aria-hidden="true" />
       </button>

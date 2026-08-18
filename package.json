@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test:chat": "node scripts/test-chatbot.mjs",
     "test:chat:flow": "node scripts/test-chatbot-flow.mjs",
-    "test:congty": "node scripts/kiem-tra-congty-dong.mjs"
+    "test:congty": "node scripts/kiem-tra-congty-dong.mjs",
+    "bangmau": "node scripts/kiem-tra-bang-mau.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",

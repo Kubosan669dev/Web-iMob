@@ -1,0 +1,5 @@
+{
+  "_note": "Giao diện của website. Sửa được trong /admin, mục Giao diện.",
+  "_bangMau": "Khoá bảng màu. Danh sách khoá hợp lệ nằm trong src/data/bangMau.js (sinh từ scripts/kiem-tra-bang-mau.mjs). Khoá lạ thì website tự lùi về chàm tím.",
+  "bangMau": "cham-tim"
+}

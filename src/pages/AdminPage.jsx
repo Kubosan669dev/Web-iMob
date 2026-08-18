@@ -18,6 +18,7 @@ import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/F
 import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
+import { BANG_MAU } from "../data/bangMau.js";
 
 // ============================================================
 // AdminPage — trang quản trị nội dung (/admin).
@@ -58,6 +59,7 @@ const MUC_TRANG_CHU = [
 
 const MUC_KHAC = [
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null },
+  { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", neo: "/" },
   { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", neo: "/privacy-policy" },
 ];
 
@@ -68,7 +70,7 @@ function Bang({ loai, children }) {
   if (!children) return null;
   const kieu =
     loai === "loi"
-      ? "bg-red-50 text-red-700"
+      ? "bg-loi-nen text-loi"
       : "bg-brand-soft text-brand";
   const Icon = loai === "loi" ? AlertTriangle : CheckCircle2;
   return (
@@ -264,6 +266,96 @@ function MucLienHe({ d, doi, daSua }) {
           );
         })}
       </div>
+    </Khung>
+  );
+}
+
+/**
+ * Bảng màu CHÍNH THỨC của website.
+ *
+ * Khác hẳn nút chọn màu ngoài trang chủ: nút đó chỉ đổi màu trên máy người bấm
+ * để xem thử, còn ô chọn ở đây mới quyết định màu KHÁCH nhìn thấy.
+ */
+function MucGiaoDien({ d, doi, daSua }) {
+  const dangChon = d?.bangMau ?? "cham-tim";
+  return (
+    <Khung>
+      <TieuDeMuc ghiChu="Bảng màu khách nhìn thấy khi vào website" neo="/">
+        Giao diện
+      </TieuDeMuc>
+
+      <div className="mb-5 flex items-center gap-2">
+        <span className="text-sm font-medium text-ink-soft">Bảng màu chính thức</span>
+        {daSua && (
+          <span
+            title="Đã sửa, chưa lưu"
+            className="h-1.5 w-1.5 shrink-0 rounded-full bg-canhbao-cham"
+          />
+        )}
+      </div>
+
+      <div className="grid gap-2.5 sm:grid-cols-2">
+        {BANG_MAU.map((b) => {
+          const chon = b.khoa === dangChon;
+          return (
+            <button
+              key={b.khoa}
+              type="button"
+              onClick={() => doi({ ...d, bangMau: b.khoa })}
+              aria-pressed={chon}
+              className={
+                "flex items-center gap-3 rounded-card p-3.5 text-left transition-colors " +
+                (chon ? "bg-brand-soft ring-1 ring-brand" : "bg-mist hover:bg-line/60")
+              }
+            >
+              <span
+                aria-hidden="true"
+                className="flex h-7 w-12 shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-line"
+              >
+                <span
+                  className="w-1/2"
+                  style={{ backgroundColor: b.bien["--color-brand"] }}
+                />
+                <span
+                  className="w-1/2"
+                  style={{ backgroundColor: b.bien["--color-brand-soft"] }}
+                />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span
+                  className={
+                    "block truncate text-sm font-medium " +
+                    (chon ? "text-brand" : "text-ink")
+                  }
+                >
+                  {b.ten}
+                </span>
+                <span className="block truncate text-[0.8125rem] text-ink-soft">
+                  {b.moTa}
+                </span>
+              </span>
+              {chon && (
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="mt-6 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
+        Trang chủ có nút đổi màu ở góc dưới bên trái. Nút đó chỉ đổi màu{" "}
+        <span className="font-medium text-ink">trên máy người bấm</span> để xem thử,
+        không ảnh hưởng tới khách. Muốn đổi màu cho cả website thì chọn ở đây rồi bấm
+        Lưu.
+      </p>
+
+      <p className="mt-3 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
+        Mọi bảng màu đều đã qua 15 phép đo tương phản, nên chữ ở bảng nào cũng đọc
+        được. Thêm hoặc sửa màu thì sửa trong{" "}
+        <span className="font-mono">scripts/kiem-tra-bang-mau.mjs</span> rồi chạy{" "}
+        <span className="font-mono">npm run bangmau</span> — hụt chuẩn là script từ
+        chối ghi file.
+      </p>
     </Khung>
   );
 }
@@ -672,7 +764,7 @@ export default function AdminPage() {
         {so && <span className="font-mono text-xs text-ink-faint">{so}</span>}
         <span className="flex-1 font-medium">{m.nhan}</span>
         {m.khoa && suaKhoa(m.khoa) && (
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-500" title="Chưa lưu" />
+          <span className="h-1.5 w-1.5 rounded-full bg-canhbao-cham" title="Chưa lưu" />
         )}
       </button>
     );
@@ -719,7 +811,7 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={thoat}
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-red-600"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-loi"
             >
               <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Thoát</span>
@@ -766,7 +858,7 @@ export default function AdminPage() {
             </p>
           ) : !noiDung?.[TAT_CA_MUC.find((m) => m.id === muc)?.khoa] ? (
             <Khung>
-              <p className="text-sm leading-relaxed text-amber-700">
+              <p className="text-sm leading-relaxed text-canhbao">
                 Máy chủ chưa có dữ liệu cho mục này. Kiểm tra database đã kết nối
                 chưa — mở <span className="font-mono">/health</span> của API, trường{" "}
                 <span className="font-mono">database</span> phải là{" "}
@@ -783,6 +875,13 @@ export default function AdminPage() {
               )}
               {muc === "lien-he" && (
                 <MucLienHe d={noiDung.company} doi={dat("company")} daSua={suaKhoa("company")} />
+              )}
+              {muc === "giao-dien" && (
+                <MucGiaoDien
+                  d={noiDung.giaoDien}
+                  doi={dat("giaoDien")}
+                  daSua={suaKhoa("giaoDien")}
+                />
               )}
               {muc === "phap-ly" && (
                 <MucPhapLy
@@ -801,7 +900,7 @@ export default function AdminPage() {
         <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper/95 backdrop-blur-xl">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3.5">
             <p className="flex items-center gap-2 text-sm text-ink-soft">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+              <span className="h-1.5 w-1.5 rounded-full bg-canhbao-cham" aria-hidden="true" />
               Chưa lưu:{" "}
               <span className="font-medium text-ink">
                 {khoaDaSua
@@ -824,7 +923,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={luuTatCa}
                 disabled={dangLuu}
-                className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {dangLuu ? (
                   <>
