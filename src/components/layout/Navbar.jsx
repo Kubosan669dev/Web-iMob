@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Menu, Phone, Mail, Clock } from "lucide-react";
 import Container from "../ui/Container.jsx";
+import Logo from "../ui/Logo.jsx";
 import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
 import useActiveSection from "../../hooks/useActiveSection.js";
@@ -111,12 +112,11 @@ export default function Navbar() {
       <div className="border-b border-line bg-paper/80 backdrop-blur-xl">
         <Container className="flex h-14 items-center justify-between">
           {/* ---------- Logo ----------
-              Ô logo để nền chàm tím đặc vì file logo-imob-white.png là logo
-              TRẮNG — đặt lên nền sáng sẽ mất hút. */}
+              Logo dùng ảnh chính thức có sẵn ô nền, KHÔNG tự dựng ô nền bằng
+              bg-brand nữa: bg-brand đổi theo bảng màu, mà logo công ty thì
+              không được phép đổi màu. Xem components/ui/Logo.jsx. */}
           <a href="/#home" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand">
-              <img src="/logo-imob-white.png" alt="" className="h-5 w-5" />
-            </span>
+            <Logo className="h-8 w-8" />
             <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">
               {congTy.name}
             </span>

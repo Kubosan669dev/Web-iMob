@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Phone } from "lucide-react";
 import Button from "../ui/Button.jsx";
+import Logo from "../ui/Logo.jsx";
 import { NAV_ITEMS } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
 
@@ -62,9 +63,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
             {/* Header panel */}
             <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
               <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand">
-                  <img src="/logo-imob-white.png" alt="" className="h-5 w-5" />
-                </span>
+                <Logo className="h-8 w-8" />
                 <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">
                   {congTy.name}
                 </span>

@@ -10,6 +10,7 @@ import {
   User,
 } from "lucide-react";
 import * as api from "../../services/adminService.js";
+import Logo from "../ui/Logo.jsx";
 
 // ============================================================
 // Màn hình đăng nhập trang quản trị.
@@ -79,15 +80,8 @@ export default function ManHinhDangNhap({ khiXong }) {
         <div className="rounded-block bg-panel p-7 sm:p-9">
           {/* ---------- Thương hiệu ---------- */}
           <div className="mb-8 text-center">
-            {/* Ô logo nền chàm tím đặc, dùng file logo TRẮNG — logo màu đặt
-                trên nền trắng sẽ chìm. */}
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-block bg-brand">
-              <img
-                src="/logo-imob-white.png"
-                alt=""
-                className="h-9 w-9 object-contain"
-              />
-            </div>
+            {/* Logo giữ nguyên màu ở mọi bảng màu — xem components/ui/Logo.jsx */}
+            <Logo className="mx-auto mb-5 h-16 w-16" />
 
             <h1 className="tieu-de-lon text-2xl text-ink">
               iMob <span className="text-brand">Admin</span>
