@@ -33,8 +33,8 @@ import services from "../data/services.json";
    transform thì không đụng tới bố cục.
 
    `lop` truyền từ ngoài vào vì tiêu đề giờ nằm TRÊN DẢI MÀU THƯƠNG HIỆU — để
-   nguyên `text-brand` như bản cũ là chữ tím trên nền tím, mất hút. Nơi gọi
-   quyết định luôn cả ô nền bọc quanh từ (xem chỗ dùng trong Hero). */
+   nguyên `text-brand` như bản cũ là chữ tím trên nền tím, mất hút. Hero truyền
+   vào cỡ chữ chứ không truyền màu, để từ khoá thừa hưởng màu của cả tiêu đề. */
 function RotatingWord({ tu, lop = "text-brand" }) {
   const [index, setIndex] = useState(0);
   // Rỗng thì vẫn phải có một từ, không thì tiêu đề trang chủ hụt mất một dòng.
@@ -199,33 +199,40 @@ export default function Hero() {
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-medium text-tren-brand/75">{hero.badge}</p>
 
-            {/* BA DÒNG XẾP CHỒNG, không viết liền một câu.
-                Đã thử viết liền rồi bỏ: RotatingWord có lớp giữ chỗ để khung
-                không nhảy, nên bề rộng của nó LUÔN bằng từ dài nhất
-                ("chính quyền số"). Nằm giữa câu thì từ ngắn như "doanh nghiệp"
-                để hở hai khoảng trắng to hai bên, và chữ "ở" bị đẩy rớt lại
-                cuối dòng trên. Cho mỗi phần một dòng riêng thì phần thừa đó
-                thành lề của một dòng căn giữa — không ai thấy nữa. */}
-            <h1 className="tieu-de-lon mt-3 text-[clamp(1.75rem,3.6vw,2.75rem)] text-tren-brand">
-              {hero.tieuDeTruoc}
-              <br />
-              {/* TỪ KHOÁ NẰM TRONG Ô NỀN ĐẢO MÀU.
-                  Trên dải màu thương hiệu chỉ có ĐÚNG MỘT màu chữ đọc được
-                  (--color-tren-brand, đã đo tương phản cho cả 9 bảng màu), nên
-                  không thể tô từ khoá bằng màu khác để cho nổi. Cách còn lại
-                  là đảo nền: ô nền sáng + chữ mang màu thương hiệu — vẫn đúng
-                  một cặp màu đã được kiểm, mà tách hẳn khỏi nền.
+            {/* ---------- Tiêu đề: NỔI BẬT BẰNG CỠ CHỮ, không bằng hộp ----------
+                Đã thử bọc từ khoá trong một ô nền sáng cho nổi rồi bỏ: cả hệ
+                thiết kế này đang cố giảm số hộp và số đường kẻ xuống ít nhất có
+                thể, nhét một cái hộp to vào giữa tiêu đề là chọi hẳn với phần
+                còn lại của trang.
 
-                  overflow-hidden biến ô này thành một khe: từ cũ trượt lên
-                  khuất mép trên, từ mới trồi lên từ mép dưới. leading rộng hơn
-                  tiêu đề (1.25 so với 1.08) vì dấu tiếng Việt vươn cao và thụt
-                  sâu — chật là cụt mất dấu trong một ô có cắt viền. */}
-              <RotatingWord
-                tu={hero.tuKhoaDong}
-                lop="overflow-hidden rounded-2xl bg-panel px-5 py-1.5 leading-[1.25] text-brand"
-              />
-              <br />
-              {hero.tieuDeSau}
+                Đổi màu chữ cũng không được: trên dải màu thương hiệu chỉ có
+                ĐÚNG MỘT màu chữ đọc được (--color-tren-brand, đã đo tương phản
+                cho cả 9 bảng màu). Màu nào khác cũng hoặc chìm vào nền, hoặc
+                hụt chuẩn ở một trong 9 bảng.
+
+                Còn lại là thứ khỏi phải xin phép ai: THỨ BẬC CỠ CHỮ. "Công nghệ
+                cho" và "ở Quảng Ninh." chỉ là chữ nối — cho nhỏ lại. Từ khoá to
+                gấp hơn hai lần, và nó lại là thứ duy nhất chuyển động.
+
+                BA DÒNG XẾP CHỒNG chứ không viết liền một câu: RotatingWord có
+                lớp giữ chỗ nên bề rộng của nó LUÔN bằng từ dài nhất. Nằm giữa
+                câu thì từ ngắn để hở hai khoảng trắng to hai bên; đứng riêng
+                một dòng căn giữa thì phần thừa đó thành lề, không ai thấy. */}
+            <h1 className="mt-4 text-tren-brand">
+              <span className="block text-[clamp(1.0625rem,2vw,1.5rem)] font-medium tracking-tight">
+                {hero.tieuDeTruoc}
+              </span>
+
+              <span className="mt-1.5 block">
+                <RotatingWord
+                  tu={hero.tuKhoaDong}
+                  lop="tieu-de-lon text-[clamp(2.125rem,5vw,3.75rem)]"
+                />
+              </span>
+
+              <span className="mt-1.5 block text-[clamp(1.0625rem,2vw,1.5rem)] font-medium tracking-tight">
+                {hero.tieuDeSau}
+              </span>
             </h1>
 
             {/* max-w hẹp hơn tiêu đề: một dòng văn xuôi dài quá 65-70 ký tự là
