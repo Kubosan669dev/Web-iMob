@@ -5,9 +5,8 @@ import { ChevronRight, MessageCircle, Package, Phone } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
 import Anh from "../components/ui/Anh.jsx";
-import MaQR from "../components/ui/MaQR.jsx";
+import SlideSanPham from "../components/ui/SlideSanPham.jsx";
 import { iconOf } from "../components/service/icons.js";
-import useManHinhRong from "../hooks/useManHinhRong.js";
 import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 import { demSoLieu } from "../utils/soLieu.js";
 import { openChat } from "../utils/chatBus.js";
@@ -118,11 +117,27 @@ function DongMuc({ muc }) {
       </li>
     );
   }
+
+  // NEO TRONG CÙNG TRANG PHẢI DÙNG <a>, KHÔNG DÙNG <Link>.
+  // <Link to="/#projects"> khi đang đứng ở trang chủ chỉ đổi hash trên URL:
+  // React Router không tự cuộn tới neo, mà ScrollToTop thì cố ý bỏ qua khi có
+  // hash — kết quả là bấm vào không có gì xảy ra. Thẻ <a> để trình duyệt tự lo
+  // việc cuộn, đúng cách thanh menu trên cùng đang làm (Navbar.jsx). Khoảng
+  // hụt do thanh menu che đã có `section[id] { scroll-margin-top }` trong
+  // styles/index.css xử lý.
+  const trongTrang = muc.den.startsWith("#") || muc.den.startsWith("/#");
+
   return (
     <li>
-      <Link to={muc.den} className={lop}>
-        {ruot}
-      </Link>
+      {trongTrang ? (
+        <a href={muc.den} className={lop}>
+          {ruot}
+        </a>
+      ) : (
+        <Link to={muc.den} className={lop}>
+          {ruot}
+        </Link>
+      )}
     </li>
   );
 }
@@ -149,10 +164,8 @@ export default function Hero() {
   const hero = useHero();
   const congTy = useCongTy();
   const sanPham = useSanPham();
-  const rong = useManHinhRong();
 
   const soLieu = demSoLieu(sanPham);
-  const noiBat = sanPham[0]; // sản phẩm chủ lực = sản phẩm đầu danh sách trong /admin
 
   // Cột danh mục = đúng mục lục của bộ "slide" trang chủ. Không có file dữ
   // liệu riêng cho nó: sản phẩm đếm từ CMS, ba dịch vụ lấy từ services.json.
@@ -276,9 +289,9 @@ export default function Hero() {
 
             {/* ---------- Cột phải ----------
                 Ưu tiên ảnh banner nếu /admin có điền (đúng chỗ TopCV để banner
-                quảng cáo). Chưa có ảnh thì đứng thay là SẢN PHẨM CHỦ LỰC — thứ
-                thật, mở ra dùng được ngay, chứ không phải một ảnh minh hoạ mua
-                sẵn về để lấp chỗ trống. */}
+                quảng cáo). Chưa có ảnh thì đứng thay là BĂNG CHUYỀN SẢN PHẨM —
+                thứ thật, mở ra dùng được ngay, chứ không phải một ảnh minh hoạ
+                mua sẵn về để lấp chỗ trống. */}
             {hero.anh ? (
               <Anh
                 src={hero.anh}
@@ -287,49 +300,7 @@ export default function Hero() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              noiBat && (
-                <div className="flex flex-col justify-between rounded-card bg-brand-soft p-6 sm:p-8">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-brand">
-                      Sản phẩm chủ lực · đang chạy thật
-                    </p>
-                    <h2 className="tieu-de-lon mt-3 text-[clamp(1.5rem,2.6vw,2rem)] text-ink">
-                      {noiBat.title}
-                    </h2>
-                    <p className="mt-2.5 max-w-md text-[0.9375rem] leading-relaxed text-ink-soft">
-                      {noiBat.description}
-                    </p>
-                    <p className="mt-3 text-sm text-ink-faint">{noiBat.khachHang}</p>
-                  </div>
-
-                  <div className="mt-7 flex items-end justify-between gap-5">
-                    {noiBat.lienKet && (
-                      <Button
-                        href={noiBat.lienKet}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Mở thử ngay
-                      </Button>
-                    )}
-
-                    {/* Mã QR chỉ trên máy tính — xem lý do trong
-                        hooks/useManHinhRong.js */}
-                    {rong && noiBat.lienKet && (
-                      <div className="text-center">
-                        <div className="rounded-xl bg-white p-1.5">
-                          <MaQR
-                            noiDung={noiBat.lienKet}
-                            alt={`Mã QR mở ${noiBat.title}`}
-                            className="h-24 w-24"
-                          />
-                        </div>
-                        <p className="mt-1.5 text-xs text-ink-faint">Quét bằng điện thoại</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
+              <SlideSanPham danhSach={sanPham} />
             )}
           </div>
         </div>

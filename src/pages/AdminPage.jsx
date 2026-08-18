@@ -174,7 +174,7 @@ function MucHero({ d, doi, daSua }) {
             giaTri={d.anh}
             doi={s("anh")}
             daSua={daSua}
-            moTa="Bỏ file vào public/anh/ rồi gõ /anh/ten-file.png. Để TRỐNG thì ô đó hiện sản phẩm đứng đầu mục Sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
+            moTa="Bỏ file vào public/anh/ rồi gõ /anh/ten-file.png. Để TRỐNG thì ô đó chạy băng chuyền lần lượt qua các sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
           />
           <O
             nhan="Mô tả ảnh"
