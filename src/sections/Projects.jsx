@@ -156,9 +156,18 @@ export default function Projects() {
             <div className="sm:col-span-2">
               <TheSanPham sp={noiBat} noiBat />
             </div>
-            {conLai.map((sp) => (
-              <TheSanPham key={sp.id} sp={sp} />
-            ))}
+            {/* Lưới 2 cột. Nếu số thẻ còn lại là SỐ LẺ thì thẻ cuối cùng chiếm
+                trọn bề ngang — không thì nó đứng lẻ nửa hàng và chừa một ô
+                trống toang hoác ở góc dưới bên phải. Quy tắc này tự đúng khi
+                thêm hay bớt sản phẩm, khỏi phải nhớ sửa lại bố cục. */}
+            {conLai.map((sp, i) => {
+              const cuoiLe = i === conLai.length - 1 && conLai.length % 2 === 1;
+              return (
+                <div key={sp.id} className={cuoiLe ? "sm:col-span-2" : undefined}>
+                  <TheSanPham sp={sp} />
+                </div>
+              );
+            })}
           </div>
         </Reveal>
 

@@ -43,6 +43,16 @@
       "lienKet": "https://bandosodongtrieu.vn"
     },
     {
+      "id": "ban-do-so-xa-quang-tan",
+      "icon": "map",
+      "loai": "Bản đồ số",
+      "khachHang": "Xã Quảng Tân, Quảng Ninh",
+      "title": "Bản đồ số xã Quảng Tân",
+      "description": "Bản đồ số địa bàn xã Quảng Tân.",
+      "anh": "",
+      "lienKet": "https://bandosoxaquangtan.vn"
+    },
+    {
       "id": "website-phuong-yen-tu",
       "icon": "globe",
       "loai": "Website",
