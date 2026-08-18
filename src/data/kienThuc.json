@@ -31,6 +31,13 @@
       "mo_ta": "Giới thiệu, năng lực, số liệu, điểm mạnh, cách làm việc. Nguồn: company.json + about.json.",
       "intents": [
         {
+          "id": "dau-thau",
+          "nguon": "soan",
+          "_note": "KHONG khang dinh du hay khong du dieu kien thau — moi goi mot yeu cau khac nhau, tra loi chac chan la noi lieu. Chuyen sang nguoi that.",
+          "keywords": ["đấu thầu", "dự thầu", "chào thầu", "hồ sơ năng lực", "hồ sơ dự thầu", "điều kiện tham gia", "tư cách pháp nhân", "chứng chỉ năng lực"],
+          "answer": "Về hồ sơ năng lực và điều kiện tham gia thầu, bên mình **gửi bản đầy đủ theo từng gói** ạ — mỗi gói yêu cầu khác nhau nên không có bản trả lời chung.\n\nBạn gọi **{{cong_ty.dien_thoai}}** hoặc gửi email **{{cong_ty.email}}** kèm thông tin gói thầu, bên mình chuẩn bị và phản hồi {{cong_ty.thoi_gian_phan_hoi}}."
+        },
+        {
           "id": "about-stats",
           "nguon": "web",
           "_note": "PHẢI đứng TRƯỚC intent 'pricing': câu 'bao nhiêu dự án' cũng chứa 'bao nhiêu' của pricing. Ngoài ra pricing còn có danh sách 'tru' chặn lần hai.",
@@ -47,7 +54,7 @@
           "id": "strengths",
           "nguon": "web",
           "keywords": ["điểm mạnh", "thế mạnh", "ưu điểm", "vì sao chọn", "tại sao chọn", "nên chọn", "khác gì", "hơn gì", "nổi bật", "khác biệt", "so với đơn vị khác", "hơn đối thủ"],
-          "answer": "Ba điều bên mình tự tin nhất:\n\n- **Đối tác tin cậy** — đồng hành từ ý tưởng, tư vấn, thiết kế tới triển khai và đào tạo vận hành\n- **Đội ngũ chuyên môn** — kỹ sư có kinh nghiệm thực chiến về sản phẩm số và tích hợp AI\n- **Giải pháp may đo** — không rập khuôn, thiết kế đúng theo bài toán và quy mô của bạn"
+          "answer": "Bốn điều bên mình tự tin nhất:\n\n- **Ở ngay Quảng Ninh** — văn phòng tại Hạ Long, toàn bộ sản phẩm đang chạy đều trong tỉnh, nên khảo sát và hỗ trợ tại chỗ thuận tiện hơn hẳn đơn vị ở xa\n- **Đối tác tin cậy** — đồng hành từ ý tưởng, tư vấn, thiết kế tới triển khai và đào tạo vận hành\n- **Đội ngũ chuyên môn** — kỹ sư có kinh nghiệm thực chiến về sản phẩm số và tích hợp AI\n- **Giải pháp may đo** — không rập khuôn, thiết kế đúng theo bài toán và quy mô của bạn"
         },
         {
           "id": "philosophy",
@@ -75,7 +82,7 @@
           "id": "pricing",
           "nguon": "web",
           "_note": "KHÔNG dùng từ đơn 'gia': bỏ dấu xong 'đánh giá' → 'danh gia' cũng chứa 'gia'. Danh sách 'tru' chặn các câu 'bao nhiêu DỰ ÁN / KHÁCH HÀNG' — hỏi năng lực chứ không hỏi tiền (bug từ khoá kiểu này dự án đã dính 3 lần, xem CHATBOT.md mục 9).",
-          "keywords": ["giá", "bao nhiêu", "chi phí", "chi phí làm", "khoảng nhiêu", "báo giá", "tốn kém", "học phí", "giá cả", "hết bao nhiêu", "giá bao nhiêu", "bảng giá", "mấy triệu", "bao tiền", "nhiêu tiền", "giá thành", "đắt không", "rẻ không", "ngân sách"],
+          "keywords": ["giá", "bao nhiêu", "chi phí", "chi phí làm", "khoảng nhiêu", "báo giá", "tốn kém", "học phí", "giá cả", "hết bao nhiêu", "giá bao nhiêu", "bảng giá", "mấy triệu", "bao tiền", "nhiêu tiền", "giá thành", "đắt không", "rẻ không", "ngân sách", "ước lượng", "tạm tính", "đủ làm không", "có đủ không", "con số ước"],
           "tru": ["bao nhiêu dự án", "bao nhiêu khách", "bao nhiêu năm", "bao nhiêu nhân viên", "bao nhiêu người", "mấy dự án"],
           "answer": "Chi phí **tùy theo quy mô và yêu cầu** của từng dự án nên bên mình không có mức cố định ạ 🙏.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}**, bên mình sẽ **tư vấn và báo giá chi tiết miễn phí** {{cong_ty.thoi_gian_phan_hoi}}!"
         },
@@ -195,7 +202,7 @@
         {
           "id": "zma-dich-vu-cong",
           "nguon": "soan",
-          "keywords": ["dịch vụ công", "hành chính công", "zalo dịch vụ công", "ubnd", "phường xã", "hồ sơ hành chính", "nộp thủ tục", "phản ánh hiện trường", "bộ phận 1 cửa", "bộ phận một cửa", "thủ tục 1 cửa", "một cửa", "1 cửa"],
+          "keywords": ["dịch vụ công", "hành chính công", "zalo dịch vụ công", "ubnd", "phường xã", "hồ sơ hành chính", "nộp thủ tục", "phản ánh hiện trường", "bộ phận 1 cửa", "bộ phận một cửa", "thủ tục 1 cửa", "một cửa", "1 cửa", "phần mềm một cửa", "phần mềm 1 cửa"],
           "answer": "**Zalo Mini App Dịch vụ công & Hành chính công** 🏛️\n\nBên mình có giải pháp Zalo Mini App chuyên biệt cho các cơ quan hành chính, UBND Phường/Xã/Huyện:\n\n- Tra cứu tiến độ hồ sơ bộ phận 1 cửa\n- Nộp hồ sơ thủ tục hành chính trực tuyến\n- Phản ánh hiện trường kèm hình ảnh & vị trí GPS\n- Nhận thông báo kết quả trả hồ sơ qua Zalo ZNS\n- Đặt lịch hẹn làm việc tại trụ sở hành chính\n\nBạn đang cần triển khai Mini App Dịch vụ công cho đơn vị nào ạ?"
         },
         {
@@ -309,7 +316,7 @@
         {
           "id": "tich-hop-he-thong",
           "nguon": "web",
-          "keywords": ["tích hợp", "kết nối phần mềm", "hệ thống sẵn có", "đồng bộ dữ liệu", "phần mềm đang dùng", "kết nối api"],
+          "keywords": ["tích hợp", "kết nối phần mềm", "hệ thống sẵn có", "đồng bộ dữ liệu", "phần mềm đang dùng", "kết nối api", "kết nối được", "nối được với", "liên thông", "hệ thống đang dùng", "đồng bộ với"],
           "answer": "Được ạ — **tích hợp đồng bộ với hệ thống sẵn có** là một trong những việc bên mình làm thường xuyên, để bạn không phải bỏ phần mềm đang dùng.\n\nBạn cho mình biết đang dùng phần mềm gì, bên mình xem khả năng kết nối rồi đề xuất cách làm nhé!"
         }
       ]
@@ -320,6 +327,12 @@
       "ten": "Chatbot & trợ lý AI",
       "mo_ta": "Nguồn: projects.json (Chatbot CSKH tích hợp AI) + chính con bot này.",
       "intents": [
+        {
+          "id": "tro-ly-ai-doanh-nghiep",
+          "nguon": "soan",
+          "keywords": ["trợ lý ai riêng", "xây trợ lý ai", "trợ lý ai cho doanh nghiệp", "trợ lý ai doanh nghiệp", "ai cho công ty", "chatbot cho công ty", "chatbot nội bộ", "trợ lý nội bộ", "xây trợ lý"],
+          "answer": "Bên mình **xây trợ lý AI riêng cho doanh nghiệp và cơ quan** ạ — huấn luyện trên đúng tài liệu, quy trình và dữ liệu của đơn vị bạn, không phải bản dùng chung.\n\nChính con trợ lý bạn đang nhắn đây là một bản đang chạy thật trên website iMob.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}** để bên mình tư vấn cụ thể nhé."
+        },
         {
           "id": "chatbot-ai",
           "nguon": "web",
@@ -362,6 +375,38 @@
     },
 
     {
+      "id": "an-ninh-mang",
+      "ten": "An toàn an ninh mạng",
+      "mo_ta": "Nâng chuẩn cấp độ 2 trở lên, giám sát và ứng cứu sự cố 24/7. Nguồn: danh mục dịch vụ công ty chốt 18/08/2026. CHỈ nêu đúng phạm vi công ty tuyên bố, KHÔNG thêm chi tiết kỹ thuật chưa kiểm chứng được.",
+      "intents": [
+        {
+          "id": "an-toan-cap-do",
+          "nguon": "soan",
+          "keywords": ["an toàn thông tin", "an ninh mạng", "cấp độ 2", "cấp độ 3", "cấp độ 4", "nâng cấp bảo mật", "nâng chuẩn", "hồ sơ cấp độ", "phê duyệt cấp độ", "đạt chuẩn an toàn", "kiểm tra an toàn"],
+          "answer": "Có ạ. iMob **khảo sát và nâng cấp** app, website, phần mềm đơn vị đang dùng lên **chuẩn an toàn an ninh mạng cấp độ 2 trở lên**.\n\nPhạm vi việc phải làm và thời gian phụ thuộc hẳn vào hệ thống hiện tại của bạn, nên bên mình **khảo sát trước rồi mới báo** — không có gói dựng sẵn.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}** để đặt lịch khảo sát miễn phí nhé."
+        },
+        {
+          "id": "giam-sat-ung-cuu",
+          "nguon": "soan",
+          "keywords": ["giám sát 24/7", "trực 24/7", "ứng cứu sự cố", "ứng cứu", "vận hành an ninh", "theo dõi hệ thống", "sự cố an ninh", "giám sát hệ thống", "đội ngũ nội bộ"],
+          "answer": "Có ạ. iMob nhận **vận hành, giám sát 24/7 và ứng cứu sự cố an toàn an ninh mạng**, kèm tư vấn an ninh mạng — đơn vị **không phải tự xây đội ngũ nội bộ**.\n\nMức độ giám sát và cam kết thời gian phản hồi tuỳ hệ thống, bên mình khảo sát rồi báo phương án cụ thể.\n\nGọi **{{cong_ty.dien_thoai}}** hoặc để lại số, bên mình liên hệ {{cong_ty.thoi_gian_phan_hoi}} ạ."
+        }
+      ]
+    },
+    {
+      "id": "robot-uav",
+      "ten": "Robot, UAV & Drone",
+      "mo_ta": "Robot tuần tra/lễ tân, UAV, drone theo yêu cầu. Nguồn: danh mục dịch vụ công ty chốt 18/08/2026. KHÔNG nêu hãng, model hay thông số — chưa có tài liệu nào để dẫn.",
+      "intents": [
+        {
+          "id": "robot-uav-drone",
+          "nguon": "soan",
+          "keywords": ["robot", "drone", "uav", "flycam", "thiết bị bay", "robot tuần tra", "robot lễ tân", "máy bay không người lái"],
+          "answer": "iMob triển khai **robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu** ạ.\n\nLoại thiết bị và cấu hình phụ thuộc bài toán cụ thể của từng đơn vị nên bên mình cần trao đổi trước, chứ không có gói bán sẵn.\n\nBạn mô tả nhu cầu rồi để lại **số điện thoại**, hoặc gọi thẳng **{{cong_ty.dien_thoai}}** nhé."
+        }
+      ]
+    },
+    {
       "id": "dich-vu-tong-quan",
       "ten": "Tổng quan dịch vụ",
       "mo_ta": "Câu hỏi chung chung. ĐẶT SAU các mục dịch vụ cụ thể để câu hỏi rõ ràng luôn về đúng mục của nó.",
@@ -377,7 +422,7 @@
           "id": "services-overview",
           "nguon": "web",
           "keywords": ["dịch vụ gì", "những dịch vụ", "cung cấp gì", "có dịch vụ", "làm những gì", "làm gì", "dịch vụ nào", "các dịch vụ", "bên bạn làm", "cung cấp dịch vụ", "bên mình làm gì"],
-          "answer": "iMob cung cấp **3 nhóm dịch vụ chính**:\n\n1. **Phát triển Zalo Mini App** — ứng dụng chạy ngay trên Zalo\n2. **Giải pháp Phần mềm & Phần cứng** — phần mềm quản lý + thiết bị IoT\n3. **Đào tạo Chuyển đổi số** — giúp đội ngũ làm chủ công cụ số & AI\n\nNgoài ra bên mình còn làm **website** và **chatbot AI**. Bạn muốn tìm hiểu kỹ mảng nào ạ?"
+          "answer": "iMob nhận **7 nhóm việc** ạ:\n\n1. **Thiết kế app/web theo yêu cầu** — Zalo Mini App, website, phần mềm quản lý\n2. **Nâng chuẩn an toàn thông tin** — khảo sát và nâng cấp hệ thống đang có lên cấp độ 2 trở lên\n3. **Giám sát an ninh mạng 24/7** — vận hành và ứng cứu sự cố, đơn vị không phải tự xây đội ngũ\n4. **Robot, UAV & Drone** — robot tuần tra, robot lễ tân, thiết bị bay theo yêu cầu\n5. **Xây trợ lý AI cho doanh nghiệp**\n6. **Tập huấn chuyển đổi số**\n7. **Phần cứng & thiết bị IoT**\n\nBạn muốn tìm hiểu kỹ mảng nào ạ?"
         }
       ]
     },
@@ -469,8 +514,8 @@
         {
           "id": "data-security",
           "nguon": "web",
-          "keywords": ["bảo mật", "an toàn dữ liệu", "rò rỉ", "lộ dữ liệu", "dữ liệu khách", "riêng tư", "dữ liệu của tôi", "bảo vệ dữ liệu"],
-          "answer": "Bên mình **cam kết bảo mật dữ liệu** trong hợp đồng ạ: chỉ thu thập những gì thật sự cần cho dự án, không dùng dữ liệu của khách này cho khách khác.\n\nVới hệ thống có AI, bên mình **không dùng dữ liệu trò chuyện của khách để huấn luyện mô hình**."
+          "keywords": ["bảo mật", "an toàn dữ liệu", "rò rỉ", "lộ dữ liệu", "dữ liệu khách", "riêng tư", "dữ liệu của tôi", "bảo vệ dữ liệu", "nghị định 13", "dữ liệu công dân", "dữ liệu lưu", "lưu ở đâu", "lưu trữ dữ liệu", "máy chủ đặt", "đặt máy chủ", "dữ liệu cá nhân"],
+          "answer": "Bên mình **cam kết bảo mật dữ liệu** trong hợp đồng ạ: chỉ thu thập những gì thật sự cần cho dự án, không dùng dữ liệu của khách này cho khách khác.\n\n**Nơi lưu dữ liệu** do hai bên thống nhất trong hợp đồng — đặt trên hạ tầng của chính đơn vị bạn, hoặc trên máy chủ bên mình quản lý, tuỳ yêu cầu của bạn.\n\nViệc thu thập và xử lý dữ liệu cá nhân thực hiện theo **Nghị định 13/2023/NĐ-CP**. Với hệ thống có AI, bên mình **không dùng dữ liệu trò chuyện của khách để huấn luyện mô hình**.\n\nCần điều khoản cụ thể cho gói của bạn thì gọi **{{cong_ty.dien_thoai}}** nhé."
         }
       ]
     },

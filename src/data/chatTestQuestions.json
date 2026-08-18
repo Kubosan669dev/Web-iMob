@@ -233,6 +233,18 @@
 
     { "q": "làm web bất động sản tính lãi vay ngân hàng", "expect": "nganh-bds-dulich", "phai_co": ["lãi suất vay"] },
 
-    { "q": "tích hợp vietqr tự động xác nhận chuyển khoản", "expect": "tich-hop-thanh-toan-qr", "phai_co": ["VietQR"] }
+    { "q": "tích hợp vietqr tự động xác nhận chuyển khoản", "expect": "tich-hop-thanh-toan-qr", "phai_co": ["VietQR"] },
+    { "q": "Nâng cấp hệ thống lên chuẩn an toàn thông tin cấp độ 2 là làm những gì?", "expect": "an-toan-cap-do", "phai_co": ["cấp độ 2"] },
+    { "q": "ben ban co lam an ninh mang khong", "expect": "an-toan-cap-do" },
+    { "q": "Có dịch vụ giám sát an ninh mạng 24/7 và ứng cứu sự cố không?", "expect": "giam-sat-ung-cuu", "phai_co": ["ứng cứu"] },
+    { "q": "Bên bạn có cung cấp robot tuần tra và drone không?", "expect": "robot-uav-drone", "phai_co": ["robot"] },
+    { "q": "ben ban co lam uav khong", "expect": "robot-uav-drone" },
+    { "q": "Tôi muốn xây trợ lý AI riêng cho công ty tôi thì làm thế nào?", "expect": "tro-ly-ai-doanh-nghiep", "phai_co": ["trợ lý AI riêng"] },
+    { "q": "Công ty có đủ điều kiện tham gia đấu thầu dự án công không?", "expect": "dau-thau", "phai_co": ["hồ sơ năng lực"] },
+    { "q": "Dữ liệu công dân lưu ở đâu, có đúng Nghị định 13/2023 không?", "expect": "data-security", "phai_co": ["Nghị định 13"] },
+    { "q": "Cứ cho tôi con số ước lượng thôi cũng được, 100 triệu có đủ làm không?", "expect": "pricing", "phai_co": ["báo giá"] },
+    { "q": "Tôi không cần app mới, chỉ cần nâng cấp bảo mật cho website cũ thôi", "expect": "an-toan-cap-do" },
+    { "q": "Zalo Mini App có kết nối được với phần mềm một cửa của phường không?", "expect": "zma-dich-vu-cong", "phai_co": ["1 cửa"] },
+    { "q": "co tich hop duoc voi he thong dang dung khong", "expect": "tich-hop-he-thong", "phai_co": ["tích hợp"] }
   ]
 }
