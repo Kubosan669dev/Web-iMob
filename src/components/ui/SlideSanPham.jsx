@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "./Button.jsx";
 import MaQR from "./MaQR.jsx";
 import useManHinhRong from "../../hooks/useManHinhRong.js";
@@ -51,6 +52,24 @@ export default function SlideSanPham({ danhSach }) {
 
   if (tong === 0) return null;
   const sp = danhSach[chiSo % tong];
+  const di = (buoc) => setChiSo((i) => (i + buoc + tong) % tong);
+
+  /* Vị trí ngang của từng slide, suy ra từ CHỖ ĐỨNG của nó so với slide đang
+     hiện — không cần nhớ vừa bấm tới hay bấm lui:
+       đứng trước  -> nằm bên trái  (đã trôi qua)
+       đang hiện   -> ở giữa
+       đứng sau    -> nằm bên phải  (chưa tới)
+     Nhờ vậy bấm tới thì chữ trôi sang trái, bấm lui thì trôi sang phải, đúng
+     chiều ở cả hai nút mà không phải giữ thêm một biến trạng thái nào. */
+  const viTri = (k) =>
+    k === chiSo
+      ? "translate-x-0 opacity-100"
+      : k < chiSo
+        ? "-translate-x-6 opacity-0"
+        : "translate-x-6 opacity-0";
+
+  const nutMuiTen =
+    "flex h-7 w-7 items-center justify-center rounded-full text-brand transition-colors hover:bg-panel";
 
   return (
     <div
@@ -62,13 +81,34 @@ export default function SlideSanPham({ danhSach }) {
       onBlurCapture={() => setDung(false)}
       className="flex flex-col rounded-card bg-brand-soft p-6 sm:p-8"
     >
-      <div className="flex items-baseline justify-between gap-4">
+      <div className="flex items-center justify-between gap-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand">
           Sản phẩm đang chạy thật
         </p>
-        <p className="shrink-0 text-xs font-medium tabular-nums text-ink-faint">
-          {chiSo + 1}/{tong}
-        </p>
+
+        {tong > 1 && (
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => di(-1)}
+              aria-label="Sản phẩm trước"
+              className={nutMuiTen}
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={() => di(1)}
+              aria-label="Sản phẩm sau"
+              className={nutMuiTen}
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <p className="ml-1 text-xs font-medium tabular-nums text-ink-faint">
+              {chiSo + 1}/{tong}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* ---------- Chồng slide ---------- */}
@@ -78,8 +118,8 @@ export default function SlideSanPham({ danhSach }) {
             key={s.id ?? k}
             aria-hidden={k !== chiSo}
             className={
-              "col-start-1 row-start-1 transition-opacity duration-500 " +
-              (k === chiSo ? "opacity-100" : "opacity-0")
+              "col-start-1 row-start-1 transition-all duration-500 ease-out " +
+              viTri(k)
             }
           >
             <h2 className="tieu-de-lon text-[clamp(1.5rem,2.6vw,2rem)] text-ink">
