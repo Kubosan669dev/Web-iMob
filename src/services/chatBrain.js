@@ -66,15 +66,38 @@ const KHOA_CONG_TY = {
   thoi_gian_phan_hoi: "responseTime",
 };
 
-export function dienThongTin(text, congTy) {
-  if (!congTy) return text;
-  // $1 là phần tên bên trong {{cong_ty.___}}
-  return text.replace(/\{\{cong_ty\.(\w+)\}\}/g, (nguyenVan, ten) => {
-    const giaTri = congTy[KHOA_CONG_TY[ten]];
-    // Không tìm thấy → GIỮ NGUYÊN {{...}} để lỗi hiện ra thật to,
-    // thay vì âm thầm mất một dòng thông tin (script test cũng bắt được).
-    return giaTri ?? nguyenVan;
-  });
+// Tên trong kho kiến thức  →  khóa trong kết quả demSoLieu() (utils/soLieu.js).
+// Cùng lý do với {{cong_ty.*}}: kho kiến thức KHÔNG được chép tay con số.
+// Bản cũ chép "50+ dự án, 30+ khách hàng, 99% hài lòng" vào câu trả lời —
+// ba con số không ai xác minh được, mà bot thì nói ra như thể chắc chắn.
+const KHOA_SO_LIEU = {
+  san_pham: "sanPham",
+  don_vi: "donVi",
+  nhom: "nhom",
+  danh_sach: "danhSach", // danh sách sản phẩm dạng markdown
+};
+
+export function dienThongTin(text, congTy, soLieu) {
+  let ra = text;
+
+  if (congTy) {
+    // $1 là phần tên bên trong {{cong_ty.___}}
+    ra = ra.replace(/\{\{cong_ty\.(\w+)\}\}/g, (nguyenVan, ten) => {
+      const giaTri = congTy[KHOA_CONG_TY[ten]];
+      // Không tìm thấy → GIỮ NGUYÊN {{...}} để lỗi hiện ra thật to,
+      // thay vì âm thầm mất một dòng thông tin (script test cũng bắt được).
+      return giaTri ?? nguyenVan;
+    });
+  }
+
+  if (soLieu) {
+    ra = ra.replace(/\{\{so_lieu\.(\w+)\}\}/g, (nguyenVan, ten) => {
+      const giaTri = soLieu[KHOA_SO_LIEU[ten]];
+      return giaTri == null ? nguyenVan : String(giaTri);
+    });
+  }
+
+  return ra;
 }
 
 // ------------------------------------------------------------
@@ -100,8 +123,9 @@ function keywordHits(text, tokens, keyword) {
 //   message   câu khách gõ
 //   knowledge nội dung kienThuc.json
 //   congTy    nội dung company.json (để điền {{cong_ty.*}}) — có thể bỏ trống
+//   soLieu    kết quả demSoLieu() (để điền {{so_lieu.*}}) — có thể bỏ trống
 // Trả về: { intentId, mucId, answer, score }
-export function findAnswer(message, knowledge, congTy) {
+export function findAnswer(message, knowledge, congTy, soLieu) {
   const text = normalize(message);
   const tokens = text.split(" ");
 
@@ -138,7 +162,7 @@ export function findAnswer(message, knowledge, congTy) {
     return {
       intentId: "fallback",
       mucId: null,
-      answer: dienThongTin(knowledge.fallback, congTy),
+      answer: dienThongTin(knowledge.fallback, congTy, soLieu),
       score: 0,
     };
   }
@@ -146,7 +170,7 @@ export function findAnswer(message, knowledge, congTy) {
   return {
     intentId: best.id,
     mucId: best.mucId,
-    answer: dienThongTin(best.answer, congTy),
+    answer: dienThongTin(best.answer, congTy, soLieu),
     score: bestScore,
   };
 }

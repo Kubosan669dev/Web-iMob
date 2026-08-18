@@ -4,11 +4,14 @@ import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
 import ChuyenDoiCard from "../components/ui/ChuyenDoiCard.jsx";
 import { iconOf } from "../components/service/icons.js";
-import { useAbout, useCongTy } from "../context/NoiDungContext.jsx";
+import { useAbout, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
+import { soLieuHienThi } from "../utils/soLieu.js";
 
 // Nội dung section đọc từ data/about.json — sửa được ở /admin, tab Giới thiệu.
-// (Các câu trả lời "about-stats" / "strengths" trong data/kienThuc.json lấy
-// đúng những số này — sửa số ở đây thì nhớ sửa cả bên đó.)
+//
+// TRỪ DẢI SỐ LIỆU: ba con số đó ĐẾM từ danh sách sản phẩm (utils/soLieu.js),
+// không nằm trong about.json nữa. Bản trước ghi tay "50+ / 30+ / 99%" và
+// không ai kiểm chứng được — xem lý do đầy đủ trong utils/soLieu.js.
 //
 // Toàn bộ chữ trong section này lấy từ ba ấn phẩm chính thức của công ty:
 // sứ mệnh, triết lý phục vụ, bốn giá trị cốt lõi và năm năng lực nổi bật.
@@ -26,6 +29,7 @@ const FEATURE_ICONS = {
 export default function About() {
   const congTy = useCongTy();
   const about = useAbout();
+  const soLieu = soLieuHienThi(useSanPham());
 
   return (
     <section id="about" className="bg-mist py-24 lg:py-32">
@@ -53,7 +57,7 @@ export default function About() {
 
             <Reveal delay={0.1}>
               <div className="grid grid-cols-3 gap-6 border-t border-line pt-8">
-                {about.stats.map((stat) => (
+                {soLieu.map((stat) => (
                   <div key={stat.label}>
                     <p className="tieu-de-lon text-[clamp(1.75rem,4vw,2.75rem)] text-brand">
                       {stat.value}

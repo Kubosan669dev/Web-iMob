@@ -213,9 +213,9 @@
         "Hỗ trợ tư vấn sau khóa học"
       ],
       "statistics": {
-        "hoc_vien": "500+",
-        "ty_le_hai_long": "95%",
-        "doanh_nghiep_tin_tuong": "50+"
+        "_ghi_chu": "ĐÃ BỎ 500+ học viên / 95% hài lòng / 50+ doanh nghiệp (18/08/2026): không ấn phẩm nào của công ty có các con số đó và không có khảo sát nào để đối chiếu. KHÔNG điền số ước lượng vào đây.",
+        "san_pham_dang_chay": "6",
+        "co_quan_don_vi": "6"
       },
       "cta": [
         "ĐĂNG KÝ NGAY",
@@ -419,9 +419,9 @@
         "Hỗ trợ kỹ thuật 24/7 sau khi bàn giao"
       ],
       "statistics": {
-        "miniapp_da_trien_khai": "50+",
-        "nguoi_dung_hai_long": "100.000+",
-        "ty_le_hoan_thanh_du_an": "98%"
+        "_ghi_chu": "ĐÃ BỎ 50+ MiniApp / 100.000+ người dùng / 98% hoàn thành (18/08/2026): không xác minh được. Số dưới đây ĐẾM từ danh sách sản phẩm thật trên imob.vn.",
+        "zalo_mini_app_dang_chay": "3",
+        "ten_san_pham": "Yên Tử Số, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số"
       },
       "demo_flow_preview": [
         "Đăng ký dịch vụ",
@@ -661,9 +661,9 @@
         "Khác (mô tả chi tiết)"
       ],
       "statistics": {
-        "du_an_phan_mem": "200+",
-        "he_thong_phan_cung": "150+",
-        "uptime_dam_bao": "99.9%"
+        "_ghi_chu": "ĐÃ BỎ 200+ dự án / 150+ hệ thống / uptime 99.9% (18/08/2026): không xác minh được. Uptime là CAM KẾT theo hợp đồng từng dự án, không phải thành tích chung — đừng đưa lại vào đây.",
+        "san_pham_dang_chay": "6",
+        "co_quan_don_vi": "6"
       },
       "cta": [
         "BẮT ĐẦU DỰ ÁN",
@@ -723,22 +723,13 @@
     "source": "website + derived"
   },
   "statistics_all": {
-    "digital_transformation": {
-      "hoc_vien_da_dao_tao": "500+",
-      "ty_le_hai_long": "95%",
-      "doanh_nghiep_tin_tuong": "50+"
-    },
-    "zalo_miniapp": {
-      "miniapp_da_trien_khai": "50+",
-      "nguoi_dung_hai_long": "100.000+",
-      "ty_le_hoan_thanh_du_an": "98%"
-    },
-    "software_hardware": {
-      "du_an_phan_mem": "200+",
-      "he_thong_phan_cung": "150+",
-      "uptime_dam_bao": "99.9%"
-    },
-    "source": "website"
+    "_ghi_chu": "VIẾT LẠI 18/08/2026. Bản cũ ghi 500+ học viên, 100.000+ người dùng, 200+ dự án phần mềm, 150+ hệ thống phần cứng và source là 'website' — nhưng website chưa bao giờ có những con số đó, và không ấn phẩm nào của công ty có. Chỉ để lại thứ ĐẾM ĐƯỢC.",
+    "san_pham_dang_chay": "6",
+    "co_quan_don_vi": "6",
+    "nhom_giai_phap": "3",
+    "danh_sach": "Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử",
+    "khong_cong_bo": "Tỷ lệ hài lòng, số người dùng và tỷ lệ hoàn thành dự án: KHÔNG có khảo sát nào để dẫn, nên không công bố.",
+    "source": "đếm từ danh sách sản phẩm thật đang chạy trên imob.vn"
   },
   "service_comparison": [
     {
@@ -898,7 +889,7 @@
         "giảm giá",
         "thành tích"
       ],
-      "text": "Ưu đãi chương trình đào tạo chuyển đổi số: Giảm 20% cho đăng ký nhóm từ 10 người; Miễn phí tài liệu và chứng chỉ; Hỗ trợ tư vấn sau khóa học. Thành tích: 500+ học viên đã đào tạo, tỷ lệ hài lòng 95%, 50+ doanh nghiệp tin tưởng. Liên hệ: +84 936 982 256, training@imob.vn. Lưu ý: học phí cụ thể không công bố, báo giá theo từng đơn vị."
+      "text": "Ưu đãi chương trình đào tạo chuyển đổi số: Giảm 20% cho đăng ký nhóm từ 10 người; Miễn phí tài liệu và chứng chỉ; Hỗ trợ tư vấn sau khóa học. Liên hệ: +84 936 982 256, training@imob.vn. Lưu ý: học phí cụ thể không công bố, báo giá theo từng đơn vị."
     },
     {
       "id": "C007",
@@ -1028,7 +1019,7 @@
         "thành tích",
         "liên hệ"
       ],
-      "text": "Khi liên hệ về Zalo MiniApp, khách hàng nhận được: Tư vấn miễn phí về giải pháp MiniApp; Demo trực tiếp trên thiết bị của bạn; Báo giá chi tiết và lộ trình triển khai; Hỗ trợ kỹ thuật 24/7 sau khi bàn giao. Thành tích: 50+ MiniApp đã triển khai, 100.000+ người dùng hài lòng, tỷ lệ hoàn thành dự án 98%. Liên hệ: +84 936 982 256, miniapp@imob.vn. Không có bảng giá công khai."
+      "text": "Khi liên hệ về Zalo MiniApp, khách hàng nhận được: Tư vấn miễn phí về giải pháp MiniApp; Demo trực tiếp trên thiết bị của bạn; Báo giá chi tiết và lộ trình triển khai; Hỗ trợ kỹ thuật 24/7 sau khi bàn giao. Zalo Mini App đang chạy thật: Yên Tử Số, Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số. Liên hệ: +84 936 982 256, miniapp@imob.vn. Không có bảng giá công khai."
     },
     {
       "id": "C013",
@@ -1264,7 +1255,7 @@
         "năng lực công ty",
         "đã triển khai bao nhiêu dự án"
       ],
-      "answer": "Số liệu iMob công bố: 200+ dự án phần mềm, 150+ hệ thống phần cứng, uptime đảm bảo 99,9%; 50+ Zalo MiniApp đã triển khai phục vụ hơn 100.000 người dùng với tỷ lệ hoàn thành dự án 98%; và 500+ học viên đào tạo chuyển đổi số, 95% hài lòng, 50+ doanh nghiệp tin tưởng."
+      "answer": "iMob chỉ công bố số đếm được từ sản phẩm đang chạy thật: 6 sản phẩm cho 6 cơ quan, đơn vị tại Quảng Ninh, thuộc 3 nhóm giải pháp (Zalo Mini App, bản đồ số, website). Cụ thể: Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử. Về tỷ lệ hài lòng, số người dùng hay tỷ lệ hoàn thành dự án thì iMob không công bố, vì chưa có khảo sát độc lập nào để dẫn — anh/chị mở thử trực tiếp từng sản phẩm để tự đánh giá ạ."
     },
     {
       "id": "F005",
@@ -1903,7 +1894,7 @@
         "portfolio",
         "ví dụ thực tế"
       ],
-      "answer": "iMob đã triển khai 200+ dự án phần mềm, 150+ hệ thống phần cứng và 50+ Zalo MiniApp. Danh sách khách hàng và case study cụ thể chưa được công bố công khai trên website, anh/chị liên hệ hotline 0936 982 256 để đội tư vấn chia sẻ các dự án tương tự với lĩnh vực của mình nhé.",
+      "answer": "iMob đã bàn giao và đang vận hành các sản phẩm sau tại Quảng Ninh: Yên Tử Số (Zalo Mini App — Khu di tích danh thắng Yên Tử), Zalo Mini App Bảo tàng – Thư viện tỉnh Quảng Ninh, Phường An Sinh Số (Zalo Mini App), Bản đồ số Đông Triều, Bản đồ số xã Quảng Tân, Website phường Yên Tử. Tất cả đều mở công khai nên anh/chị dùng thử trực tiếp được. Muốn xem dự án gần với lĩnh vực của mình thì gọi hotline 0936 982 256 để đội tư vấn giới thiệu cụ thể ạ.",
       "action": "escalate"
     },
     {
@@ -2674,7 +2665,7 @@
     {
       "id": "T15",
       "input": "Cho xin danh sách khách hàng đã làm",
-      "expect": "Nêu số liệu tổng, nói case study chưa công bố, chuyển hotline"
+      "expect": "Liệt kê đúng các sản phẩm đang chạy thật, mời dùng thử, chuyển hotline"
     }
   ],
   "data_gaps": [

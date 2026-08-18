@@ -104,10 +104,10 @@
     { "q": "tien do du an the nao", "expect": "process-time" },
     { "q": "bao gio xong vay ban", "expect": "process-time" },
 
-    { "q": "Bên bạn đã làm được bao nhiêu dự án rồi?", "expect": "about-stats", "phai_co": ["50"] },
-    { "q": "da lam cho bao nhieu khach hang", "expect": "about-stats", "phai_co": ["30"] },
+    { "q": "Bên bạn đã làm được bao nhiêu dự án rồi?", "expect": "about-stats", "phai_co": ["sản phẩm"] },
+    { "q": "da lam cho bao nhieu khach hang", "expect": "about-stats", "phai_co": ["cơ quan"] },
     { "q": "quy mô công ty thế nào", "expect": "about-stats" },
-    { "q": "khách hàng có hài lòng không", "expect": "about-stats", "phai_co": ["99", "hài lòng"] },
+    { "q": "khách hàng có hài lòng không", "expect": "about-stats", "phai_co": ["dùng thử"] },
 
     { "q": "Có bàn giao mã nguồn cho khách không?", "expect": "source-code", "phai_co": ["mã nguồn", "source"] },
     { "q": "minh co duoc so huu code khong", "expect": "source-code", "phai_co": ["mã nguồn", "source", "bàn giao"] },

@@ -1,7 +1,9 @@
 import knowledge from "../data/kienThuc.json";
 import companyMacDinh from "../data/company.json";
+import projectsMacDinh from "../data/projects.json";
 import { API_BASE_URL } from "../utils/constants.js";
 import { findAnswer, chongLap } from "./chatBrain.js";
+import { demSoLieu, danhSachMarkdown } from "../utils/soLieu.js";
 
 // Thông tin công ty giờ sửa được ở trang /admin, nên KHÔNG được đọc cứng từ
 // company.json nữa — bot sẽ đọc số điện thoại cũ cho khách nghe. Component
@@ -58,7 +60,7 @@ ${knowledge.fallback}
 // src/data/kienThuc.json (muốn bot thông minh hơn thì thêm vào file đó).
 //
 // Chữ ký cố định (hợp đồng giữa UI và bộ não):
-//   sendMessage(message, history) → Promise<{ response: string }>
+//   sendMessage(message, history, congTy, sanPham) → Promise<{ response }>
 // ============================================================
 
 // Nghỉ một nhịp trước khi trả lời. Bot trả lời tức thì (0ms) trông giật cục
@@ -212,11 +214,17 @@ async function callGeminiAI(message, history = [], company) {
  *   chỗ {{cong_ty.*}} trong kho kiến thức, nên sửa SĐT ở /admin là bot nói theo
  *   ngay. Không truyền thì dùng bản đóng gói sẵn.
  */
-export async function sendMessage(message, history = [], congTy) {
+export async function sendMessage(message, history = [], congTy, sanPham) {
   const company = congTy ?? companyMacDinh;
 
+  // Số liệu bot đọc cho khách nghe được ĐẾM từ danh sách sản phẩm mới nhất
+  // (sửa ở /admin), không chép tay vào kho kiến thức — cùng lý do với congTy
+  // ở trên. Nơi gọi không truyền thì dùng bản đóng gói sẵn.
+  const ds = sanPham?.length ? sanPham : projectsMacDinh.danhSach;
+  const soLieu = { ...demSoLieu(ds), danhSach: danhSachMarkdown(ds) };
+
   // Bước 1: Khớp kho kiến thức local trước (Tốc độ 0ms, 100% chuẩn xác, 0đ token)
-  const result = findAnswer(message, knowledge, company);
+  const result = findAnswer(message, knowledge, company, soLieu);
 
   // Nếu khớp trúng intent cụ thể (Score > 0) -> dùng ngay câu trả lời local
   if (result.intentId !== "fallback") {

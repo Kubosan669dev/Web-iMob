@@ -23,7 +23,7 @@ export default function ZaloMiniAppPage() {
       <FeatureList {...data.features} />
       <CardGrid {...data.benefits} />
       <ProcessSteps {...data.process} />
-      <StatsBand {...data.stats} />
+      <StatsBand />
       <Contact />
     </>
   );

@@ -35,7 +35,7 @@
           "nguon": "web",
           "_note": "PHẢI đứng TRƯỚC intent 'pricing': câu 'bao nhiêu dự án' cũng chứa 'bao nhiêu' của pricing. Ngoài ra pricing còn có danh sách 'tru' chặn lần hai.",
           "keywords": ["bao nhiêu dự án", "mấy dự án", "số dự án", "bao nhiêu khách hàng", "bao nhiêu khách", "bao nhiêu năm", "đã làm bao nhiêu", "làm được bao nhiêu", "kinh nghiệm bao nhiêu", "quy mô", "hài lòng", "mức độ hài lòng", "uy tín không", "có đáng tin"],
-          "answer": "Tới nay iMob đã triển khai **50+ dự án** cho **30+ khách hàng**, với mức độ hài lòng **99%** ạ.\n\nBạn muốn xem dự án nào gần với nhu cầu của mình để mình giới thiệu cụ thể hơn không?"
+          "answer": "Hiện iMob có **{{so_lieu.san_pham}} sản phẩm đang chạy thật** cho **{{so_lieu.don_vi}} cơ quan, đơn vị** tại Quảng Ninh, thuộc **{{so_lieu.nhom}} nhóm giải pháp** ạ.\n\nBên mình không đưa ra con số phần trăm hài lòng, mà mời bạn tự kiểm: các sản phẩm đều đang mở công khai, bạn dùng thử được ngay. Bạn muốn mình gửi liên kết sản phẩm nào không ạ?"
         },
         {
           "id": "company-intro",
@@ -391,7 +391,7 @@
           "id": "portfolio",
           "nguon": "web",
           "keywords": ["dự án", "đã làm", "từng làm", "sản phẩm đã", "khách hàng", "portfolio", "đã triển khai", "làm cho ai", "case study", "sản phẩm tiêu biểu", "dự án tiêu biểu"],
-          "answer": "Một vài dự án bên mình đã thực hiện:\n\n- **Zalo Mini App đặt lịch Spa** — đặt lịch, tích điểm, CSKH\n- **Hệ thống quản lý kho thông minh (IoT)** — tồn kho thời gian thực\n- **Website thương mại điện tử** — chuẩn SEO, tích hợp thanh toán\n- **Chatbot CSKH tích hợp AI** — trả lời khách 24/7\n- **Ứng dụng quản lý nhà hàng** — gọi món, bếp, doanh thu realtime\n- **Đào tạo chuyển đổi số** — chương trình 8 tuần cho 200+ nhân sự\n\nBạn đang quan tâm loại dự án nào (Mini App, kho, website, chatbot, nhà hàng...) để mình giới thiệu sát hơn ạ?"
+          "answer": "Các sản phẩm iMob đã bàn giao và đang chạy:\n\n{{so_lieu.danh_sach}}\n\nBạn quan tâm nhóm nào (Zalo Mini App, bản đồ số, website) để mình giới thiệu sát hơn ạ?"
         },
         {
           "id": "du-an-nha-hang",

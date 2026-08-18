@@ -19,7 +19,7 @@ export default function DigitalTransformationPage() {
       <CardGrid {...data.audience} tinted />
       <FeatureList {...data.modules} />
       <CardGrid {...data.formats} />
-      <StatsBand {...data.stats} />
+      <StatsBand />
       <Contact />
     </>
   );

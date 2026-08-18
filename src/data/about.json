@@ -1,5 +1,5 @@
 {
-  "_note": "Nội dung section GIỚI THIỆU. Sửa được ở /admin — tab Giới thiệu. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. Số liệu ở đây là nguồn cho các câu trả lời 'about-stats' và 'strengths' trong kienThuc.json — sửa thì nhớ sửa cả hai. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component). CẬP NHẬT 17/08/2026: toàn bộ chữ lấy từ ba ấn phẩm chính thức của công ty. ⚠️ Riêng khối `stats` là số liệu có sẵn từ trước, TÔI KHÔNG XÁC MINH ĐƯỢC — ấn phẩm không có con số nào. Kiểm lại trước khi công bố.",
+  "_note": "Nội dung section GIỚI THIỆU. Sửa được ở /admin — tab Giới thiệu. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. Trường `icon` là tên icon lucide, được map sang component trong About.jsx (JSON không chứa được component). CẬP NHẬT 17/08/2026: toàn bộ chữ lấy từ ba ấn phẩm chính thức của công ty. ⚠️ ĐÃ BỎ khối `stats` (18/08/2026): ba con số 50+/30+/99% không ấn phẩm nào có, không xác minh được. Dải số liệu trên trang chủ giờ ĐẾM từ danh sách sản phẩm — xem src/utils/soLieu.js.",
 
   "phuDe": "Về chúng tôi",
   "tieuDe": "Mang công nghệ đến gần hơn,",
@@ -8,11 +8,6 @@
 
   "philosophy": "iMob không chỉ bán sản phẩm, mà cung cấp giải pháp toàn diện và đồng hành lâu dài. Từ khâu lên ý tưởng, tư vấn, thiết kế đến triển khai và đào tạo vận hành. Chúng tôi tin rằng thành công của khách hàng chính là minh chứng tốt nhất cho giá trị mà iMob mang lại.",
 
-  "stats": [
-    { "value": "50+", "label": "Dự án triển khai" },
-    { "value": "30+", "label": "Khách hàng đồng hành" },
-    { "value": "99%", "label": "Mức độ hài lòng" }
-  ],
 
   "features": [
     {

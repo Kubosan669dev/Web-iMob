@@ -1,5 +1,5 @@
 {
-  "_note": "NỘI DUNG 3 TRANG DỊCH VỤ RIÊNG (/zalo-miniapp, /software-hardware, /digital-transformation). Bố cục học theo imob.vn nhưng SỐ LIỆU LẤY TỪ DỮ LIỆU THẬT của dự án (about.json: 50+/30+/99%, projects.json: chương trình 8 tuần / 200+ nhân sự) — KHÔNG bịa '100K người dùng', KHÔNG hứa mốc thời gian cụ thể cho từng dự án (cùng kỷ luật với kienThuc.json). 'icon' là tên icon lucide, được map trong src/components/service/icons.js. Trang do các component trong src/components/service/ render.",
+  "_note": "NỘI DUNG 3 TRANG DỊCH VỤ RIÊNG (/zalo-miniapp, /software-hardware, /digital-transformation). Bố cục học theo imob.vn KHÔNG bịa số liệu. ⚠️ Khối `stats` đã BỎ khỏi file này (18/08/2026): ba trang đều khai 50+/30+/99% mà không ấn phẩm nào của công ty có con số đó. Dải số liệu giờ do component StatsBand tự ĐẾM từ danh sách sản phẩm — xem src/utils/soLieu.js. KHÔNG bịa '100K người dùng', KHÔNG hứa mốc thời gian cụ thể cho từng dự án (cùng kỷ luật với kienThuc.json). 'icon' là tên icon lucide, được map trong src/components/service/icons.js. Trang do các component trong src/components/service/ render.",
   "zalo-miniapp": {
     "meta": {
       "route": "/zalo-miniapp",
@@ -82,13 +82,6 @@
         { "title": "Thiết kế", "desc": "Dựng UI/UX theo nhận diện thương hiệu và luồng sử dụng của khách." },
         { "title": "Triển khai", "desc": "Lập trình, tích hợp thanh toán, nộp Zalo xét duyệt và phát hành." },
         { "title": "Đào tạo & bàn giao", "desc": "Hướng dẫn vận hành, bàn giao và bảo trì trọn gói sau khi lên sóng." }
-      ]
-    },
-    "stats": {
-      "items": [
-        { "value": "50+", "label": "Dự án triển khai" },
-        { "value": "30+", "label": "Khách hàng đồng hành" },
-        { "value": "99%", "label": "Mức độ hài lòng" }
       ]
     }
   },
@@ -176,13 +169,6 @@
         { "title": "Triển khai & đào tạo", "desc": "Cài đặt tại chỗ, chạy thử, đào tạo đội ngũ sử dụng." },
         { "title": "Vận hành & hỗ trợ", "desc": "Bàn giao, bảo trì trọn gói và đồng hành khi cần mở rộng." }
       ]
-    },
-    "stats": {
-      "items": [
-        { "value": "50+", "label": "Dự án triển khai" },
-        { "value": "30+", "label": "Khách hàng đồng hành" },
-        { "value": "99%", "label": "Mức độ hài lòng" }
-      ]
     }
   },
 
@@ -252,13 +238,6 @@
         { "icon": "users", "title": "Trực tiếp (offline)", "desc": "Đào tạo tại doanh nghiệp, thực hành trực tiếp cùng giảng viên." },
         { "icon": "monitor", "title": "Trực tuyến (online)", "desc": "Học từ xa linh hoạt theo lịch của đội ngũ, phù hợp nhiều chi nhánh." },
         { "icon": "presentation", "title": "Chuyên đề", "desc": "Buổi chuyên sâu theo một chủ đề cụ thể mà doanh nghiệp cần." }
-      ]
-    },
-    "stats": {
-      "items": [
-        { "value": "200+", "label": "Nhân sự đã đào tạo" },
-        { "value": "50+", "label": "Dự án triển khai" },
-        { "value": "99%", "label": "Mức độ hài lòng" }
       ]
     }
   }

@@ -21,6 +21,7 @@ import {
   dienThongTin,
   normalize,
 } from "../src/services/chatBrain.js";
+import { demSoLieu, danhSachMarkdown } from "../src/utils/soLieu.js";
 
 // Đọc dữ liệu (đọc bằng fs để chạy được trên Node không cần cấu hình JSON import)
 function docJson(duongDan) {
@@ -30,6 +31,15 @@ function docJson(duongDan) {
 const knowledge = docJson("../src/data/kienThuc.json");
 const company = docJson("../src/data/company.json");
 const { cases } = docJson("../src/data/chatTestQuestions.json");
+const projects = docJson("../src/data/projects.json");
+
+// Số liệu bot đọc cho khách nghe được ĐẾM từ danh sách sản phẩm, y như lúc
+// chạy thật (xem src/utils/soLieu.js) — test phải dùng cùng một nguồn, không
+// thì phép kiểm 5 bên dưới sẽ báo {{so_lieu.*}} chưa điền được.
+const soLieu = {
+  ...demSoLieu(projects.danhSach),
+  danhSach: danhSachMarkdown(projects.danhSach),
+};
 
 const intents = gomIntents(knowledge);
 
@@ -41,7 +51,7 @@ const fails = [];
 const lacDe = [];
 
 for (const c of cases) {
-  const { intentId, answer } = findAnswer(c.q, knowledge, company);
+  const { intentId, answer } = findAnswer(c.q, knowledge, company, soLieu);
 
   if (intentId !== c.expect) {
     fails.push({ q: c.q, expect: c.expect, got: intentId });
@@ -131,7 +141,7 @@ if (thieuTest.length > 0) {
 //    → khách nhìn thấy chuỗi kỹ thuật. Bắt ngay ở đây.
 // ============================================================
 const conPlaceholder = intents
-  .filter((i) => dienThongTin(i.answer, company).includes("{{"))
+  .filter((i) => dienThongTin(i.answer, company, soLieu).includes("{{"))
   .map((i) => i.id);
 
 if (conPlaceholder.length > 0) {

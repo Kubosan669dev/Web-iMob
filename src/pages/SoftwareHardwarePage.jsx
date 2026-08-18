@@ -20,7 +20,7 @@ export default function SoftwareHardwarePage() {
       <CardGrid {...data.benefits} />
       <CardGrid {...data.industries} tinted />
       <ProcessSteps {...data.process} />
-      <StatsBand {...data.stats} />
+      <StatsBand />
       <Contact />
     </>
   );

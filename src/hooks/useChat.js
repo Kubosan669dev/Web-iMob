@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { sendMessage } from "../services/chatService.js";
-import { useCongTy } from "../context/NoiDungContext.jsx";
+import { useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 
 // ============================================================
 // useChat: "bộ nhớ hội thoại" của chatbot.
@@ -55,6 +55,7 @@ async function typeOutMessage(id, fullText, setMessages) {
 
 export default function useChat() {
   const congTy = useCongTy();
+  const sanPham = useSanPham();
 
   // Người dùng bật "giảm chuyển động" thì hiện nguyên câu ngay, không gõ dần.
   // Hiệu ứng này chạy bằng JavaScript nên MotionConfig/CSS không với tới được,
@@ -85,7 +86,7 @@ export default function useChat() {
 
       // Truyền congTy để bot dùng SĐT/email/địa chỉ MỚI NHẤT (sửa ở /admin),
       // chứ không phải bản đóng gói lúc build.
-      const { response } = await sendMessage(trimmed, history, congTy);
+      const { response } = await sendMessage(trimmed, history, congTy, sanPham);
       setIsWaiting(false); // hết chờ mạng → chuyển sang hiện chữ dần
 
       if (reduceMotion) {
