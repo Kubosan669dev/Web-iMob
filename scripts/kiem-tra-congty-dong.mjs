@@ -41,7 +41,7 @@ for (const cauHoi of CAU_HOI) {
   const kq = findAnswer(cauHoi, knowledge, congTyMoi);
   const noiSoMoi = kq.answer.includes(SO_MOI) || kq.answer.includes(EMAIL_MOI);
   const conSoCu =
-    kq.answer.includes("936 982 256") || kq.answer.includes("hotro@imob.vn");
+    kq.answer.includes("936 982 256") || kq.answer.includes("admin@imob.vn");
 
   console.log(`[${cauHoi}]`);
   console.log(`  -> ${kq.answer.slice(0, 90)}`);

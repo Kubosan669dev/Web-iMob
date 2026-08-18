@@ -40,7 +40,10 @@ def kiem_tra(inp: str, ans: str):
     if "bao hanh" in ki or "hong thi" in ki:
         kq.append(("bao hanh: co '2 nam' va '1 nam'", "2 nam" in ka and "1 nam" in ka))
     if " o dau" in (" " + ki) or "van phong" in ki:
-        kq.append(("dia chi: co 'bai chay'", "bai chay" in ka))
+        # Doi 18/08/2026: cong ty xac nhan dia chi la van phong HL68 Building
+        # (phuong Ha Long), khong phai To 8 khu 3 Bai Chay nhu ban truoc. Bat
+        # theo "hl68" vi day la phan dac trung nhat, khong dinh dau tieng Viet.
+        kq.append(("dia chi: co 'hl68'", "hl68" in ka))
     if "bao nhieu tinh nang" in ki:
         kq.append(("tinh nang: co so '7'", "7" in ans))
     if "source code" in ki or "ma nguon" in ki:

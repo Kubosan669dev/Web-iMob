@@ -85,13 +85,6 @@ export default function Footer() {
           <CotLink tieuDe="Liên hệ">
             <DongLink href={`tel:${soDienThoaiGoi}`}>{congTy.phone}</DongLink>
             <DongLink href={`mailto:${congTy.email}`}>{congTy.email}</DongLink>
-            {/* Email hỗ trợ chỉ hiện khi dữ liệu có — trường này mới thêm
-                17/08/2026, website chạy với database seed cũ có thể chưa có. */}
-            {congTy.emailHoTro && (
-              <DongLink href={`mailto:${congTy.emailHoTro}`}>
-                {congTy.emailHoTro}
-              </DongLink>
-            )}
             <li className="text-xs leading-relaxed text-ink-soft">
               {congTy.workingHours}
             </li>
@@ -126,12 +119,9 @@ export default function Footer() {
       {/* ---------- Dòng pháp lý ---------- */}
       <div className="border-t border-line py-6">
         <Container className="space-y-3">
-          {/* Tên pháp nhân và địa chỉ ĐĂNG KÝ KINH DOANH — khác địa chỉ văn
-              phòng ở trên, theo đúng ấn phẩm công ty. Chỉ hiện khi dữ liệu có. */}
-          <p className="text-xs leading-relaxed text-ink-faint">
-            {congTy.fullName}
-            {congTy.diaChiDangKy && <> · {congTy.diaChiDangKy}</>}
-          </p>
+          {/* Tên pháp nhân. Công ty xác nhận 18/08/2026 chỉ dùng MỘT địa chỉ —
+              văn phòng HL68, đã hiện ở cột Liên hệ phía trên nên không lặp lại. */}
+          <p className="text-xs leading-relaxed text-ink-faint">{congTy.fullName}</p>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-ink-faint">

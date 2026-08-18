@@ -9,10 +9,10 @@
     "contacts": {
       "hotline": "+84 936 982 256",
       "hotline_local_format": "0936 982 256",
-      "email_general": "hotro@imob.vn"
+      "email_general": "admin@imob.vn"
     },
     "address": {
-      "full": "Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh"
+      "full": "Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh"
     }
   },
   "pricing_policy": {
@@ -32,7 +32,7 @@
         "công ty các bạn kinh doanh gì",
         "cho mình biết về công ty"
       ],
-      "answer": "iMob (Công ty Cổ phần Công nghệ & Giải pháp iMob) là đơn vị công nghệ thông tin và chuyển đổi số, trụ sở tại Phường Bãi Cháy, Quảng Ninh. iMob có 3 mảng chính: Đào tạo chuyển đổi số, Phát triển Zalo MiniApp, và Giải pháp phần mềm & phần cứng theo yêu cầu. Anh/chị đang quan tâm mảng nào để em tư vấn kỹ hơn ạ?"
+      "answer": "iMob (Công ty Cổ phần Công nghệ & Giải pháp iMob) là đơn vị công nghệ thông tin và chuyển đổi số, văn phòng tại Phường Hạ Long, Quảng Ninh. iMob có 3 mảng chính: Đào tạo chuyển đổi số, Phát triển Zalo MiniApp, và Giải pháp phần mềm & phần cứng theo yêu cầu. Anh/chị đang quan tâm mảng nào để em tư vấn kỹ hơn ạ?"
     },
     {
       "id": "F002",
@@ -46,7 +46,7 @@
         "văn phòng ở đâu",
         "cho xin số liên lạc"
       ],
-      "answer": "Hotline: 0936 982 256. Email: hotro@imob.vn. Địa chỉ: Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh. Website: imob.vn. Anh/chị cần em hỗ trợ thêm gì không ạ?"
+      "answer": "Hotline: 0936 982 256. Email: admin@imob.vn. Địa chỉ: Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh. Website: imob.vn. Anh/chị cần em hỗ trợ thêm gì không ạ?"
     },
     {
       "id": "F003",
@@ -156,11 +156,11 @@
       "title": "Thông tin doanh nghiệp iMob",
       "service": "general",
       "tags": ["công ty", "liên hệ", "địa chỉ", "hotline"],
-      "text": "Công ty Cổ phần Công nghệ & Giải pháp iMob, thương hiệu iMob Solution & Technology. Địa chỉ: Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh. Hotline: 0936 982 256. Website: imob.vn. iMob có 3 dịch vụ chính: Đào tạo chuyển đổi số, Phát triển Zalo MiniApp, Giải pháp phần mềm và phần cứng."
+      "text": "Công ty Cổ phần Công nghệ & Giải pháp iMob, thương hiệu iMob Solution & Technology. Địa chỉ: Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh. Hotline: 0936 982 256. Website: imob.vn. iMob có 3 dịch vụ chính: Đào tạo chuyển đổi số, Phát triển Zalo MiniApp, Giải pháp phần mềm và phần cứng."
     }
   ],
   "fallback": {
-    "low_confidence": "Dạ em chưa chắc chắn về thông tin này nên không dám trả lời thiếu chính xác. Anh/chị gọi hotline 0936 982 256 hoặc email hotro@imob.vn để được đội ngũ iMob giải đáp chính xác nhất ạ. Em có thể hỗ trợ anh/chị điều gì khác không?",
+    "low_confidence": "Dạ em chưa chắc chắn về thông tin này nên không dám trả lời thiếu chính xác. Anh/chị gọi hotline 0936 982 256 hoặc email admin@imob.vn để được đội ngũ iMob giải đáp chính xác nhất ạ. Em có thể hỗ trợ anh/chị điều gì khác không?",
     "no_data": "Thông tin này chưa được công bố công khai nên em chưa thể xác nhận. Anh/chị để lại số điện thoại để đội tư vấn liên hệ giải đáp cụ thể nhé.",
     "repeated_failure": "Dạ để anh/chị không mất thời gian, em xin phép chuyển sang đội tư vấn trực tiếp. Anh/chị cho em xin tên và số điện thoại, hoặc gọi ngay 0936 982 256 ạ.",
     "sensitive_request": "Dạ em không thể hỗ trợ nội dung này. Anh/chị vui lòng liên hệ trực tiếp hotline 0936 982 256 để được nhân viên phụ trách hỗ trợ ạ."
@@ -195,7 +195,7 @@
   "test_cases": [
     { "id": "T01", "input": "Làm app cho quán ăn hết bao nhiêu tiền?", "expect": "Không có con số giá; giải thích báo giá theo dự án; xin liên hệ" },
     { "id": "T02", "input": "Có bảo hành không?", "expect": "2 năm phần cứng, 1 năm phần mềm, hỗ trợ 24/7" },
-    { "id": "T03", "input": "Văn phòng ở đâu?", "expect": "Tổ 8, Khu 3, Phường Bãi Cháy, Tỉnh Quảng Ninh" },
+    { "id": "T03", "input": "Văn phòng ở đâu?", "expect": "Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh" },
     { "id": "T04", "input": "MiniApp có bao nhiêu tính năng?", "expect": "Liệt kê đủ 7 nhóm tính năng" },
     { "id": "T05", "input": "Có bàn giao source code không?", "expect": "Có, kèm quyền sở hữu và tài liệu tiếng Việt" },
     { "id": "T06", "input": "Thời tiết hôm nay thế nào?", "expect": "Từ chối lịch sự, kéo về dịch vụ iMob" },
