@@ -1,7 +1,37 @@
 {
   "_note": "SẢN PHẨM ĐÃ TRIỂN KHAI. Đây là bản MẶC ĐỊNH đóng gói sẵn trong bundle — hiện ngay khi trang vừa mở và vẫn còn đó nếu máy chủ chết. Bản đang chạy thật sửa trong /admin → mục Sản phẩm, lưu ở database dưới khoá 'projects'. Sửa file này rồi deploy thì phải vào /admin bấm 'Nạp lại từ file gốc', không thì database vẫn giữ bản cũ.",
-  "_huongdan_anh": "• lienKet: điền địa chỉ thì cả thẻ bấm được VÀ tự có mã QR — mã sinh ngay trong trình duyệt từ địa chỉ này (src/components/ui/MaQR.jsx), không cần chạy lệnh gì. • anh: ảnh chụp màn hình, bỏ file vào public/anh/ rồi ghi '/anh/ten-file.webp'; tỉ lệ 16:10, rộng khoảng 1200px — việc này phải làm trong mã nguồn vì trang quản trị chưa tải ảnh lên được. • Để trống trường nào thì phần đó tự ẩn, trang vẫn đẹp. • 19/08/2026: ba ảnh hiện có là ẢNH CHỤP THẬT trang chủ của chính ba website đã bàn giao (Chrome headless 1280×800, đổi sang WebP 1200×750). Ba Zalo Mini App còn lại CHƯA có ảnh vì link zalo.me/s/... chỉ mở ra trang quét mã QR của Zalo chứ không phải giao diện app — lấy trang đó làm ảnh là đưa ảnh của Zalo lên chứ không phải sản phẩm của iMob. Cần người mở app trên điện thoại rồi chụp màn hình gửi về. • Thứ tự danh sách đang xếp dự án CÓ ẢNH lên trước, vì thẻ không ảnh trống tới hai phần ba. Có đủ sáu ảnh thì xếp lại theo ý công ty.",
+  "_huongdan_anh": "• lienKet: điền địa chỉ thì cả thẻ bấm được VÀ tự có mã QR — mã sinh ngay trong trình duyệt từ địa chỉ này (src/components/ui/MaQR.jsx), không cần chạy lệnh gì. • anh: bỏ file vào public/anh/ rồi ghi '/anh/ten-file.webp'; tỉ lệ 16:10, rộng khoảng 1200px — việc này phải làm trong mã nguồn vì trang quản trị chưa tải ảnh lên được. • Để trống trường nào thì phần đó tự ẩn, trang vẫn đẹp. • 19/08/2026 — CẢ SÁU đã có ảnh THẬT, không có ảnh minh hoạ mua sẵn nào: ba website (Đông Triều, Quảng Tân, phường Yên Tử) chụp thẳng trang chủ bằng Chrome headless 1280×800; ba Zalo Mini App do công ty mở app trên điện thoại chụp gửi về (871×1884). Ảnh điện thoại là ảnh DỌC mà ô ảnh trên web là NGANG, cắt thẳng chỉ còn một dải mỏng vô nghĩa — nên dựng lại thành khung 1200×750: ảnh chụp đặt trong viền máy bo góc, nền là chính ảnh đó phóng to làm nhoè rồi pha trắng 34% để mỗi slide tự hoà tông màu. Script dựng nằm trong lịch sử commit này. • Thứ tự giữ đúng như công ty xếp ban đầu.",
   "danhSach": [
+    {
+      "id": "yen-tu-so",
+      "icon": "landmark",
+      "loai": "Zalo Mini App",
+      "khachHang": "Khu di tích danh thắng Yên Tử",
+      "title": "Yên Tử Số",
+      "description": "Zalo Mini App phục vụ khu di tích danh thắng Yên Tử.",
+      "anh": "/anh/yen-tu-so.webp",
+      "lienKet": "https://zalo.me/s/1740150693479312611/"
+    },
+    {
+      "id": "bao-tang-thu-vien-quang-ninh",
+      "icon": "library",
+      "loai": "Zalo Mini App",
+      "khachHang": "Bảo tàng – Thư viện tỉnh Quảng Ninh",
+      "title": "Bảo tàng – Thư viện tỉnh Quảng Ninh",
+      "description": "Zalo Mini App của Bảo tàng – Thư viện tỉnh Quảng Ninh.",
+      "anh": "/anh/bao-tang-thu-vien-quang-ninh.webp",
+      "lienKet": "https://zalo.me/s/868766387773152883/"
+    },
+    {
+      "id": "phuong-an-sinh-so",
+      "icon": "building-2",
+      "loai": "Zalo Mini App",
+      "khachHang": "Phường An Sinh",
+      "title": "Phường An Sinh Số",
+      "description": "Zalo Mini App chính quyền số của phường An Sinh.",
+      "anh": "/anh/phuong-an-sinh-so.webp",
+      "lienKet": "https://zalo.me/s/66674171653706230/"
+    },
     {
       "id": "ban-do-so-dong-trieu",
       "icon": "map",
@@ -31,36 +61,6 @@
       "description": "Website chính thức của phường Yên Tử.",
       "anh": "/anh/website-phuong-yen-tu.webp",
       "lienKet": "https://phuongyentu.com.vn"
-    },
-    {
-      "id": "yen-tu-so",
-      "icon": "landmark",
-      "loai": "Zalo Mini App",
-      "khachHang": "Khu di tích danh thắng Yên Tử",
-      "title": "Yên Tử Số",
-      "description": "Zalo Mini App phục vụ khu di tích danh thắng Yên Tử.",
-      "anh": "",
-      "lienKet": "https://zalo.me/s/1740150693479312611/"
-    },
-    {
-      "id": "bao-tang-thu-vien-quang-ninh",
-      "icon": "library",
-      "loai": "Zalo Mini App",
-      "khachHang": "Bảo tàng – Thư viện tỉnh Quảng Ninh",
-      "title": "Bảo tàng – Thư viện tỉnh Quảng Ninh",
-      "description": "Zalo Mini App của Bảo tàng – Thư viện tỉnh Quảng Ninh.",
-      "anh": "",
-      "lienKet": "https://zalo.me/s/868766387773152883/"
-    },
-    {
-      "id": "phuong-an-sinh-so",
-      "icon": "building-2",
-      "loai": "Zalo Mini App",
-      "khachHang": "Phường An Sinh",
-      "title": "Phường An Sinh Số",
-      "description": "Zalo Mini App chính quyền số của phường An Sinh.",
-      "anh": "",
-      "lienKet": "https://zalo.me/s/66674171653706230/"
     }
   ]
 }
