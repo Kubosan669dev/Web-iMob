@@ -41,15 +41,39 @@ kế này — xem `src/context/NoiDungContext.jsx`.
 
 ### Chatbot trả lời theo 3 tầng
 
-Khách hỏi → website thử lần lượt:
+Khách hỏi → thử lần lượt:
 
-1. **Kho kiến thức trong trình duyệt** (`src/data/kienThuc.json`) — nhanh nhất, 0 đồng.
-2. **API Python** (TF-IDF, `chatbot-python/`) — nếu bước 1 không khớp *và* bật `VITE_USE_BACKEND=true`.
-3. **Google Gemini** — nếu bước 2 cũng không xong *và* có `VITE_GEMINI_API_KEY`.
+1. **Kho kiến thức trong trình duyệt** (`src/data/kienThuc.json`) — 0ms, 0 đồng,
+   không cần mạng. Đại đa số câu hỏi dừng ở đây.
+2. **API Python** (TF-IDF, `chatbot-python/`) — nếu bước 1 không khớp *và* bật
+   `VITE_USE_BACKEND=true`.
+3. **Google Gemini** — nằm **BÊN TRONG** bước 2, do backend gọi, nếu TF-IDF cũng
+   không đủ tự tin. Chỉ chạy khi đã đặt `GEMINI_API_KEY` trên Render.
 4. Vẫn không được thì trả câu mặc định "mời liên hệ hotline".
 
 Nghĩa là **website vẫn chạy tốt kể cả khi API Python chết hoặc đang ngủ**. Đây là
 điều tốt: không có điểm chết duy nhất.
+
+> ⚠️ **Khoá Gemini đặt ở Render, KHÔNG đặt ở Vercel** (đổi 19/08/2026).
+> Trước đây website gọi thẳng Gemini bằng `VITE_GEMINI_API_KEY`. Mọi biến
+> `VITE_*` bị nhét **thẳng vào file JavaScript công khai** — ai mở F12 cũng copy
+> được khoá rồi tiêu quota của công ty. Mã gọi Gemini phía trình duyệt đã bị gỡ
+> hẳn, nên đặt lại biến đó cũng không có tác dụng gì.
+>
+> **Cách bật:** Render → `imob-chatbot-api` → **Environment** → thêm
+> `GEMINI_API_KEY` = khoá lấy ở <https://aistudio.google.com/> → **Save**.
+> Service tự khởi động lại (~1 phút), **không cần build lại**.
+>
+> **Cách kiểm:** mở `https://imob-chatbot-api.onrender.com/health`, xem trường
+> `"gemini"` là `"bat"` hay `"tat"`.
+>
+> Chạy ở máy thì đặt cùng tên biến đó trong `chatbot-python/.env`.
+
+**Đặt khoá vào còn làm bot khắt khe hơn.** Ngưỡng nhận của TF-IDF tự siết lại
+(0,18 → 0,35) khi có Gemini đỡ phía sau: câu nào TF-IDF chỉ khớp lờ mờ thì thà
+đưa cho Gemini trả lời có căn cứ, còn hơn nhận bừa. Đo thật ngày 19/08/2026 cho
+thấy với ngưỡng cũ, câu *"cho tôi công thức nấu phở"* đạt 0,226 và **vẫn được bot
+nhận rồi trả lời**. Chi tiết trong `chatbot-python/imob_bot/bot.py`.
 
 ---
 

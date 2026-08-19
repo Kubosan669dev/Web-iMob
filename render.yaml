@@ -71,6 +71,22 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false
 
+      # --- Google Gemini (TÙY CHỌN) ---
+      # Khi kho kiến thức trong máy không trả lời được, bot hỏi tiếp Gemini
+      # (xem imob_bot/gemini.py). Không đặt khoá thì tầng này tự tắt, bot chạy
+      # y như trước — không có gì hỏng.
+      #
+      # ⚠️ ĐẶT Ở ĐÂY, TUYỆT ĐỐI KHÔNG ĐẶT Ở VERCEL DƯỚI DẠNG VITE_GEMINI_API_KEY.
+      # Mọi biến VITE_* bị nhét thẳng vào file JavaScript công khai, ai mở F12
+      # cũng copy được khoá rồi tiêu quota của công ty.
+      #
+      # sync: false = Render KHÔNG lấy giá trị từ file này (file nằm trong repo
+      # công khai). Vào Dashboard -> imob-chatbot-api -> Environment -> điền tay.
+      # Lấy khoá tại https://aistudio.google.com/ (bấm "Get API key").
+      # Kiểm đã bật chưa: mở /health, xem trường "gemini" là "bat" hay "tat".
+      - key: GEMINI_API_KEY
+        sync: false
+
       # --- Phần CMS ---
       # Render tự điền chuỗi kết nối của database khai báo ở trên.
       - key: DATABASE_URL

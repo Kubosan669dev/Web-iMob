@@ -8,10 +8,22 @@ Với mỗi câu test, in ra câu trả lời của bot và tự kiểm:
   - Vài câu có nội dung bắt buộc (bảo hành, địa chỉ, số tính năng, source code).
 """
 
+import os
 import sys
 from pathlib import Path
 
-from imob_bot import ChatBot, KienThuc
+# TẮT Gemini trong lúc chạy test — phải đặt TRƯỚC khi nạp imob_bot.
+#
+# Vì sao: bộ test này kiểm những lằn ranh KHÔNG ĐƯỢC PHÉP SAI (không đưa số
+# tiền, không đổi vai khi bị dụ). Nếu để Gemini bật, cùng một câu hỏi có thể ra
+# kết quả khác nhau giữa hai lần chạy, test hỏng lúc được lúc không thì mất
+# sạch giá trị. Ngoài ra test phải chạy được khi không có mạng và không được
+# tiêu quota của công ty mỗi lần ai đó gõ `python run_tests.py`.
+#
+# Muốn thử Gemini thật thì chạy backend rồi gọi /api/chat, đừng bật ở đây.
+os.environ["GEMINI_API_KEY"] = ""
+
+from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
 

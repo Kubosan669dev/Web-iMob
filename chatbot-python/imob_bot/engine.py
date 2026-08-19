@@ -58,3 +58,22 @@ class TimKiem:
         diem = cosine_similarity(vec, self.matrix)[0]
         i = int(diem.argmax())
         return self.docs[i], float(diem[i])
+
+    def tra_nhieu(self, cau_hoi: str, k: int = 4):
+        """Trả về k tài liệu gần nhất, sắp từ giống nhất xuống.
+
+        Khác `tra()` ở chỗ KHÔNG lọc theo ngưỡng: dùng để gom bối cảnh gửi cho
+        Gemini ở những câu mà bot trong máy đã chịu thua. Điểm thấp không có
+        nghĩa là vô dụng — nó vẫn là phần kho kiến thức gần chủ đề nhất, và đưa
+        cho model đọc vẫn tốt hơn nhiều so với để model tự nghĩ ra.
+        """
+        if self.matrix is None:
+            return []
+        q = chuan_hoa(cau_hoi)
+        if not q:
+            return []
+        vec = self.vectorizer.transform([q])
+        diem = cosine_similarity(vec, self.matrix)[0]
+        # argsort tăng dần -> lấy k phần tử cuối rồi đảo lại cho giảm dần
+        thu_tu = diem.argsort()[-k:][::-1]
+        return [(self.docs[int(i)], float(diem[int(i)])) for i in thu_tu if diem[int(i)] > 0]

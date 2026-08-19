@@ -38,6 +38,7 @@ import api_noi_dung
 import auth
 import db
 from imob_bot import ChatBot, KienThuc
+from imob_bot import gemini
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("imob")
@@ -92,6 +93,15 @@ async def vong_doi(app: FastAPI):
             db.khoi_tao()
             if not db.co_db():
                 log.warning("Đã đặt DATABASE_URL nhưng kết nối hỏng — CMS đang TẮT.")
+
+    # Nói to trạng thái Gemini ngay lúc khởi động. Không có dòng này thì lúc
+    # quên đặt khoá, bot vẫn chạy êm và không ai biết tầng AI đang tắt —
+    # chỉ thấy khách thỉnh thoảng nhận câu "em chưa hiểu".
+    log.info(
+        "Tầng Gemini: %s",
+        f"BẬT (model {gemini.MODEL})" if gemini.dang_bat()
+        else "TẮT (chưa đặt GEMINI_API_KEY) — bot chạy bằng kho kiến thức trong máy",
+    )
 
     yield
     db.dong()
@@ -202,6 +212,8 @@ def health():
         "status": "ok",
         "so_phien": len(_phien),
         "database": "ok" if db.co_db() else ("loi" if db.DA_CAU_HINH else "tat"),
+        # Chỉ báo BẬT/TẮT, tuyệt đối không lộ khoá ra đường dẫn công khai.
+        "gemini": "bat" if gemini.dang_bat() else "tat",
     }
 
 

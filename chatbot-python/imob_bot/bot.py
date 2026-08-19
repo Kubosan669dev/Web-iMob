@@ -7,20 +7,54 @@ Thứ tự xử lý mỗi lượt (quan trọng — đúng thứ tự này mới
   2. Câu hỏi về giá?          -> giải thích báo giá riêng (không đưa số) + mời để lại liên hệ.
   3. Khớp FAQ / smalltalk?    -> trả lời biên tập sẵn; nếu action=collect_lead thì mở phiên lead.
   4. Khớp kho kiến thức dài?  -> trả lời bằng đoạn kiến thức.
-  5. Không khớp gì            -> câu fallback; trượt 2 lần liên tiếp thì mời gặp người thật.
+  5. Vẫn không khớp?          -> nhờ Gemini, kèm vài đoạn kiến thức gần nhất làm căn cứ
+                                 (chỉ chạy khi đã đặt GEMINI_API_KEY — xem gemini.py).
+  6. Không có Gemini nữa      -> câu fallback; trượt 2 lần liên tiếp thì mời gặp người thật.
 
 Cuối cùng: rà lại câu trả lời, nếu lỡ chứa số tiền thì thay bằng câu chuẩn.
 """
 
+from . import gemini
 from . import guardrails as gr
 from .engine import TimKiem
 from .knowledge import KienThuc
 from .lead import ThuThapLead
 
 # Ngưỡng cosine: khớp phải "giống" tối thiểu bao nhiêu mới nhận.
-# Chỉnh 2 số này nếu bot nhận nhầm (tăng lên) hoặc hay bỏ sót (giảm xuống).
+#
+# CÓ HAI BỘ, chọn theo việc có Gemini đỡ phía sau hay không — vì câu hỏi
+# "nhận hay bỏ" phụ thuộc vào thứ đang chờ ở phía sau:
+#
+#   • KHÔNG có Gemini: phía sau chỉ là câu "em chưa hiểu". Lúc đó một câu trả
+#     lời hơi lệch vẫn hơn là không có gì, nên để ngưỡng thấp. Đây là bộ số
+#     dùng suốt từ đầu dự án.
+#
+#   • CÓ Gemini: phía sau là một câu trả lời có căn cứ (Gemini được đưa kèm
+#     đúng mấy đoạn kiến thức gần nhất). Lúc đó nhận bừa lại thành có hại.
+#
+# Số đo thật ngày 19/08/2026 cho thấy ngưỡng cũ dễ dãi tới mức nào — điểm FAQ:
+#     cảm ơn bạn                      0,822   đúng
+#     đào tạo chuyển đổi số gồm gì    0,620   đúng
+#     xin chào                        0,469   đúng
+#     bảo hành bao lâu                0,426   đúng
+#     địa chỉ công ty ở đâu           0,391   đúng
+#     ------------------------------- 0,35 <- ngưỡng mới
+#     app có chạy trên iOS không      0,328   LẠC ĐỀ
+#     ai là giám đốc công ty          0,305   LẠC ĐỀ
+#     số tài khoản ngân hàng          0,287   LẠC ĐỀ
+#     bên bạn làm app giao đồ ăn      0,248   LẠC ĐỀ
+#     cho tôi công thức nấu phở       0,226   LẠC ĐỀ
+#     hôm nay trời mưa không          0,220   LẠC ĐỀ
+#     ------------------------------- 0,18 <- ngưỡng cũ
+# Tức là "cho tôi công thức nấu phở" vẫn được bot nhận và trả lời.
+#
+# Nhớ thêm: ở web thật, tầng này CHỈ nhận những câu mà kho kiến thức trong
+# trình duyệt đã bó tay (xem src/services/chatService.js). Câu dễ không bao
+# giờ tới đây, nên khắt khe ở đây không làm mất câu trả lời tốt nào.
 NGUONG_FAQ = 0.18
 NGUONG_CHUNK = 0.12
+NGUONG_FAQ_CO_AI = 0.35
+NGUONG_CHUNK_CO_AI = 0.20
 
 DICH_VU_HOP_LE = {"digital_transformation", "zalo_miniapp", "software_hardware"}
 
@@ -66,8 +100,12 @@ class ChatBot:
                     f"báo giá, em xin phép kết nối tới hotline {self.kt.hotline()} để đội "
                     "tư vấn hỗ trợ trực tiếp nhé!")
 
+        co_ai = gemini.dang_bat()
+        nguong_faq = NGUONG_FAQ_CO_AI if co_ai else NGUONG_FAQ
+        nguong_chunk = NGUONG_CHUNK_CO_AI if co_ai else NGUONG_CHUNK
+
         doc, diem = self.tim_faq.tra(text)
-        khop_faq = doc is not None and diem >= NGUONG_FAQ
+        khop_faq = doc is not None and diem >= nguong_faq
 
         # 2. Câu hỏi về giá — không bao giờ đưa số
         if gr.la_cau_hoi_gia(text):
@@ -88,16 +126,50 @@ class ChatBot:
 
         # 4. Khớp kho kiến thức dài
         doc_c, diem_c = self.tim_chunk.tra(text)
-        if doc_c is not None and diem_c >= NGUONG_CHUNK:
+        if doc_c is not None and diem_c >= nguong_chunk:
             self.so_lan_truot = 0
             return doc_c["answer"]
 
-        # 5. Không khớp gì
+        # 5. Kho kiến thức trong máy chịu thua -> nhờ Gemini (nếu đã đặt khoá)
+        #
+        # Đặt ở ĐÂY chứ không phải đầu luồng là có chủ ý: mọi câu mà bot trong
+        # máy trả lời được thì vẫn do bot trong máy trả lời — nhanh hơn, miễn
+        # phí, và quan trọng nhất là câu chữ đã được người duyệt. Gemini chỉ
+        # nhận phần đuôi mà trước đây khách chỉ nhận được câu "em chưa hiểu".
+        #
+        # Các bước 1–4 ở trên đã lọc trước những thứ tuyệt đối không giao cho
+        # AI: prompt injection và câu hỏi giá. Câu Gemini trả về vẫn còn phải
+        # qua guardrails.chua_so_gia() ở tra_loi().
+        cau_ai = gemini.hoi(text, self.kt, self._boi_canh(text))
+        if cau_ai:
+            self.so_lan_truot = 0
+            return cau_ai
+
+        # 6. Không khớp gì và cũng không có Gemini
         self.so_lan_truot += 1
         if self.so_lan_truot >= 2:
             self.so_lan_truot = 0
             return self.kt.fallback("repeated_failure")
         return self.kt.fallback("low_confidence")
+
+    def _boi_canh(self, text: str):
+        """Vài đoạn kiến thức gần chủ đề nhất, làm căn cứ cho Gemini.
+
+        Gộp cả FAQ lẫn đoạn kiến thức dài vì hai bộ này chứa những thứ khác
+        nhau: FAQ là câu hỏi thường gặp đã biên tập, chunk là nội dung lấy từ
+        các trang dịch vụ.
+        """
+        cap = self.tim_chunk.tra_nhieu(text, gemini.SO_DOAN_BOI_CANH)
+        cap += self.tim_faq.tra_nhieu(text, 2)
+        cap.sort(key=lambda x: x[1], reverse=True)
+
+        ra, da_co = [], set()
+        for doc, _ in cap[: gemini.SO_DOAN_BOI_CANH]:
+            noi_dung = (doc.get("answer") or "").strip()
+            if noi_dung and noi_dung not in da_co:
+                da_co.add(noi_dung)
+                ra.append(noi_dung)
+        return ra
 
     # ================= phụ trợ =================
     def _xu_ly_doc(self, doc) -> str:
