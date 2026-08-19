@@ -149,13 +149,19 @@ function MucHero({ d, doi, daSua }) {
       <div className="space-y-5">
         <O nhan="Nhãn nhỏ phía trên" giaTri={d.badge} doi={s("badge")} daSua={daSua} />
 
+        {/* Nhãn đổi 19/08/2026 cho khớp bố cục tiêu đề mới. BA TRƯỜNG NÀY ĐÃ
+            ĐỔI VAI, tên khoá giữ nguyên để không phải chuyển đổi dữ liệu cũ:
+              tieuDeTruoc — trước là dòng chữ nhỏ dẫn vào, GIỜ là dòng to nhất
+              tieuDeSau   — trước là đuôi câu, GIỜ là dòng to thứ hai
+              tuKhoaDong  — trước là MỘT từ xoay vòng giữa câu, GIỜ là cả dải
+                            mảng công nghệ hiện cùng lúc, sáng dần từng cụm */}
         <div className={LUOI}>
-          <O nhan="Dòng tiêu đề trên" giaTri={d.tieuDeTruoc} doi={s("tieuDeTruoc")} daSua={daSua} />
-          <O nhan="Dòng tiêu đề dưới" giaTri={d.tieuDeSau} doi={s("tieuDeSau")} daSua={daSua} />
+          <O nhan="Dòng tiêu đề LỚN" giaTri={d.tieuDeTruoc} doi={s("tieuDeTruoc")} daSua={daSua} />
+          <O nhan="Dòng tiêu đề thứ hai" giaTri={d.tieuDeSau} doi={s("tieuDeSau")} daSua={daSua} />
         </div>
 
         <OTuKhoa
-          nhan="Từ khoá đổi liên tục (dòng giữa)"
+          nhan="Dải mảng công nghệ (hiện cùng lúc, sáng dần từng cụm)"
           danhSach={d.tuKhoaDong}
           doi={s("tuKhoaDong")}
           daSua={daSua}
