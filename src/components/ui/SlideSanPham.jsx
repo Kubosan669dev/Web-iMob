@@ -20,7 +20,19 @@ import useManHinhRong from "../../hooks/useManHinhRong.js";
 //
 // 2. DỪNG KHI RÊ CHUỘT HOẶC ĐANG ĐỌC BẰNG BÀN PHÍM.
 //    Chữ tự trôi mất giữa chừng lúc người ta đang đọc là lỗi kinh điển của
-//    băng chuyền. Cũng dừng hẳn nếu máy bật "giảm chuyển động".
+//    băng chuyền.
+//
+//    ⚠️ MÁY BẬT "GIẢM CHUYỂN ĐỘNG" THÌ BỎ HIỆU ỨNG TRƯỢT, KHÔNG BỎ VIỆC ĐỔI
+//    SLIDE (sửa 19/08/2026). Bản trước tắt hẳn cả vòng xoay: máy nào bật cài
+//    đặt đó thì băng chuyền đứng im vĩnh viễn ở dự án đầu tiên — đo bằng cách
+//    nạp trang vào iframe rồi đọc tên dự án sau mỗi vài giây, 33 giây vẫn y
+//    nguyên "Yên Tử Số". Windows tắt hiệu ứng động là bật cờ này, nên rất
+//    nhiều khách rơi vào diện đó mà công ty thì yêu cầu "chuyển động sau mỗi
+//    7 đến 10 giây sang dự án khác".
+//    Cài đặt ấy nói "đừng làm mọi thứ bay nhảy", không nói "đừng cập nhật nội
+//    dung" — thứ gây khó chịu là cú TRƯỢT, không phải việc đổi dự án. Nên vẫn
+//    đổi đúng nhịp 8 giây, chỉ đổi tức thì thay vì trượt ngang. Vẫn dừng khi
+//    rê chuột nên người đọc luôn có cách giữ lại.
 //
 // 3. MÃ QR NẰM NGOÀI CHỒNG SLIDE, chỉ đổi nội dung theo slide đang hiện.
 //    Để trong chồng thì phải sinh 6 mã QR cùng lúc — tải thư viện rồi vẽ 6 lần
@@ -48,7 +60,7 @@ export default function SlideSanPham({ danhSach }) {
   }, [tong]);
 
   useEffect(() => {
-    if (tong < 2 || dung || giamChuyenDong) return;
+    if (tong < 2 || dung) return;
     const timer = setInterval(() => setChiSo((i) => (i + 1) % tong), NHIP_MS);
     return () => clearInterval(timer);
   }, [tong, dung, giamChuyenDong]);
@@ -64,12 +76,16 @@ export default function SlideSanPham({ danhSach }) {
        đứng sau    -> nằm bên phải  (chưa tới)
      Nhờ vậy bấm tới thì chữ trôi sang trái, bấm lui thì trôi sang phải, đúng
      chiều ở cả hai nút mà không phải giữ thêm một biến trạng thái nào. */
-  const viTri = (k) =>
-    k === chiSo
-      ? "translate-x-0 opacity-100"
-      : k < chiSo
-        ? "-translate-x-6 opacity-0"
-        : "translate-x-6 opacity-0";
+  //  pointer-events-none cho slide ẩn: sáu slide xếp chồng cùng một ô lưới nên
+  //  slide cuối trong DOM nằm TRÊN CÙNG dù trong suốt. Không tắt thì nó nuốt
+  //  con trỏ của slide đang hiện — ảnh maket bên dưới không nhận được rê chuột
+  //  để đậm lên, và sau này thêm liên kết vào slide là bấm không được.
+  const viTri = (k) => {
+    if (k === chiSo) return giamChuyenDong ? "opacity-100" : "translate-x-0 opacity-100";
+    const an = "opacity-0 pointer-events-none";
+    if (giamChuyenDong) return an;
+    return k < chiSo ? "-translate-x-6 " + an : "translate-x-6 " + an;
+  };
 
   const nutMuiTen =
     "flex h-7 w-7 items-center justify-center rounded-full text-brand transition-colors hover:bg-panel";
@@ -118,7 +134,8 @@ export default function SlideSanPham({ danhSach }) {
             key={s.id ?? k}
             aria-hidden={k !== chiSo}
             className={
-              "col-start-1 row-start-1 transition-all duration-500 ease-out " +
+              "col-start-1 row-start-1 " +
+              (giamChuyenDong ? "" : "transition-all duration-500 ease-out ") +
               viTri(k)
             }
           >
