@@ -111,12 +111,31 @@ export function gomIntents(knowledge) {
 }
 
 // Một từ khóa có "dính" câu hỏi không?
-//   - Cụm nhiều từ ("bao nhiêu", "chi phí")  → khớp chuỗi con (substring)
-//   - Từ đơn ("giá", "zalo")                 → khớp TRỌN TỪ, để "giai" KHÔNG
-//     dính từ khóa "gia" (đây là lỗi kinh điển của khớp chuỗi con).
+//   - Từ đơn ("giá", "zalo")   → khớp TRỌN TỪ, để "giai" KHÔNG dính từ khóa
+//     "gia" (đây là lỗi kinh điển của khớp chuỗi con).
+//   - Cụm nhiều từ             → khớp chuỗi con NHƯNG phải ĐÚNG RANH GIỚI TỪ
+//     ở cả hai đầu.
+//
+// Vì sao phải chặn ranh giới cho cả cụm nhiều từ (sửa 19/08/2026):
+// bản trước dùng thẳng text.includes(keyword), nên câu
+//     "tôi ở Hải Phòng thì có làm được không"
+// bỏ dấu thành "toi o hai phong thi co lam duoc khong", trong đó
+// "p|hong thi" chứa đúng chuỗi "hong thi" — từ khóa "hỏng thì" của intent BẢO
+// HÀNH. Kết quả: mọi khách ở Hải Phòng hỏi bất cứ điều gì đều nhận được câu
+// trả lời về bảo hành. Đây đúng là lỗi mà ghi chú ở dòng trên đã cảnh báo cho
+// từ đơn, nhưng cụm nhiều từ lại bỏ quên.
+//
+// Vẫn cho phép cụm là PHẦN ĐẦU của câu dài hơn ("mất bao" bắt "mất bao lâu"),
+// vì chỗ cắt vẫn rơi đúng vào khoảng trắng.
 function keywordHits(text, tokens, keyword) {
-  if (keyword.includes(" ")) return text.includes(keyword);
-  return tokens.includes(keyword);
+  if (!keyword.includes(" ")) return tokens.includes(keyword);
+
+  for (let i = text.indexOf(keyword); i !== -1; i = text.indexOf(keyword, i + 1)) {
+    const dauSach = i === 0 || text[i - 1] === " ";
+    const cuoiSach = i + keyword.length === text.length || text[i + keyword.length] === " ";
+    if (dauSach && cuoiSach) return true;
+  }
+  return false;
 }
 
 // Tìm câu trả lời phù hợp nhất.

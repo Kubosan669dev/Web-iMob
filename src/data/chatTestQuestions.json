@@ -254,6 +254,8 @@
     { "q": "làm được song ngữ Việt Anh không", "expect": "ngon-ngu" },
     { "q": "bên bạn ở Hà Nội hay Quảng Ninh", "expect": "location", "phai_co": ["Quảng Ninh"] },
     { "q": "công ty có chứng chỉ gì không", "expect": "dau-thau" },
-    { "q": "tôi cần gấp trong 2 tuần có kịp không", "expect": "process-time" }
+    { "q": "tôi cần gấp trong 2 tuần có kịp không", "expect": "process-time" },
+    { "q": "tôi ở Hải Phòng thì có làm được không", "expect": "remote-work" },
+    { "q": "khách ngoài tỉnh có nhận không", "expect": "remote-work" }
   ]
 }

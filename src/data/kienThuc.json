@@ -537,7 +537,7 @@
           "id": "remote-work",
           "nguon": "web",
           "_note": "PHẢI đứng TRƯỚC 'location': câu 'làm việc online được không' vô tình chứa cụm 'lam viec o' của location (khớp chuỗi con: 'lam viec online' bắt đầu bằng 'lam viec o').",
-          "keywords": ["tỉnh khác", "từ xa", "remote", "đến tận nơi", "ngoài quảng ninh", "online được không", "khác tỉnh", "ở xa"],
+          "keywords": ["tỉnh khác", "từ xa", "remote", "đến tận nơi", "ngoài quảng ninh", "online được không", "khác tỉnh", "ở xa", "hải phòng", "ngoài tỉnh", "toàn quốc", "cả nước", "khác địa phương", "tỉnh nào cũng"],
           "answer": "Được ạ! Văn phòng bên mình ở **{{cong_ty.dia_chi}}** nhưng làm việc từ xa với khách ở tỉnh khác hoàn toàn bình thường — trao đổi online, chỉ gặp trực tiếp ở những mốc thật sự cần như khảo sát hoặc bàn giao."
         },
         {
