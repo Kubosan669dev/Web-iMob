@@ -194,7 +194,7 @@ export default function ChatWidget() {
         {/* Vòng pulse mời gọi — chỉ khi đang ĐÓNG và KHÔNG có lời chào. Lời
             chào tự nó đã kéo mắt rồi, thêm vòng nhấp nháy nữa là rối. */}
         {!open && !chao && (
-          <span className="absolute inset-0 animate-ping rounded-full bg-brand opacity-40" />
+          <span className="absolute inset-0 animate-ping rounded-full bg-brand opacity-25" />
         )}
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -219,7 +219,11 @@ export default function ChatWidget() {
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
             // Mobile: full màn hình. Từ sm trở lên: panel nổi góc phải, bo góc.
-            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[75vh] sm:w-96"
+            //
+            // Rộng thêm ở màn hình lớn (lg): câu trả lời của bot hầu hết là
+            // danh sách nhiều gạch đầu dòng, thêm được 32px chiều ngang là bớt
+            // được một lần xuống dòng ở gần như mọi dòng.
+            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-9rem)] sm:w-96 lg:w-[26rem]"
           >
             <Suspense fallback={<ChatWindowSkeleton />}>
               <ChatWindow onClose={dong} />

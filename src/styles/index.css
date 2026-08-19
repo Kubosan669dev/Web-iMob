@@ -184,16 +184,30 @@
    nên phải tự thêm style cho đúng khu vực bong bóng chat của bot. */
 @layer components {
   .chat-markdown p {
-    @apply mb-2 last:mb-0;
+    @apply mb-2.5 last:mb-0;
   }
   .chat-markdown strong {
     @apply font-semibold text-ink;
   }
+  /* Thụt lề nông hơn bản trước (pl-5 -> pl-[1.15rem]): khối trả lời của bot giờ
+     rộng hết khung nên không cần lấy thêm lề để tách khỏi bong bóng nữa, mà mỗi
+     milimet chiều ngang đều đáng giá với danh sách dài. */
   .chat-markdown ul {
-    @apply mb-2 list-disc space-y-1 pl-5 last:mb-0;
+    @apply mb-2.5 list-disc space-y-1.5 pl-[1.15rem] last:mb-0;
   }
   .chat-markdown ol {
-    @apply mb-2 list-decimal space-y-1 pl-5 last:mb-0;
+    @apply mb-2.5 list-decimal space-y-1.5 pl-[1.15rem] last:mb-0;
+  }
+  /* Dấu đầu dòng mang màu thương hiệu. Chi tiết duy nhất được tô màu bên trong
+     câu trả lời — đủ để danh sách bắt mắt mà không phải kẻ ô hay đổi nền. */
+  .chat-markdown li::marker {
+    color: var(--color-brand);
+  }
+  /* Bot hiện chỉ dùng **đậm** chứ chưa dùng tiêu đề, nhưng kho kiến thức sửa
+     được từ /admin nên cứ phòng sẵn — thiếu quy tắc này thì Tailwind preflight
+     làm h3 trông y hệt đoạn văn thường. */
+  .chat-markdown :is(h1, h2, h3, h4) {
+    @apply mb-1.5 mt-4 font-semibold text-ink first:mt-0;
   }
   .chat-markdown code {
     @apply rounded bg-brand-soft px-1.5 py-0.5 font-mono text-[0.85em] text-brand-deep;

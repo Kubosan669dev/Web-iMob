@@ -4,6 +4,7 @@ import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
 import Button from "../components/ui/Button.jsx";
 import ChuyenDoiCard from "../components/ui/ChuyenDoiCard.jsx";
+import Logo from "../components/ui/Logo.jsx";
 import MessageBubble from "../components/chatbot/MessageBubble.jsx";
 import TypingIndicator from "../components/chatbot/TypingIndicator.jsx";
 import { iconOf } from "../components/service/icons.js";
@@ -137,11 +138,21 @@ export default function About() {
                 phỏng một cửa sổ nổi lên trên mặt trang, bóng ở đây mang nghĩa
                 "nằm trên", không phải trang trí. */}
             <div className="mx-auto w-full max-w-sm overflow-hidden rounded-block bg-panel shadow-lift">
-              <div className="flex items-center gap-2 border-b border-line px-5 py-4">
-                <span className="h-3 w-3 rounded-full bg-line" />
-                <span className="h-3 w-3 rounded-full bg-line" />
-                <span className="h-3 w-3 rounded-full bg-line" />
-                <p className="ml-2 text-sm font-medium text-ink-soft">iMob Assistant</p>
+              {/* Khối này là ẢNH CHỤP khung chat thật, nên tiêu đề phải dựng
+                  y hệt ChatWindow.jsx — cùng logo, cùng tên, cùng dòng phụ.
+                  Bản trước vẽ ba chấm tròn kiểu cửa sổ macOS và đề "iMob
+                  Assistant", trong khi khung chat thật không có chấm nào và
+                  tên tiếng Việt. Quảng cáo một đằng, bấm vào ra một nẻo. */}
+              <div className="flex items-center gap-3 border-b border-line px-5 py-3.5">
+                <Logo className="h-9 w-9" />
+                <div className="min-w-0">
+                  <p className="truncate text-[13.5px] font-bold tracking-tight text-ink">
+                    Trợ lý AI iMob
+                  </p>
+                  <p className="truncate text-[11px] text-ink-soft">
+                    Sản phẩm · Báo giá · An ninh mạng
+                  </p>
+                </div>
               </div>
               <div className="space-y-4 px-5 py-6">
                 {PREVIEW_MESSAGES.map((m) => (
