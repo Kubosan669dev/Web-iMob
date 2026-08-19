@@ -152,6 +152,16 @@ export default function SlideSanPham({ danhSach }) {
                 thì mỗi lần đổi slide là cả thẻ trắng đổi màu theo. Rê chuột
                 thì lớp phủ tan hẳn.
 
+                ⚠️ 19/08/2026 — HIỆN TRỌN VẸN, không cắt lấy một dải ngang.
+                Bản trước ép ô ảnh về h-40/sm:h-52 rồi object-cover object-top,
+                tức là chỉ thấy khoảng 45% phía trên của ảnh. Công ty góp ý
+                đúng: nhìn một dải mỏng thì không hình dung được sản phẩm, phải
+                cho ảnh hiện đủ mới "trực diện và tổng quan". Nay dùng
+                aspect-[16/10] — trùng đúng tỉ lệ mọi ảnh trong public/anh/ và
+                trùng với thẻ ở mục Dự án, nên không cắt mất gì.
+                Kèm theo: bỏ luôn được cái ràng buộc rắc rối là phải canh ảnh
+                sao cho vết cắt 45% rơi vào khoảng trống giữa hai dòng chữ.
+
                 ⚠️ 19/08/2026 — bản đầu để opacity-60, chụp màn hình 1440px
                 lại thì ảnh bạc trắng gần như không nhìn ra sản phẩm gì. Góp ý
                 của công ty là "maket mờ ĐỂ NHÌN đại diện từng sản phẩm": mờ
@@ -164,7 +174,7 @@ export default function SlideSanPham({ danhSach }) {
                   src={s.anh}
                   alt={`Giao diện ${s.title}`}
                   loading="lazy"
-                  className="h-40 w-full object-cover object-top opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100 sm:h-52"
+                  className="aspect-[16/10] w-full object-cover opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100"
                 />
                 <span
                   className="pointer-events-none absolute inset-0 bg-brand/[0.07] transition-opacity duration-500 group-hover/anh:opacity-0"
@@ -218,7 +228,14 @@ export default function SlideSanPham({ danhSach }) {
         {/* Mã QR chỉ trên máy tính — xem lý do trong hooks/useManHinhRong.js */}
         {rong && sp.lienKet && (
           <div className="shrink-0 text-center">
-            <div className="rounded-xl bg-white p-1.5">
+            {/* mx-auto w-fit: ô trắng phải ÔM SÁT mã QR.
+                Không có nó thì đây là một div khối, tự giãn bằng bề ngang của
+                dòng "Quét mã để trải nghiệm" (137px) trong khi mã chỉ 96px —
+                thừa 35px trắng dồn hết sang PHẢI, nhìn lệch hẳn. Không sửa được
+                bằng text-center vì Tailwind đặt img{display:block}, mà căn giữa
+                bằng text-align chỉ ăn với phần tử inline. Đo được bằng
+                getBoundingClientRect: hộp 137×108, ảnh QR 96×96 nằm sát trái. */}
+            <div className="mx-auto w-fit rounded-xl bg-white p-1.5">
               <MaQR
                 noiDung={sp.lienKet}
                 alt={`Mã QR mở ${sp.title}`}

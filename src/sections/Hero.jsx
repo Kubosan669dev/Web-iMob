@@ -312,7 +312,10 @@ export default function Hero() {
               `truncate` mới làm đúng việc của nó là cắt chữ kèm dấu "…". */}
           <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
             {/* ---------- Cột trái: danh mục tự chọn đường đi ---------- */}
-            <ul className="space-y-0.5">
+            {/* Căn giữa theo chiều dọc: ô ảnh bên phải nay hiện trọn vẹn tỉ lệ
+                16:10 nên thẻ cao 845px, trong khi bảy hàng này chỉ chiếm 476px.
+                Neo lên đỉnh thì thừa gần 370px trống dồn hết xuống đáy trái. */}
+            <ul className="flex h-full flex-col justify-center space-y-0.5">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}
