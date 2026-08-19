@@ -1,7 +1,37 @@
 {
   "_note": "SẢN PHẨM ĐÃ TRIỂN KHAI. Đây là bản MẶC ĐỊNH đóng gói sẵn trong bundle — hiện ngay khi trang vừa mở và vẫn còn đó nếu máy chủ chết. Bản đang chạy thật sửa trong /admin → mục Sản phẩm, lưu ở database dưới khoá 'projects'. Sửa file này rồi deploy thì phải vào /admin bấm 'Nạp lại từ file gốc', không thì database vẫn giữ bản cũ.",
-  "_huongdan_anh": "• lienKet: điền địa chỉ thì cả thẻ bấm được VÀ tự có mã QR — mã sinh ngay trong trình duyệt từ địa chỉ này (src/components/ui/MaQR.jsx), không cần chạy lệnh gì. • anh: ảnh chụp màn hình, bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png'; tỉ lệ 16:10, rộng khoảng 1200px — việc này phải làm trong mã nguồn vì trang quản trị chưa tải ảnh lên được. • Để trống trường nào thì phần đó tự ẩn, trang vẫn đẹp.",
+  "_huongdan_anh": "• lienKet: điền địa chỉ thì cả thẻ bấm được VÀ tự có mã QR — mã sinh ngay trong trình duyệt từ địa chỉ này (src/components/ui/MaQR.jsx), không cần chạy lệnh gì. • anh: ảnh chụp màn hình, bỏ file vào public/anh/ rồi ghi '/anh/ten-file.webp'; tỉ lệ 16:10, rộng khoảng 1200px — việc này phải làm trong mã nguồn vì trang quản trị chưa tải ảnh lên được. • Để trống trường nào thì phần đó tự ẩn, trang vẫn đẹp. • 19/08/2026: ba ảnh hiện có là ẢNH CHỤP THẬT trang chủ của chính ba website đã bàn giao (Chrome headless 1280×800, đổi sang WebP 1200×750). Ba Zalo Mini App còn lại CHƯA có ảnh vì link zalo.me/s/... chỉ mở ra trang quét mã QR của Zalo chứ không phải giao diện app — lấy trang đó làm ảnh là đưa ảnh của Zalo lên chứ không phải sản phẩm của iMob. Cần người mở app trên điện thoại rồi chụp màn hình gửi về. • Thứ tự danh sách đang xếp dự án CÓ ẢNH lên trước, vì thẻ không ảnh trống tới hai phần ba. Có đủ sáu ảnh thì xếp lại theo ý công ty.",
   "danhSach": [
+    {
+      "id": "ban-do-so-dong-trieu",
+      "icon": "map",
+      "loai": "Bản đồ số",
+      "khachHang": "Đông Triều, Quảng Ninh",
+      "title": "Bản đồ số Đông Triều",
+      "description": "Bản đồ số địa bàn Đông Triều.",
+      "anh": "/anh/ban-do-so-dong-trieu.webp",
+      "lienKet": "https://bandosodongtrieu.vn"
+    },
+    {
+      "id": "ban-do-so-xa-quang-tan",
+      "icon": "map",
+      "loai": "Bản đồ số",
+      "khachHang": "Xã Quảng Tân, Quảng Ninh",
+      "title": "Bản đồ số xã Quảng Tân",
+      "description": "Bản đồ số địa bàn xã Quảng Tân.",
+      "anh": "/anh/ban-do-so-xa-quang-tan.webp",
+      "lienKet": "https://bandosoxaquangtan.vn"
+    },
+    {
+      "id": "website-phuong-yen-tu",
+      "icon": "globe",
+      "loai": "Website",
+      "khachHang": "Phường Yên Tử",
+      "title": "Website phường Yên Tử",
+      "description": "Website chính thức của phường Yên Tử.",
+      "anh": "/anh/website-phuong-yen-tu.webp",
+      "lienKet": "https://phuongyentu.com.vn"
+    },
     {
       "id": "yen-tu-so",
       "icon": "landmark",
@@ -31,36 +61,6 @@
       "description": "Zalo Mini App chính quyền số của phường An Sinh.",
       "anh": "",
       "lienKet": "https://zalo.me/s/66674171653706230/"
-    },
-    {
-      "id": "ban-do-so-dong-trieu",
-      "icon": "map",
-      "loai": "Bản đồ số",
-      "khachHang": "Đông Triều, Quảng Ninh",
-      "title": "Bản đồ số Đông Triều",
-      "description": "Bản đồ số địa bàn Đông Triều.",
-      "anh": "",
-      "lienKet": "https://bandosodongtrieu.vn"
-    },
-    {
-      "id": "ban-do-so-xa-quang-tan",
-      "icon": "map",
-      "loai": "Bản đồ số",
-      "khachHang": "Xã Quảng Tân, Quảng Ninh",
-      "title": "Bản đồ số xã Quảng Tân",
-      "description": "Bản đồ số địa bàn xã Quảng Tân.",
-      "anh": "",
-      "lienKet": "https://bandosoxaquangtan.vn"
-    },
-    {
-      "id": "website-phuong-yen-tu",
-      "icon": "globe",
-      "loai": "Website",
-      "khachHang": "Phường Yên Tử",
-      "title": "Website phường Yên Tử",
-      "description": "Website chính thức của phường Yên Tử.",
-      "anh": "",
-      "lienKet": "https://phuongyentu.com.vn"
     }
   ]
 }

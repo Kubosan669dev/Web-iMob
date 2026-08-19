@@ -299,7 +299,18 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
+          {/* ⚠️ grid-cols-[minmax(0,1fr)] KHÔNG PHẢI thừa — đừng rút gọn.
+              Ô lưới mặc định rộng tối thiểu bằng "min-content" của thứ nằm
+              trong. Dòng mô tả trong DongMuc dùng class `truncate`, mà
+              `truncate` kèm luôn `white-space: nowrap`, nên min-content của nó
+              là ĐỘ DÀI CẢ CÂU chứ không phải một chữ. Kết quả: trên điện thoại
+              rộng 390px, cả trang bị kéo rộng 509px và trôi ngang.
+              Đo được bằng cách nạp trang vào iframe 390px rồi đọc scrollWidth —
+              lỗi này đã lên web thật, mắt thường lướt qua không thấy vì phần
+              tràn nằm bên phải ngoài màn hình.
+              minmax(0,1fr) cho phép ô co xuống dưới min-content, lúc đó
+              `truncate` mới làm đúng việc của nó là cắt chữ kèm dấu "…". */}
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
             {/* ---------- Cột trái: danh mục tự chọn đường đi ---------- */}
             <ul className="space-y-0.5">
               {MUC.map((m) => (

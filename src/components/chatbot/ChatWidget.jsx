@@ -131,6 +131,7 @@ export default function ChatWidget() {
     if (!tuMo || daChaoRef.current || daDongRef.current || daTungDong()) return;
 
     let huy = false;
+    let goCuon = null; // hàm gỡ trình nghe sự kiện cuộn, đặt ở đây để hàm dọn dẹp với tới
     const hen = setTimeout(() => {
       if (huy || daDongRef.current) return;
       daChaoRef.current = true;
@@ -140,19 +141,47 @@ export default function ChatWidget() {
         return;
       }
 
-      // Máy tính: nạp xong file ChatWindow rồi mới mở. Mở trước thì khách nhìn
-      // thấy một vòng xoay chờ tải — ấn tượng đầu tiên tệ hơn hẳn so với chờ
-      // thêm vài trăm mili giây để hiện ra một khung chat đã đầy đủ.
-      import("./ChatWindow.jsx")
-        .catch(() => {})
-        .then(() => {
-          if (!huy && !daDongRef.current) setOpen(true);
-        });
+      // Nạp xong file ChatWindow rồi mới mở. Mở trước thì khách nhìn thấy một
+      // vòng xoay chờ tải — ấn tượng đầu tiên tệ hơn hẳn so với chờ thêm vài
+      // trăm mili giây để hiện ra một khung chat đã đầy đủ.
+      const batDauMo = () => {
+        import("./ChatWindow.jsx")
+          .catch(() => {})
+          .then(() => {
+            if (!huy && !daDongRef.current) setOpen(true);
+          });
+      };
+
+      // ⚠️ CHỜ KHÁCH CUỘN QUA KHỐI ĐẦU TRANG RỒI MỚI MỞ (19/08/2026).
+      // Khung chat rộng 26rem neo sát phải, còn tiêu đề trang chủ sau góp ý của
+      // công ty đã nới ra max-w-5xl. Chụp màn hình 1440px thì thấy khung chat
+      // đè lên đúng dòng "cho doanh nghiệp & chính quyền" và cụm "Digital
+      // Platform" — tức là chính cái câu công ty vừa yêu cầu làm to lên thì bị
+      // widget của mình che mất. Trước đây tiêu đề chỉ max-w-3xl nên chưa lộ.
+      //
+      // Chờ cuộn thay vì bỏ hẳn tự mở: khách cuộn nghĩa là đã đọc xong khối đầu
+      // VÀ đang quan tâm — mở lúc đó đúng lúc hơn là chào ngay giây thứ ba.
+      // Khách không cuộn thì nút tròn vẫn nằm đó, không mất đường vào chat.
+      const daQuaKhoiDau = () => window.scrollY > window.innerHeight * 0.6;
+      if (daQuaKhoiDau()) {
+        batDauMo();
+        return;
+      }
+
+      const khiCuon = () => {
+        if (huy || daDongRef.current) return goCuon?.();
+        if (!daQuaKhoiDau()) return;
+        goCuon?.();
+        batDauMo();
+      };
+      window.addEventListener("scroll", khiCuon, { passive: true });
+      goCuon = () => window.removeEventListener("scroll", khiCuon);
     }, treMs);
 
     return () => {
       huy = true;
       clearTimeout(hen);
+      goCuon?.();
     };
     // Cài đặt từ database về muộn hơn lần vẽ đầu -> hẹn giờ đặt lại theo giá
     // trị mới. Tắt trong /admin thì hàm dọn dẹp huỷ luôn lần hẹn đang chờ.

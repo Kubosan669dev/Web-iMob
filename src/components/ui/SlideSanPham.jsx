@@ -130,20 +130,27 @@ export default function SlideSanPham({ danhSach }) {
                 Bỏ file vào public/anh/ rồi điền đường dẫn ở /admin (tab Sản
                 phẩm) là hiện ngay, không phải sửa code.
 
-                Làm mờ nhẹ và phủ một lớp màu thương hiệu rất nhạt: ảnh chụp
-                màn hình sáu sản phẩm khác nhau sẽ có sáu tông màu khác nhau,
-                không xử lý thì mỗi lần đổi slide là cả thẻ trắng đổi màu theo.
-                Đậm lên khi rê chuột để xem cho rõ. */}
+                Phủ một lớp màu thương hiệu rất nhạt: ảnh chụp màn hình sáu
+                sản phẩm khác nhau sẽ có sáu tông màu khác nhau, không xử lý
+                thì mỗi lần đổi slide là cả thẻ trắng đổi màu theo. Rê chuột
+                thì lớp phủ tan hẳn.
+
+                ⚠️ 19/08/2026 — bản đầu để opacity-60, chụp màn hình 1440px
+                lại thì ảnh bạc trắng gần như không nhìn ra sản phẩm gì. Góp ý
+                của công ty là "maket mờ ĐỂ NHÌN đại diện từng sản phẩm": mờ
+                là để ảnh không tranh chỗ với chữ, không phải để xoá ảnh đi.
+                Đưa lên 90% và bỏ hẳn việc giảm độ mờ của ảnh — chỉ lớp phủ
+                màu làm nhiệm vụ hoà tông. */}
             {s.anh && (
               <div className="group/anh relative mb-4 overflow-hidden rounded-card bg-mist">
                 <img
                   src={s.anh}
                   alt={`Giao diện ${s.title}`}
                   loading="lazy"
-                  className="h-36 w-full object-cover object-top opacity-60 transition-opacity duration-500 group-hover/anh:opacity-100 sm:h-44"
+                  className="h-40 w-full object-cover object-top opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100 sm:h-52"
                 />
                 <span
-                  className="pointer-events-none absolute inset-0 bg-brand/10 transition-opacity duration-500 group-hover/anh:opacity-0"
+                  className="pointer-events-none absolute inset-0 bg-brand/[0.07] transition-opacity duration-500 group-hover/anh:opacity-0"
                   aria-hidden="true"
                 />
               </div>
