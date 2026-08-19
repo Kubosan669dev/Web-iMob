@@ -63,7 +63,7 @@ function TheDichVu({ service }) {
 export default function Services() {
   return (
     // Nền trắng — xen kẽ với dải nền xám của section Sản phẩm phía trên.
-    <section id="services" className="py-24 lg:py-32">
+    <section id="services" className="border-t border-line py-24 lg:py-32">
       <Container className="space-y-14">
         <Reveal>
           <SectionTitle

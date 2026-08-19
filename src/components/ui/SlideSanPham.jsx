@@ -28,7 +28,10 @@ import useManHinhRong from "../../hooks/useManHinhRong.js";
 //    là nó nhấp nháy theo từng slide.
 // ============================================================
 
-const NHIP_MS = 5000;
+// 8 giây, nằm giữa khoảng 7–10s công ty đề nghị trong văn bản góp ý
+// 19/08/2026. Bản trước để 5s — quá gấp: mô tả sản phẩm dài 2 dòng thì
+// người đọc chậm chưa kịp hết câu đã bị đẩy sang dự án khác.
+const NHIP_MS = 8000;
 
 export default function SlideSanPham({ danhSach }) {
   const [chiSo, setChiSo] = useState(0);
@@ -74,7 +77,7 @@ export default function SlideSanPham({ danhSach }) {
   return (
     <div
       role="group"
-      aria-label="Sản phẩm nổi bật"
+      aria-label="Dự án nổi bật"
       onMouseEnter={() => setDung(true)}
       onMouseLeave={() => setDung(false)}
       onFocusCapture={() => setDung(true)}
@@ -83,7 +86,7 @@ export default function SlideSanPham({ danhSach }) {
     >
       <div className="flex items-center justify-between gap-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand">
-          Sản phẩm nổi bật
+          Dự án nổi bật
         </p>
 
         {tong > 1 && (
@@ -119,6 +122,33 @@ export default function SlideSanPham({ danhSach }) {
               viTri(k)
             }
           >
+            {/* ---------- Maket sản phẩm ----------
+                Công ty yêu cầu "chèn thêm maket mờ để nhìn thấy hình ảnh từng
+                sản phẩm". Khối này CHỈ HIỆN khi sản phẩm đó có trường `anh`
+                trong CMS — chưa có ảnh thì tự ẩn, bố cục vẫn y như trước.
+
+                Bỏ file vào public/anh/ rồi điền đường dẫn ở /admin (tab Sản
+                phẩm) là hiện ngay, không phải sửa code.
+
+                Làm mờ nhẹ và phủ một lớp màu thương hiệu rất nhạt: ảnh chụp
+                màn hình sáu sản phẩm khác nhau sẽ có sáu tông màu khác nhau,
+                không xử lý thì mỗi lần đổi slide là cả thẻ trắng đổi màu theo.
+                Đậm lên khi rê chuột để xem cho rõ. */}
+            {s.anh && (
+              <div className="group/anh relative mb-4 overflow-hidden rounded-card bg-mist">
+                <img
+                  src={s.anh}
+                  alt={`Giao diện ${s.title}`}
+                  loading="lazy"
+                  className="h-36 w-full object-cover object-top opacity-60 transition-opacity duration-500 group-hover/anh:opacity-100 sm:h-44"
+                />
+                <span
+                  className="pointer-events-none absolute inset-0 bg-brand/10 transition-opacity duration-500 group-hover/anh:opacity-0"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+
             <h2 className="tieu-de-lon text-[clamp(1.5rem,2.6vw,2rem)] text-ink">
               {s.title}
             </h2>
@@ -171,7 +201,7 @@ export default function SlideSanPham({ danhSach }) {
                 className="h-24 w-24"
               />
             </div>
-            <p className="mt-1.5 text-xs text-ink-faint">Quét bằng điện thoại</p>
+            <p className="mt-1.5 text-xs text-ink-faint">Quét mã để trải nghiệm</p>
           </div>
         )}
       </div>

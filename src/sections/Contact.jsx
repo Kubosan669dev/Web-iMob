@@ -247,7 +247,7 @@ export default function Contact() {
   const thongTinLienHe = dungThongTinLienHe(congTy);
 
   return (
-    <section id="contact" className="py-24 lg:py-32">
+    <section id="contact" className="border-t border-line py-24 lg:py-32">
       <Container className="space-y-14">
         <Reveal>
           <SectionTitle

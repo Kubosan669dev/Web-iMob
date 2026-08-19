@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import {
   Bot,
@@ -21,72 +21,61 @@ import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 import { danhSachDonVi } from "../utils/soLieu.js";
 import { openChat } from "../utils/chatBus.js";
 
-/* ================= RotatingWord =================
-   Từ ở giữa dòng tiêu đề tự đổi liên tục (chính quyền số → doanh nghiệp → ...).
-   Danh sách từ do trang /admin quyết định (tab Hero) — truyền vào qua prop chứ
-   không đọc cứng, để sửa trong admin là đổi ngay.
+/* ================= DaiCongNghe =================
+   Dòng liệt kê các mảng công nghệ của iMob, hiện HẾT cùng lúc và sáng dần từng
+   cụm một.
 
-   ---- Vì sao có LỚP GIỮ CHỖ ----
-   Bản trước chỉ có đúng một <span> chứa từ đang hiện. Hai lỗi kéo theo:
+   Thay cho RotatingWord (một từ đổi liên tục) của bản trước. Văn bản góp ý
+   19/08/2026 chê thẳng: "nhìn vào cũng chưa biết đc công nghệ của iMob là gì".
+   Đúng — cho xem mỗi lần một từ thì khách phải đứng đợi đủ một vòng mới biết
+   công ty làm những gì, mà không ai đợi cả. Liệt kê hết là trả lời được ngay
+   câu hỏi đó trong một cái liếc mắt.
 
-   1. `mode="wait"` gỡ từ CŨ ra rồi mới gắn từ MỚI. Trong khoảng giữa, khung
-      rỗng hoàn toàn → dòng chữ tụt lên rồi rơi xuống.
-   2. Mỗi từ có chiều cao thật khác nhau vì dấu tiếng Việt: "chính quyền số"
-      có dấu sắc/huyền vươn lên, "doanh nghiệp" có dấu nặng thụt xuống.
+   Vẫn giữ chuyển động, chỉ đổi vai: thay vì thay chữ, nó DI CHUYỂN SỰ CHÚ Ý
+   qua từng mảng. Được cả hai — vừa đọc được toàn bộ, vừa có nhịp cho mắt bám.
 
-   Cách chữa: xếp CHỒNG toàn bộ các từ vào cùng MỘT ô lưới (col-start-1
-   row-start-1). Các bản sao vô hình luôn có mặt nên ô lưới luôn lấy kích thước
-   của từ RỘNG NHẤT và CAO NHẤT — đo bằng chữ thật chứ không đoán theo số ký
-   tự. Từ đang hiện nằm chồng lên cùng ô đó và chỉ chạy `transform`, mà
-   transform thì không đụng tới bố cục.
+   ---- Vì sao làm nổi bằng ĐỘ MỜ chứ không bằng MÀU ----
+   Dải này nằm trên nền màu thương hiệu, mà ở đó chỉ có ĐÚNG MỘT màu chữ đọc
+   được (--color-tren-brand, đã đo tương phản cho cả 9 bảng màu). Đổi màu là
+   hoặc chìm vào nền, hoặc hụt chuẩn ở một bảng nào đó. Độ mờ + độ đậm thì
+   bảng màu nào cũng đúng.
 
-   `lop` truyền từ ngoài vào vì tiêu đề giờ nằm TRÊN DẢI MÀU THƯƠNG HIỆU — để
-   nguyên `text-brand` như bản cũ là chữ tím trên nền tím, mất hút. Hero truyền
-   vào cỡ chữ chứ không truyền màu, để từ khoá thừa hưởng màu của cả tiêu đề. */
-function RotatingWord({ tu, lop = "text-brand" }) {
+   Người bật "giảm chuyển động" thì hiện tất cả ở mức sáng nhất, không chạy. */
+function DaiCongNghe({ tu }) {
+  const danhSach = tu?.length ? tu : ["AI", "Zalo Mini App", "Website"];
+  const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
-  // Rỗng thì vẫn phải có một từ, không thì tiêu đề trang chủ hụt mất một dòng.
-  const danhSach = tu?.length ? tu : ["chính quyền số"];
 
   useEffect(() => {
-    // Danh sách đổi (vừa tải xong nội dung từ API) -> quay lại từ đầu, tránh
-    // index cũ trỏ ra ngoài mảng mới.
     setIndex(0);
-    if (danhSach.length < 2) return;
+    if (reduceMotion || danhSach.length < 2) return;
     const timer = setInterval(
       () => setIndex((i) => (i + 1) % danhSach.length),
-      2600
+      1800
     );
     return () => clearInterval(timer);
-  }, [danhSach.length]);
-
-  const tuHienTai = danhSach[index % danhSach.length];
+  }, [danhSach.length, reduceMotion]);
 
   return (
-    <span className={`inline-grid ${lop}`}>
-      {danhSach.map((t) => (
-        <span
-          key={`cho-${t}`}
-          aria-hidden="true"
-          className="invisible col-start-1 row-start-1 whitespace-nowrap"
-        >
-          {t}
+    <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[clamp(0.8125rem,1.5vw,1.0625rem)] font-medium text-tren-brand">
+      {danhSach.map((t, n) => (
+        <span key={t} className="flex items-center gap-3">
+          {n > 0 && (
+            <span className="text-tren-brand/35" aria-hidden="true">
+              •
+            </span>
+          )}
+          <span
+            className={
+              "transition-opacity duration-500 " +
+              (reduceMotion || n === index ? "opacity-100" : "opacity-55")
+            }
+          >
+            {t}
+          </span>
         </span>
       ))}
-
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={tuHienTai}
-          initial={{ opacity: 0, y: "0.28em" }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: "-0.28em" }}
-          transition={{ duration: 0.32, ease: "easeOut" }}
-          className="col-start-1 row-start-1 whitespace-nowrap"
-        >
-          {tuHienTai}
-        </motion.span>
-      </AnimatePresence>
-    </span>
+    </p>
   );
 }
 
@@ -162,7 +151,7 @@ function DongMuc({ muc }) {
    kiểm chứng được năng lực cụ thể của công ty ở ba mảng đó. */
 const MUC = [
   {
-    nhan: "Sản phẩm nổi bật trong năm",
+    nhan: "Dự án nổi bật trong năm",
     phu: "Đã bàn giao và đang chạy tại Quảng Ninh",
     den: "/#projects",
     icon: Package,
@@ -241,50 +230,47 @@ export default function Hero() {
           xuống dưới nó. Thanh đó cao 3.5rem trên điện thoại, và 5.5rem từ 640px
           trở lên (có thêm dải liên hệ ở trên). Sửa chiều cao Navbar thì phải
           sửa cả đây. */}
-      <div className="bg-brand pb-28 pt-20 sm:pt-28">
+      <div className="bg-brand pb-28 pt-24 sm:pt-28">
         <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-medium text-tren-brand/75">{hero.badge}</p>
+          {/* max-w-5xl chứ không phải max-w-3xl như bản trước.
+              Góp ý 19/08/2026 chê đúng chỗ này: "cái phần đó to như vậy mà e k
+              phóng to chữ ra, để thừa 2 bên, xong chữ ở giữa thì bé tí". */}
+          <div className="mx-auto max-w-5xl text-center">
+            <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-tren-brand/70 sm:text-sm">
+              {hero.badge}
+            </p>
 
-            {/* ---------- Tiêu đề: NỔI BẬT BẰNG CỠ CHỮ, không bằng hộp ----------
-                Đã thử bọc từ khoá trong một ô nền sáng cho nổi rồi bỏ: cả hệ
-                thiết kế này đang cố giảm số hộp và số đường kẻ xuống ít nhất có
-                thể, nhét một cái hộp to vào giữa tiêu đề là chọi hẳn với phần
-                còn lại của trang.
+            {/* ---------- Tiêu đề ----------
+                Viết theo đúng mẫu công ty đưa trong văn bản góp ý:
 
-                Đổi màu chữ cũng không được: trên dải màu thương hiệu chỉ có
-                ĐÚNG MỘT màu chữ đọc được (--color-tren-brand, đã đo tương phản
-                cho cả 9 bảng màu). Màu nào khác cũng hoặc chìm vào nền, hoặc
-                hụt chuẩn ở một trong 9 bảng.
+                    iMob Solution & Technology
+                    Kiến tạo hệ sinh thái số
+                    cho doanh nghiệp & chính quyền
+                    AI • Zalo Mini App • GIS • Website • IoT • Digital Platform
 
-                Còn lại là thứ khỏi phải xin phép ai: THỨ BẬC CỠ CHỮ. "Công nghệ
-                cho" và "ở Quảng Ninh." chỉ là chữ nối — cho nhỏ lại. Từ khoá to
-                gấp hơn hai lần, và nó lại là thứ duy nhất chuyển động.
+                ĐÃ BỎ cụm "ở Quảng Ninh" khỏi tiêu đề (công ty chốt 19/08/2026):
+                người ngoài tỉnh nhìn vào tưởng iMob chỉ làm cho đơn vị trong
+                Quảng Ninh nên tự loại mình. Bằng chứng thật về Quảng Ninh không
+                mất đi — nó chuyển xuống dòng "Được tin tưởng bởi..." ở cuối thẻ
+                trắng, chỗ đó là chứng minh năng lực chứ không phải giới hạn
+                phạm vi.
 
-                BA DÒNG XẾP CHỒNG chứ không viết liền một câu: RotatingWord có
-                lớp giữ chỗ nên bề rộng của nó LUÔN bằng từ dài nhất. Nằm giữa
-                câu thì từ ngắn để hở hai khoảng trắng to hai bên; đứng riêng
-                một dòng căn giữa thì phần thừa đó thành lề, không ai thấy. */}
-            <h1 className="mt-4 text-tren-brand">
-              <span className="block text-[clamp(1.0625rem,2vw,1.5rem)] font-medium tracking-tight">
+                Hai dòng đều to, dòng dưới nhỏ hơn một bậc: dòng trên là việc
+                iMob làm, dòng dưới là làm cho ai. */}
+            <h1 className="mt-5 text-tren-brand">
+              <span className="tieu-de-lon block text-[clamp(2rem,6vw,4.25rem)]">
                 {hero.tieuDeTruoc}
               </span>
-
-              <span className="mt-1.5 block">
-                <RotatingWord
-                  tu={hero.tuKhoaDong}
-                  lop="tieu-de-lon text-[clamp(2.125rem,5vw,3.75rem)]"
-                />
-              </span>
-
-              <span className="mt-1.5 block text-[clamp(1.0625rem,2vw,1.5rem)] font-medium tracking-tight">
+              <span className="tieu-de-lon mt-1.5 block text-[clamp(1.375rem,4vw,2.75rem)] text-tren-brand/90">
                 {hero.tieuDeSau}
               </span>
             </h1>
 
+            <DaiCongNghe tu={hero.tuKhoaDong} />
+
             {/* max-w hẹp hơn tiêu đề: một dòng văn xuôi dài quá 65-70 ký tự là
                 mắt khó bắt được đầu dòng kế tiếp. */}
-            <p className="mx-auto mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-tren-brand/75 sm:text-base">
+            <p className="mx-auto mt-6 max-w-xl text-[0.9375rem] leading-relaxed text-tren-brand/75 sm:text-base">
               {hero.moTa}
             </p>
           </div>
@@ -348,10 +334,19 @@ export default function Hero() {
             CMS. Không bỏ đi thông tin nào, cũng không thêm lời nào không kiểm
             được — mà "Bảo tàng – Thư viện tỉnh Quảng Ninh" thì nặng hơn hẳn
             một con số. */}
+        {/* Câu dẫn đổi 19/08/2026 theo đúng chữ công ty đề nghị trong văn bản
+            góp ý. "Đang phục vụ" nghe như một dịch vụ đang chạy; "Được tin
+            tưởng bởi" là lời chứng thực — cùng một danh sách tên nhưng nói được
+            nhiều hơn hẳn. Đây cũng là chỗ chữ "Quảng Ninh" chuyển xuống sau khi
+            rời khỏi tiêu đề: ở đây nó là BẰNG CHỨNG đã làm được, chứ không phải
+            giới hạn phạm vi phục vụ. */}
         {donVi.length > 0 && (
           <p className="mx-auto mt-5 max-w-3xl text-center text-sm leading-relaxed text-ink-soft">
-            <span className="font-semibold text-ink">Đang phục vụ</span>{" "}
-            {donVi.join(" · ")}
+            <span className="font-semibold text-ink">
+              Được tin tưởng bởi các chính quyền địa phương, khu di tích và thiết chế văn hoá trên
+              địa bàn Quảng Ninh
+            </span>
+            <span className="mt-1 block">{donVi.join(" · ")}</span>
           </p>
         )}
       </Container>

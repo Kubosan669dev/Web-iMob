@@ -86,6 +86,63 @@ def gui_lien_he(than: GuiLienHe, request: Request):
     return {"ok": True, "id": ma}
 
 
+# ============================================================
+# Để lại liên hệ NHANH ngay trong khung chat
+#
+# Vì sao không dùng chung /api/lien-he ở trên: đường đó bắt buộc có `name`,
+# `message` và một `email` ĐÚNG ĐỊNH DẠNG. Khách đang chat thì phần lớn chỉ
+# muốn thả lại đúng số điện thoại rồi thôi — bắt điền đủ ba trường ngay trong
+# khung chat là mất luôn cái lead đó.
+#
+# Đổi lại, dữ liệu vào đây MỎNG hơn (thường chỉ có một dòng liên hệ), nên nó
+# được ghi với nguon="chatbot" để người trực ở /admin phân biệt được ngay đâu
+# là form đầy đủ, đâu là số nhặt từ chat.
+#
+# Vẫn đi qua _chan_spam() chung với form: 5 lượt/IP/giờ.
+# ============================================================
+REGEX_SDT = re.compile(r"^[0-9+().\s-]{8,20}$")
+
+
+class LienHeNhanh(BaseModel):
+    # Một dòng duy nhất: số điện thoại HOẶC email, khách gõ kiểu nào cũng nhận.
+    lien_he: str = Field(min_length=3, max_length=200)
+    # Câu hỏi khách vừa gõ trong chat (nếu có) — giúp người gọi lại biết ngữ
+    # cảnh. Không bắt buộc.
+    ghi_chu: str = Field(default="", max_length=2000)
+
+
+@router.post("/api/lien-he-nhanh", status_code=status.HTTP_201_CREATED)
+def lien_he_nhanh(than: LienHeNhanh, request: Request):
+    _chan_spam(request)
+
+    gia_tri = than.lien_he.strip()
+    la_email = bool(REGEX_EMAIL.match(gia_tri))
+    la_sdt = bool(REGEX_SDT.match(gia_tri)) and sum(c.isdigit() for c in gia_tri) >= 8
+
+    if not (la_email or la_sdt):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Bạn nhập giúp mình số điện thoại hoặc email nhé.",
+        )
+
+    if not db.co_db():
+        # KHÔNG báo thành công giả — xem lý do ở /api/lien-he phía trên.
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Hệ thống chưa sẵn sàng nhận liên hệ. Bạn gọi hotline giúp mình nhé.",
+        )
+
+    ma = db.them_lien_he(
+        nguon="chatbot",
+        ho_ten=None,
+        email=gia_tri if la_email else None,
+        so_dien_thoai=gia_tri if la_sdt else None,
+        dich_vu=None,
+        loi_nhan=than.ghi_chu.strip() or "Khách để lại liên hệ trong khung chat.",
+    )
+    return {"ok": True, "id": ma}
+
+
 @router.get("/api/lien-he")
 def danh_sach(_: str = Depends(yeu_cau_dang_nhap)):
     if not db.co_db():

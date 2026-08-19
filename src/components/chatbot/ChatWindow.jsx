@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { RotateCcw, X } from "lucide-react";
 import useChat from "../../hooks/useChat.js";
+import { useCongTy } from "../../context/NoiDungContext.jsx";
 import Logo from "../ui/Logo.jsx";
 import MessageBubble from "./MessageBubble.jsx";
 import TypingIndicator from "./TypingIndicator.jsx";
 import ChatInput from "./ChatInput.jsx";
 import ChatIntro from "./ChatIntro.jsx";
 import GoiY from "./GoiY.jsx";
+import DeLaiLienHe from "./DeLaiLienHe.jsx";
 
 // ChatWindow: toàn bộ nội dung khung chat — tiêu đề, màn hình mở đầu hoặc danh
 // sách tin nhắn (tự cuộn xuống cuối mỗi khi có gì mới), bảng gợi ý gọi ra được
 // bất cứ lúc nào, và ô nhập liệu.
 export default function ChatWindow({ onClose }) {
   const { messages, isTyping, isWaiting, send, clearChat } = useChat();
+  const congTy = useCongTy();
   const bottomRef = useRef(null);
 
   // Đã cuộn khỏi đỉnh chưa — dùng để hiện/ẩn đường kẻ dưới tiêu đề.
@@ -69,9 +72,9 @@ export default function ChatWindow({ onClose }) {
     <div className="flex h-full flex-col overflow-hidden bg-panel shadow-lift sm:rounded-block">
       {/* ---------- Tiêu đề ----------
           Đường kẻ chỉ hiện khi nội dung đã cuộn khỏi đỉnh: lúc mới mở, màn
-          hình mở đầu liền một mạch từ logo trên tiêu đề xuống logo lớn bên
-          dưới, không bị một vạch cắt ngang. Giữ `border-transparent` thay vì
-          bỏ hẳn border để chiều cao không đổi khi kẻ xuất hiện. */}
+          hình mở đầu liền một mạch với tiêu đề, không bị một vạch cắt ngang.
+          Giữ `border-transparent` thay vì bỏ hẳn border để chiều cao không đổi
+          khi kẻ xuất hiện. */}
       <header
         className={
           "flex shrink-0 items-center gap-3 border-b px-4 py-3 transition-colors " +
@@ -131,6 +134,21 @@ export default function ChatWindow({ onClose }) {
           Một đường kẻ duy nhất bao cả hai. Bảng gợi ý mở ra thì nằm gọn bên
           trong, không sinh thêm vạch ngăn thứ hai. */}
       <div className="shrink-0 border-t border-line">
+        {/* Dòng mời để lại liên hệ — công ty yêu cầu thêm (19/08/2026).
+            Đặt ngay trên ô nhập chứ không trộn vào danh sách tin nhắn: ở đây nó
+            luôn trong tầm mắt, còn trong danh sách thì trôi mất sau vài lượt.
+            Ghi thẳng vào database, xem ở /admin — không phải chỉ nhắn một câu.
+
+            Gửi kèm câu hỏi GẦN NHẤT của khách làm ghi chú, để người gọi lại
+            biết khách đang quan tâm chuyện gì thay vì cầm một số trần. */}
+        <DeLaiLienHe
+          hotline={congTy?.phone}
+          ghiChu={
+            [...messages].reverse().find((m) => m.role === "user")?.text ??
+            "Khách để lại liên hệ trong khung chat."
+          }
+        />
+
         {hienGoiY && !batDau && (
           <div className="px-3 pt-3">
             <GoiY gon onSelect={chonGoiY} disabled={isTyping} />

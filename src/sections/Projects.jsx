@@ -149,14 +149,14 @@ export default function Projects() {
   if (!noiBat) return null;
 
   return (
-    <section id="projects" className="bg-mist py-24 lg:py-32">
+    <section id="projects" className="border-t border-line bg-mist py-24 lg:py-32">
       <Container className="space-y-14">
         <Reveal>
           <SectionTitle
-            badge="Sản phẩm"
-            title="Đã chạy thật,"
-            highlight="ở Quảng Ninh."
-            description="Chính quyền địa phương, khu di tích và thiết chế văn hoá của tỉnh đang dùng sản phẩm do iMob xây dựng."
+            badge="Dự án"
+            title="Xem đủ danh sách"
+            highlight="đã bàn giao."
+            description="Khối đầu trang chỉ xoay vòng từng dự án một. Đây là danh sách đầy đủ — bấm vào tên để mở, hoặc quét mã QR ở cuối mục để dùng thử ngay trên điện thoại."
           />
         </Reveal>
 

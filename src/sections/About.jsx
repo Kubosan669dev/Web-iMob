@@ -70,7 +70,7 @@ export default function About() {
   const about = useAbout();
 
   return (
-    <section id="about" className="bg-mist py-20 lg:py-24">
+    <section id="about" className="border-t border-line bg-mist py-20 lg:py-24">
       <Container className="space-y-14 lg:space-y-16">
         {/* ---------- Tiêu đề = sứ mệnh công ty ---------- */}
         <Reveal>

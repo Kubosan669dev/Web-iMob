@@ -31,12 +31,16 @@ export const SITE = company;
 // ngày 17/08/2026. Khách của iMob là chủ doanh nghiệp vừa và nhỏ ở Việt Nam;
 // bắt họ đọc menu tiếng Anh là dựng thêm một rào cản chẳng để làm gì.
 // Thứ tự cũng đổi cho khớp thứ tự section mới của trang chủ.
+// ĐỔI NHÃN 19/08/2026 theo góp ý của công ty: "Sản phẩm" -> "Dự án",
+// "Dịch vụ" -> "Công nghệ". Chỉ đổi CHỮ HIỆN RA, giữ nguyên `id` và `href`
+// (#projects, #services) — id còn được dùng cho neo cuộn, cho useActiveSection
+// và được nhắc trong kho kiến thức chatbot, đổi là hỏng cả ba chỗ.
 export const NAV_ITEMS = [
   { id: "home", label: "Trang chủ", href: "/#home" },
-  { id: "projects", label: "Sản phẩm", href: "/#projects" },
+  { id: "projects", label: "Dự án", href: "/#projects" },
   {
     id: "services",
-    label: "Dịch vụ",
+    label: "Công nghệ",
     href: "/#services",
     children: [
       { label: "Phát triển Zalo MiniApp", to: "/zalo-miniapp" },

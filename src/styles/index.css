@@ -110,9 +110,11 @@
     scroll-behavior: smooth;
   }
 
-  /* Anchor không bị navbar (fixed) che mất tiêu đề section */
+  /* Anchor không bị navbar (fixed) che mất tiêu đề section.
+     Thanh menu cao 4rem (h-16 + viền). Chừa thêm ~1,5rem cho thoáng.
+     ⚠️ Đổi chiều cao menu trong Navbar.jsx thì phải sửa cả số này. */
   section[id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 5.5rem;
   }
 
   body {

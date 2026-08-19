@@ -1,4 +1,3 @@
-import Logo from "../ui/Logo.jsx";
 import GoiY from "./GoiY.jsx";
 
 // ============================================================
@@ -13,17 +12,16 @@ import GoiY from "./GoiY.jsx";
 // thích ngắn, rồi để khách TỰ CHỌN đường đi bằng danh sách hạng mục. Câu tiêu
 // đề cố ý vọng lại "Bạn đang cần gì?" ở đầu trang chủ — cùng một giọng, khách
 // nhận ra ngay vẫn là một sản phẩm.
-//
-// Logo dùng component Logo (ảnh thật của công ty) chứ không phải icon robot
-// chung chung: đây là chỗ giới thiệu danh tính, mà icon robot thì trang nào
-// cũng giống trang nào.
 // ============================================================
 export default function ChatIntro({ onSelect, disabled }) {
   return (
     <div className="pb-1 pt-1">
-      <Logo className="h-10 w-10" />
-
-      <h2 className="tieu-de-lon mt-3 text-[1.1875rem] text-ink">Bạn đang cần tìm hiểu gì?</h2>
+      {/* ĐÃ BỎ logo lớn ở đây (19/08/2026). Văn bản góp ý khoanh đỏ đúng chỗ
+          này và ghi một chữ: "thừa". Đúng — thanh tiêu đề ngay phía trên đã có
+          logo iMob và tên "Trợ lý AI iMob" rồi, đặt thêm một logo nữa cách đó
+          40px là nhắc lại cùng một điều hai lần trong một tầm mắt. Bỏ đi còn
+          được thêm ~54px chiều cao cho phần gợi ý. */}
+      <h2 className="tieu-de-lon text-[1.1875rem] text-ink">Bạn đang cần tìm hiểu gì?</h2>
 
       {/* Cố ý KHÔNG dùng lại câu chào của useChat ("Bạn cần hỏi gì cứ nhắn
           nhé") — đặt ngay dưới tiêu đề là lặp đúng một ý. Chỗ này nói thứ

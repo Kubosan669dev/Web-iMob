@@ -1,14 +1,16 @@
 {
-  "_note": "Nội dung khối HERO (màn hình đầu trang chủ). Sửa được ở /admin — tab Hero. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. CỐ Ý không có số điện thoại/email ở đây: hai thứ đó nằm ở company.json để cả website lẫn chatbot dùng chung một nguồn. CẬP NHẬT 17/08/2026: chữ lấy theo định vị chính thức trong ấn phẩm công ty — iMob phục vụ CẢ doanh nghiệp LẪN chính quyền địa phương ở Quảng Ninh, đó mới là điểm không ai thay được, nên đưa thẳng lên tiêu đề. Nút chính đổi thành 'Nhận khảo sát miễn phí' vì đó là chào mời có thật trong ấn phẩm giải pháp, cụ thể hơn hẳn 'Liên hệ'.",
+  "_note": "Nội dung khối HERO (màn hình đầu trang chủ). Sửa được ở /admin — tab Hero. File này là giá trị MẶC ĐỊNH, dùng khi chưa gọi được API. CỐ Ý không có số điện thoại/email ở đây: hai thứ đó nằm ở company.json để cả website lẫn chatbot dùng chung một nguồn. CẬP NHẬT 19/08/2026 theo văn bản góp ý của công ty: tiêu đề cũ 'Công nghệ cho ... ở Quảng Ninh' bị chê mờ nhạt và chưa cho biết iMob làm công nghệ gì. Bản mới nói thẳng phạm vi (Kiến tạo hệ sinh thái số cho doanh nghiệp & chính quyền) rồi liệt kê đúng các mảng công nghệ. ĐÃ BỎ cụm 'ở Quảng Ninh' khỏi tiêu đề vì nó làm khách tỉnh khác tưởng iMob chỉ phục vụ trong tỉnh — nhưng bằng chứng thật về Quảng Ninh vẫn giữ ở dòng cuối thẻ trắng.",
   "badge": "iMob Solution & Technology",
-  "tieuDeTruoc": "Công nghệ cho",
+  "tieuDeTruoc": "Kiến tạo hệ sinh thái số",
   "tuKhoaDong": [
-    "chính quyền số",
-    "doanh nghiệp",
-    "di sản Yên Tử",
-    "dịch vụ công"
+    "AI",
+    "Zalo Mini App",
+    "GIS",
+    "Website",
+    "IoT",
+    "Digital Platform"
   ],
-  "tieuDeSau": "ở Quảng Ninh.",
+  "tieuDeSau": "cho doanh nghiệp & chính quyền",
   "moTa": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững.",
   "nutChinh": "Nhận khảo sát miễn phí",
   "nutPhu": "Chat với AI",

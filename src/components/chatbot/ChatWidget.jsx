@@ -229,11 +229,11 @@ export default function ChatWidget() {
             // bấy nhiêu — cao quá là chui xuống dưới navbar, mà navbar z-50 >
             // panel z-40 nên phần bị che là ĐÚNG CÁI TIÊU ĐỀ có nút đóng.
             //     lề dưới 6rem (bottom-24)
-            //   + navbar   5.625rem (dải liên hệ h-8 + thanh chính h-14 + 2 viền)
+            //   + navbar   4rem (thanh chính h-16 + viền; dải liên hệ đã gỡ 19/08)
             //   + khe hở   1rem
-            //   ≈ 13rem
+            //   ≈ 11rem
             // Ai đổi chiều cao navbar trong Navbar.jsx thì phải sửa cả số này.
-            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-13rem)] sm:w-96 lg:w-[26rem]"
+            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-11rem)] sm:w-96 lg:w-[26rem]"
           >
             <Suspense fallback={<ChatWindowSkeleton />}>
               <ChatWindow onClose={dong} />

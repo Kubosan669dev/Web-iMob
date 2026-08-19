@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, Menu, Phone, Mail, Clock } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import Logo from "../ui/Logo.jsx";
 import Button from "../ui/Button.jsx";
@@ -13,47 +13,21 @@ import { useCongTy } from "../../context/NoiDungContext.jsx";
 // (useActiveSection phụ thuộc vào nó, xem comment trong hook)
 const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
-/* ---------- Thanh liên hệ trên cùng ----------
-   Số điện thoại và giờ làm việc là hai thứ khách doanh nghiệp và cán bộ cơ
-   quan tìm nhiều nhất, mà trước đây chỉ có ở tận chân trang.
+/* ---------- ĐÃ GỠ: thanh liên hệ trên cùng (19/08/2026) ----------
+   Trước đây có một dải mỏng phía trên thanh menu, hiện số điện thoại, email và
+   giờ làm việc.
 
-   Đây là chỗ CỐ Ý đi lệch khỏi apple.com: Apple không có thanh này vì họ bán
-   hàng qua cửa hàng và website, còn iMob bán qua gặp gỡ và điện thoại. Bù lại
-   thanh được làm đúng tinh thần Apple — mỏng, nền xám nhạt, chữ 12px, không
-   viền không màu mè, để nó không tranh chỗ với nội dung.
+   Gỡ theo góp ý của công ty: ngay bên phải thanh menu đã có nút "Nhận tư vấn",
+   bấm vào là ra đủ số điện thoại, email và địa chỉ văn phòng — nên dải kia
+   thành thừa, chỉ tổ đẩy nội dung chính xuống thấp thêm 33px.
 
-   Luôn hiện chứ không ẩn khi cuộn: ẩn/hiện làm header co giãn, trang nhấp
-   nháy mỗi lần cuộn qua ngưỡng. Cao 32px thì để luôn cho yên.
-   Ẩn dưới sm vì ba mục xếp ngang không đủ chỗ trên màn hình hẹp — ở đó đã có
-   nút gọi trong menu di động. */
-function ThanhLienHe({ congTy }) {
-  return (
-    <div className="hidden border-b border-line bg-mist sm:block">
-      <Container className="flex h-8 items-center justify-between gap-6 text-xs text-ink-soft">
-        <div className="flex items-center gap-5">
-          <a
-            href={`tel:${congTy.phone.replace(/\s/g, "")}`}
-            className="flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand"
-          >
-            <Phone className="h-3.5 w-3.5" aria-hidden="true" />
-            {congTy.phone}
-          </a>
-          <a
-            href={`mailto:${congTy.email}`}
-            className="hidden items-center gap-1.5 transition-colors hover:text-brand md:flex"
-          >
-            <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-            {congTy.email}
-          </a>
-        </div>
-        <p className="flex items-center gap-1.5">
-          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-          {congTy.workingHours}
-        </p>
-      </Container>
-    </div>
-  );
-}
+   ⚠️ Việc này làm THANH MENU THẤP ĐI, và có ba chỗ đang tính theo chiều cao đó:
+     • styles/index.css     -> section[id] { scroll-margin-top }
+     • sections/Hero.jsx    -> padding-top của dải màu thương hiệu
+     • chatbot/ChatWidget.jsx -> sm:max-h của khung chat (nếu sai, khung chat
+       chui xuống dưới menu và mất luôn nút đóng — đã dính lỗi này một lần)
+   Sửa chiều cao menu thì phải xem lại cả ba chỗ trên.
+   ---------------------------------------------------------------- */
 
 // Một item trên menu desktop; item có children sẽ kèm dropdown (mở bằng CSS group-hover)
 function NavItem({ item, active }) {
@@ -62,8 +36,8 @@ function NavItem({ item, active }) {
       <a
         href={item.href}
         className={
-          "flex items-center gap-1 px-3 py-2 text-[0.8125rem] transition-colors duration-200 " +
-          (active ? "font-medium text-ink" : "text-ink-soft hover:text-ink")
+          "flex items-center gap-1 px-3.5 py-2 text-[0.9375rem] font-medium transition-colors duration-200 " +
+          (active ? "text-brand" : "text-ink-soft hover:text-ink")
         }
       >
         {item.label}
@@ -102,7 +76,6 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <ThanhLienHe congTy={congTy} />
 
       {/* Thanh điều hướng LUÔN mờ đục, không đổi trạng thái theo cuộn — giống
           apple.com. Bản trước để trong suốt khi ở đầu trang rồi mới hiện nền
@@ -110,7 +83,7 @@ export default function Navbar() {
           qua ngưỡng, và ở đầu trang thì menu chữ xám nằm trên nền trắng trơn
           trông như bị bỏ quên. */}
       <div className="border-b border-line bg-paper/80 backdrop-blur-xl">
-        <Container className="flex h-14 items-center justify-between">
+        <Container className="flex h-16 items-center justify-between">
           {/* ---------- Logo ----------
               Logo dùng ảnh chính thức có sẵn ô nền, KHÔNG tự dựng ô nền bằng
               bg-brand nữa: bg-brand đổi theo bảng màu, mà logo công ty thì
