@@ -34,7 +34,7 @@
           "id": "dau-thau",
           "nguon": "soan",
           "_note": "KHONG khang dinh du hay khong du dieu kien thau — moi goi mot yeu cau khac nhau, tra loi chac chan la noi lieu. Chuyen sang nguoi that.",
-          "keywords": ["đấu thầu", "dự thầu", "chào thầu", "hồ sơ năng lực", "hồ sơ dự thầu", "điều kiện tham gia", "tư cách pháp nhân", "chứng chỉ năng lực"],
+          "keywords": ["đấu thầu", "dự thầu", "chào thầu", "hồ sơ năng lực", "hồ sơ dự thầu", "điều kiện tham gia", "tư cách pháp nhân", "chứng chỉ năng lực", "chứng chỉ", "chứng nhận", "có chứng chỉ", "giấy phép kinh doanh"],
           "answer": "Về hồ sơ năng lực và điều kiện tham gia thầu, bên mình **gửi bản đầy đủ theo từng gói** ạ — mỗi gói yêu cầu khác nhau nên không có bản trả lời chung.\n\nBạn gọi **{{cong_ty.dien_thoai}}** hoặc gửi email **{{cong_ty.email}}** kèm thông tin gói thầu, bên mình chuẩn bị và phản hồi {{cong_ty.thoi_gian_phan_hoi}}."
         },
         {
@@ -90,7 +90,8 @@
           "id": "process-time",
           "nguon": "web",
           "_note": "KHÔNG dùng cụm trống 'tien do': bỏ dấu xong 'trả TIỀN ĐÓ bằng cách nào' cũng ra 'tien do' → hỏi thanh toán bị hiểu nhầm thành hỏi tiến độ.",
-          "keywords": ["bao lâu", "thời gian", "quy trình", "tiến độ dự án", "tiến độ làm", "tiến độ thế nào", "mất bao", "làm trong", "khi nào", "xong", "bao giờ xong", "làm mất", "hoàn thành trong", "mấy ngày", "mấy tuần", "mấy tháng", "deadline"],
+          "tru": ["bảo hành"],
+          "keywords": ["bao lâu", "thời gian", "quy trình", "tiến độ dự án", "tiến độ làm", "tiến độ thế nào", "mất bao", "làm trong", "khi nào", "xong", "bao giờ xong", "làm mất", "hoàn thành trong", "mấy ngày", "mấy tuần", "mấy tháng", "deadline", "cần gấp", "làm gấp", "có kịp", "kịp không", "gấp lắm"],
           "answer": "Thời gian phụ thuộc vào **quy mô và số tính năng** của từng dự án nên bên mình chưa có mốc cố định ạ.\n\nQuy trình bên mình gồm 5 bước: **Ý tưởng → Tư vấn → Thiết kế → Triển khai → Đào tạo & bàn giao**, sau bàn giao vẫn có vận hành và bảo trì trọn gói.\n\nBạn mô tả nhu cầu, bên mình ước lượng tiến độ cụ thể và báo lại {{cong_ty.thoi_gian_phan_hoi}} nhé!"
         }
       ]
@@ -506,10 +507,17 @@
       "mo_ta": "Bảo hành và cam kết bảo mật. ⚠️ Phần thời hạn/phạm vi cần đối chiếu hợp đồng thật.",
       "intents": [
         {
+          "id": "ngon-ngu",
+          "nguon": "web",
+          "_note": "Them 19/08/2026. Truoc do \"co ho tro tieng Anh khong\" roi vao intent BAO HANH vi dinh chu \"ho tro\". KHONG khang dinh pham vi da ngon ngu — khong co tai lieu nao cua cong ty noi ve viec nay.",
+          "keywords": ["tiếng anh", "song ngữ", "đa ngôn ngữ", "bản tiếng anh", "hỗ trợ tiếng anh", "tiếng nước ngoài", "tiếng trung", "tiếng nhật", "tiếng hàn", "nhiều ngôn ngữ", "chuyển ngôn ngữ"],
+          "answer": "**Giao diện đa ngôn ngữ** là hạng mục bên mình làm theo yêu cầu của từng dự án ạ — app, Zalo Mini App hay website đều thêm được.\n\nSố ngôn ngữ, phần nội dung nào cần dịch và ai chịu trách nhiệm bản dịch thì thống nhất khi khảo sát, vì mỗi dự án một khác.\n\nBạn cho biết cần những ngôn ngữ nào, hoặc gọi **{{cong_ty.dien_thoai}}** để bên mình tư vấn cụ thể nhé."
+        },
+        {
           "id": "warranty-support",
           "nguon": "web",
-          "keywords": ["bảo hành", "bảo trì", "hỗ trợ", "sau bàn giao", "sau khi bàn giao", "support", "chăm sóc sau", "lỗi thì sao", "hỏng thì", "gặp sự cố"],
-          "answer": "Bên mình **vận hành & bảo trì trọn gói** sau bàn giao ạ: sửa lỗi phát sinh, hỗ trợ kỹ thuật khi cần và cập nhật khi môi trường thay đổi.\n\nThời hạn và phạm vi cụ thể ghi rõ trong hợp đồng từng dự án. Riêng dịch vụ đào tạo còn có **đồng hành hỗ trợ sau khóa học**."
+          "keywords": ["bảo hành", "bảo trì", "hỗ trợ", "sau bàn giao", "sau khi bàn giao", "support", "chăm sóc sau", "lỗi thì sao", "hỏng thì", "gặp sự cố", "bảo hành bao lâu", "bảo hành mấy năm", "thời hạn bảo hành", "bảo hành trong bao", "hết bảo hành"],
+          "answer": "Bên mình **vận hành & bảo trì trọn gói** sau bàn giao ạ: sửa lỗi phát sinh, hỗ trợ kỹ thuật khi cần và cập nhật khi môi trường thay đổi.\n\n- **Phần cứng — bảo hành 2 năm**\n- **Phần mềm — bảo hành 1 năm**\n- **Hỗ trợ kỹ thuật 24/7** sau bàn giao\n\nPhạm vi chi tiết ghi rõ trong hợp đồng từng dự án. Riêng dịch vụ đào tạo còn có **đồng hành hỗ trợ sau khóa học**."
         },
         {
           "id": "data-security",
@@ -542,7 +550,7 @@
         {
           "id": "location",
           "nguon": "web",
-          "keywords": ["ở đâu", "địa chỉ", "văn phòng", "chỗ nào", "khu vực nào", "trụ sở", "địa điểm", "làm việc ở"],
+          "keywords": ["ở đâu", "địa chỉ", "văn phòng", "chỗ nào", "khu vực nào", "trụ sở", "địa điểm", "làm việc ở", "hà nội hay", "hay quảng ninh", "ở tỉnh nào", "đóng ở đâu", "công ty ở tỉnh"],
           "answer": "Văn phòng iMob ở **{{cong_ty.dia_chi}}** ạ. Bạn ở khu vực nào để bên mình sắp xếp trao đổi thuận tiện nhé?"
         },
         {

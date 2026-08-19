@@ -245,6 +245,15 @@
     { "q": "Cứ cho tôi con số ước lượng thôi cũng được, 100 triệu có đủ làm không?", "expect": "pricing", "phai_co": ["báo giá"] },
     { "q": "Tôi không cần app mới, chỉ cần nâng cấp bảo mật cho website cũ thôi", "expect": "an-toan-cap-do" },
     { "q": "Zalo Mini App có kết nối được với phần mềm một cửa của phường không?", "expect": "zma-dich-vu-cong", "phai_co": ["1 cửa"] },
-    { "q": "co tich hop duoc voi he thong dang dung khong", "expect": "tich-hop-he-thong", "phai_co": ["tích hợp"] }
+    { "q": "co tich hop duoc voi he thong dang dung khong", "expect": "tich-hop-he-thong", "phai_co": ["tích hợp"] },
+    { "q": "bảo hành bao lâu", "expect": "warranty-support", "phai_co": ["2 năm"] },
+    { "q": "thời hạn bảo hành phần mềm là bao lâu", "expect": "warranty-support", "phai_co": ["1 năm"] },
+    { "q": "hết bảo hành thì tính sao", "expect": "warranty-support" },
+    { "q": "có hỗ trợ tiếng Anh không", "expect": "ngon-ngu" },
+    { "q": "app có bản tiếng Anh không", "expect": "ngon-ngu" },
+    { "q": "làm được song ngữ Việt Anh không", "expect": "ngon-ngu" },
+    { "q": "bên bạn ở Hà Nội hay Quảng Ninh", "expect": "location", "phai_co": ["Quảng Ninh"] },
+    { "q": "công ty có chứng chỉ gì không", "expect": "dau-thau" },
+    { "q": "tôi cần gấp trong 2 tuần có kịp không", "expect": "process-time" }
   ]
 }
