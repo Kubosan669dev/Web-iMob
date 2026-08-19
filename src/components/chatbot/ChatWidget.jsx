@@ -223,7 +223,17 @@ export default function ChatWidget() {
             // Rộng thêm ở màn hình lớn (lg): câu trả lời của bot hầu hết là
             // danh sách nhiều gạch đầu dòng, thêm được 32px chiều ngang là bớt
             // được một lần xuống dòng ở gần như mọi dòng.
-            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-9rem)] sm:w-96 lg:w-[26rem]"
+            //
+            // ⚠️ 13rem TRONG max-h LÀ SỐ TÍNH RA, ĐỪNG ĐOÁN LẠI. Panel neo ở
+            // ĐÁY (bottom-24) nên nó cao lên bao nhiêu thì mép trên trèo lên
+            // bấy nhiêu — cao quá là chui xuống dưới navbar, mà navbar z-50 >
+            // panel z-40 nên phần bị che là ĐÚNG CÁI TIÊU ĐỀ có nút đóng.
+            //     lề dưới 6rem (bottom-24)
+            //   + navbar   5.625rem (dải liên hệ h-8 + thanh chính h-14 + 2 viền)
+            //   + khe hở   1rem
+            //   ≈ 13rem
+            // Ai đổi chiều cao navbar trong Navbar.jsx thì phải sửa cả số này.
+            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[600px] sm:max-h-[calc(100vh-13rem)] sm:w-96 lg:w-[26rem]"
           >
             <Suspense fallback={<ChatWindowSkeleton />}>
               <ChatWindow onClose={dong} />

@@ -90,18 +90,22 @@ export default function GoiY({ onSelect, disabled, gon = false }) {
     );
   }
 
+  // Sáu hàng phải VỪA khung 600px cùng với phần giới thiệu phía trên, không
+  // thì khách phải cuộn mới thấy hết — mà cuộn thì hạng mục cuối gần như không
+  // ai đọc. Đó là lý do đệm và khe hở ở đây bó sát, đừng nới ra nếu chưa đo
+  // lại tổng chiều cao.
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       {GOI_Y.map((g) => (
         <button
           key={g.nhan}
           type="button"
           disabled={disabled}
           onClick={() => onSelect(g.hoi)}
-          className="group flex w-full items-center gap-3 rounded-card bg-ink/5 px-3.5 py-3 text-left transition-colors hover:bg-brand-soft disabled:opacity-40"
+          className="group flex w-full items-center gap-2.5 rounded-card bg-ink/5 px-3 py-2.5 text-left transition-colors hover:bg-brand-soft disabled:opacity-40"
         >
           <g.icon className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
-          <span className="min-w-0 flex-1 text-[13px] font-medium text-ink">{g.nhan}</span>
+          <span className="min-w-0 flex-1 text-[12.5px] font-medium text-ink">{g.nhan}</span>
           <ArrowRight
             className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-transform group-hover:translate-x-0.5 group-hover:text-brand"
             aria-hidden="true"
