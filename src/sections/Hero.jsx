@@ -98,12 +98,14 @@ function DongMuc({ muc }) {
     </>
   );
 
+  // h-full: hàng phải cao bằng ô <li> đã giãn, nếu không thì vùng bấm và nền
+  // khi rê chuột vẫn chỉ cao bằng chữ, để hở khe giữa các hàng.
   const lop =
-    "group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-mist";
+    "group flex h-full w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-mist";
 
   if (muc.bam) {
     return (
-      <li>
+      <li className="flex-1">
         <button type="button" onClick={muc.bam} className={lop}>
           {ruot}
         </button>
@@ -121,7 +123,7 @@ function DongMuc({ muc }) {
   const trongTrang = muc.den.startsWith("#") || muc.den.startsWith("/#");
 
   return (
-    <li>
+    <li className="flex-1">
       {trongTrang ? (
         <a href={muc.den} className={lop}>
           {ruot}
@@ -312,10 +314,14 @@ export default function Hero() {
               `truncate` mới làm đúng việc của nó là cắt chữ kèm dấu "…". */}
           <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
             {/* ---------- Cột trái: danh mục tự chọn đường đi ---------- */}
-            {/* Căn giữa theo chiều dọc: ô ảnh bên phải nay hiện trọn vẹn tỉ lệ
-                16:10 nên thẻ cao 845px, trong khi bảy hàng này chỉ chiếm 476px.
-                Neo lên đỉnh thì thừa gần 370px trống dồn hết xuống đáy trái. */}
-            <ul className="flex h-full flex-col justify-center space-y-0.5">
+            {/* Bảy hàng GIÃN ĐỀU lấp kín chiều cao, không để khoảng trống.
+                Ô ảnh bên phải nay hiện trọn vẹn 16:10 nên thẻ cao 845px, trong
+                khi bảy hàng ở cỡ tự nhiên chỉ chiếm 476px. Đã thử neo lên đỉnh
+                (thừa 370px dồn xuống đáy) rồi thử căn giữa (thừa chia đôi trên
+                dưới) — công ty chê cả hai là trống trải. Cho mỗi hàng flex-1
+                thì chỗ thừa biến thành khoảng thở của từng hàng, không còn
+                mảng trống nào. */}
+            <ul className="flex h-full flex-col gap-0.5">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}
