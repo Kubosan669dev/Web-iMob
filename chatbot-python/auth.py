@@ -28,6 +28,24 @@ JWT_SECRET = os.getenv("JWT_SECRET", "")
 JWT_ALG = "HS256"
 SO_GIO_HAN_VE = 8
 
+# ============================================================
+# HAI VAI TRÒ
+#
+# quan_tri   — tài khoản thật của công ty. Làm được mọi thứ.
+# khach_thu  — tài khoản dùng thử, mật khẩu HIỆN CÔNG KHAI ở màn hình đăng nhập
+#              để người kiểm thử tự vào. Sửa được nội dung website, nhưng KHÔNG
+#              đọc được mục Liên hệ.
+#
+# Vì sao phải chặn mục Liên hệ: bảng lien_he chứa họ tên, số điện thoại, email
+# và lời nhắn của khách thật — dữ liệu cá nhân theo Nghị định 13/2023. Mật khẩu
+# đã công khai thì phải coi như cả internet đang cầm tài khoản đó.
+#
+# Chặn ở ĐÂY, tại máy chủ. Ẩn cái tab đi ở giao diện là vô nghĩa: mở F12 gõ một
+# dòng fetch là đọc được sạch.
+# ============================================================
+VAI_QUAN_TRI = "quan_tri"
+VAI_KHACH_THU = "khach_thu"
+
 # bcrypt chỉ xử lý tối đa 72 byte; dài hơn là phần thừa bị bỏ lặng lẽ.
 GIOI_HAN_BYTE_MAT_KHAU = 72
 
@@ -82,11 +100,15 @@ def kiem_mat_khau(mat_khau: str, chuoi_bam: str) -> bool:
 # ============================================================
 # Vé JWT
 # ============================================================
-def tao_ve(ten_dang_nhap: str) -> tuple[str, int]:
-    """Trả về (vé, số giây còn hiệu lực)."""
+def tao_ve(ten_dang_nhap: str, vai_tro: str = VAI_QUAN_TRI) -> tuple[str, int]:
+    """Trả về (vé, số giây còn hiệu lực).
+
+    Vai trò nằm TRONG vé và vé có chữ ký, nên client không tự nâng quyền cho
+    mình được: sửa một ký tự trong vé là chữ ký sai, máy chủ từ chối ngay.
+    """
     het_han = datetime.now(timezone.utc) + timedelta(hours=SO_GIO_HAN_VE)
     ve = jwt.encode(
-        {"sub": ten_dang_nhap, "exp": het_han},
+        {"sub": ten_dang_nhap, "vai": vai_tro, "exp": het_han},
         JWT_SECRET,
         algorithm=JWT_ALG,
     )
@@ -96,13 +118,8 @@ def tao_ve(ten_dang_nhap: str) -> tuple[str, int]:
 _bearer = HTTPBearer(auto_error=False)
 
 
-def yeu_cau_dang_nhap(
-    thong_tin: HTTPAuthorizationCredentials | None = Depends(_bearer),
-) -> str:
-    """Dependency của FastAPI: gắn vào endpoint nào thì endpoint đó cần vé hợp lệ.
-
-    Trả về tên đăng nhập để endpoint biết ai đang sửa (ghi vào cột nguoi_sua).
-    """
+def _giai_ve(thong_tin: HTTPAuthorizationCredentials | None) -> tuple[str, str]:
+    """Mở vé, trả về (tên đăng nhập, vai trò). Vé hỏng thì ném 401."""
     loi = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Bạn cần đăng nhập lại.",
@@ -119,7 +136,51 @@ def yeu_cau_dang_nhap(
     ten = noi_dung.get("sub")
     if not ten:
         raise loi
-    return ten
+    # Vé phát TRƯỚC khi có hệ vai trò thì không mang khóa "vai". Coi là quản trị
+    # để người đang đăng nhập dở không bị đá ra giữa chừng lúc deploy bản mới.
+    # Vé chỉ sống 8 tiếng nên diện này tự hết sau một ngày làm việc.
+    return ten, noi_dung.get("vai") or VAI_QUAN_TRI
+
+
+def yeu_cau_dang_nhap(
+    thong_tin: HTTPAuthorizationCredentials | None = Depends(_bearer),
+) -> str:
+    """Dependency của FastAPI: gắn vào endpoint nào thì endpoint đó cần vé hợp lệ.
+
+    Trả về tên đăng nhập để endpoint biết ai đang sửa (ghi vào cột nguoi_sua).
+    Nhận CẢ HAI vai trò — dùng cho những việc tài khoản thử cũng được làm.
+    """
+    return _giai_ve(thong_tin)[0]
+
+
+def chi_quan_tri(ly_do: str = "Tài khoản dùng thử không được làm việc này."):
+    """Sinh ra một dependency CHỈ nhận tài khoản quản trị thật.
+
+    Nhận `ly_do` để mỗi đường dẫn nói đúng chuyện của mình. Bản đầu dùng chung
+    một câu "không xem được thông tin khách hàng" cho mọi chỗ, nên lúc tài khoản
+    thử bấm xóa ảnh lại nhận được câu nói về khách hàng — người đọc tưởng mình
+    bấm nhầm nút.
+
+    Trả 403 chứ KHÔNG phải 401: 401 nghĩa là "chưa/hết đăng nhập" và trang admin
+    sẽ đá người ta về màn hình đăng nhập, trong khi họ vẫn đang đăng nhập bình
+    thường, chỉ là không đủ quyền cho đúng việc này.
+    """
+
+    def kiem(
+        thong_tin: HTTPAuthorizationCredentials | None = Depends(_bearer),
+    ) -> str:
+        ten, vai = _giai_ve(thong_tin)
+        if vai != VAI_QUAN_TRI:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN, detail=ly_do
+            )
+        return ten
+
+    return kiem
+
+
+# Dùng cho nơi không cần câu riêng.
+yeu_cau_quan_tri = chi_quan_tri()
 
 
 # ============================================================

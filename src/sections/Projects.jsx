@@ -7,6 +7,7 @@ import MaQR from "../components/ui/MaQR.jsx";
 import { iconOf } from "../components/service/icons.js";
 import useManHinhRong from "../hooks/useManHinhRong.js";
 import { useSanPham } from "../context/NoiDungContext.jsx";
+import { diaChiAnh } from "../utils/anh.js";
 
 /* ================= Sản phẩm đã triển khai =================
    Danh sách lấy từ CMS (khoá `projects`), sửa được trong /admin → mục Sản phẩm.
@@ -51,7 +52,7 @@ function TheSanPham({ sp, noiBat = false }) {
     >
       {/* Ảnh minh hoạ — chỉ hiện khi data có `anh` VÀ file tải được. */}
       <Anh
-        src={sp.anh}
+        src={diaChiAnh(sp.anh)}
         alt={`Giao diện ${sp.title}`}
         boc="mb-7 overflow-hidden rounded-card bg-mist"
         className="aspect-[16/10] w-full object-cover"

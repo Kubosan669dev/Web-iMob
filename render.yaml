@@ -107,6 +107,21 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
 
+      # Tài khoản DÙNG THỬ cho người kiểm thử. Đặt cả hai biến thì màn hình
+      # /admin hiện sẵn tên và mật khẩu này cho tester tự vào; bỏ trống một
+      # trong hai thì tài khoản bị XÓA khỏi database và dòng gợi ý tự biến mất.
+      # Bật/tắt chỉ cần sửa ở ĐÂY, không phải build lại website.
+      #
+      # ⚠️ MẬT KHẨU NÀY LÀ CÔNG KHAI — phải khác hẳn ADMIN_PASSWORD ở trên và
+      # không được trùng mật khẩu dùng ở bất cứ nơi nào khác.
+      # Tài khoản này sửa được nội dung website nhưng KHÔNG đọc được mục Tin
+      # nhắn (họ tên, số điện thoại, email khách thật) — chặn ở máy chủ, xem
+      # chatbot-python/auth.py.
+      - key: TESTER_USER
+        sync: false
+      - key: TESTER_PASSWORD
+        sync: false
+
   # ----------------------------------------------------------
   # 2) Website React (Vite) — chạy dạng file tĩnh trên CDN, miễn phí và
   #    không bao giờ "ngủ" như web service.
@@ -165,9 +180,9 @@ services:
       - key: VITE_GEMINI_API_KEY
         sync: false
 
-      # Dòng gợi ý tài khoản hiện trên trang /admin.
-      # ⚠️ ĐỂ TRỐNG trên website thật — có đặt là ai vào /admin cũng đọc được
-      # mật khẩu và sửa được nội dung. Chỉ điền khi đây là bản trình diễn, và
-      # điền đúng cặp ADMIN_USER / ADMIN_PASSWORD bạn vừa đặt ở trên.
-      - key: VITE_DEMO_LOGIN
-        sync: false
+      # (Đã bỏ VITE_DEMO_LOGIN ngày 20/08/2026.) Dòng gợi ý tài khoản dùng thử
+      # giờ lấy thẳng từ máy chủ API qua /api/tai-khoan-thu, cấu hình bằng
+      # TESTER_USER / TESTER_PASSWORD ở dịch vụ imob-chatbot-api phía trên.
+      # Lý do bỏ: mật khẩu để ở đây là bản CHÉP TAY, sớm muộn cũng lệch với mật
+      # khẩu thật bên kia — lúc đó màn hình hiện một mật khẩu sai, người test gõ
+      # 5 lần rồi bị khóa IP 15 phút mà không hiểu vì sao.

@@ -11,6 +11,7 @@ Các nhóm đường dẫn:
   POST /api/dang-nhap — đăng nhập trang quản trị        (api_auth.py)
   /api/noi-dung       — nội dung website cho CMS         (api_noi_dung.py)
   /api/lien-he        — khách để lại thông tin           (api_lien_he.py)
+  /api/anh            — ảnh tải lên từ trang quản trị     (api_anh.py)
 
 NGUYÊN TẮC: database là TÙY CHỌN. Không có (hoặc chết) thì CMS và việc lưu liên
 hệ tự tắt, còn chatbot vẫn chạy y như cũ. Website cũng có bản JSON đóng gói sẵn
@@ -32,6 +33,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import api_anh
 import api_auth
 import api_lien_he
 import api_noi_dung
@@ -144,13 +146,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,  # dùng vé Bearer, không dùng cookie
-    allow_methods=["GET", "POST", "PUT", "PATCH"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
 
 app.include_router(api_auth.router)
 app.include_router(api_noi_dung.router)
 app.include_router(api_lien_he.router)
+app.include_router(api_anh.router)
 
 # ============================================================
 # Mỗi khách một phiên chat riêng

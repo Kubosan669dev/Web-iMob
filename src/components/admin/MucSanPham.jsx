@@ -7,6 +7,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { O, ODai } from "./Fields.jsx";
+import ChonAnh from "./ChonAnh.jsx";
 import MaQR from "../ui/MaQR.jsx";
 import { TEN_ICON, iconOf } from "../service/icons.js";
 
@@ -215,12 +216,11 @@ function TheSanPham({ sp, chiSo, tong, doi, xoa, chuyen }) {
               )}
             </div>
 
-            <O
+            <ChonAnh
               nhan="Ảnh chụp màn hình"
               giaTri={sp.anh}
               doi={s("anh")}
-              placeholder="/anh/ten-file.png"
-              moTa="Bỏ file vào thư mục public/anh/ rồi gõ đường dẫn. Việc này phải làm trong mã nguồn — trang quản trị chưa tải ảnh lên được."
+              moTa="Hiện trong băng chuyền ở khối đầu trang và trên thẻ dự án. Ảnh ngang, tỉ lệ 16:10 là vừa khung nhất."
             />
           </div>
         </div>

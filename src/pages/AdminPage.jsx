@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
+import ChonAnh from "../components/admin/ChonAnh.jsx";
 import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
@@ -175,12 +176,12 @@ function MucHero({ d, doi, daSua }) {
         </div>
 
         <div className={LUOI}>
-          <O
+          <ChonAnh
             nhan="Ảnh banner (ô bên phải)"
             giaTri={d.anh}
             doi={s("anh")}
             daSua={daSua}
-            moTa="Bỏ file vào public/anh/ rồi gõ /anh/ten-file.png. Để TRỐNG thì ô đó chạy băng chuyền lần lượt qua các sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
+            moTa="Để TRỐNG thì ô đó chạy băng chuyền lần lượt qua các sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
           />
           <O
             nhan="Mô tả ảnh"
@@ -757,6 +758,12 @@ export default function AdminPage() {
   const [ten, setTen] = useState(api.layTenDangNhap());
   const [muc, setMuc] = useState("tong-quan");
 
+  // Tài khoản dùng thử (mật khẩu hiện công khai ở màn hình đăng nhập) không
+  // được xem mục Tin nhắn — trong đó là họ tên, số điện thoại, email của khách
+  // thật. Máy chủ mới là nơi chặn thật (auth.yeu_cau_quan_tri); ẩn ở đây chỉ để
+  // người test khỏi bấm vào một cái tab rồi nhận thông báo lỗi.
+  const laKhachThu = api.laKhachThu();
+
   const [goc, setGoc] = useState(null); // bản đã lưu trên máy chủ
   const [noiDung, setNoiDung] = useState(null); // bản đang sửa
   const [dangTai, setDangTai] = useState(false);
@@ -1009,7 +1016,7 @@ export default function AdminPage() {
               Khác
             </p>
             <div className="space-y-0.5">
-              {MUC_KHAC.map((m) => (
+              {MUC_KHAC.filter((m) => !(laKhachThu && m.id === "tin-nhan")).map((m) => (
                 <NutMuc key={m.id} m={m} />
               ))}
             </div>
@@ -1024,7 +1031,16 @@ export default function AdminPage() {
           {muc === "tong-quan" ? (
             <MucTongQuan noiDung={noiDung} diChuyen={setMuc} />
           ) : muc === "tin-nhan" ? (
-            <MucTinNhan />
+            laKhachThu ? (
+              <Khung>
+                <p className="text-sm leading-relaxed text-ink-soft">
+                  Tài khoản dùng thử không xem được thông tin khách hàng. Mục này
+                  chứa họ tên, số điện thoại và email của khách thật.
+                </p>
+              </Khung>
+            ) : (
+              <MucTinNhan />
+            )
           ) : dangTai ? (
             <p className="flex items-center gap-2 py-10 text-sm text-ink-soft">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

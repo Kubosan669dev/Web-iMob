@@ -22,6 +22,11 @@ psycopg[binary,pool]>=3.1,<4
 PyJWT>=2.8,<3      # tạo/kiểm "vé" đăng nhập
 bcrypt>=4.1,<6     # băm mật khẩu
 
+# Nhận file tải lên (api_anh.py). FastAPI bắt buộc phải có thư viện này mới
+# dùng được UploadFile — thiếu nó thì lỗi chỉ hiện ra lúc CHẠY, không phải lúc
+# cài, nên rất dễ lên tới production mới phát hiện.
+python-multipart>=0.0.9,<1
+
 # Đọc file .env khi chạy ở máy. Trên Render không có file .env (biến đặt thẳng
 # trong dashboard) — thiếu file thì thư viện lặng lẽ bỏ qua, không lỗi.
 python-dotenv>=1.0,<2

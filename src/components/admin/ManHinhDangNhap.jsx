@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   ChevronLeft,
   Eye,
   EyeOff,
+  FlaskConical,
   Loader2,
   Lock,
   User,
@@ -25,13 +26,23 @@ import Logo from "../ui/Logo.jsx";
 // cận và bớt trống trải.
 // ============================================================
 
-// Dòng gợi ý tài khoản dùng thử. Lấy từ biến môi trường VITE_DEMO_LOGIN,
-// KHÔNG viết cứng trong mã.
+// ============================================================
+// Ô TÀI KHOẢN DÙNG THỬ (công ty yêu cầu 20/08/2026: "hiển thị tên user
+// password ở đó để tester có thể truy cập vào").
 //
-// ⚠️ CÓ HIỆN LÀ AI CŨNG ĐĂNG NHẬP ĐƯỢC. Chỉ đặt biến này khi trang thật sự chỉ
-// để trình diễn. Website thật thì để trống -> dòng này tự biến mất, không phải
-// sửa code. Xem .env.example.
-const DEMO_LOGIN = (import.meta.env.VITE_DEMO_LOGIN || "").trim();
+// Tên và mật khẩu lấy từ MÁY CHỦ qua /api/tai-khoan-thu, không phải từ biến
+// VITE_ lúc build. Lý do: tài khoản thật nằm ở Render (biến TESTER_USER /
+// TESTER_PASSWORD) còn website build ở Vercel. Nếu chép mật khẩu sang một biến
+// VITE_ thì hai nơi sẽ lệch nhau ngay lần đổi mật khẩu đầu tiên — màn hình hiện
+// một mật khẩu cũ, người test gõ 5 lần rồi bị khóa IP 15 phút mà không hiểu vì
+// sao. Lấy từ API thì chỉ có một nguồn sự thật, và tắt cũng chỉ cần bỏ trống
+// biến trên Render, không phải build lại website.
+//
+// ⚠️ AN TOÀN: tài khoản này mang vai 'khach_thu' — sửa được nội dung website
+// nhưng KHÔNG đọc được mục Tin nhắn (họ tên, số điện thoại, email khách thật —
+// dữ liệu cá nhân theo Nghị định 13/2023). Chặn nằm ở máy chủ, xem
+// auth.yeu_cau_quan_tri và api_lien_he.py.
+// ============================================================
 
 const O_NHAP =
   "w-full rounded-xl border border-transparent bg-mist py-3 pl-11 text-[0.9375rem] " +
@@ -60,6 +71,18 @@ export default function ManHinhDangNhap({ khiXong }) {
   const [hienMatKhau, setHienMatKhau] = useState(false);
   const [loi, setLoi] = useState("");
   const [dangGui, setDangGui] = useState(false);
+  const [taiKhoanThu, setTaiKhoanThu] = useState(null);
+
+  // Hỏi máy chủ xem có tài khoản dùng thử không. Gọi ngầm và nuốt mọi lỗi:
+  // máy chủ đang ngủ thì chỉ là chưa hiện dòng gợi ý, người biết mật khẩu vẫn
+  // đăng nhập bình thường. `con` chặn việc gán state sau khi rời trang.
+  useEffect(() => {
+    let con = true;
+    api.taiKhoanThu().then((tk) => con && setTaiKhoanThu(tk));
+    return () => {
+      con = false;
+    };
+  }, []);
 
   const guiDi = async (e) => {
     e.preventDefault();
@@ -158,10 +181,48 @@ export default function ManHinhDangNhap({ khiXong }) {
               </p>
             )}
 
-            {DEMO_LOGIN && (
-              <p className="rounded-xl bg-brand-soft px-4 py-3 text-center text-[0.8125rem] text-brand">
-                {DEMO_LOGIN}
-              </p>
+            {taiKhoanThu && (
+              <div className="rounded-xl bg-brand-soft p-4">
+                <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-brand">
+                  <FlaskConical className="h-4 w-4" aria-hidden="true" />
+                  Tài khoản dùng thử
+                </p>
+
+                {/* Chữ MONO và cho bôi đen: mật khẩu hay có l/1/I và O/0 nhìn
+                    giống hệt nhau ở phông thường. Người test còn phải chép được
+                    ra chỗ khác nên không dùng ảnh hay chặn chọn chữ. */}
+                <dl className="mt-2.5 space-y-1 text-[0.8125rem]">
+                  <div className="flex gap-2">
+                    <dt className="w-24 shrink-0 text-ink-soft">Tên đăng nhập</dt>
+                    <dd className="select-all break-all font-mono text-ink">
+                      {taiKhoanThu.ten}
+                    </dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt className="w-24 shrink-0 text-ink-soft">Mật khẩu</dt>
+                    <dd className="select-all break-all font-mono text-ink">
+                      {taiKhoanThu.mat_khau}
+                    </dd>
+                  </div>
+                </dl>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTen(taiKhoanThu.ten);
+                    setMatKhau(taiKhoanThu.mat_khau);
+                    setLoi("");
+                  }}
+                  className="mt-3 rounded-full bg-brand px-4 py-1.5 text-[0.8125rem] font-medium text-tren-brand transition-colors hover:bg-brand-deep"
+                >
+                  Điền sẵn vào ô trên
+                </button>
+
+                <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+                  Tài khoản này sửa được nội dung website nhưng không xem được
+                  thông tin khách hàng.
+                </p>
+              </div>
             )}
           </form>
         </div>

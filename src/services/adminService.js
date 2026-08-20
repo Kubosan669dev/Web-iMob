@@ -11,6 +11,11 @@ import { API_BASE_URL } from "../utils/constants.js";
 
 const KHOA_VE = "imob_admin_ve";
 const KHOA_TEN = "imob_admin_ten";
+const KHOA_VAI = "imob_admin_vai";
+
+// Hai vai trò — phải khớp với auth.py bên backend.
+export const VAI_QUAN_TRI = "quan_tri";
+export const VAI_KHACH_THU = "khach_thu";
 
 // Backend gói free trên Render NGỦ sau 15 phút. Lần gọi đầu phải chờ máy chủ
 // thức dậy nên hạn chờ phải rộng — 45 giây. Trang admin có hiện thông báo
@@ -33,10 +38,29 @@ export function layTenDangNhap() {
   }
 }
 
-function luuVe(ve, ten) {
+/** Vai trò của người đang đăng nhập.
+ *
+ *  CHỈ để quyết định hiện hay ẩn phần nào trên giao diện. KHÔNG phải hàng rào
+ *  an ninh — giá trị này nằm trong máy khách nên sửa được bằng một dòng trong
+ *  F12. Hàng rào thật nằm ở máy chủ (auth.yeu_cau_quan_tri), và nó không đọc
+ *  ô này mà đọc vai trò ký sẵn trong vé. */
+export function layVaiTro() {
+  try {
+    return sessionStorage.getItem(KHOA_VAI) || VAI_QUAN_TRI;
+  } catch {
+    return VAI_QUAN_TRI;
+  }
+}
+
+export function laKhachThu() {
+  return layVaiTro() === VAI_KHACH_THU;
+}
+
+function luuVe(ve, ten, vai) {
   try {
     sessionStorage.setItem(KHOA_VE, ve);
     sessionStorage.setItem(KHOA_TEN, ten);
+    sessionStorage.setItem(KHOA_VAI, vai || VAI_QUAN_TRI);
   } catch {
     // Trình duyệt chặn storage — vẫn dùng được trong phiên hiện tại vì
     // AdminPage giữ vé trong state, chỉ là tải lại trang thì phải đăng nhập lại.
@@ -47,6 +71,7 @@ export function dangXuat() {
   try {
     sessionStorage.removeItem(KHOA_VE);
     sessionStorage.removeItem(KHOA_TEN);
+    sessionStorage.removeItem(KHOA_VAI);
   } catch {
     /* không sao */
   }
@@ -148,8 +173,21 @@ export async function dangNhap(tenDangNhap, matKhau) {
     canVe: false,
     than: { ten_dang_nhap: tenDangNhap, mat_khau: matKhau },
   });
-  luuVe(kq.ve, kq.ten_dang_nhap);
+  luuVe(kq.ve, kq.ten_dang_nhap, kq.vai_tro);
   return kq.ten_dang_nhap;
+}
+
+/** Tài khoản dùng thử để hiện ở màn hình đăng nhập. Trả null khi tính năng tắt.
+ *
+ *  Nuốt mọi lỗi: máy chủ đang ngủ hoặc bản backend cũ chưa có đường dẫn này thì
+ *  chỉ là không hiện dòng gợi ý — tuyệt đối không được chặn người ta đăng nhập. */
+export async function taiKhoanThu() {
+  try {
+    const kq = await goi("/api/tai-khoan-thu", { canVe: false });
+    return kq?.ten && kq?.mat_khau ? kq : null;
+  } catch {
+    return null;
+  }
 }
 
 // ---------- Nội dung ----------
@@ -178,4 +216,67 @@ export function danhDauLienHe(ma, daXuLy) {
     method: "PATCH",
     than: { da_xu_ly: daXuLy },
   });
+}
+
+
+// ---------- Ảnh ----------
+//
+// Tải file KHÔNG đi qua goi() ở trên được: hàm đó luôn đặt
+// Content-Type: application/json và tự JSON.stringify phần thân. Với FormData
+// thì phải để trình duyệt TỰ đặt Content-Type, vì nó còn phải kèm chuỗi
+// `boundary` ngẫu nhiên phân tách các phần — tự viết tay header là hỏng.
+export async function taiAnhLen(file) {
+  const ve = layVe();
+  if (!ve) throw new LoiApi("Bạn cần đăng nhập.", 401);
+
+  const bieuMau = new FormData();
+  bieuMau.append("file", file);
+
+  const controller = new AbortController();
+  const hetGio = setTimeout(() => controller.abort(), HET_GIO_MS);
+
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}/api/anh`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${ve}` },
+      body: bieuMau,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    throw new LoiApi(
+      err.name === "AbortError"
+        ? "Tải ảnh lâu quá. Ảnh nặng hoặc mạng chậm — thử lại nhé."
+        : "Không kết nối được tới máy chủ.",
+      0
+    );
+  } finally {
+    clearTimeout(hetGio);
+  }
+
+  if (res.status === 401) {
+    dangXuat();
+    throw new LoiApi("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", 401);
+  }
+
+  if (!res.ok) {
+    let thongDiep = `Máy chủ báo lỗi ${res.status}.`;
+    try {
+      const loi = await res.json();
+      if (typeof loi?.detail === "string") thongDiep = loi.detail;
+    } catch {
+      /* không đọc được thân lỗi */
+    }
+    throw new LoiApi(thongDiep, res.status);
+  }
+
+  return res.json();
+}
+
+export function danhSachAnh() {
+  return goi("/api/anh");
+}
+
+export function xoaAnh(ma) {
+  return goi(`/api/anh/${encodeURIComponent(ma)}`, { method: "DELETE" });
 }

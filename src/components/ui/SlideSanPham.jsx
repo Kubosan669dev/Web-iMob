@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "./Button.jsx";
 import MaQR from "./MaQR.jsx";
 import useManHinhRong from "../../hooks/useManHinhRong.js";
+import { diaChiAnh } from "../../utils/anh.js";
 
 // ============================================================
 // Băng chuyền sản phẩm ở khung hình đầu — ô bên phải, đúng chỗ TopCV để
@@ -189,7 +190,7 @@ export default function SlideSanPham({ danhSach }) {
             {s.anh && (
               <div className="group/anh relative mb-4 overflow-hidden rounded-card bg-mist lg:mb-0">
                 <img
-                  src={s.anh}
+                  src={diaChiAnh(s.anh)}
                   alt={`Giao diện ${s.title}`}
                   loading="lazy"
                   className="aspect-[16/10] w-full object-cover opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100"

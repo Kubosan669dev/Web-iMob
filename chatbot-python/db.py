@@ -93,8 +93,36 @@ CREATE TABLE IF NOT EXISTS noi_dung (
 CREATE TABLE IF NOT EXISTS nguoi_dung (
     ten_dang_nhap TEXT PRIMARY KEY,
     mat_khau_hash TEXT NOT NULL,
+    vai_tro       TEXT NOT NULL DEFAULT 'quan_tri',
     tao_luc       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Database đã tạo từ trước thì CREATE TABLE IF NOT EXISTS ở trên không đụng tới,
+-- nên phải thêm cột riêng. Mọi tài khoản cũ mặc định là quản trị đầy đủ.
+ALTER TABLE nguoi_dung
+    ADD COLUMN IF NOT EXISTS vai_tro TEXT NOT NULL DEFAULT 'quan_tri';
+
+-- Ảnh tải lên từ trang quản trị.
+--
+-- VÌ SAO LƯU TRONG DATABASE CHỨ KHÔNG GHI RA ĐĨA: Render gói free cấp cho mỗi
+-- service một ổ đĩa TẠM. Deploy lại hoặc service ngủ dậy là ổ đó về trắng —
+-- ảnh vừa tải lên tuần trước sẽ biến mất mà không có cảnh báo nào. Database thì
+-- nằm riêng và còn mãi.
+--
+-- BYTEA = mảng byte thô. Ảnh đã được nén sang WebP ngay trên trình duyệt trước
+-- khi gửi lên (xem components/admin/ChonAnh.jsx), nên mỗi tấm chỉ khoảng
+-- 80–200KB thay vì 3–5MB của ảnh gốc chụp từ điện thoại.
+CREATE TABLE IF NOT EXISTS anh (
+    id            TEXT PRIMARY KEY,
+    ten_goc       TEXT NOT NULL,
+    kieu          TEXT NOT NULL,
+    du_lieu       BYTEA NOT NULL,
+    kich_thuoc    INTEGER NOT NULL,
+    nguoi_tai_len TEXT,
+    tao_luc       TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS anh_moi_nhat ON anh (tao_luc DESC);
 
 -- Khách để lại thông tin (từ form liên hệ hoặc từ chatbot).
 -- ĐÂY LÀ DỮ LIỆU CÁ NHÂN — xem Nghị định 13/2023.
@@ -141,6 +169,7 @@ def khoi_tao() -> bool:
 
         _nap_noi_dung_lan_dau()
         _dat_tai_khoan_admin()
+        _dat_tai_khoan_thu()
     except Exception:
         log.exception(
             "Không kết nối được database — CMS và lưu liên hệ sẽ TẮT, "
@@ -237,6 +266,85 @@ def _dat_tai_khoan_admin() -> None:
         )
 
 
+def _dat_tai_khoan_thu() -> None:
+    """Tài khoản DÙNG THỬ cho người kiểm thử — mật khẩu hiện công khai ở /admin.
+
+    Bật bằng cách đặt cả hai biến TESTER_USER và TESTER_PASSWORD. Bỏ trống một
+    trong hai thì tài khoản bị XÓA khỏi database và dòng gợi ý ở màn hình đăng
+    nhập cũng tự biến mất — tắt bằng một biến môi trường, không phải sửa code.
+
+    ⚠️ VAI TRÒ 'khach_thu', KHÔNG PHẢI 'quan_tri'. Đây là điểm mấu chốt của cả
+    tính năng này: mật khẩu đã hiện công khai thì coi như cả internet đăng nhập
+    được. Tài khoản đó TUYỆT ĐỐI không được chạm vào bảng lien_he — trong đó là
+    họ tên, số điện thoại, email và lời nhắn của khách thật, tức dữ liệu cá nhân
+    thuộc phạm vi Nghị định 13/2023. Chặn ở máy chủ (api_lien_he.py dùng
+    yeu_cau_quan_tri) chứ không chỉ ẩn cái tab đi ở giao diện — ẩn giao diện thì
+    người ta vẫn gọi thẳng API đọc được.
+
+    Tài khoản thử VẪN sửa được nội dung website, vì nếu không thì chẳng kiểm thử
+    được gì. Rủi ro đó chấp nhận được: nội dung luôn khôi phục lại được bằng nút
+    "Nạp lại từ file gốc" trong trang quản trị.
+    """
+    from auth import VAI_KHACH_THU, bam_mat_khau
+
+    ten = os.getenv("TESTER_USER", "").strip()
+    mat_khau = os.getenv("TESTER_PASSWORD", "")
+
+    if not ten or not mat_khau:
+        # Dọn tài khoản thử cũ nếu có: quên xóa là để hở một cửa vào vĩnh viễn.
+        with pool().connection() as conn:
+            da_xoa = conn.execute(
+                "DELETE FROM nguoi_dung WHERE vai_tro = %s RETURNING ten_dang_nhap",
+                (VAI_KHACH_THU,),
+            ).fetchall()
+        if da_xoa:
+            log.info("Đã xóa tài khoản dùng thử (TESTER_USER/TESTER_PASSWORD bỏ trống).")
+        return
+
+    if len(mat_khau) < 8:
+        log.error("TESTER_PASSWORD phải dài ít nhất 8 ký tự — bỏ qua tài khoản thử.")
+        return
+
+    with pool().connection() as conn:
+        # Không cho trùng tên với tài khoản quản trị: nếu trùng, câu UPDATE bên
+        # dưới sẽ hạ chính tài khoản thật xuống vai khách thử và khóa mình ra
+        # ngoài phần Liên hệ.
+        dang_co = conn.execute(
+            "SELECT vai_tro FROM nguoi_dung WHERE ten_dang_nhap = %s",
+            (ten,),
+        ).fetchone()
+        if dang_co and dang_co["vai_tro"] != VAI_KHACH_THU:
+            log.error(
+                "TESTER_USER trùng tên với tài khoản quản trị '%s' — bỏ qua, "
+                "nếu không sẽ tự hạ quyền chính mình. Đặt tên khác đi.",
+                ten,
+            )
+            return
+
+        # Xóa tài khoản thử CŨ trước: đổi TESTER_USER sang tên mới mà không xóa
+        # tên cũ thì cả hai cùng đăng nhập được, trong khi màn hình chỉ hiện tên
+        # mới — một cửa vào mà không ai còn nhớ.
+        conn.execute(
+            "DELETE FROM nguoi_dung WHERE vai_tro = %s AND ten_dang_nhap <> %s",
+            (VAI_KHACH_THU, ten),
+        )
+        conn.execute(
+            """
+            INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash, vai_tro)
+            VALUES (%s, %s, %s)
+            ON CONFLICT (ten_dang_nhap) DO UPDATE
+                SET mat_khau_hash = EXCLUDED.mat_khau_hash,
+                    vai_tro       = EXCLUDED.vai_tro
+            """,
+            (ten, bam_mat_khau(mat_khau), VAI_KHACH_THU),
+        )
+    log.warning(
+        "Tài khoản dùng thử '%s' đang BẬT — mật khẩu hiện công khai ở /admin. "
+        "Tài khoản này không xem được mục Liên hệ.",
+        ten,
+    )
+
+
 def dong() -> None:
     global _pool
     if _pool is not None:
@@ -279,7 +387,7 @@ def lay_nguoi_dung(ten_dang_nhap: str) -> dict | None:
         return None
     with pool().connection() as conn:
         return conn.execute(
-            "SELECT ten_dang_nhap, mat_khau_hash FROM nguoi_dung WHERE ten_dang_nhap = %s",
+            "SELECT ten_dang_nhap, mat_khau_hash, vai_tro FROM nguoi_dung WHERE ten_dang_nhap = %s",
             (ten_dang_nhap,),
         ).fetchone()
 
@@ -333,3 +441,78 @@ def danh_dau_lien_he(ma: int, da_xu_ly: bool) -> bool:
             (da_xu_ly, ma),
         ).fetchone()
     return dong_sua is not None
+
+
+# ============================================================
+# Ảnh tải lên từ trang quản trị
+#
+# Trước đây muốn đổi ảnh sản phẩm phải: chép file vào public/anh/ -> gõ đường
+# dẫn tay -> commit -> push -> chờ deploy. Người không biết Git thì chịu.
+# Giờ tải thẳng trong /admin, ảnh nằm trong database và có địa chỉ /api/anh/<id>.
+# ============================================================
+def them_anh(
+    ma: str,
+    ten_goc: str,
+    kieu: str,
+    du_lieu: bytes,
+    nguoi_tai_len: str,
+) -> None:
+    with pool().connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO anh (id, ten_goc, kieu, du_lieu, kich_thuoc, nguoi_tai_len)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """,
+            (ma, ten_goc, kieu, du_lieu, len(du_lieu), nguoi_tai_len),
+        )
+
+
+def lay_anh(ma: str) -> dict | None:
+    """Đọc một tấm ảnh để trả về cho trình duyệt. Đây là đường CÔNG KHAI."""
+    if not co_db():
+        return None
+    with pool().connection() as conn:
+        return conn.execute(
+            "SELECT kieu, du_lieu FROM anh WHERE id = %s", (ma,)
+        ).fetchone()
+
+
+def danh_sach_anh(gioi_han: int = 200) -> list[dict]:
+    """Danh sách ảnh cho ô chọn trong trang quản trị.
+
+    CỐ Ý không lấy cột du_lieu: mỗi tấm cả trăm KB, kéo 200 tấm về chỉ để vẽ
+    một danh sách tên thì vừa chậm vừa vô ích. Giao diện lấy ảnh qua
+    /api/anh/<id>, và trình duyệt tự nhớ (cache) nên chỉ tải mỗi tấm một lần.
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            """
+            SELECT id, ten_goc, kieu, kich_thuoc, nguoi_tai_len, tao_luc
+            FROM anh
+            ORDER BY tao_luc DESC
+            LIMIT %s
+            """,
+            (gioi_han,),
+        ).fetchall()
+
+
+def xoa_anh(ma: str) -> bool:
+    with pool().connection() as conn:
+        dong_xoa = conn.execute(
+            "DELETE FROM anh WHERE id = %s RETURNING id", (ma,)
+        ).fetchone()
+    return dong_xoa is not None
+
+
+def tong_dung_luong_anh() -> int:
+    """Tổng số byte mọi ảnh đang chiếm. Trang quản trị hiện con số này ra.
+
+    Postgres gói free chỉ có 1GB dùng chung cho cả nội dung lẫn liên hệ — không
+    ai nhìn thấy mức đang dùng thì tới lúc đầy mới biết, và lúc đó thì mọi thứ
+    cùng hỏng một lượt chứ không riêng phần ảnh.
+    """
+    with pool().connection() as conn:
+        dong_tong = conn.execute(
+            "SELECT COALESCE(SUM(kich_thuoc), 0) AS tong FROM anh"
+        ).fetchone()
+    return int(dong_tong["tong"])

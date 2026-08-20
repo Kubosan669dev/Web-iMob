@@ -11,9 +11,13 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field, field_validator
 
 import db
-from auth import yeu_cau_dang_nhap
+from auth import chi_quan_tri
 
 router = APIRouter(tags=["lien-he"])
+
+CHI_QUAN_TRI = chi_quan_tri(
+    "Tài khoản dùng thử không xem được thông tin khách hàng."
+)
 
 REGEX_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -143,8 +147,14 @@ def lien_he_nhanh(than: LienHeNhanh, request: Request):
     return {"ok": True, "id": ma}
 
 
+# ⚠️ yeu_cau_quan_tri chứ KHÔNG phải yeu_cau_dang_nhap (đổi 20/08/2026).
+# Từ khi có tài khoản dùng thử hiện mật khẩu công khai ở màn hình đăng nhập,
+# "đã đăng nhập" không còn đồng nghĩa với "được tin cậy". Bảng lien_he chứa họ
+# tên, số điện thoại, email và lời nhắn của khách thật — dữ liệu cá nhân theo
+# Nghị định 13/2023. Để nguyên yeu_cau_dang_nhap thì công bố mật khẩu ở trang
+# admin chính là công bố luôn danh sách khách hàng.
 @router.get("/api/lien-he")
-def danh_sach(_: str = Depends(yeu_cau_dang_nhap)):
+def danh_sach(_: str = Depends(CHI_QUAN_TRI)):
     if not db.co_db():
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -158,7 +168,7 @@ class DanhDau(BaseModel):
 
 
 @router.patch("/api/lien-he/{ma}")
-def danh_dau(ma: int, than: DanhDau, _: str = Depends(yeu_cau_dang_nhap)):
+def danh_dau(ma: int, than: DanhDau, _: str = Depends(CHI_QUAN_TRI)):
     if not db.co_db():
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

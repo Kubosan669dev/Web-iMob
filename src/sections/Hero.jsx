@@ -20,6 +20,7 @@ import SlideSanPham from "../components/ui/SlideSanPham.jsx";
 import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 import { danhSachDonVi } from "../utils/soLieu.js";
 import { openChat } from "../utils/chatBus.js";
+import { diaChiAnh } from "../utils/anh.js";
 
 /* ================= DaiCongNghe =================
    Dòng liệt kê các mảng công nghệ của iMob, hiện HẾT cùng lúc và sáng dần từng
@@ -361,7 +362,7 @@ export default function Hero() {
                 mua sẵn về để lấp chỗ trống. */}
             {hero.anh ? (
               <Anh
-                src={hero.anh}
+                src={diaChiAnh(hero.anh)}
                 alt={hero.anhMoTa || ""}
                 boc="overflow-hidden rounded-card bg-mist"
                 className="h-full w-full object-cover"
