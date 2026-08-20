@@ -188,7 +188,7 @@ export default function MucTaiKhoanDemo() {
               setTen(e.target.value);
               setXong("");
             }}
-            placeholder="admin"
+            placeholder="tên tài khoản"
             autoComplete="off"
             className={O_NHAP}
           />
@@ -199,7 +199,14 @@ export default function MucTaiKhoanDemo() {
             Mật khẩu hiện ra
           </span>
           <div className="relative">
-            {/* CỐ Ý để type="text" mặc định — xem quyết định 2 ở đầu file. */}
+            {/* CỐ Ý để type="text" mặc định — xem quyết định 2 ở đầu file.
+
+                ⚠️ VÀ ĐỪNG ĐẶT MẬT KHẨU THẬT LÀM CHỮ GỢI Ý. Lỗi đã mắc ngày
+                20/08/2026: placeholder để "imob@2026" — đúng mật khẩu quản trị
+                thật của công ty. Vite nhét chữ đó thẳng vào file JavaScript
+                công khai, nên ai mở F12 tải gói AdminPage về cũng đọc được,
+                KỂ CẢ khi tính năng này đang tắt và chưa ai từng bật.
+                Chữ gợi ý phải luôn là chữ vô nghĩa. */}
             <input
               type={che ? "password" : "text"}
               value={matKhau}
@@ -207,7 +214,7 @@ export default function MucTaiKhoanDemo() {
                 setMatKhau(e.target.value);
                 setXong("");
               }}
-              placeholder="imob@2026"
+              placeholder="mật khẩu sẽ hiện công khai"
               autoComplete="off"
               className={`${O_NHAP} pr-11 font-mono`}
             />
