@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   ChevronLeft,
+  Clock,
   Eye,
   EyeOff,
   Loader2,
@@ -64,7 +65,7 @@ function O({ nhan, icon: Icon, dungSau, ...props }) {
   );
 }
 
-export default function ManHinhDangNhap({ khiXong }) {
+export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
   const [ten, setTen] = useState("");
   const [matKhau, setMatKhau] = useState("");
   const [hienMatKhau, setHienMatKhau] = useState(false);
@@ -117,6 +118,31 @@ export default function ManHinhDangNhap({ khiXong }) {
 
           {/* ---------- Form ---------- */}
           <form onSubmit={guiDi} className="space-y-5">
+            {/* Câu giải thích khi bị TỰ ĐỘNG đăng xuất (useTuDongDangXuat.js).
+                Không có nó thì người đang soạn dở tự dưng thấy màn hình đăng
+                nhập hiện ra mà không hiểu vì sao.
+
+                Đặt TRƯỚC hai ô nhập chứ không phải dưới cùng: đây là câu trả
+                lời cho "ủa sao lại thế này?", phải đọc được trước khi người ta
+                bắt đầu gõ lại.
+
+                Không dùng màu lỗi — đây không phải lỗi, mà là việc đúng như
+                thiết kế. Tô đỏ chỉ làm người dùng tưởng hệ thống hỏng. */}
+            {lyDo && !loi && (
+              <p
+                role="status"
+                className="flex items-start gap-2.5 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft"
+              >
+                <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <span>
+                  {lyDo}
+                  <span className="mt-1 block text-ink-faint">
+                    Đăng nhập lại là thấy nguyên phần đang sửa dở.
+                  </span>
+                </span>
+              </p>
+            )}
+
             <O
               nhan="Tên đăng nhập"
               icon={User}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertTriangle,
@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
+import useTuDongDangXuat from "../hooks/useTuDongDangXuat.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
 import ChonAnh from "../components/admin/ChonAnh.jsx";
 import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
@@ -761,11 +762,26 @@ export default function AdminPage() {
   const [ten, setTen] = useState(api.layTenDangNhap());
   const [muc, setMuc] = useState("tong-quan");
 
+  // Câu giải thích khi bị TỰ ĐỘNG đăng xuất. Không có nó thì người đang soạn
+  // dở tự dưng thấy màn hình đăng nhập hiện ra mà không hiểu vì sao — tưởng
+  // máy chủ hỏng hoặc mình bấm nhầm.
+  const [lyDoThoat, setLyDoThoat] = useState("");
+
+  useTuDongDangXuat(Boolean(ten), (lyDo) => {
+    api.dangXuat();
+    setTen(null);
+    setLyDoThoat(lyDo);
+  });
+
   // Tài khoản dùng thử (mật khẩu hiện công khai ở màn hình đăng nhập) không
   // được xem mục Tin nhắn — trong đó là họ tên, số điện thoại, email của khách
   // thật. Máy chủ mới là nơi chặn thật (auth.yeu_cau_quan_tri); ẩn ở đây chỉ để
   // người test khỏi bấm vào một cái tab rồi nhận thông báo lỗi.
   const laKhachThu = api.laKhachThu();
+
+  // Còn thay đổi chưa lưu trong bộ nhớ hay không. Dùng cho effect tải nội dung
+  // bên dưới — xem lý do ở đó.
+  const conSuaDoRef = useRef(false);
 
   const [goc, setGoc] = useState(null); // bản đã lưu trên máy chủ
   const [noiDung, setNoiDung] = useState(null); // bản đang sửa
@@ -798,8 +814,20 @@ export default function AdminPage() {
     }
   }, []);
 
+  // ⚠️ ĐĂNG NHẬP LẠI MÀ CÒN SỬA DỞ THÌ KHÔNG TẢI LẠI TỪ MÁY CHỦ.
+  //
+  // Bản đầu chỉ có `if (ten) taiNoiDung()`. Từ khi có tự động đăng xuất
+  // (useTuDongDangXuat.js) thì điều đó thành lỗi mất dữ liệu: soạn nửa tiếng,
+  // đi pha ấm trà, quay lại bị đăng xuất — đăng nhập lại là `ten` đổi, effect
+  // này chạy, `setNoiDung(d)` ghi đè bản của máy chủ lên toàn bộ phần đang sửa.
+  // Đo được bằng cách sửa một ô rồi để hết giờ: chữ vừa gõ biến mất sạch.
+  //
+  // Đọc ref chứ không đọc khoaDaSua trực tiếp: đưa khoaDaSua vào mảng phụ thuộc
+  // thì cứ gõ một chữ là effect chạy lại và gọi API thêm một lần.
   useEffect(() => {
-    if (ten) taiNoiDung();
+    if (!ten) return;
+    if (conSuaDoRef.current) return;
+    taiNoiDung();
   }, [ten, taiNoiDung]);
 
   // Khoá nào đang khác bản đã lưu.
@@ -810,6 +838,10 @@ export default function AdminPage() {
     );
   }, [goc, noiDung]);
 
+  // Gán ngay trong lúc vẽ, nên effect ở trên (chạy SAU khi vẽ) luôn đọc được
+  // giá trị mới nhất.
+  conSuaDoRef.current = khoaDaSua.length > 0;
+
   // Đang sửa dở mà đóng tab / bấm back thì trình duyệt hỏi lại.
   useEffect(() => {
     if (khoaDaSua.length === 0) return;
@@ -818,7 +850,16 @@ export default function AdminPage() {
     return () => window.removeEventListener("beforeunload", canh);
   }, [khoaDaSua.length]);
 
-  if (!ten) return <ManHinhDangNhap khiXong={setTen} />;
+  if (!ten)
+    return (
+      <ManHinhDangNhap
+        lyDo={lyDoThoat}
+        khiXong={(t) => {
+          setLyDoThoat("");
+          setTen(t);
+        }}
+      />
+    );
 
   /* --------- Lưu --------- */
   const donDep = (khoa, duLieu) => {
@@ -915,6 +956,7 @@ export default function AdminPage() {
   const thoat = () => {
     if (khoaDaSua.length && !window.confirm("Còn thay đổi chưa lưu. Thoát luôn?")) return;
     api.dangXuat();
+    setLyDoThoat("");
     setTen(null);
   };
 
