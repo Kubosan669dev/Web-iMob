@@ -280,3 +280,16 @@ export function danhSachAnh() {
 export function xoaAnh(ma) {
   return goi(`/api/anh/${encodeURIComponent(ma)}`, { method: "DELETE" });
 }
+
+
+// ---------- Dòng tài khoản ở màn hình đăng nhập ----------
+export function docCaiDatDemo() {
+  return goi("/api/cai-dat-demo");
+}
+
+export function ghiCaiDatDemo({ bat, ten, matKhau }) {
+  return goi("/api/cai-dat-demo", {
+    method: "PUT",
+    than: { bat, ten, mat_khau: matKhau },
+  });
+}

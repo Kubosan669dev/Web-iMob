@@ -9,6 +9,7 @@ import {
   FileDown,
   FileText,
   Inbox,
+  KeyRound,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -29,6 +30,7 @@ import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
 import MucSanPham from "../components/admin/MucSanPham.jsx";
+import MucTaiKhoanDemo from "../components/admin/MucTaiKhoanDemo.jsx";
 import MucTongQuan from "../components/admin/MucTongQuan.jsx";
 
 // ============================================================
@@ -81,6 +83,7 @@ const MUC_TRANG_CHU = [
 
 const MUC_KHAC = [
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
+  { id: "tai-khoan-demo", nhan: "Đăng nhập thử", khoa: null, icon: KeyRound },
   { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
   { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", icon: FileText, neo: "/privacy-policy" },
 ];
@@ -1016,7 +1019,9 @@ export default function AdminPage() {
               Khác
             </p>
             <div className="space-y-0.5">
-              {MUC_KHAC.filter((m) => !(laKhachThu && m.id === "tin-nhan")).map((m) => (
+              {MUC_KHAC.filter(
+                (m) => !(laKhachThu && (m.id === "tin-nhan" || m.id === "tai-khoan-demo"))
+              ).map((m) => (
                 <NutMuc key={m.id} m={m} />
               ))}
             </div>
@@ -1030,6 +1035,19 @@ export default function AdminPage() {
 
           {muc === "tong-quan" ? (
             <MucTongQuan noiDung={noiDung} diChuyen={setMuc} />
+          ) : muc === "tai-khoan-demo" ? (
+            <Khung>
+              <TieuDeMuc ghiChu="Dòng tài khoản hiện sẵn cho người kiểm thử">
+                Đăng nhập thử
+              </TieuDeMuc>
+              {laKhachThu ? (
+                <p className="text-sm leading-relaxed text-ink-soft">
+                  Tài khoản dùng thử không đổi được cấu hình này.
+                </p>
+              ) : (
+                <MucTaiKhoanDemo />
+              )}
+            </Khung>
           ) : muc === "tin-nhan" ? (
             laKhachThu ? (
               <Khung>

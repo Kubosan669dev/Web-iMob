@@ -2,7 +2,7 @@
 
 import os
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 
 import auth
@@ -62,30 +62,130 @@ def dang_nhap(yeu_cau: YeuCauDangNhap, request: Request):
 
 
 # ============================================================
-# Tài khoản dùng thử — đường dẫn CÔNG KHAI
+# DÒNG TÀI KHOẢN HIỆN Ở MÀN HÌNH ĐĂNG NHẬP — đường dẫn CÔNG KHAI
 #
-# Trả về đúng tên và mật khẩu của tài khoản kiểm thử để màn hình đăng nhập hiện
-# lên cho người test tự vào. Nghe thì ngược đời, nhưng đây chính là thứ công ty
-# yêu cầu, và nó KHÔNG mở thêm cửa nào: mật khẩu đó dù sao cũng đang được in
-# trên màn hình đăng nhập rồi.
+# Trả về đúng tên và mật khẩu để trang /admin in lên cho người kiểm thử tự vào.
+# Nghe ngược đời, nhưng đây chính là thứ công ty yêu cầu, và nó KHÔNG mở thêm
+# cửa nào: mật khẩu đó dù sao cũng đang được in trên màn hình đăng nhập rồi.
 #
-# VÌ SAO LẤY TỪ API CHỨ KHÔNG VIẾT VÀO BIẾN VITE_ CỦA WEBSITE:
-# Biến VITE_ bị nhúng cứng vào file JavaScript lúc build và nằm ở Vercel, trong
-# khi tài khoản thật nằm ở Render. Hai nơi thì sớm muộn cũng lệch nhau — đổi
-# TESTER_PASSWORD trên Render mà quên sửa bên Vercel là màn hình hiện một mật
-# khẩu sai, người test gõ 5 lần rồi bị khóa IP 15 phút mà không hiểu vì sao.
-# Lấy từ API thì chỉ có MỘT nguồn sự thật, và tắt cũng chỉ cần bỏ trống biến
-# trên Render là xong, không phải build lại website.
+# HAI NGUỒN, ưu tiên từ trên xuống:
+#   1. Bảng tai_khoan_demo  — chỉnh trong /admin, có hiệu lực ngay
+#   2. TESTER_USER/TESTER_PASSWORD — biến môi trường, cách cũ, giữ để bản đang
+#      chạy không hỏng khi deploy bản mới
+#
+# ⚠️ CÔNG TY CHỌN HIỆN TÀI KHOẢN QUẢN TRỊ THẬT (20/08/2026), sau khi đã được
+# nói rõ hậu quả bằng văn bản: ai vào /admin cũng đọc được toàn bộ họ tên, số
+# điện thoại, email và lời nhắn của khách trong mục Tin nhắn, và xoá được nội
+# dung website. Đây là quyết định của chủ sở hữu hệ thống, không phải mặc định
+# của phần mềm — mặc định vẫn là TẮT.
+#
+# Vì vậy chỗ này KHÔNG tự đoán tài khoản nào để hiện. Nó chỉ in đúng cái đã
+# được lưu, và trang quản trị có nhiệm vụ cảnh báo mỗi lần lưu (xem
+# /api/cai-dat-demo bên dưới).
 # ============================================================
 @router.get("/api/tai-khoan-thu")
 def tai_khoan_thu():
-    """Trả {} khi tính năng tắt — giao diện tự ẩn dòng gợi ý."""
-    ten = os.getenv("TESTER_USER", "").strip()
-    mat_khau = os.getenv("TESTER_PASSWORD", "")
-
-    # Kiểm cả co_db(): biến đã đặt nhưng database chết thì tài khoản kia không
-    # tồn tại, hiện ra chỉ tổ làm người test gõ vào rồi nhận "sai mật khẩu".
-    if not ten or not mat_khau or not db.co_db():
+    """Trả {} khi tắt — giao diện tự ẩn dòng gợi ý."""
+    if not db.co_db():
         return {}
 
+    cai_dat = db.lay_tai_khoan_demo()
+    if cai_dat is not None:
+        if not cai_dat["bat"]:
+            # Đã tắt trong /admin thì TẮT HẲN, không lùi về biến môi trường.
+            # Không có dòng này thì bấm tắt xong dòng chữ vẫn còn — người bấm
+            # tưởng nút hỏng, trong khi thật ra nó đang đọc biến cũ trên Render.
+            return {}
+        if cai_dat["ten_hien"] and cai_dat["mat_khau_hien"]:
+            return {"ten": cai_dat["ten_hien"], "mat_khau": cai_dat["mat_khau_hien"]}
+
+    ten = os.getenv("TESTER_USER", "").strip()
+    mat_khau = os.getenv("TESTER_PASSWORD", "")
+    if not ten or not mat_khau:
+        return {}
     return {"ten": ten, "mat_khau": mat_khau}
+
+
+# ============================================================
+# Chỉnh dòng đó ngay trong /admin — khỏi phải mở Render
+# ============================================================
+CHI_QUAN_TRI = auth.chi_quan_tri(
+    "Chỉ tài khoản quản trị mới đổi được dòng tài khoản trên màn hình đăng nhập."
+)
+
+
+class CaiDatDemo(BaseModel):
+    bat: bool
+    ten: str = ""
+    mat_khau: str = ""
+
+
+@router.get("/api/cai-dat-demo")
+def doc_cai_dat_demo(_: str = Depends(CHI_QUAN_TRI)):
+    if not db.co_db():
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Chưa cấu hình database.",
+        )
+
+    cai_dat = db.lay_tai_khoan_demo()
+    if cai_dat is None:
+        # Chưa ai đặt gì -> lấy biến môi trường làm giá trị mở đầu, để người
+        # đang dùng cách cũ mở trang lên là thấy đúng cái đang chạy.
+        ten = os.getenv("TESTER_USER", "").strip()
+        mat_khau = os.getenv("TESTER_PASSWORD", "")
+        return {
+            "bat": bool(ten and mat_khau),
+            "ten": ten,
+            "mat_khau": mat_khau,
+            "vai_tro": db.vai_tro_cua(ten) if ten else None,
+        }
+
+    return {
+        "bat": cai_dat["bat"],
+        "ten": cai_dat["ten_hien"],
+        "mat_khau": cai_dat["mat_khau_hien"],
+        "vai_tro": db.vai_tro_cua(cai_dat["ten_hien"]) if cai_dat["ten_hien"] else None,
+        "nguoi_sua": cai_dat["nguoi_sua"],
+    }
+
+
+@router.put("/api/cai-dat-demo")
+def ghi_cai_dat_demo(than: CaiDatDemo, nguoi_sua: str = Depends(CHI_QUAN_TRI)):
+    if not db.co_db():
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Chưa cấu hình database.",
+        )
+
+    ten = than.ten.strip()
+    mat_khau = than.mat_khau
+
+    if than.bat:
+        if not ten or not mat_khau:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Bật thì phải điền cả tên đăng nhập và mật khẩu.",
+            )
+
+        # ⚠️ KIỂM MẬT KHẨU CÓ ĐĂNG NHẬP ĐƯỢC THẬT KHÔNG, trước khi cho lưu.
+        #
+        # Không kiểm thì gõ sai một ký tự là màn hình đăng nhập in ra một mật
+        # khẩu SAI. Người kiểm thử tin vào dòng đó, gõ đúng 5 lần, rồi bị khoá
+        # IP 15 phút mà không hiểu vì sao — lỗi này rất khó lần ra vì nhìn đâu
+        # cũng thấy "đã cấu hình xong".
+        nguoi = db.lay_nguoi_dung(ten)
+        if nguoi is None or not auth.kiem_mat_khau(mat_khau, nguoi["mat_khau_hash"]):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    "Cặp tên đăng nhập / mật khẩu này KHÔNG đăng nhập được. "
+                    "Từ chối lưu, vì hiện một mật khẩu sai lên màn hình sẽ làm "
+                    "người kiểm thử gõ sai nhiều lần rồi bị khoá IP 15 phút."
+                ),
+            )
+
+    db.ghi_tai_khoan_demo(than.bat, ten, mat_khau, nguoi_sua)
+
+    vai_tro = db.vai_tro_cua(ten) if ten else None
+    return {"ok": True, "bat": than.bat, "vai_tro": vai_tro}

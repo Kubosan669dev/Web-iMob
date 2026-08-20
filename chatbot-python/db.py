@@ -124,6 +124,29 @@ CREATE TABLE IF NOT EXISTS anh (
 
 CREATE INDEX IF NOT EXISTS anh_moi_nhat ON anh (tao_luc DESC);
 
+-- Dòng tài khoản hiện trên MÀN HÌNH ĐĂNG NHẬP để người kiểm thử tự vào.
+--
+-- ⚠️ CỘT mat_khau_hien LƯU MẬT KHẨU DẠNG THÔ, KHÔNG BĂM. Đây là CỐ Ý, không
+-- phải sơ suất — mục đích của nó là ĐỂ IN RA MÀN HÌNH, mà chuỗi băm thì không
+-- suy ngược lại được. Nói cách khác: mật khẩu này công khai theo thiết kế.
+--
+-- Vì vậy, hai điều bắt buộc phải nhớ:
+--   · Đừng bao giờ đặt vào đây một mật khẩu đang dùng ở nơi khác.
+--   · Bảng nguoi_dung VẪN chỉ lưu chuỗi băm. Bảng này KHÔNG dùng để đăng nhập,
+--     nó chỉ nói "hiện dòng chữ gì lên màn hình". Đăng nhập vẫn đi qua bcrypt
+--     như cũ, nên xoá sạch bảng này cũng không ai mất quyền vào.
+--
+-- CHECK (id = 1): bảng này chỉ được có ĐÚNG MỘT dòng. Không ràng buộc thì sớm
+-- muộn cũng có hai dòng và không ai biết dòng nào đang hiệu lực.
+CREATE TABLE IF NOT EXISTS tai_khoan_demo (
+    id            INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+    bat           BOOLEAN NOT NULL DEFAULT false,
+    ten_hien      TEXT NOT NULL DEFAULT '',
+    mat_khau_hien TEXT NOT NULL DEFAULT '',
+    cap_nhat_luc  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    nguoi_sua     TEXT
+);
+
 -- Khách để lại thông tin (từ form liên hệ hoặc từ chatbot).
 -- ĐÂY LÀ DỮ LIỆU CÁ NHÂN — xem Nghị định 13/2023.
 CREATE TABLE IF NOT EXISTS lien_he (
@@ -516,3 +539,51 @@ def tong_dung_luong_anh() -> int:
             "SELECT COALESCE(SUM(kich_thuoc), 0) AS tong FROM anh"
         ).fetchone()
     return int(dong_tong["tong"])
+
+
+# ============================================================
+# Dòng tài khoản hiện ở màn hình đăng nhập
+#
+# Trước 20/08/2026 việc này chỉ cấu hình được bằng biến môi trường trên Render:
+# đổi một chữ cũng phải mở dashboard, sửa biến, chờ khởi động lại. Công ty yêu
+# cầu chỉnh thẳng trong /admin. Biến môi trường VẪN dùng được và làm giá trị
+# lùi về, nên bản cũ đang chạy không hỏng gì.
+# ============================================================
+def lay_tai_khoan_demo() -> dict | None:
+    """Cấu hình đang lưu trong database. None nếu chưa ai đặt gì."""
+    if not co_db():
+        return None
+    with pool().connection() as conn:
+        return conn.execute(
+            "SELECT bat, ten_hien, mat_khau_hien, cap_nhat_luc, nguoi_sua "
+            "FROM tai_khoan_demo WHERE id = 1"
+        ).fetchone()
+
+
+def ghi_tai_khoan_demo(bat: bool, ten: str, mat_khau: str, nguoi_sua: str) -> None:
+    with pool().connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO tai_khoan_demo (id, bat, ten_hien, mat_khau_hien,
+                                        cap_nhat_luc, nguoi_sua)
+            VALUES (1, %s, %s, %s, now(), %s)
+            ON CONFLICT (id) DO UPDATE
+                SET bat           = EXCLUDED.bat,
+                    ten_hien      = EXCLUDED.ten_hien,
+                    mat_khau_hien = EXCLUDED.mat_khau_hien,
+                    cap_nhat_luc  = now(),
+                    nguoi_sua     = EXCLUDED.nguoi_sua
+            """,
+            (bat, ten, mat_khau, nguoi_sua),
+        )
+
+
+def vai_tro_cua(ten_dang_nhap: str) -> str | None:
+    """Vai trò của một tài khoản, hoặc None nếu không có tài khoản đó.
+
+    Trang quản trị dùng hàm này để cảnh báo đúng mức: đem tài khoản TOÀN QUYỀN
+    ra hiện công khai thì hậu quả khác hẳn so với một tài khoản chỉ sửa nội
+    dung, và người bấm nút phải thấy được sự khác nhau đó ngay lúc bấm.
+    """
+    nguoi = lay_nguoi_dung(ten_dang_nhap)
+    return nguoi["vai_tro"] if nguoi else None
