@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Container from "../ui/Container.jsx";
+import BanDo from "../ui/BanDo.jsx";
 import {
   FacebookIcon,
   YoutubeIcon,
@@ -94,6 +95,13 @@ export default function Footer() {
           <CotLink tieuDe="Văn phòng">
             <li className="text-xs leading-relaxed text-ink-soft">
               {congTy.address}
+            </li>
+            {/* Bản đồ chân trang — công ty yêu cầu 20/08/2026, theo đúng mẫu
+                trang phường Quảng Tân: địa chỉ bằng chữ, ngay dưới là bản đồ.
+                Thấp (h-28) vì chân trang là nơi tra cứu, không phải nơi gây ấn
+                tượng — đủ để nhận ra khu vực rồi bấm mở app thật. */}
+            <li className="pt-3">
+              <BanDo cao="h-28" />
             </li>
             <li className="pt-3">
               <div className="flex items-center gap-4">

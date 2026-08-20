@@ -9,6 +9,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
+import BanDo from "../components/ui/BanDo.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Button from "../components/ui/Button.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
@@ -287,6 +288,11 @@ export default function Contact() {
                   </li>
                 ))}
               </ul>
+
+              {/* Bản đồ lấp đúng khoảng trống công ty khoanh 20/08/2026.
+                  Đặt SAU danh sách địa chỉ chứ không đặt trước: người ta đọc
+                  địa chỉ bằng chữ trước, bản đồ là thứ xác nhận lại. */}
+              <BanDo cao="h-56" className="mt-9" />
 
               <p className="mt-auto pt-10 text-[0.9375rem] leading-relaxed text-ink-soft">
                 Cần trả lời ngay? Hỏi nhanh trợ lý{" "}

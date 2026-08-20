@@ -254,6 +254,16 @@ const TRUONG_CONG_TY = [
   { khoa: "email", nhan: "Email chính" },
   { khoa: "website", nhan: "Website" },
   { khoa: "address", nhan: "Địa chỉ văn phòng", dai: true, moTa: "Nơi khách tới gặp" },
+  {
+    khoa: "banDo",
+    nhan: "Từ khoá tra bản đồ",
+    dai: true,
+    moTa:
+      "Dùng cho bản đồ ở chân trang và mục Liên hệ. KHÔNG dán cả địa chỉ ở trên " +
+      "— cụm “Văn phòng tầng 3” làm Google tra không ra. Ghim chưa đúng chỗ thì " +
+      "mở Google Maps, bấm chuột phải vào đúng cửa rồi dán toạ độ vào đây, " +
+      "dạng 20.9572849,107.0932340",
+  },
   { khoa: "workingHours", nhan: "Giờ làm việc" },
   { khoa: "responseTime", nhan: "Thời gian phản hồi", moTa: 'Ví dụ: "trong vòng 24 giờ"' },
   { khoa: "suMenh", nhan: "Sứ mệnh", dai: true, moTa: "Hiện cuối khối Hero" },
