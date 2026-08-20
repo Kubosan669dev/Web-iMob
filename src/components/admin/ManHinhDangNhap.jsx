@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   Eye,
   EyeOff,
-  FlaskConical,
   Loader2,
   Lock,
   User,
@@ -181,48 +180,37 @@ export default function ManHinhDangNhap({ khiXong }) {
               </p>
             )}
 
+            {/* ---------- Dòng tài khoản dùng thử ----------
+                Công ty chốt 20/08/2026: gọn đúng MỘT DÒNG, theo mẫu ảnh gửi
+                kèm ("Demo: admin / imob@2025"). Bản trước là một ô có nhãn,
+                bảng hai dòng và nút riêng — công ty thấy rườm rà.
+
+                Vẫn giữ ba thứ, vì chúng không tốn thêm dòng nào:
+                  · font-mono cho phần tài khoản — mật khẩu hay có l/1/I và
+                    O/0, phông thường nhìn y hệt nhau, chép nhầm là gõ sai 5
+                    lần rồi bị khoá IP 15 phút.
+                  · select-all — nháy đúp một cái là bôi đen được cả cụm.
+                  · cả dòng là một cái nút: bấm vào tự điền sẵn hai ô ở trên.
+                    Nhìn vẫn là một dòng chữ, chỉ đậm nền lên khi rê chuột.
+
+                Câu "không xem được thông tin khách hàng" chuyển vào title —
+                đọc được khi rê chuột, mà không chiếm chỗ trên màn hình. */}
             {taiKhoanThu && (
-              <div className="rounded-xl bg-brand-soft p-4">
-                <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-brand">
-                  <FlaskConical className="h-4 w-4" aria-hidden="true" />
-                  Tài khoản dùng thử
-                </p>
-
-                {/* Chữ MONO và cho bôi đen: mật khẩu hay có l/1/I và O/0 nhìn
-                    giống hệt nhau ở phông thường. Người test còn phải chép được
-                    ra chỗ khác nên không dùng ảnh hay chặn chọn chữ. */}
-                <dl className="mt-2.5 space-y-1 text-[0.8125rem]">
-                  <div className="flex gap-2">
-                    <dt className="w-24 shrink-0 text-ink-soft">Tên đăng nhập</dt>
-                    <dd className="select-all break-all font-mono text-ink">
-                      {taiKhoanThu.ten}
-                    </dd>
-                  </div>
-                  <div className="flex gap-2">
-                    <dt className="w-24 shrink-0 text-ink-soft">Mật khẩu</dt>
-                    <dd className="select-all break-all font-mono text-ink">
-                      {taiKhoanThu.mat_khau}
-                    </dd>
-                  </div>
-                </dl>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTen(taiKhoanThu.ten);
-                    setMatKhau(taiKhoanThu.mat_khau);
-                    setLoi("");
-                  }}
-                  className="mt-3 rounded-full bg-brand px-4 py-1.5 text-[0.8125rem] font-medium text-tren-brand transition-colors hover:bg-brand-deep"
-                >
-                  Điền sẵn vào ô trên
-                </button>
-
-                <p className="mt-3 text-xs leading-relaxed text-ink-soft">
-                  Tài khoản này sửa được nội dung website nhưng không xem được
-                  thông tin khách hàng.
-                </p>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setTen(taiKhoanThu.ten);
+                  setMatKhau(taiKhoanThu.mat_khau);
+                  setLoi("");
+                }}
+                title="Bấm để điền sẵn. Tài khoản này sửa được nội dung website nhưng không xem được thông tin khách hàng."
+                className="w-full rounded-xl bg-brand-soft px-4 py-3 text-center text-[0.8125rem] text-brand transition-colors hover:bg-brand hover:text-tren-brand"
+              >
+                Demo:{" "}
+                <span className="select-all break-all font-mono">
+                  {taiKhoanThu.ten} / {taiKhoanThu.mat_khau}
+                </span>
+              </button>
             )}
           </form>
         </div>
