@@ -57,7 +57,7 @@ function DaiCongNghe({ tu }) {
   }, [danhSach.length, reduceMotion]);
 
   return (
-    <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[clamp(0.8125rem,1.5vw,1.0625rem)] font-medium text-tren-brand">
+    <p className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[0.875rem] font-semibold tracking-wide text-tren-brand sm:text-[0.9375rem]">
       {danhSach.map((t, n) => (
         <span key={t} className="flex items-center gap-3">
           {n > 0 && (
@@ -88,8 +88,15 @@ function DongMuc({ muc }) {
         <Icon className="h-5 w-5 text-brand" aria-hidden="true" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[0.9375rem] font-medium text-ink">{muc.nhan}</span>
-        <span className="block truncate text-[0.8125rem] text-ink-soft">{muc.phu}</span>
+        <span className="block text-[0.9375rem] font-medium leading-snug text-ink">{muc.nhan}</span>
+        {/* KHÔNG dùng `truncate` nữa: nó cắt cụt giữa từ ("phần mềm quản…",
+            "đang chạy trên tran…"). Công ty muốn truyền đạt được nhiều, mà một
+            câu bị cắt dở thì vừa mất chữ vừa xấu. Cho xuống dòng, cùng lắm
+            thành hai dòng — vẫn thấp hơn ba dòng nhãn của mục 3, 4, 7.
+            (Ghi chú: `truncate` kèm white-space:nowrap chính là thứ từng làm
+            tràn ngang trên điện thoại — xem grid-cols-[minmax(0,1fr)] bên dưới.
+            Bỏ nó đi thì lỗi đó cũng không còn đường quay lại.) */}
+        <span className="block text-[0.8125rem] leading-snug text-ink-soft">{muc.phu}</span>
       </span>
       <ChevronRight
         className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-brand"
@@ -169,7 +176,7 @@ const MUC = [
   },
   {
     nhan: "Thiết kế app/web theo yêu cầu",
-    phu: "Zalo Mini App · website · phần mềm quản lý",
+    phu: "Zalo Mini App · website · phần mềm",
     den: "/#services",
     icon: MonitorSmartphone,
   },
@@ -191,7 +198,7 @@ const MUC = [
   },
   {
     nhan: "Xây dựng trợ lý AI doanh nghiệp",
-    phu: "Bấm thử chính trợ lý đang chạy trên trang này",
+    phu: "Bấm thử trợ lý đang chạy trên trang",
     bam: openChat,
     icon: Bot,
   },
@@ -239,9 +246,25 @@ export default function Hero() {
           xuống dưới nó. Thanh đó cao 3.5rem trên điện thoại, và 5.5rem từ 640px
           trở lên (có thêm dải liên hệ ở trên). Sửa chiều cao Navbar thì phải
           sửa cả đây. */}
-      <div className="bg-brand pb-28 pt-24 sm:pt-28">
+      <div className="bg-brand pb-28 pt-20 sm:pt-24">
         <Container>
-          {/* max-w-5xl chứ không phải max-w-3xl như bản trước.
+          {/* ⚠️ THANG CHỮ (20/08/2026) — đo bằng getComputedStyle rồi mới sửa.
+              Trước đó khối này có NĂM cỡ chữ chen trong 4px: 13 · 14 · 15 · 16 ·
+              17. Mắt không phân biệt được 15 với 16 với 17, nên chúng không tạo
+              ra thứ bậc nào cả, chỉ làm trang trông rối — đúng lời công ty chê
+              "cỡ chữ chưa cân đối".
+              Tệ hơn, thứ bậc còn NGƯỢC: dải từ khoá "AI · Zalo Mini App · GIS…"
+              để 17px đậm, to hơn cả câu nói iMob làm gì (16px thường).
+              Nay còn BỐN bậc, mỗi bậc cách nhau đủ xa để nhận ra:
+                 13px  dòng phụ, badge
+                 15px  nhãn danh mục, dải từ khoá   (nhãn — đậm 600)
+                 19px  câu định vị dưới tiêu đề     (câu văn)
+                 28px  tên dự án
+                 63px  tiêu đề chính
+              Dải từ khoá hạ cỡ nhưng ĐẬM hơn (500 → 600) nên vẫn nổi, chỉ thôi
+              tranh chỗ với câu văn.
+
+              max-w-5xl chứ không phải max-w-3xl như bản trước.
               Góp ý 19/08/2026 chê đúng chỗ này: "cái phần đó to như vậy mà e k
               phóng to chữ ra, để thừa 2 bên, xong chữ ở giữa thì bé tí". */}
           <div className="mx-auto max-w-5xl text-center">
@@ -279,7 +302,7 @@ export default function Hero() {
 
             {/* max-w hẹp hơn tiêu đề: một dòng văn xuôi dài quá 65-70 ký tự là
                 mắt khó bắt được đầu dòng kế tiếp. */}
-            <p className="mx-auto mt-6 max-w-xl text-[0.9375rem] leading-relaxed text-tren-brand/75 sm:text-base">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-tren-brand/85 sm:text-[1.1875rem]">
               {hero.moTa}
             </p>
           </div>
