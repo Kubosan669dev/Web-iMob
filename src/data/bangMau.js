@@ -9,7 +9,7 @@
 // <html>, KHÔNG phải build lại: Tailwind v4 biên dịch mọi utility thành
 // var(--color-*), nên đổi biến là cả trang đổi theo ngay lập tức.
 //
-// Mọi bảng đã qua 15 phép đo tương phản WCAG.
+// Mọi bảng đã qua 16 phép đo tương phản WCAG.
 // ============================================================
 
 /** Bảng màu dùng khi chưa ai chọn gì. Là màu trong logo iMob. */
@@ -207,7 +207,7 @@ export const BANG_MAU = [
     toi: true,
     bien: {
       "--color-paper": "#101017",
-      "--color-mist": "#1a1a24",
+      "--color-mist": "#24242f",
       "--color-panel": "#1a1a24",
       "--color-ink": "#f2f2f7",
       "--color-ink-soft": "#a9a9bb",

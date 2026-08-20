@@ -99,7 +99,7 @@ const BANG = {
   //   • trenBrand phải là màu TỐI — chữ trắng trên nền hồng nhạt không đọc được
   "midnight-crimson": {
     ten: "Midnight Crimson", mo: "Nền tối, đỏ trầm", toi: true,
-    paper: "#101017", mist: "#1a1a24", panel: "#1a1a24",
+    paper: "#101017", mist: "#24242f", panel: "#1a1a24",
     ink: "#f2f2f7", inkSoft: "#a9a9bb", inkFaint: "#8e8ea0", line: "#2c2c3a",
     brand: "#ff6b7f", brandDeep: "#ff94a3", brandSoft: "#33161d",
     trenBrand: "#1a0409", loi: "#ff8a80", loiNen: "#33161a",
@@ -124,6 +124,23 @@ const KIEM = [
   ["loi", "loiNen", 4.5, "chữ lỗi trong khối lỗi"],
   ["loi", "paper", 4.5, "chữ lỗi trên nền trang"],
   ["canhbao", "mist", 4.5, "chữ cảnh báo trên nền phụ"],
+
+  // ⚠️ PHEP DO NAY THEM 20/08/2026 SAU MOT LOI DA LEN WEB THAT.
+  //
+  // Bang "midnight-crimson" tung dat mist = panel = #1a1a24. Moi o nhap trong
+  // trang quan tri deu la `bg-mist` dat tren the `bg-panel`, nen o nhap TANG
+  // HINH hoan toan — chi hien ra vien luc dang go (focus:border-brand). Ca
+  // form 20 o trong khong con mot duong bao nao, khong biet cho nao bam duoc.
+  //
+  // 14 phep do cu deu chi so chu voi nen, khong phep nao so hai NEN voi nhau,
+  // nen loi nay lot het qua.
+  //
+  // Nguong 1.05 co ve thap den vo ly, va dung la vay — no khong nham do "dep",
+  // no chi nham bat dung mot chuyen: hai nen TRUNG KHIT nhau (ti le 1.00). Do
+  // that cua 9 bang hien tai la 1.089 den 1.163, thap nhat la chinh bang mac
+  // dinh cham-tim. Dat cao hon 1.089 la loai oan ca nhung bang dang nhin ra
+  // duoc binh thuong.
+  ["mist", "panel", 1.05, "ô nhập (nền mist) phải nổi trên thẻ (nền panel)"],
 ];
 
 let hong = 0;
@@ -133,7 +150,7 @@ for (const [khoa, p] of Object.entries(BANG)) {
     const r = tuongPhan(p[chu], p[nen]);
     if (r < nguong) {
       loi.push(
-        `    x ${nhan.padEnd(40)} ${r.toFixed(2)}  (cần >= ${nguong.toFixed(1)})  ${p[chu]} trên ${p[nen]}`
+        `    x ${nhan.padEnd(40)} ${r.toFixed(2)}  (cần >= ${nguong.toFixed(2)})  ${p[chu]} trên ${p[nen]}`
       );
     }
   }
