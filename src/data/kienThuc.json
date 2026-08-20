@@ -377,20 +377,20 @@
 
     {
       "id": "an-ninh-mang",
-      "ten": "An toàn an ninh mạng",
+      "ten": "An toàn thông tin & an ninh mạng",
       "mo_ta": "Nâng chuẩn cấp độ 2 trở lên, giám sát và ứng cứu sự cố 24/7. Nguồn: danh mục dịch vụ công ty chốt 18/08/2026. CHỈ nêu đúng phạm vi công ty tuyên bố, KHÔNG thêm chi tiết kỹ thuật chưa kiểm chứng được.",
       "intents": [
         {
           "id": "an-toan-cap-do",
           "nguon": "soan",
           "keywords": ["an toàn thông tin", "an ninh mạng", "cấp độ 2", "cấp độ 3", "cấp độ 4", "nâng cấp bảo mật", "nâng chuẩn", "hồ sơ cấp độ", "phê duyệt cấp độ", "đạt chuẩn an toàn", "kiểm tra an toàn"],
-          "answer": "Có ạ. iMob **khảo sát và nâng cấp** app, website, phần mềm đơn vị đang dùng lên **chuẩn an toàn an ninh mạng cấp độ 2 trở lên**.\n\nPhạm vi việc phải làm và thời gian phụ thuộc hẳn vào hệ thống hiện tại của bạn, nên bên mình **khảo sát trước rồi mới báo** — không có gói dựng sẵn.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}** để đặt lịch khảo sát miễn phí nhé."
+          "answer": "Có ạ. iMob **khảo sát và nâng cấp** app, website, phần mềm đơn vị đang dùng lên **cấp độ 2 trở lên** theo quy định về cấp độ an toàn hệ thống thông tin.\n\nPhạm vi việc phải làm và thời gian phụ thuộc hẳn vào hệ thống hiện tại của bạn, nên bên mình **khảo sát trước rồi mới báo** — không có gói dựng sẵn.\n\nBạn để lại **số điện thoại** hoặc gọi **{{cong_ty.dien_thoai}}** để đặt lịch khảo sát miễn phí nhé."
         },
         {
           "id": "giam-sat-ung-cuu",
           "nguon": "soan",
           "keywords": ["giám sát 24/7", "trực 24/7", "ứng cứu sự cố", "ứng cứu", "vận hành an ninh", "theo dõi hệ thống", "sự cố an ninh", "giám sát hệ thống", "đội ngũ nội bộ"],
-          "answer": "Có ạ. iMob nhận **vận hành, giám sát 24/7 và ứng cứu sự cố an toàn an ninh mạng**, kèm tư vấn an ninh mạng — đơn vị **không phải tự xây đội ngũ nội bộ**.\n\nMức độ giám sát và cam kết thời gian phản hồi tuỳ hệ thống, bên mình khảo sát rồi báo phương án cụ thể.\n\nGọi **{{cong_ty.dien_thoai}}** hoặc để lại số, bên mình liên hệ {{cong_ty.thoi_gian_phan_hoi}} ạ."
+          "answer": "Có ạ. iMob nhận **vận hành, giám sát 24/7 và ứng cứu sự cố an toàn thông tin và an ninh mạng**, kèm tư vấn an ninh mạng — đơn vị **không phải tự xây đội ngũ nội bộ**.\n\nMức độ giám sát và cam kết thời gian phản hồi tuỳ hệ thống, bên mình khảo sát rồi báo phương án cụ thể.\n\nGọi **{{cong_ty.dien_thoai}}** hoặc để lại số, bên mình liên hệ {{cong_ty.thoi_gian_phan_hoi}} ạ."
         }
       ]
     },

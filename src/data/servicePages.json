@@ -44,7 +44,7 @@
     "features": {
       "badge": "Tính năng nổi bật",
       "title": "TÍNH NĂNG",
-      "highlight": "VƯỢT TRỘI",
+      "highlight": "ĐIỂM MẠNH",
       "description": "Những khối chức năng bên mình dựng sẵn và ghép theo nhu cầu từng dự án.",
       "items": [
         { "title": "Đăng ký & đặt lịch online", "desc": "Khách đặt lịch, đặt bàn, đăng ký dịch vụ ngay trong Zalo — không phải gọi điện hay chờ phản hồi." },
@@ -128,7 +128,7 @@
       ]
     },
     "benefits": {
-      "badge": "Ưu điểm vượt trội",
+      "badge": "Điểm mạnh của giải pháp",
       "title": "VÌ SAO",
       "highlight": "CHỌN IMOB",
       "description": "Sáu điều bên mình cam kết trong hợp đồng từng dự án.",

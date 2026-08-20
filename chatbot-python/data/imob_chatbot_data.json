@@ -30,7 +30,7 @@
     "brand_name": "iMob Solution & Technology",
     "short_name": "iMob",
     "tagline": "SOLUTION & TECHNOLOGY",
-    "positioning": "Đối tác tin cậy hàng đầu trong lĩnh vực công nghệ thông tin và chuyển đổi số tại Việt Nam. Kiến tạo tương lai số cho doanh nghiệp.",
+    "positioning": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững. Kiến tạo tương lai số cho doanh nghiệp.",
     "website": "https://imob.vn",
     "logo": "https://imob.vn/logo-imob-power.png",
     "address": {
@@ -302,9 +302,9 @@
         },
         {
           "no": 3,
-          "name": "Cấp vé điện tử – Mã QR duy nhất",
+          "name": "Cấp vé điện tử – mỗi khách một mã QR riêng",
           "details": [
-            "Mỗi khách nhận mã QR cá nhân hóa để check-in nhanh chóng",
+            "Mỗi khách nhận một mã QR riêng để check-in nhanh chóng",
             "Không cần in vé giấy, tránh thất lạc hoặc giả mạo",
             "Lưu trữ trong Zalo, chụp ảnh hoặc gửi bạn bè"
           ]
@@ -781,7 +781,7 @@
         "hotline",
         "email"
       ],
-      "text": "CÔNG TY CỔ PHẦN CÔNG NGHỆ & GIẢI PHÁP IMOB, thương hiệu iMob Solution & Technology. Đối tác tin cậy hàng đầu trong lĩnh vực công nghệ thông tin và chuyển đổi số tại Việt Nam. Kiến tạo tương lai số cho doanh nghiệp. Địa chỉ: Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh. Website: https://imob.vn. Hotline: +84 936 982 256 (dùng chung cho cả 3 mảng dịch vụ). Email: admin@imob.vn (chung), training@imob.vn (đào tạo chuyển đổi số), miniapp@imob.vn (Zalo MiniApp), projects@imob.vn (dự án phần mềm và phần cứng). iMob có 7 nhóm việc: thiết kế app/web theo yêu cầu; nâng chuẩn an toàn an ninh mạng cấp độ 2 trở lên; giám sát an ninh mạng 24/7 và ứng cứu sự cố; robot tuần tra, robot lễ tân, UAV và drone; xây dựng trợ lý AI doanh nghiệp; tập huấn chuyển đổi số; giải pháp phần cứng và thiết bị IoT."
+      "text": "CÔNG TY CỔ PHẦN CÔNG NGHỆ & GIẢI PHÁP IMOB, thương hiệu iMob Solution & Technology. Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững. Kiến tạo tương lai số cho doanh nghiệp. Địa chỉ: Tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, Phường Hạ Long, Tỉnh Quảng Ninh. Website: https://imob.vn. Hotline: +84 936 982 256 (dùng chung cho cả 3 mảng dịch vụ). Email: admin@imob.vn (chung), training@imob.vn (đào tạo chuyển đổi số), miniapp@imob.vn (Zalo MiniApp), projects@imob.vn (dự án phần mềm và phần cứng). iMob có 7 nhóm việc: thiết kế app/web theo yêu cầu; nâng cấp độ an toàn hệ thống thông tin lên cấp độ 2 trở lên; giám sát an ninh mạng 24/7 và ứng cứu sự cố; robot tuần tra, robot lễ tân, UAV và drone; xây dựng trợ lý AI doanh nghiệp; tập huấn chuyển đổi số; giải pháp phần cứng và thiết bị IoT."
     },
     {
       "id": "C002",
@@ -917,7 +917,7 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 1 của Zalo MiniApp do iMob phát triển - Đăng ký dịch vụ online: Chọn loại hình dịch vụ (tham quan, học, tư vấn, hội thảo...); Chọn ngày, giờ, số lượng, hình thức tham gia; Giao diện trực quan, dễ thao tác ngay cả với người lớn tuổi."
+      "text": "Tính năng thứ 1 của Zalo MiniApp do iMob phát triển - Đăng ký dịch vụ online: Chọn loại hình dịch vụ (tham quan, học, tư vấn, hội thảo...); Chọn ngày, giờ, số lượng, hình thức tham gia; Giao diện trực quan, dễ thao tác ngay cả với người lớn tuổi."
     },
     {
       "id": "C009-2",
@@ -927,17 +927,17 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 2 của Zalo MiniApp do iMob phát triển - Thanh toán không dùng tiền mặt: Tích hợp ZaloPay, ví điện tử, ngân hàng; Hỗ trợ thanh toán theo nhóm (gộp vé, thanh toán hộ); Gửi xác nhận + hóa đơn điện tử sau khi thanh toán thành công."
+      "text": "Tính năng thứ 2 của Zalo MiniApp do iMob phát triển - Thanh toán không dùng tiền mặt: Tích hợp ZaloPay, ví điện tử, ngân hàng; Hỗ trợ thanh toán theo nhóm (gộp vé, thanh toán hộ); Gửi xác nhận + hóa đơn điện tử sau khi thanh toán thành công."
     },
     {
       "id": "C009-3",
-      "title": "Zalo MiniApp - Tính năng 3: Cấp vé điện tử – Mã QR duy nhất",
+      "title": "Zalo MiniApp - Tính năng 3: Cấp vé điện tử – mỗi khách một mã QR riêng",
       "service": "zalo_miniapp",
       "tags": [
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 3 của Zalo MiniApp do iMob phát triển - Cấp vé điện tử – Mã QR duy nhất: Mỗi khách nhận mã QR cá nhân hóa để check-in nhanh chóng; Không cần in vé giấy, tránh thất lạc hoặc giả mạo; Lưu trữ trong Zalo, chụp ảnh hoặc gửi bạn bè."
+      "text": "Tính năng thứ 3 của Zalo MiniApp do iMob phát triển - Cấp vé điện tử – mỗi khách một mã QR riêng: Mỗi khách nhận một mã QR riêng để check-in nhanh chóng; Không cần in vé giấy, tránh thất lạc hoặc giả mạo; Lưu trữ trong Zalo, chụp ảnh hoặc gửi bạn bè."
     },
     {
       "id": "C009-4",
@@ -947,7 +947,7 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 4 của Zalo MiniApp do iMob phát triển - Quản lý thông tin cá nhân – lịch sử sử dụng: Xem lại lịch sử đăng ký, tra cứu thông tin đã dùng; Cập nhật thông tin liên hệ, chỉnh sửa nếu cần; Gửi phản hồi, đánh giá sau khi sử dụng dịch vụ."
+      "text": "Tính năng thứ 4 của Zalo MiniApp do iMob phát triển - Quản lý thông tin cá nhân – lịch sử sử dụng: Xem lại lịch sử đăng ký, tra cứu thông tin đã dùng; Cập nhật thông tin liên hệ, chỉnh sửa nếu cần; Gửi phản hồi, đánh giá sau khi sử dụng dịch vụ."
     },
     {
       "id": "C009-5",
@@ -957,7 +957,7 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 5 của Zalo MiniApp do iMob phát triển - Thông báo – Nhắc lịch tự động: Tự động gửi tin nhắn nhắc lịch hẹn, lịch tham quan trước giờ; Gửi thông báo khẩn cấp: thay đổi giờ, tạm ngưng dịch vụ; Thông báo ưu đãi, khuyến mãi hoặc sự kiện đặc biệt."
+      "text": "Tính năng thứ 5 của Zalo MiniApp do iMob phát triển - Thông báo – Nhắc lịch tự động: Tự động gửi tin nhắn nhắc lịch hẹn, lịch tham quan trước giờ; Gửi thông báo khẩn cấp: thay đổi giờ, tạm ngưng dịch vụ; Thông báo ưu đãi, khuyến mãi hoặc sự kiện đặc biệt."
     },
     {
       "id": "C009-6",
@@ -967,7 +967,7 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 6 của Zalo MiniApp do iMob phát triển - Chatbot hỗ trợ – Phản hồi nhanh: Tư vấn tự động các câu hỏi phổ biến: giờ mở cửa, bảng giá, chính sách hoàn tiền...; Kết nối trực tiếp với nhân viên tư vấn khi cần; Gửi hỗ trợ kỹ thuật, sự cố ngay trong giao diện Zalo."
+      "text": "Tính năng thứ 6 của Zalo MiniApp do iMob phát triển - Chatbot hỗ trợ – Phản hồi nhanh: Tư vấn tự động các câu hỏi phổ biến: giờ mở cửa, bảng giá, chính sách hoàn tiền...; Kết nối trực tiếp với nhân viên tư vấn khi cần; Gửi hỗ trợ kỹ thuật, sự cố ngay trong giao diện Zalo."
     },
     {
       "id": "C009-7",
@@ -977,7 +977,7 @@
         "tính năng",
         "chức năng"
       ],
-      "text": "Tính năng số 7 của Zalo MiniApp do iMob phát triển - Tích hợp hệ thống dữ liệu – cá nhân hóa dịch vụ: Ghi nhận hành vi sử dụng để gợi ý dịch vụ phù hợp; Cho phép khai thác số liệu báo cáo hành vi khách hàng (nếu được phép); Tích hợp với hệ thống quản lý nội bộ để đồng bộ dữ liệu đăng ký – vận hành."
+      "text": "Tính năng thứ 7 của Zalo MiniApp do iMob phát triển - Tích hợp hệ thống dữ liệu – cá nhân hóa dịch vụ: Ghi nhận hành vi sử dụng để gợi ý dịch vụ phù hợp; Cho phép khai thác số liệu báo cáo hành vi khách hàng (nếu được phép); Tích hợp với hệ thống quản lý nội bộ để đồng bộ dữ liệu đăng ký – vận hành."
     },
     {
       "id": "C010",
@@ -1171,7 +1171,7 @@
         "báo giá",
         "bao nhiêu tiền"
       ],
-      "text": "iMob không công bố bảng giá trên website. Mô hình định giá: Báo giá theo từng dự án (custom quote) sau bước khảo sát. Thông tin liên quan đến giá duy nhất được công bố: Giảm 20% cho đăng ký nhóm từ 10 người; Miễn phí tài liệu và chứng chỉ; Hỗ trợ tư vấn miễn phí sau khóa học; Tư vấn và demo miễn phí, báo giá chi tiết sau trao đổi; Định vị tối ưu chi phí, ROI cao so với app độc lập; Tư vấn kiến trúc và demo miễn phí, báo giá chi tiết kèm timeline; Bảo hành 2 năm phần cứng, 1 năm phần mềm. Chatbot tuyệt đối không được đưa ra con số giá. Câu trả lời chuẩn khi khách hỏi giá: Chi phí phụ thuộc vào phạm vi và tính năng cụ thể nên iMob báo giá riêng cho từng dự án sau bước khảo sát — bước tư vấn và demo hoàn toàn miễn phí ạ. Anh/chị để lại tên, số điện thoại và mô tả ngắn về nhu cầu, em chuyển đội tư vấn liên hệ lại sớm nhất, hoặc anh/chị gọi trực tiếp hotline 0936 982 256 nhé."
+      "text": "iMob không công bố bảng giá trên website. Mô hình định giá: Báo giá theo từng dự án (custom quote) sau bước khảo sát. Các thông tin về giá đã được công bố: Giảm 20% cho đăng ký nhóm từ 10 người; Miễn phí tài liệu và chứng chỉ; Hỗ trợ tư vấn miễn phí sau khóa học; Tư vấn và demo miễn phí, báo giá chi tiết sau trao đổi; Định vị tối ưu chi phí, ROI cao so với app độc lập; Tư vấn kiến trúc và demo miễn phí, báo giá chi tiết kèm timeline; Bảo hành 2 năm phần cứng, 1 năm phần mềm. Chatbot tuyệt đối không được đưa ra con số giá. Câu trả lời chuẩn khi khách hỏi giá: Chi phí phụ thuộc vào phạm vi và tính năng cụ thể nên iMob báo giá riêng cho từng dự án sau bước khảo sát — bước tư vấn và demo hoàn toàn miễn phí ạ. Anh/chị để lại tên, số điện thoại và mô tả ngắn về nhu cầu, em chuyển đội tư vấn liên hệ lại sớm nhất, hoặc anh/chị gọi trực tiếp hotline 0936 982 256 nhé."
     },
     {
       "id": "C021",
@@ -1209,7 +1209,7 @@
         "iMob chuyên về lĩnh vực nào",
         "cho mình biết về công ty"
       ],
-      "answer": "iMob (Công ty Cổ phần Công nghệ & Giải pháp iMob) là đơn vị công nghệ thông tin và chuyển đổi số, văn phòng tại Phường Hạ Long, Quảng Ninh. iMob nhận 7 nhóm việc: (1) Thiết kế app/web theo yêu cầu (Zalo Mini App, website, phần mềm quản lý); (2) Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh mạng cấp độ 2 trở lên; (3) Vận hành, giám sát an ninh mạng 24/7 và ứng cứu sự cố, đơn vị không phải tự xây đội ngũ nội bộ; (4) Ứng dụng robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu; (5) Xây dựng trợ lý AI cho doanh nghiệp; (6) Tập huấn chuyển đổi số; (7) Giải pháp phần cứng và thiết bị IoT. Anh/chị đang quan tâm mảng nào để em tư vấn kỹ hơn ạ?"
+      "answer": "iMob (Công ty Cổ phần Công nghệ & Giải pháp iMob) là đơn vị công nghệ thông tin và chuyển đổi số, văn phòng tại Phường Hạ Long, Quảng Ninh. iMob nhận 7 nhóm việc: (1) Thiết kế app/web theo yêu cầu (Zalo Mini App, website, phần mềm quản lý); (2) Khảo sát và nâng cấp app/web, phần mềm đang có lên cấp độ an toàn hệ thống thông tin cấp độ 2 trở lên; (3) Vận hành, giám sát an ninh mạng 24/7 và ứng cứu sự cố, đơn vị không phải tự xây đội ngũ nội bộ; (4) Ứng dụng robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu; (5) Xây dựng trợ lý AI cho doanh nghiệp; (6) Tập huấn chuyển đổi số; (7) Giải pháp phần cứng và thiết bị IoT. Anh/chị đang quan tâm mảng nào để em tư vấn kỹ hơn ạ?"
     },
     {
       "id": "F002",
@@ -1236,7 +1236,7 @@
         "các gói dịch vụ",
         "bên bạn cung cấp gì"
       ],
-      "answer": "iMob nhận 7 nhóm việc: (1) Thiết kế app/web theo yêu cầu (Zalo Mini App, website, phần mềm quản lý); (2) Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh mạng cấp độ 2 trở lên; (3) Vận hành, giám sát an ninh mạng 24/7 và ứng cứu sự cố, đơn vị không phải tự xây đội ngũ nội bộ; (4) Ứng dụng robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu; (5) Xây dựng trợ lý AI cho doanh nghiệp; (6) Tập huấn chuyển đổi số; (7) Giải pháp phần cứng và thiết bị IoT. Anh/chị quan tâm dịch vụ nào ạ?"
+      "answer": "iMob nhận 7 nhóm việc: (1) Thiết kế app/web theo yêu cầu (Zalo Mini App, website, phần mềm quản lý); (2) Khảo sát và nâng cấp app/web, phần mềm đang có lên cấp độ an toàn hệ thống thông tin cấp độ 2 trở lên; (3) Vận hành, giám sát an ninh mạng 24/7 và ứng cứu sự cố, đơn vị không phải tự xây đội ngũ nội bộ; (4) Ứng dụng robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu; (5) Xây dựng trợ lý AI cho doanh nghiệp; (6) Tập huấn chuyển đổi số; (7) Giải pháp phần cứng và thiết bị IoT. Anh/chị quan tâm dịch vụ nào ạ?"
     },
     {
       "id": "F004",
@@ -1952,7 +1952,7 @@
         "alo",
         "có ai không"
       ],
-      "answer": "Dạ em chào anh/chị! Em là iBot — trợ lý tư vấn của iMob. iMob nhận 7 nhóm việc, hay được hỏi nhất là thiết kế app/web theo yêu cầu, nâng cấp hệ thống lên chuẩn an toàn an ninh mạng, và giám sát an ninh mạng 24/7. Anh/chị đang quan tâm điều gì ạ?"
+      "answer": "Dạ em chào anh/chị! Em là iBot — trợ lý tư vấn của iMob. iMob nhận 7 nhóm việc, hay được hỏi nhất là thiết kế app/web theo yêu cầu, nâng cấp độ an toàn hệ thống thông tin, và giám sát an ninh mạng 24/7. Anh/chị đang quan tâm điều gì ạ?"
     },
     {
       "id": "S002",
@@ -2449,7 +2449,7 @@
         },
         {
           "role": "bot",
-          "text": "Dạ em hiểu anh/chị cần con số để cân đối, nhưng em không thể đưa mức giá ước chừng vì dễ sai lệch so với báo giá thật và ảnh hưởng đến kế hoạch của mình. Cách nhanh nhất là anh/chị gọi hotline 0936 982 256 — đội tư vấn khảo sát miễn phí và gửi báo giá chính xác kèm timeline trong thời gian ngắn. Hoặc anh/chị để lại số, em nhờ bên em gọi lại ngay ạ."
+          "text": "Dạ em hiểu anh/chị cần con số để cân đối, nhưng em không thể đưa mức giá ước chừng vì dễ sai lệch so với báo giá thật và ảnh hưởng đến kế hoạch của mình. Cách nhanh gọn là anh/chị gọi hotline 0936 982 256 — đội tư vấn khảo sát miễn phí và gửi báo giá chính xác kèm timeline trong thời gian ngắn. Hoặc anh/chị để lại số, em nhờ bên em gọi lại ngay ạ."
         }
       ]
     }
