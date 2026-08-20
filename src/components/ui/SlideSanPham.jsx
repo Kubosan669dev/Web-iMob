@@ -40,10 +40,19 @@ import useManHinhRong from "../../hooks/useManHinhRong.js";
 //    là nó nhấp nháy theo từng slide.
 // ============================================================
 
-// 8 giây, nằm giữa khoảng 7–10s công ty đề nghị trong văn bản góp ý
-// 19/08/2026. Bản trước để 5s — quá gấp: mô tả sản phẩm dài 2 dòng thì
-// người đọc chậm chưa kịp hết câu đã bị đẩy sang dự án khác.
-const NHIP_MS = 8000;
+// ⚠️ ĐỪNG TỰ Ý ĐỔI LẠI THÀNH 8000 — con số này ĐÃ đổi hai lần, có lý do:
+//   5000  bản đầu
+//   8000  theo văn bản góp ý 19/08/2026: "chuyển động sau mỗi 7 đến 10 giây"
+//   2500  công ty yêu cầu trực tiếp cuối ngày 19/08/2026: "nhanh hơn 1 chút,
+//         tầm 2 đến 3 giây chuyển sang 1 lần"
+// Yêu cầu sau NGƯỢC với văn bản trước. Giữ 2500 vì đó là ý mới nhất, và ghi
+// lại đây để lần sau ai đọc văn bản góp ý cũng không tưởng là code làm sai.
+//
+// 2,5 giây là nhanh so với một thẻ có ảnh + tiêu đề + mô tả hai dòng: người
+// đọc chậm sẽ không kịp hết câu. Cái đỡ cho việc đó là băng chuyền DỪNG NGAY
+// khi rê chuột vào hoặc khi đang đọc bằng bàn phím (xem quyết định 2 ở trên) —
+// muốn đọc kỹ thì chỉ cần trỏ chuột vào là nó đứng lại.
+const NHIP_MS = 2500;
 
 export default function SlideSanPham({ danhSach }) {
   const [chiSo, setChiSo] = useState(0);
