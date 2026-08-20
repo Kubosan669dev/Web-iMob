@@ -1,6 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
-import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
 import Anh from "../components/ui/Anh.jsx";
 import MaQR from "../components/ui/MaQR.jsx";
@@ -25,6 +24,22 @@ import { diaChiAnh } from "../utils/anh.js";
    ô trống, mà vẫn giữ được thứ bậc.
 
    Thẻ KHÔNG viền KHÔNG bóng — nền trắng đặt trên dải nền xám nhạt là đủ tách.
+
+   ---- KHÔNG CÓ TIÊU ĐỀ MỤC (bỏ 20/08/2026 theo yêu cầu công ty: "xoá bỏ
+   phần này đi đang thừa") ----
+   Trước đây mở đầu bằng một khối SectionTitle căn giữa: nhãn "Dự án", tiêu đề
+   lớn hai dòng và một đoạn mô tả ba dòng — chiếm khoảng 280px chiều cao trước
+   khi khách nhìn thấy sản phẩm đầu tiên. Đoạn mô tả lại chỉ đi giải thích mối
+   quan hệ với khối đầu trang chứ không thêm thông tin gì về sản phẩm.
+
+   Bản thân các thẻ đã tự nói rõ đây là gì, nên khối kia là chữ thừa đặt trước
+   nội dung thật. Bỏ đi cũng đúng hướng công ty nhắc nhiều lần: "còn nhiều tài
+   nguyên trống nó sẽ bị xấu trong khi mình có nhiều thứ cần truyền đạt".
+
+   ⚠️ VẪN GIỮ aria-label trên thẻ <section>. Không có tiêu đề nhìn thấy thì
+   trình đọc màn hình chỉ đọc được "vùng nội dung" trống trơn, người khiếm thị
+   duyệt theo danh sách vùng sẽ không biết vùng này chứa gì. Nhãn ẩn giải
+   quyết việc đó mà không hiện thêm chữ nào lên màn hình.
 
    ---- Ảnh và mã QR ----
    Ba trường `anh`, `qr`, `lienKet` trong data/projects.json đều CÓ THỂ ĐỂ
@@ -150,18 +165,28 @@ export default function Projects() {
   if (!noiBat) return null;
 
   return (
-    <section id="projects" className="border-t border-line bg-mist py-24 lg:py-32">
+    <section
+      id="projects"
+      aria-labelledby="tieu-de-du-an"
+      className="border-t border-line bg-mist py-24 lg:py-32"
+    >
+      {/* Tiêu đề CHỈ dành cho trình đọc màn hình — không chiếm một pixel nào.
+          Hai việc nó làm:
+            1. Đặt tên cho vùng nội dung, để người khiếm thị duyệt theo danh
+               sách vùng biết vùng này chứa gì.
+            2. Giữ đúng thứ bậc tiêu đề h1 -> h2 -> h3. Bỏ hẳn thì trang nhảy
+               từ h1 của khối đầu trang xuống thẳng h3 của từng thẻ sản phẩm,
+               tức là thiếu một bậc — trình đọc màn hình báo lỗi cấu trúc.
+
+          Đặt NGOÀI <Container>: bên trong Container có space-y-14, thẻ này
+          tuy vô hình nhưng vẫn tính là một phần tử con, nên sẽ đẩy lưới sản
+          phẩm xuống thêm 56px — đúng cái khoảng trống vừa bỏ đi. */}
+      <h2 id="tieu-de-du-an" className="sr-only">
+        Dự án đã bàn giao
+      </h2>
+
       <Container className="space-y-14">
         <Reveal>
-          <SectionTitle
-            badge="Dự án"
-            title="Xem đủ danh sách"
-            highlight="đã bàn giao."
-            description="Khối đầu trang chỉ xoay vòng từng dự án một. Đây là danh sách đầy đủ — bấm vào tên để mở, hoặc quét mã QR ở cuối mục để dùng thử ngay trên điện thoại."
-          />
-        </Reveal>
-
-        <Reveal delay={0.1}>
           <div className="grid gap-5 sm:grid-cols-2">
             {/* Sản phẩm chủ lực chiếm trọn bề ngang */}
             <div className="sm:col-span-2">
