@@ -83,6 +83,28 @@ def dang_nhap(yeu_cau: YeuCauDangNhap, request: Request):
 # được lưu, và trang quản trị có nhiệm vụ cảnh báo mỗi lần lưu (xem
 # /api/cai-dat-demo bên dưới).
 # ============================================================
+# ⚠️⚠️ CỜ CỦA GIAI ĐOẠN DEMO — ĐỔI VỀ False TRƯỚC KHI BÀN GIAO THẬT ⚠️⚠️
+#
+# True  = màn hình đăng nhập tự hiện luôn ADMIN_USER / ADMIN_PASSWORD, không
+#         phải đặt thêm biến nào trên Render, không phải bật gì trong /admin.
+#         Người kiểm thử mở /admin là vào được ngay.
+# False = chỉ hiện khi đã cấu hình riêng (trong /admin, hoặc TESTER_USER).
+#
+# Công ty quyết định 20/08/2026: "đây là bản demo nên tôi muốn tester thử chứ
+# sau này sẽ sửa sau". Đặt True cho đúng giai đoạn đó.
+#
+# HẬU QUẢ KHI ĐỂ True — đã trình bày với công ty bằng văn bản trước khi làm:
+# bất kỳ ai mở /admin cũng đọc được mật khẩu TOÀN QUYỀN, nên xem được toàn bộ
+# mục Tin nhắn (họ tên, số điện thoại, email, lời nhắn của khách thật — dữ
+# liệu cá nhân, Nghị định 13/2023) và xoá được nội dung website.
+#
+# HAI CÁCH TẮT, chọn cách nào cũng được:
+#   · Đổi dòng dưới về False rồi deploy.
+#   · Hoặc vào /admin → Khác → "Đăng nhập thử", bỏ tick, Lưu. Bản ghi trong
+#     database THẮNG cờ này, nên tắt được ngay mà không cần deploy lại.
+BAN_DEMO_HIEN_TAI_KHOAN_QUAN_TRI = True
+
+
 @router.get("/api/tai-khoan-thu")
 def tai_khoan_thu():
     """Trả {} khi tắt — giao diện tự ẩn dòng gợi ý."""
@@ -101,9 +123,19 @@ def tai_khoan_thu():
 
     ten = os.getenv("TESTER_USER", "").strip()
     mat_khau = os.getenv("TESTER_PASSWORD", "")
-    if not ten or not mat_khau:
-        return {}
-    return {"ten": ten, "mat_khau": mat_khau}
+    if ten and mat_khau:
+        return {"ten": ten, "mat_khau": mat_khau}
+
+    # Nguồn cuối cùng: chính tài khoản quản trị. Chỉ chạy trong giai đoạn demo
+    # — xem khối cảnh báo ở trên. Máy chủ đã có sẵn hai biến này nên không phải
+    # cấu hình thêm gì cả.
+    if BAN_DEMO_HIEN_TAI_KHOAN_QUAN_TRI:
+        ten = os.getenv("ADMIN_USER", "").strip()
+        mat_khau = os.getenv("ADMIN_PASSWORD", "")
+        if ten and mat_khau:
+            return {"ten": ten, "mat_khau": mat_khau}
+
+    return {}
 
 
 # ============================================================

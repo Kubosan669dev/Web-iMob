@@ -108,7 +108,11 @@ export default function ManHinhDangNhap({ khiXong }) {
             <h1 className="tieu-de-lon text-2xl text-ink">
               iMob <span className="text-brand">Admin</span>
             </h1>
-            <p className="mt-1.5 text-sm text-ink-faint">Quản trị nội dung</p>
+            {/* "QUẢN TRỊ HỆ THỐNG" viết hoa, giãn chữ — theo đúng ảnh mẫu
+                công ty gửi 20/08/2026 ("làm y hệt cái ảnh"). */}
+            <p className="mt-1.5 text-sm uppercase tracking-wider text-ink-faint">
+              Quản trị hệ thống
+            </p>
           </div>
 
           {/* ---------- Form ---------- */}
@@ -162,7 +166,13 @@ export default function ManHinhDangNhap({ khiXong }) {
             <button
               type="submit"
               disabled={dangGui}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-[1.0625rem] font-medium text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
+              /* Nút chuyển sắc theo ảnh mẫu công ty gửi. CỐ Ý dùng hai màu
+                 thương hiệu (brand -> brand-deep) chứ không ghim cứng mã màu
+                 xanh–tím như trong ảnh: trang này chạy được với cả 9 bảng màu,
+                 ghim cứng thì bảng nào cũng ra một nút xanh tím lạc lõng, và
+                 mất luôn phần bảo đảm tương phản đã đo bằng
+                 scripts/kiem-tra-bang-mau.mjs. */
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand to-brand-deep px-5 py-3 text-[1.0625rem] font-medium text-tren-brand transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {dangGui ? (
                 <>
