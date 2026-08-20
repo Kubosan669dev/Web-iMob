@@ -98,14 +98,12 @@ function DongMuc({ muc }) {
     </>
   );
 
-  // h-full: hàng phải cao bằng ô <li> đã giãn, nếu không thì vùng bấm và nền
-  // khi rê chuột vẫn chỉ cao bằng chữ, để hở khe giữa các hàng.
   const lop =
-    "group flex h-full w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-mist";
+    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition-colors hover:bg-mist";
 
   if (muc.bam) {
     return (
-      <li className="flex-1">
+      <li>
         <button type="button" onClick={muc.bam} className={lop}>
           {ruot}
         </button>
@@ -123,7 +121,7 @@ function DongMuc({ muc }) {
   const trongTrang = muc.den.startsWith("#") || muc.den.startsWith("/#");
 
   return (
-    <li className="flex-1">
+    <li>
       {trongTrang ? (
         <a href={muc.den} className={lop}>
           {ruot}
@@ -141,10 +139,21 @@ function DongMuc({ muc }) {
    BẢY MỤC do công ty chốt (18/08/2026) — đây là danh mục chào hàng chính thức,
    không phải ba dịch vụ cũ trong services.json nữa.
 
-   Chữ đã RÚT NGẮN so với bản gốc: một dòng điều hướng chỉ đọc lướt, câu như
-   "Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh
-   mạng cấp độ 2 trở lên" dài 20 chữ thì không ai đọc hết. Ý đầy đủ chuyển
-   xuống dòng phụ.
+   ⚠️ CHỮ LẤY NGUYÊN VĂN TỪ FILE "Cac san pham noi bat trong nam.docx"
+   (20/08/2026). Anh Việt nhắn: "7 mục anh kê ở đây là anh đã chọn từ ngữ phù
+   hợp rồi, em giữ nguyên từ đấy đưa vào nhé đừng chỉnh lại". Bản trước tôi tự
+   rút gọn cho vừa một dòng — nay trả lại đúng câu của công ty. Chỉ bỏ dấu
+   chấm/hai chấm cuối câu vì đây là danh sách điều hướng, không đổi một chữ nào.
+
+   Ba mục có câu dài (3, 4, 7) thì BỎ dòng phụ: câu gốc đã nói đủ ý, thêm dòng
+   phụ do tôi tự viết vào nữa là vừa thừa vừa trái lời dặn. Bốn mục còn lại câu
+   ngắn nên giữ dòng phụ làm rõ thêm.
+
+   ⚠️ MỤC 3 VÀ 7 dùng cụm "an toàn an ninh mạng cấp độ 2". Cấp độ 1–5 thuộc
+   Luật An toàn thông tin mạng 2015, KHÔNG thuộc Luật An ninh mạng 2018 — tôi
+   đã sửa chỗ khác trong ngày theo chính góp ý 09:22 của anh Việt về dùng từ
+   đúng chuyên môn. Ở đây giữ nguyên vì anh dặn đừng chỉnh. Công ty chốt lại
+   thì sửa cả hai nơi cho khớp.
 
    ⚠️ BỐN MỤC CHƯA CÓ TRANG RIÊNG — an toàn thông tin, robot/UAV/Drone, giám
    sát 24/7 — nên tạm dẫn về form Liên hệ. Đó là đích ĐÚNG cho dịch vụ phải
@@ -153,7 +162,7 @@ function DongMuc({ muc }) {
    kiểm chứng được năng lực cụ thể của công ty ở ba mảng đó. */
 const MUC = [
   {
-    nhan: "Dự án nổi bật trong năm",
+    nhan: "Các sản phẩm nổi bật trong năm",
     phu: "Đã bàn giao và đang chạy tại Quảng Ninh",
     den: "/#projects",
     icon: Package,
@@ -165,14 +174,12 @@ const MUC = [
     icon: MonitorSmartphone,
   },
   {
-    nhan: "Nâng chuẩn an toàn thông tin",
-    phu: "Khảo sát và nâng cấp hệ thống đang có lên cấp độ 2 trở lên",
+    nhan: "Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh mạng cấp độ 2 trở lên",
     den: "/#contact",
     icon: ShieldCheck,
   },
   {
-    nhan: "Robot, UAV & Drone",
-    phu: "Robot tuần tra, robot lễ tân, thiết bị bay theo yêu cầu",
+    nhan: "Ứng dụng các loại robot tuần tra/lễ tân, UAV, Drone theo yêu cầu",
     den: "/#contact",
     icon: PlaneTakeoff,
   },
@@ -189,12 +196,12 @@ const MUC = [
     icon: Bot,
   },
   {
-    nhan: "Giám sát an ninh mạng 24/7",
-    phu: "Vận hành và ứng cứu sự cố, không cần đội ngũ nội bộ",
+    nhan: "Vận hành, ứng cứu sự cố an toàn an ninh mạng và hỗ trợ tư vấn an ninh mạng, giám sát 24/7 không cần xây dựng đội ngũ nội bộ",
     den: "/#contact",
     icon: Radar,
   },
 ];
+
 
 /* ================= Hero =================
    DỰNG LẠI 18/08/2026 theo góp ý: "một ông chủ bận rộn vào 30 giây là hiểu
@@ -314,14 +321,11 @@ export default function Hero() {
               `truncate` mới làm đúng việc của nó là cắt chữ kèm dấu "…". */}
           <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
             {/* ---------- Cột trái: danh mục tự chọn đường đi ---------- */}
-            {/* Bảy hàng GIÃN ĐỀU lấp kín chiều cao, không để khoảng trống.
-                Ô ảnh bên phải nay hiện trọn vẹn 16:10 nên thẻ cao 845px, trong
-                khi bảy hàng ở cỡ tự nhiên chỉ chiếm 476px. Đã thử neo lên đỉnh
-                (thừa 370px dồn xuống đáy) rồi thử căn giữa (thừa chia đôi trên
-                dưới) — công ty chê cả hai là trống trải. Cho mỗi hàng flex-1
-                thì chỗ thừa biến thành khoảng thở của từng hàng, không còn
-                mảng trống nào. */}
-            <ul className="flex h-full flex-col gap-0.5">
+            {/* ⚠️ ĐỪNG giãn đều hay căn giữa lại. Đã thử cả hai (19–20/08/2026),
+                công ty chê "nhiều khoảng trống quá". Cách đúng là làm THẺ BÊN
+                PHẢI thấp xuống — ảnh maket nay nằm cạnh chữ chứ không nằm trên
+                — để hai cột tự cao xấp xỉ nhau mà không hàng nào bị kéo giãn. */}
+            <ul className="space-y-0.5">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}

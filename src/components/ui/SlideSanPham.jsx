@@ -107,7 +107,7 @@ export default function SlideSanPham({ danhSach }) {
       onMouseLeave={() => setDung(false)}
       onFocusCapture={() => setDung(true)}
       onBlurCapture={() => setDung(false)}
-      className="flex flex-col rounded-card bg-brand-soft p-6 sm:p-8"
+      className="flex flex-col rounded-card bg-brand-soft p-5 sm:p-6"
     >
       <div className="flex items-center justify-between gap-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand">
@@ -177,8 +177,17 @@ export default function SlideSanPham({ danhSach }) {
                 là để ảnh không tranh chỗ với chữ, không phải để xoá ảnh đi.
                 Đưa lên 90% và bỏ hẳn việc giảm độ mờ của ảnh — chỉ lớp phủ
                 màu làm nhiệm vụ hoà tông. */}
+            {/* ⚠️ MÀN HÌNH RỘNG: ẢNH NẰM CẠNH CHỮ (20/08/2026).
+                Ảnh hiện trọn vẹn 16:10 mà lại nằm TRÊN chữ thì riêng nó đã cao
+                463px, kéo cả thẻ lên 845px — cao gần gấp đôi cột danh mục bên
+                trái, sinh ra mảng trống mà công ty chê. Xếp cạnh nhau thì ảnh
+                chỉ còn ~385px ngang, cao ~240px, thẻ rút về khoảng 510px, xấp
+                xỉ chiều cao tự nhiên của bảy hàng bên trái — hết chỗ trống mà
+                KHÔNG phải thu nhỏ ảnh hay giãn hàng.
+                Dưới lg vẫn xếp dọc: màn hình hẹp mà chia đôi thì ảnh bé quá. */}
+            <div className="lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center lg:gap-6">
             {s.anh && (
-              <div className="group/anh relative mb-4 overflow-hidden rounded-card bg-mist">
+              <div className="group/anh relative mb-4 overflow-hidden rounded-card bg-mist lg:mb-0">
                 <img
                   src={s.anh}
                   alt={`Giao diện ${s.title}`}
@@ -192,19 +201,22 @@ export default function SlideSanPham({ danhSach }) {
               </div>
             )}
 
-            <h2 className="tieu-de-lon text-[clamp(1.5rem,2.6vw,2rem)] text-ink">
-              {s.title}
-            </h2>
-            <p className="mt-2.5 max-w-md text-[0.9375rem] leading-relaxed text-ink-soft">
-              {s.description}
-            </p>
-            <p className="mt-3 text-sm text-ink-faint">{s.khachHang}</p>
+            <div>
+              <h2 className="tieu-de-lon text-[clamp(1.375rem,2.2vw,1.75rem)] text-ink">
+                {s.title}
+              </h2>
+              <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-soft">
+                {s.description}
+              </p>
+              <p className="mt-3 text-sm text-ink-faint">{s.khachHang}</p>
+            </div>
+            </div>
           </div>
         ))}
       </div>
 
       {/* ---------- Hành động + mã QR ---------- */}
-      <div className="mt-7 flex items-end justify-between gap-5">
+      <div className="mt-5 flex items-end justify-between gap-5">
         <div>
           {sp.lienKet && (
             <Button href={sp.lienKet} target="_blank" rel="noopener noreferrer">
