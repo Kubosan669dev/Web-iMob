@@ -1,5 +1,5 @@
 {
-  "_note": "NỘI DUNG 3 TRANG DỊCH VỤ RIÊNG (/zalo-miniapp, /software-hardware, /digital-transformation). Bố cục học theo imob.vn KHÔNG bịa số liệu. ⚠️ Khối `stats` đã BỎ khỏi file này (18/08/2026): ba trang đều khai 50+/30+/99% mà không ấn phẩm nào của công ty có con số đó. Dải số liệu giờ do component StatsBand tự ĐẾM từ danh sách sản phẩm — xem src/utils/soLieu.js. KHÔNG bịa '100K người dùng', KHÔNG hứa mốc thời gian cụ thể cho từng dự án (cùng kỷ luật với kienThuc.json). 'icon' là tên icon lucide, được map trong src/components/service/icons.js. Trang do các component trong src/components/service/ render.",
+  "_note": "NỘI DUNG 3 TRANG DỊCH VỤ RIÊNG (/zalo-miniapp, /software-hardware, /digital-transformation). Bố cục học theo imob.vn KHÔNG bịa số liệu. ⚠️ Khối `stats` đã BỎ khỏi file này (18/08/2026): ba trang đều khai 50+/30+/99% mà không ấn phẩm nào của công ty có con số đó. Dải số liệu giờ do component StatsBand tự ĐẾM từ danh sách sản phẩm — xem src/utils/soLieu.js. KHÔNG bịa '100K người dùng', KHÔNG hứa mốc thời gian cụ thể cho từng dự án (cùng kỷ luật với kienThuc.json). 'icon' là tên icon lucide, được map trong src/components/service/icons.js. Trang do các component trong src/components/service/ render. ⚠️ TIÊU ĐỀ (hero.title + hero.highlight) VIẾT THƯỜNG, TUYỆT ĐỐI KHÔNG IN HOA TOÀN BỘ — sửa 21/08/2026 vì cả ba trang đang để 'ĐÀO TẠO / CHUYỂN ĐỔI SỐ', 'PHÁT TRIỂN', 'PHẦN MỀM &' và bị CHỒNG DẤU: chữ hoa tiếng Việt có tới hai dấu xếp chồng (Ể = Ê + hỏi, Ầ = Â + huyền) nên nó vượt cao hơn hẳn chữ Latin, trong khi tiêu đề dùng lớp tieu-de-lon với line-height 1.08 rất siết. Kết quả trên màn 1280px: dấu hỏi của Ể bay lên tách khỏi chữ, dấu của Ổ đè vào dòng bên trên, chấm dưới Ạ dính vào dấu bên dưới. Đây đúng là điều đã ghi trong src/components/ui/Button.jsx từ đầu: 'Chữ thường, không IN HOA: tiếng Việt viết hoa toàn bộ bị chồng dấu.' Viết thường thì dấu nằm gọn trong khoảng của chữ và không bao giờ tràn sang dòng khác.",
   "zalo-miniapp": {
     "meta": {
       "route": "/zalo-miniapp",
@@ -8,8 +8,8 @@
     },
     "hero": {
       "badge": "Giải pháp số hóa trải nghiệm",
-      "title": "PHÁT TRIỂN",
-      "highlight": "ZALO MINI APP",
+      "title": "Phát triển",
+      "highlight": "Zalo Mini App",
       "description": "Ứng dụng gọn nhẹ chạy ngay trong Zalo — khách mở là dùng, không cần cài đặt. iMob đồng hành từ ý tưởng, thiết kế, tích hợp thanh toán đến vận hành trọn gói.",
       "highlights": [
         { "icon": "smartphone", "label": "Không cần cài đặt" },
@@ -94,8 +94,8 @@
     },
     "hero": {
       "badge": "Giải pháp tùy chỉnh cho doanh nghiệp",
-      "title": "PHẦN MỀM &",
-      "highlight": "PHẦN CỨNG",
+      "title": "Phần mềm &",
+      "highlight": "phần cứng",
       "description": "Phần mềm quản lý xây theo yêu cầu riêng, kết hợp thiết bị phần cứng thông minh và tích hợp đồng bộ toàn hệ thống — số liệu chạy về một chỗ.",
       "highlights": [
         { "icon": "settings", "label": "May đo theo nghiệp vụ" },
@@ -180,8 +180,8 @@
     },
     "hero": {
       "badge": "Đào tạo thực chiến",
-      "title": "ĐÀO TẠO",
-      "highlight": "CHUYỂN ĐỔI SỐ",
+      "title": "Đào tạo",
+      "highlight": "chuyển đổi số",
       "description": "Chương trình giúp đội ngũ của bạn làm chủ công cụ số và AI, áp dụng ngay vào công việc hằng ngày. Lộ trình thiết kế riêng theo từng doanh nghiệp.",
       "highlights": [
         { "icon": "target", "label": "Lộ trình theo doanh nghiệp" },

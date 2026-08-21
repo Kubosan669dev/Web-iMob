@@ -42,9 +42,21 @@ export default function ServiceHero({
             <Badge>{badge}</Badge>
           </motion.div>
 
+          {/* ⚠️ TIÊU ĐỀ Ở ĐÂY PHẢI VIẾT THƯỜNG — xem _note đầu servicePages.json.
+              Ba trang này từng để IN HOA TOÀN BỘ ("ĐÀO TẠO / CHUYỂN ĐỔI SỐ") và
+              bị chồng dấu: chữ hoa tiếng Việt xếp tới hai dấu lên nhau (Ể = Ê +
+              hỏi), cao vượt hẳn chữ Latin, mà lớp tieu-de-lon lại siết
+              line-height xuống 1.08. Dấu hỏi của Ể tách rời khỏi chữ, dấu của Ổ
+              đè lên dòng bên trên. Viết thường thì dấu nằm gọn trong khoảng
+              trên của chữ, hai dòng cạnh nhau cũng không đụng.
+
+              text-balance: chia chữ cho hai dòng đều nhau thay vì nhồi đầy dòng
+              trên rồi bỏ một từ lẻ xuống dòng dưới. Không có nó thì ở 1280px
+              tiêu đề ngắt thành "Phát triển Zalo Mini / App" và "Phần mềm &
+              phần / cứng" — cắt đứt giữa cụm từ, đọc rất khó chịu. */}
           <motion.h1
             variants={fadeUp}
-            className="tieu-de-lon mt-5 text-[clamp(2.25rem,5.5vw,4.5rem)] text-ink"
+            className="tieu-de-lon mt-5 text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] text-ink"
           >
             {title} <span className="text-brand">{highlight}</span>
           </motion.h1>
