@@ -65,13 +65,31 @@ function O({ nhan, icon: Icon, dungSau, ...props }) {
   );
 }
 
+// Chờ quá bao lâu thì mới giải thích cho người dùng biết chuyện gì đang xảy ra.
+// 4 giây: đăng nhập bình thường mất khoảng 0,5–2 giây nên không bao giờ chạm
+// tới; chỉ khi máy chủ thật sự phải thức dậy (30–50 giây) thì câu giải thích
+// mới hiện ra, đúng lúc người dùng bắt đầu tự hỏi "hỏng rồi à?".
+const NGUONG_CHO_LAU = 4000;
+
 export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
   const [ten, setTen] = useState("");
   const [matKhau, setMatKhau] = useState("");
   const [hienMatKhau, setHienMatKhau] = useState(false);
   const [loi, setLoi] = useState("");
   const [dangGui, setDangGui] = useState(false);
+  const [choLau, setChoLau] = useState(false);
   const [taiKhoanThu, setTaiKhoanThu] = useState(null);
+
+  // Bấm gửi -> hẹn giờ; xong (hoặc lỗi) -> phần dọn dẹp huỷ hẹn giờ, nên câu
+  // giải thích không bao giờ loé lên sau khi việc đã xong.
+  useEffect(() => {
+    if (!dangGui) {
+      setChoLau(false);
+      return;
+    }
+    const dongHo = setTimeout(() => setChoLau(true), NGUONG_CHO_LAU);
+    return () => clearTimeout(dongHo);
+  }, [dangGui]);
 
   // Hỏi máy chủ xem có tài khoản dùng thử không. Gọi ngầm và nuốt mọi lỗi:
   // máy chủ đang ngủ thì chỉ là chưa hiện dòng gợi ý, người biết mật khẩu vẫn
@@ -210,9 +228,20 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
               )}
             </button>
 
-            {dangGui && (
+            {/* ⚠️ CÂU NÀY CHỈ HIỆN KHI THẬT SỰ CHỜ LÂU (quá NGUONG_CHO_LAU).
+                Trước 21/08/2026 nó hiện NGAY khi bấm Đăng nhập, kèm con số
+                "30–50 giây". Đo lại thì đăng nhập chỉ mất 1,9 giây và máy chủ
+                không hề ngủ (healthCheckPath trong render.yaml giữ nó thức) —
+                nghĩa là câu đó vừa sai vừa phản tác dụng: nó BẢO người ta rằng
+                sắp phải chờ nửa phút, nên một cái chờ 2 giây cũng thành cảm
+                giác lâu. Đúng phàn nàn đã nhận: "bấm Đăng nhập rồi ngồi chờ".
+
+                Vẫn giữ câu này chứ không xoá: gói free có thể ngủ trở lại nếu
+                healthCheckPath bị bỏ, và lúc đó một màn hình im lặng 40 giây
+                thì tưởng là hỏng. Nay nó chỉ lên tiếng khi có chuyện thật. */}
+            {choLau && (
               <p className="text-center text-[0.8125rem] text-ink-faint">
-                Lần đầu trong ngày có thể chờ 30–50 giây để máy chủ thức dậy.
+                Máy chủ đang thức dậy, việc này có thể mất 30–50 giây.
               </p>
             )}
 

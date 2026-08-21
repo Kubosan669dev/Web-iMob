@@ -39,9 +39,19 @@ def dang_nhap(yeu_cau: YeuCauDangNhap, request: Request):
     # CỐ Ý kiểm mật khẩu cả khi không tìm thấy tài khoản, và trả về CÙNG MỘT câu
     # lỗi cho hai trường hợp "sai tên" và "sai mật khẩu". Nếu phân biệt, kẻ dò sẽ
     # biết được tên đăng nhập nào có thật để tập trung phá.
-    hop_le = nguoi is not None and auth.kiem_mat_khau(
-        yeu_cau.mat_khau, nguoi["mat_khau_hash"]
-    )
+    #
+    # ⚠️ 21/08/2026 — TRƯỚC ĐÂY DÒNG NÀY VIẾT:
+    #       hop_le = nguoi is not None and auth.kiem_mat_khau(...)
+    # và nó KHÔNG làm được điều ghi chú trên vừa hứa. Python gặp vế trái sai là
+    # bỏ qua vế phải, nên tên đăng nhập không có thật thì bcrypt không hề chạy.
+    # Đo trên bản đang chạy: tên không có thật 0,28 giây, tên có thật 1,88 giây
+    # — chênh gần 7 lần, bấm giờ là dò ra được tên nào tồn tại.
+    # Nay gọi kiem_mat_khau_gia() để hai nhánh tốn thời gian như nhau. Xem thêm
+    # ghi chú dài trong auth.py.
+    if nguoi is not None:
+        hop_le = auth.kiem_mat_khau(yeu_cau.mat_khau, nguoi["mat_khau_hash"])
+    else:
+        hop_le = auth.kiem_mat_khau_gia(yeu_cau.mat_khau)
 
     if not hop_le:
         auth.ghi_nhan_sai(request)

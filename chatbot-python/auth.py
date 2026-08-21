@@ -16,6 +16,7 @@ khỏi gửi lại mật khẩu. Sửa vé thì chữ ký sai ngay. Ai biết JW
 import cau_hinh  # noqa: F401  — phải nạp .env TRƯỚC khi đọc os.getenv bên dưới
 
 import os
+import secrets
 import time
 from datetime import datetime, timedelta, timezone
 
@@ -76,6 +77,32 @@ def kiem_tra_cau_hinh() -> str | None:
 # ============================================================
 # Mật khẩu
 # ============================================================
+# SỐ VÒNG BCRYPT — con số này quyết định trang đăng nhập nhanh hay chậm.
+#
+# bcrypt CỐ Ý chạy chậm để kẻ trộm được database không thử được hàng triệu mật
+# khẩu mỗi giây. Mỗi vòng cộng thêm gấp đôi công sức: 12 vòng nặng gấp 4 lần
+# 10 vòng.
+#
+# ĐO THẬT 21/08/2026 trên bản đang chạy (Render gói free, CPU bị bóp):
+#     POST /api/dang-nhap   1,88 giây
+#     mọi đường dẫn khác    0,20 - 0,28 giây
+# Tức là gần như TOÀN BỘ thời gian chờ sau khi bấm "Đăng nhập" là nằm ở đây.
+# Người dùng phản ánh đúng chỗ này: "bấm Đăng nhập rồi ngồi chờ".
+#
+# Vì sao chọn 10 chứ không giữ 12:
+#   · 12 vòng: ~0,21s ở máy để bàn, nhưng ~1,6s trên CPU yếu của gói free.
+#   · 10 vòng: nhanh gấp 4 -> còn khoảng 0,4s. Đây vẫn là mức sàn được khuyến
+#     nghị rộng rãi, không phải mức bừa.
+#   · Lớp phòng thủ thật ở đây là KHOÁ IP sau 5 lần sai trong 15 phút
+#     (kiem_tra_bi_khoa bên dưới). Kẻ dò qua mạng không được hưởng lợi gì từ
+#     việc băm nhanh hơn — nó chỉ có ý nghĩa khi database bị đánh cắp.
+#
+# ĐỔI LẠI: nếu database rò rỉ, kẻ tấn công dò mật khẩu nhanh gấp 4. Muốn quay
+# về mức cũ thì đổi số này thành 12, deploy lại là xong — mật khẩu tự được băm
+# lại theo mức mới ở mỗi lần khởi động (xem db._dat_tai_khoan_admin).
+SO_VONG_BCRYPT = 10
+
+
 def bam_mat_khau(mat_khau: str) -> str:
     thoi = mat_khau.encode("utf-8")
     if len(thoi) > GIOI_HAN_BYTE_MAT_KHAU:
@@ -83,7 +110,7 @@ def bam_mat_khau(mat_khau: str) -> str:
             f"Mật khẩu quá dài (tối đa {GIOI_HAN_BYTE_MAT_KHAU} byte). "
             "Tiếng Việt có dấu tốn 2-3 byte mỗi ký tự."
         )
-    return bcrypt.hashpw(thoi, bcrypt.gensalt()).decode("utf-8")
+    return bcrypt.hashpw(thoi, bcrypt.gensalt(SO_VONG_BCRYPT)).decode("utf-8")
 
 
 def kiem_mat_khau(mat_khau: str, chuoi_bam: str) -> bool:
@@ -95,6 +122,38 @@ def kiem_mat_khau(mat_khau: str, chuoi_bam: str) -> bool:
     except (ValueError, TypeError):
         # Chuỗi băm trong database hỏng/sai định dạng -> coi như sai mật khẩu.
         return False
+
+
+# Chuỗi băm GIẢ, dựng một lần lúc khởi động từ một mật khẩu ngẫu nhiên không ai
+# biết. Chỉ dùng cho kiem_mat_khau_gia() ngay bên dưới — không tài khoản nào
+# đăng nhập được bằng nó.
+_BAM_GIA = bcrypt.hashpw(secrets.token_bytes(32), bcrypt.gensalt(SO_VONG_BCRYPT))
+
+
+def kiem_mat_khau_gia(mat_khau: str) -> bool:
+    """Luôn trả về False, nhưng TỐN ĐÚNG BẰNG một lần kiểm mật khẩu thật.
+
+    ⚠️ ĐÂY LÀ MỘT BẢN VÁ BẢO MẬT, không phải mã thừa. Đừng "tối ưu" bằng cách
+    thay bằng `return False`.
+
+    Chuyện đã xảy ra: hàm dang_nhap trong api_auth.py viết
+
+        hop_le = nguoi is not None and kiem_mat_khau(...)
+
+    Python thấy vế trái sai là BỎ QUA luôn vế phải, nên tên đăng nhập không có
+    thật thì không tốn một giây băm nào. Ghi chú ngay trên dòng đó lại tự nhận
+    là "CỐ Ý kiểm mật khẩu cả khi không tìm thấy tài khoản" — mã làm ngược với
+    lời nó tự viết, và không ai phát hiện vì cả hai trường hợp đều trả về cùng
+    một câu lỗi.
+
+    Đo được trên bản đang chạy 21/08/2026:
+        tên đăng nhập KHÔNG có thật -> 0,28 giây
+        tên đăng nhập CÓ thật       -> 1,88 giây
+    Chênh gần 7 lần. Chỉ cần bấm giờ là biết tên nào có thật rồi dồn sức dò
+    đúng tên đó — đúng thứ mà câu lệnh kia tưởng mình đang chặn.
+    """
+    bcrypt.checkpw(mat_khau.encode("utf-8")[:GIOI_HAN_BYTE_MAT_KHAU], _BAM_GIA)
+    return False
 
 
 # ============================================================
