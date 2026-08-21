@@ -38,10 +38,23 @@ import { diaChiAnh } from "../../utils/anh.js";
 // một nguồn sự thật duy nhất.
 // ============================================================
 
-// Chậm hơn bản slide cũ (2,5 giây). Ở đó mỗi nhịp đổi HẾT nội dung nên phải
-// nhanh mới ra vẻ sống động; ở đây mỗi nhịp chỉ đẩy hàng đi một thẻ, đi nhanh
-// thành ra giật liên hồi và không ai đọc kịp tên dự án.
-const NHIP_MS = 3500;
+// ⚠️ ĐỪNG TỰ Ý ĐỔI LẠI — con số này ĐÃ đổi bốn lần, lần nào cũng do người
+// dùng yêu cầu trực tiếp, và yêu cầu sau nhiều lần NGƯỢC với văn bản trước:
+//   5000  bản đầu
+//   8000  văn bản góp ý 19/08/2026: "chuyển động sau mỗi 7 đến 10 giây"
+//   2500  yêu cầu trực tiếp cuối 19/08/2026: "nhanh hơn 1 chút, tầm 2 đến 3
+//         giây chuyển sang 1 lần"
+//   3500  21/08/2026, khi đổi từ băng chuyền MỘT dự án sang hàng BỐN thẻ. Tôi
+//         tự nới ra vì nghĩ hàng thẻ trượt nhanh sẽ giật. Đây là suy đoán của
+//         tôi, KHÔNG phải ý người dùng.
+//   2000  21/08/2026, người dùng xem hàng thẻ thật rồi chốt: "cho chạy các
+//         sản phẩm 2 giây 1 lần đi". Ý mới nhất, và là ý của người xem thật.
+//
+// 2 giây so với hiệu ứng trượt 500ms: một phần tư thời gian là đang trượt,
+// ba phần tư là đứng yên cho mắt đọc. Vẫn thoáng.
+// Ai đọc chậm thì rê chuột vào là cả hàng dừng lại ngay (xem onMouseEnter bên
+// dưới) — đó mới là cái đỡ thật sự cho nhịp nhanh, chứ không phải con số này.
+const NHIP_MS = 2000;
 
 // Khe giữa hai thẻ. Phải là MỘT con số dùng chung cho cả bề rộng thẻ lẫn quãng
 // trượt (xem công thức bên dưới), nên để thành biến CSS thay vì gõ lại hai chỗ.
