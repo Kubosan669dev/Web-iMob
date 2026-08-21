@@ -151,7 +151,7 @@ function DongMuc({ muc }) {
   );
 
   const lop =
-    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-1.5 text-left transition-colors hover:bg-mist [@media(max-height:1000px)]:py-1";
+    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-1.5 text-left transition-colors hover:bg-mist";
 
   if (muc.bam) {
     return (
@@ -312,15 +312,28 @@ export default function Hero() {
           ⚠️ pt- phải LỚN HƠN chiều cao thanh điều hướng (65px): Navbar là
           `fixed` nên không chiếm chỗ trong dòng chảy, nội dung bắt đầu quá cao
           sẽ chui vào sau nó. pt-20 = 80px, chừa 15px thở.
-          ⚠️ pb-24 (96px) phải KHỚP với -mt-24 của thẻ trắng bên dưới. Rút pb
-          mà không rút -mt là thẻ trắng leo lên che mất chữ. */}
+          ⚠️ QUAN HỆ pb Ở ĐÂY VỚI -mt CỦA THẺ TRẮNG BÊN DƯỚI — đọc kỹ chỗ này
+          trước khi đổi một trong hai số:
+
+              khoảng hở giữa hàng nút và mép trên thẻ trắng  =  pb  −  |-mt|
+
+          pb-32 (128px) với -mt-24 (96px) => hở 32px.
+          · Bằng nhau (pb-24 với -mt-24, như bản trước 21/08/2026) thì hở 0 —
+            mép thẻ rơi ĐÚNG vào chân hàng nút, dính vào nhau. Đó chính là chỗ
+            người dùng chỉ ra: "đang sát nhau quá cần giãn khoảng cách".
+          · Rút pb mà không rút -mt thì hiệu số ÂM: thẻ trắng leo lên CHE MẤT
+            chữ. Đã mắc một lần rồi — thu pb từ 96 xuống 40 mà quên -mt, đo
+            thì thấy "tiết kiệm được 56px" nhưng thật ra thẻ đè lên dòng thứ
+            hai của tiêu đề. Chỉ ảnh chụp mới lộ ra.
+          · Tăng pb hay giảm -mt đều làm trang CAO THÊM đúng bấy nhiêu pixel.
+            Không có cách nào giãn chỗ này mà miễn phí. */}
       {/* Nền CHUYỂN SẮC thay cho một mảng màu phẳng (21/08/2026, theo ảnh mẫu:
           nền của họ đậm dần từ trái sang phải chứ không phẳng lì).
           Dùng brand -> brand-deep chứ không ghim mã màu: hai token đó chính là
           cặp màu nút bấm dùng cho trạng thái thường/nhấn, nên chữ tren-brand đã
           được bảo đảm đọc được trên CẢ HAI ở đủ 9 bảng màu. Ghim cứng một mã
           màu xanh navy như trong ảnh thì tám bảng còn lại hỏng hết. */}
-      <div className="bg-gradient-to-br from-brand via-brand to-brand-deep pb-24 pt-24 [@media(max-height:1000px)]:pt-20">
+      <div className="bg-gradient-to-br from-brand via-brand to-brand-deep pb-32 pt-24 [@media(max-height:1000px)]:pt-20">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14 [@media(max-height:1000px)]:gap-6 [@media(max-height:1000px)]:lg:gap-10">
             {/* ================= Cột trái: chữ ================= */}
@@ -419,25 +432,41 @@ export default function Hero() {
           (NAV_ITEMS trong utils/constants.js), là mốc cho useActiveSection tô
           sáng mục đang xem, VÀ được nhắc tới trong kho kiến thức chatbot. Đổi
           một chỗ là gãy cả ba. */}
-      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-6 lg:pb-6 [@media(max-height:1000px)]:pb-2">
+      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-6 lg:pb-6 [@media(max-height:1000px)]:pb-5">
         {/* HAI THẺ RIÊNG, không phải một thẻ lớn chia đôi (theo ảnh mẫu
             20/08/2026). Khác biệt không chỉ ở hình thức: hai thẻ rời thì mỗi
             thẻ tự cao theo ruột của nó, không thẻ nào bị kéo giãn theo thẻ kia
             — đúng cái gốc của lời chê "nhiều khoảng trống quá" suốt mấy đợt góp
-            ý trước. */}
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] [@media(max-height:1000px)]:gap-3">
+            ý trước.
+
+            ⚠️ KHE gap-5 KHÔNG CÓ BẢN RÚT GỌN CHO MÀN THẤP, và đó là cố ý:
+            trên lg đây là lưới HAI CỘT nên gap chỉ tính theo chiều NGANG —
+            nới nó ra không tốn một pixel chiều cao nào. Đây là kiểu nới rộng
+            duy nhất trong cả khối này mà không phải đánh đổi gì; mọi chỗ khác
+            (lề trong thẻ, đệm hàng, hở giữa dải màu và thẻ) đều làm trang cao
+            thêm đúng bằng số pixel nới ra.
+
+            ⚠️ 21/08/2026 — PHẦN LỚN BIẾN THỂ [@media(max-height:1000px)] Ở
+            KHU NÀY ĐÃ BỎ (lề thẻ, đệm hàng, khoảng cách tiêu đề, dải AI). Lý
+            do: sau khi người dùng bảo "đang sát nhau quá cần giãn khoảng
+            cách", bậc màn-thấp được nới lên gần bằng bậc màn-cao, nên hai bậc
+            khai hai con số giống hệt nhau — giữ lại chỉ tổ làm người đọc sau
+            tưởng có khác biệt. Giờ hai bậc chỉ còn khác nhau ở đúng những chỗ
+            THẬT SỰ khác: đệm trên của dải màu, nhịp chữ trong dải màu, cỡ ô
+            biểu tượng, tỉ lệ ảnh, và việc ẩn dòng phụ (ngưỡng riêng 820px). */}
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)]">
           {/* ========== Thẻ trái: 7 mục ==========
               ⚠️ NỘI DUNG BẢY MỤC GIỮ NGUYÊN TỪNG CHỮ (anh Việt: "7 mục bên
               trái e giữ nguyên nd như a việt gửi nha, c chỉ gợi ý bố cục
               thôi"). Ảnh mẫu có 5 mục — đó là 5 mục của công ty khác, chỉ để
               tham khảo CÁCH BÀY. */}
-          <div className="rounded-block bg-panel p-5 shadow-lift [@media(max-height:1000px)]:p-2.5">
-            <p className="mb-4 px-1.5 text-base font-bold text-ink [@media(max-height:1000px)]:mb-1">
+          <div className="rounded-block bg-panel p-4 shadow-lift">
+            <p className="mb-3 px-1.5 text-base font-bold text-ink">
               Giải pháp nổi bật
             </p>
             {/* ⚠️ grid-cols-[minmax(0,1fr)] Ở THẺ CHA KHÔNG THỪA — xem ghi chú
                 lịch sử bên dưới về lỗi tràn ngang trên điện thoại. */}
-            <ul className="space-y-0.5 [@media(max-height:1000px)]:space-y-0">
+            <ul className="space-y-0.5">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}
@@ -450,7 +479,7 @@ export default function Hero() {
               đọng thành mảng trắng ở đáy thẻ phải — đúng thứ công ty chê suốt
               mấy đợt. Có nó thì hàng thẻ tự nở ra và căn giữa theo chiều dọc,
               còn dòng "Được tin tưởng bởi…" bám đáy. */}
-          <div className="flex min-w-0 flex-col rounded-block bg-panel p-5 shadow-lift [@media(max-height:1000px)]:p-2.5">
+          <div className="flex min-w-0 flex-col rounded-block bg-panel p-4 shadow-lift">
             <SlideSanPham danhSach={sanPham} />
 
             {/* ---------- Đơn vị đang dùng ----------
@@ -498,7 +527,7 @@ export default function Hero() {
             Bong bóng vẫn nguyên ở góc phải (công ty dặn: "cái chat bot vẫn để
             ở góc phải như cũ cũng được") — dải này chỉ mở đúng cửa sổ chat đó,
             không dựng thêm một khung chat thứ hai. */}
-        <div className="mt-4 flex flex-col items-center gap-4 rounded-block bg-brand-soft px-6 py-4 text-center sm:flex-row sm:justify-center sm:text-left [@media(max-height:1000px)]:mt-2 [@media(max-height:1000px)]:py-1.5">
+        <div className="mt-3 flex flex-col items-center gap-4 rounded-block bg-brand-soft px-6 py-2.5 text-center sm:flex-row sm:justify-center sm:text-left">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand [@media(max-height:1000px)]:h-9 [@media(max-height:1000px)]:w-9">
             <Bot className="h-6 w-6 text-tren-brand [@media(max-height:1000px)]:h-5 [@media(max-height:1000px)]:w-5" aria-hidden="true" />
           </span>

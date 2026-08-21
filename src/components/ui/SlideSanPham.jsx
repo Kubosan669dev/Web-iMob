@@ -243,7 +243,7 @@ export default function SlideSanPham({ danhSach }) {
       onBlurCapture={() => setDung(false)}
     >
       {/* ---------- Tiêu đề + hai nút ---------- */}
-      <div className="mb-4 flex items-center justify-between gap-4 [@media(max-height:1000px)]:mb-2">
+      <div className="mb-3 flex items-center justify-between gap-4">
         <p className="text-base font-bold text-ink">Dự án nổi bật</p>
 
         {gioiHan > 0 && (
