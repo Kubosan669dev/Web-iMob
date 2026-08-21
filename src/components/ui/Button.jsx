@@ -1,5 +1,7 @@
 // Button: nút dùng chung toàn site.
 //   variant : "primary" (chàm tím đặc) | "outline" (xám nhạt) | "ghost" (chữ)
+//             | "tren-brand" / "vien-tren-brand" — dùng khi nút nằm TRÊN nền
+//               màu thương hiệu
 //   size    : "sm" | "md" | "lg"
 //   href    : nếu truyền → render thẻ <a> (dùng cho anchor #section)
 //
@@ -11,10 +13,17 @@
 // • Hover chỉ đổi màu nền, không nhấc lên không đổ bóng. Chuyển động thừa làm
 //   giao diện trông rẻ tiền.
 // • Chữ thường, không IN HOA: tiếng Việt viết hoa toàn bộ bị chồng dấu.
+// Hai kiểu cuối dành riêng cho nút ĐẶT TRÊN NỀN MÀU THƯƠNG HIỆU (khối đầu
+// trang). Dùng "primary" ở đó là nút màu chàm tím đặt trên nền chàm tím —
+// đúng nghĩa tàng hình. Đã mắc lỗi này 20/08/2026 khi chuyển hai nút từ thẻ
+// trắng lên dải màu: nhìn ảnh chụp mới thấy nút chính trông như chữ thường.
 const VARIANTS = {
   primary: "bg-brand text-tren-brand hover:bg-brand-deep",
   outline: "bg-mist text-ink hover:bg-line",
   ghost: "text-brand hover:underline underline-offset-4",
+  "tren-brand": "bg-tren-brand text-brand hover:bg-tren-brand/90",
+  "vien-tren-brand":
+    "border border-tren-brand/45 text-tren-brand hover:bg-tren-brand/15",
 };
 
 const SIZES = {

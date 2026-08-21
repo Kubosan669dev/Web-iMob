@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import {
+  ArrowRight,
   Bot,
   ChevronRight,
+  Cpu,
+  Globe,
+  LayoutGrid,
+  Map,
   GraduationCap,
   MessageCircle,
   MonitorSmartphone,
@@ -12,6 +17,7 @@ import {
   PlaneTakeoff,
   Radar,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
@@ -42,6 +48,30 @@ import { diaChiAnh } from "../utils/anh.js";
    bảng màu nào cũng đúng.
 
    Người bật "giảm chuyển động" thì hiện tất cả ở mức sáng nhất, không chạy. */
+/** Biểu tượng cho từng mảng công nghệ. Khớp không phân biệt hoa thường và
+    khớp CHỨA chứ không khớp tuyệt đối, để "Zalo Mini App" hay "Mini App" đều
+    ra đúng hình. Không khớp được thì dùng Sparkles — thà một hình chung chung
+    còn hơn một viên thuốc trống trơn lệch hẳn so với các viên bên cạnh. */
+const HINH_CONG_NGHE = [
+  // "AI" khớp CẢ NHÃN (^ai$) chứ không khớp chứa: /ai/i sẽ bắt nhầm bất cứ
+  // nhãn nào có hai chữ cái đó nằm giữa từ. Các mục còn lại khớp chứa vì chúng
+  // là từ khoá đặc trưng, không lẫn vào đâu được.
+  //
+  // (Bản đầu viết ... cho đúng ranh giới từ, nhưng dấu gạch chéo bị nuốt
+  //  lúc ghi file và biến thành ký tự điều khiển 0x08 lọt thẳng vào mã nguồn —
+  //  ESLint bắt được. Dùng ^...$ vừa an toàn vừa đúng hơn cho danh sách nhãn.)
+  [/^ai$|trí tuệ/i, Bot],
+  [/zalo|mini ?app/i, MonitorSmartphone],
+  [/gis|bản ?đồ/i, Map],
+  [/web/i, Globe],
+  [/iot|cảm biến/i, Cpu],
+  [/platform|nền ?tảng/i, LayoutGrid],
+];
+
+function hinhCua(ten) {
+  return HINH_CONG_NGHE.find(([re]) => re.test(ten))?.[1] ?? Sparkles;
+}
+
 function DaiCongNghe({ tu }) {
   const danhSach = tu?.length ? tu : ["AI", "Zalo Mini App", "Website"];
   const reduceMotion = useReducedMotion();
@@ -50,33 +80,32 @@ function DaiCongNghe({ tu }) {
   useEffect(() => {
     setIndex(0);
     if (reduceMotion || danhSach.length < 2) return;
-    const timer = setInterval(
-      () => setIndex((i) => (i + 1) % danhSach.length),
-      1800
-    );
+    const timer = setInterval(() => setIndex((i) => (i + 1) % danhSach.length), 1800);
     return () => clearInterval(timer);
   }, [danhSach.length, reduceMotion]);
 
   return (
-    <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[0.875rem] font-semibold tracking-wide text-tren-brand sm:text-[0.9375rem]">
-      {danhSach.map((t, n) => (
-        <span key={t} className="flex items-center gap-3">
-          {n > 0 && (
-            <span className="text-tren-brand/35" aria-hidden="true">
-              •
+    <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start [@media(max-height:820px)]:mt-3">
+      {danhSach.map((t, n) => {
+        const Icon = hinhCua(t);
+        const dangSang = reduceMotion || n === index;
+        return (
+          <li key={t}>
+            <span
+              className={
+                "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.8125rem] font-semibold transition-colors duration-500 " +
+                (dangSang
+                  ? "border-tren-brand/45 bg-tren-brand/15 text-tren-brand"
+                  : "border-tren-brand/20 text-tren-brand/70")
+              }
+            >
+              <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              {t}
             </span>
-          )}
-          <span
-            className={
-              "transition-opacity duration-500 " +
-              (reduceMotion || n === index ? "opacity-100" : "opacity-55")
-            }
-          >
-            {t}
-          </span>
-        </span>
-      ))}
-    </p>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -123,7 +152,7 @@ function DongMuc({ muc }) {
   );
 
   const lop =
-    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-mist [@media(max-height:820px)]:py-1.5";
+    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-mist [@media(max-height:820px)]:py-1";
 
   if (muc.bam) {
     return (
@@ -251,117 +280,119 @@ export default function Hero() {
   const sanPham = useSanPham();
   const donVi = danhSachDonVi(sanPham);
 
+  // Ảnh cho cột phải khối đầu trang. Ưu tiên ô "Ảnh banner" trong /admin; chưa
+  // điền thì mượn ảnh của sản phẩm đầu danh sách — thứ thật, đã bàn giao.
+  // ⚠️ Lấy ảnh sản phẩm CUỐI danh sách, không phải sản phẩm đầu.
+  // Băng chuyền ở thẻ bên dưới luôn bắt đầu từ sản phẩm ĐẦU, nên lấy ảnh đầu
+  // là hai chỗ hiện y hệt một tấm cùng lúc ngay khi khách vừa vào trang —
+  // nhìn như lỗi lặp. Ảnh cuối (chụp màn hình website) cũng khác hẳn về dáng
+  // so với maket điện thoại của mấy sản phẩm đầu, nên hai bên bổ trợ nhau.
+  const anhKhoiDau =
+    (hero.anh || "").trim() || (sanPham[sanPham.length - 1]?.anh || "").trim();
+
   return (
     <section id="home" className="relative">
-      {/* ---------- Dải màu thương hiệu ----------
-          Chiều cao chạy THEO NỘI DUNG chứ không đặt cứng: tiêu đề xuống dòng
-          khác nhau ở mỗi bề ngang màn hình, đặt cứng thì có cỡ máy nào đó dải
-          màu kết thúc ngay trên mép thẻ trắng, để lại một vệt hở nhìn thấy rõ.
-          pb-28 + -mt-24 bên dưới cho thẻ luôn đè lên dải đúng 24 đơn vị. */}
-      {/* pt- phải LỚN HƠN chiều cao thanh điều hướng: Navbar là `fixed` nên nó
-          không chiếm chỗ trong dòng chảy, nội dung nào bắt đầu quá cao sẽ chui
-          xuống dưới nó. Thanh đó cao 3.5rem trên điện thoại, và 5.5rem từ 640px
-          trở lên (có thêm dải liên hệ ở trên). Sửa chiều cao Navbar thì phải
-          sửa cả đây. */}
-      {/* ⚠️ ĐỆM TRÊN KHÔNG ĐƯỢC NHỎ HƠN pt-20 (80px).
-          Thanh menu CỐ ĐỊNH và cao 65px, nó ĐÈ LÊN khối này chứ không đẩy khối
-          xuống. Bản thử đầu tôi hạ xuống pt-12 (48px) cho vừa màn hình, kết quả
-          là tên công ty chui vào sau thanh menu — đo được đúng -1px, tức chồng
-          lên nhau. pt-20 chừa lại 15px thở.
-          Phần chiều cao cần rút để lọt màn hình đầu tiên lấy ở chỗ khác: các
-          khoảng cách dọc bên dưới và cỡ chữ tiêu đề. */}
-      {/* [@media(max-height:820px)] — biến thể theo CHIỀU CAO màn hình, không
-          phải chiều rộng. Laptop 1366x768 vẫn rất phổ biến; ở đó khối này cao
-          hơn màn hình 123px, tức là vẫn phải cuộn mới đọc hết — đúng cái công
-          ty chê. Màn cao thì các giá trị này không áp dụng, nên không ai bị
-          thiệt vì nó.
-          Đệm trên GIỮ NGUYÊN pt-20 ở mọi cỡ: dưới mức đó là chui vào thanh
-          menu cố định cao 65px. */}
-      {/* ⚠️ ĐỆM DƯỚI (pb) PHẢI LỚN HƠN CÚ KÉO LÊN CỦA THẺ TRẮNG.
-          Thẻ trắng bên dưới có -mt-24, tức tự kéo lên 96px. pb-24 = 96px nên
-          hai số vừa khít, phần chữ ở trên không bị chạm tới.
+      {/* ---------- Dải màu thương hiệu: HAI CỘT ----------
+          Dựng lại 20/08/2026 theo đúng ảnh bố cục công ty gửi: chữ dồn về bên
+          TRÁI, ảnh sản phẩm bên PHẢI. Bản trước căn giữa toàn bộ.
 
-          Bài học phải trả giá: có lúc tôi hạ pb xuống 40px cho "vừa màn hình
-          768". Con số đo được đẹp lên thật — nhưng vì thẻ trắng leo lên che
-          mất dòng "cho doanh nghiệp & chính quyền", chứ không phải vì bố cục
-          gọn lại. Chụp màn hình mới lộ ra. Rút pb KHÔNG BAO GIỜ là tiết kiệm
-          thật: giảm pb bao nhiêu thì phải giảm -mt bấy nhiêu, và tổng chiều
-          cao không đổi một pixel. */}
+          Vì sao bố cục này chứa được nhiều hơn hẳn: căn giữa thì mỗi dòng chữ
+          phải tự giới hạn bề ngang cho dễ đọc, nên hai bên luôn thừa ra hai
+          mảng trống lớn — đúng cái công ty chê "vẫn còn nhiều kgian thừa".
+          Chia đôi thì mảng trống bên phải biến thành chỗ đặt ảnh thật, còn chữ
+          bên trái vẫn giữ đúng bề ngang dễ đọc.
+
+          ⚠️ pt- phải LỚN HƠN chiều cao thanh điều hướng (65px): Navbar là
+          `fixed` nên không chiếm chỗ trong dòng chảy, nội dung bắt đầu quá cao
+          sẽ chui vào sau nó. pt-20 = 80px, chừa 15px thở.
+          ⚠️ pb-24 (96px) phải KHỚP với -mt-24 của thẻ trắng bên dưới. Rút pb
+          mà không rút -mt là thẻ trắng leo lên che mất chữ. */}
       <div className="bg-brand pb-24 pt-20">
         <Container>
-          {/* ⚠️ THANG CHỮ (20/08/2026) — đo bằng getComputedStyle rồi mới sửa.
-              Trước đó khối này có NĂM cỡ chữ chen trong 4px: 13 · 14 · 15 · 16 ·
-              17. Mắt không phân biệt được 15 với 16 với 17, nên chúng không tạo
-              ra thứ bậc nào cả, chỉ làm trang trông rối — đúng lời công ty chê
-              "cỡ chữ chưa cân đối".
-              Tệ hơn, thứ bậc còn NGƯỢC: dải từ khoá "AI · Zalo Mini App · GIS…"
-              để 17px đậm, to hơn cả câu nói iMob làm gì (16px thường).
-              Nay còn BỐN bậc, mỗi bậc cách nhau đủ xa để nhận ra:
-                 13px  dòng phụ, badge
-                 15px  nhãn danh mục, dải từ khoá   (nhãn — đậm 600)
-                 19px  câu định vị dưới tiêu đề     (câu văn)
-                 28px  tên dự án
-                 63px  tiêu đề chính
-              Dải từ khoá hạ cỡ nhưng ĐẬM hơn (500 → 600) nên vẫn nổi, chỉ thôi
-              tranh chỗ với câu văn.
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10 [@media(max-height:820px)]:gap-5">
+            {/* ================= Cột trái: chữ ================= */}
+            <div className="text-center lg:text-left">
+              {/* TÊN CÔNG TY — to và rõ (công ty yêu cầu: "Tên cty cho to rõ
+                  ràng hơn nhé"). */}
+              <p className="text-[0.9375rem] font-bold uppercase tracking-[0.2em] text-tren-brand/90 sm:text-lg">
+                {hero.badge}
+              </p>
 
-              max-w-5xl chứ không phải max-w-3xl như bản trước.
-              Góp ý 19/08/2026 chê đúng chỗ này: "cái phần đó to như vậy mà e k
-              phóng to chữ ra, để thừa 2 bên, xong chữ ở giữa thì bé tí". */}
-          <div className="mx-auto max-w-5xl text-center">
-            {/* TÊN CÔNG TY — to và rõ hơn hẳn (công ty yêu cầu 20/08/2026:
-                "Tên cty cho to rõ ràng hơn nhé").
-                Trước: 13px, đậm 600, mờ 70%. Nay: 15px (18px từ sm), đậm 700,
-                mờ 90%. Vẫn nhỏ hơn tiêu đề vài bậc nên không tranh chỗ, nhưng
-                đã đọc được ngay từ xa thay vì phải nheo mắt. */}
-            <p className="text-[0.9375rem] font-bold uppercase tracking-[0.2em] text-tren-brand/90 sm:text-lg">
-              {hero.badge}
-            </p>
+              {/* Hai dòng đều to, dòng dưới nhỏ hơn một bậc: dòng trên là việc
+                  iMob làm, dòng dưới là làm cho ai.
+                  ĐÃ BỎ cụm "ở Quảng Ninh" khỏi tiêu đề (chốt 19/08/2026):
+                  người ngoài tỉnh nhìn vào tưởng iMob chỉ làm trong Quảng Ninh
+                  nên tự loại mình. Bằng chứng về Quảng Ninh chuyển xuống dòng
+                  "Được tin tưởng bởi…" ở cuối — chỗ đó là chứng minh năng lực
+                  chứ không phải giới hạn phạm vi. */}
+              <h1 className="mt-3 text-tren-brand">
+                <span className="tieu-de-lon block text-[clamp(1.75rem,4vw,3rem)] [@media(max-height:820px)]:text-[clamp(1.75rem,4.2vw,2.75rem)]">
+                  {hero.tieuDeTruoc}
+                </span>
+                <span className="tieu-de-lon mt-1 block text-[clamp(1.25rem,2.8vw,1.875rem)] text-tren-brand/85 [@media(max-height:820px)]:text-[clamp(1.25rem,3vw,1.75rem)]">
+                  {hero.tieuDeSau}
+                </span>
+              </h1>
 
-            {/* ---------- Tiêu đề ----------
-                Viết theo đúng mẫu công ty đưa trong văn bản góp ý:
+              <DaiCongNghe tu={hero.tuKhoaDong} />
 
-                    iMob Solution & Technology
-                    Kiến tạo hệ sinh thái số
-                    cho doanh nghiệp & chính quyền
-                    AI • Zalo Mini App • GIS • Website • IoT • Digital Platform
+              {/* ---------- Hai nút + số gọi ----------
+                  Chuyển lên đây từ thanh "Bạn đang cần gì?" ở đầu thẻ trắng,
+                  theo đúng ảnh mẫu (hai nút nằm ngay dưới phần chữ).
+                  KHÔNG mất thứ gì: cả hai nút và số hotline bấm-gọi-được đều
+                  còn nguyên, chỉ đổi chỗ. Bỏ đi đúng mấy chữ "Bạn đang cần gì?"
+                  vì trong bố cục mới hai cái nút đã tự nói lên việc của chúng. */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start [@media(max-height:820px)]:mt-4">
+                <Button href="#contact" variant="tren-brand">
+                  {hero.nutChinh}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Button>
+                <Button variant="vien-tren-brand" onClick={openChat}>
+                  <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                  {hero.nutPhu}
+                </Button>
+                <a
+                  href={`tel:${(congTy.phone ?? "").replace(/\s/g, "")}`}
+                  className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-[0.9375rem] font-semibold text-tren-brand transition-colors hover:bg-tren-brand/15"
+                >
+                  <Phone className="h-4 w-4" aria-hidden="true" />
+                  {congTy.phone}
+                </a>
+              </div>
+            </div>
 
-                ĐÃ BỎ cụm "ở Quảng Ninh" khỏi tiêu đề (công ty chốt 19/08/2026):
-                người ngoài tỉnh nhìn vào tưởng iMob chỉ làm cho đơn vị trong
-                Quảng Ninh nên tự loại mình. Bằng chứng thật về Quảng Ninh không
-                mất đi — nó chuyển xuống dòng "Được tin tưởng bởi..." ở cuối thẻ
-                trắng, chỗ đó là chứng minh năng lực chứ không phải giới hạn
-                phạm vi.
+            {/* ================= Cột phải: ảnh sản phẩm =================
+                Ảnh mẫu công ty gửi có một cụm maket nhiều thiết bị kèm các thẻ
+                nổi xung quanh. Cụm đó là ẢNH THIẾT KẾ SẴN, không dựng lại được
+                bằng mã — nên chỗ này dùng thứ mình có thật: ảnh chụp màn hình
+                sản phẩm đã bàn giao.
 
-                Hai dòng đều to, dòng dưới nhỏ hơn một bậc: dòng trên là việc
-                iMob làm, dòng dưới là làm cho ai. */}
-            <h1 className="mt-3 text-tren-brand">
-              <span className="tieu-de-lon block text-[clamp(2rem,6vw,4rem)] [@media(max-height:820px)]:text-[clamp(1.75rem,5vw,2.875rem)]">
-                {hero.tieuDeTruoc}
-              </span>
-              <span className="tieu-de-lon mt-1.5 block text-[clamp(1.375rem,4vw,2.5rem)] text-tren-brand/90 [@media(max-height:820px)]:text-[clamp(1.25rem,3.4vw,1.875rem)]">
-                {hero.tieuDeSau}
-              </span>
-            </h1>
-
-            <DaiCongNghe tu={hero.tuKhoaDong} />
-
-            {/* ĐÃ BỎ câu định vị "Đồng hành cùng doanh nghiệp và chính quyền
-                trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền
-                vững." (công ty chốt 20/08/2026: "bỏ câu đồng hành...").
-
-                Hai lý do, và cả hai đều đúng:
-                · Nó LẶP LẠI ý của dòng tiêu đề ngay trên nó ("…cho doanh
-                  nghiệp & chính quyền") — nói hai lần cùng một đối tượng trong
-                  15 chữ.
-                · Nó chiếm hai dòng chữ 19px ở đúng chỗ đắt nhất trang. Bỏ đi
-                  là khối trắng bên dưới nhích lên khoảng 70px, giúp mọi thứ
-                  trọng tâm lọt vào màn hình đầu tiên — yêu cầu chính của đợt
-                  góp ý này.
-
-                Trường `moTa` vẫn còn trong CMS nhưng KHÔNG còn được vẽ ra, và
-                ô nhập tương ứng đã gỡ khỏi /admin để không ai gõ vào một chỗ
-                không hiện đi đâu cả. */}
+                Thứ tự lấy ảnh: ô "Ảnh banner" trong /admin trước, không có thì
+                lấy ảnh của sản phẩm đầu danh sách. Cả hai đều trống thì cột này
+                TỰ ẨN và cột chữ tự chiếm trọn bề ngang — không để lại một ô
+                trống toang hoác. */}
+            {anhKhoiDau && (
+              <div className="hidden lg:block">
+                <div className="overflow-hidden rounded-block bg-tren-brand/10 p-2 ring-1 ring-tren-brand/20">
+                  {/* 16/9 chứ không phải 16/10 như thẻ dự án bên dưới.
+                      Lý do là chiều cao, không phải thẩm mỹ: cột này CAO HƠN
+                      cột chữ bên trái, mà lưới đang căn giữa (items-center) nên
+                      phần dôi ra bị chia đôi thành hai mảng trống trên và dưới
+                      phần chữ — đo được 25px thừa phía trên riêng ở màn 1440.
+                      Đã đo hai lần mới ra đúng số: 16/10 -> 16/9 vẫn còn
+                      dôi, phải xuống 2/1 thì cột ảnh (~235px) mới ngang bằng
+                      cột chữ (~235px) và mảng trống biến mất hẳn.
+                      Đây cũng là lý do rút lề bên trong CỘT CHỮ không ăn thua
+                      gì: lưới căn giữa nên chiều cao lấy theo cột CAO NHẤT,
+                      mà cột cao nhất là cột ảnh. Đo mới biết. */}
+                  <img
+                    src={diaChiAnh(anhKhoiDau)}
+                    alt={hero.anhMoTa || `Giao diện ${sanPham[sanPham.length - 1]?.title ?? "sản phẩm iMob"}`}
+                    className="aspect-[2/1] w-full rounded-card object-cover [@media(max-height:820px)]:aspect-[21/9]"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </Container>
       </div>
@@ -375,65 +406,34 @@ export default function Hero() {
           (NAV_ITEMS trong utils/constants.js), là mốc cho useActiveSection tô
           sáng mục đang xem, VÀ được nhắc tới trong kho kiến thức chatbot. Đổi
           một chỗ là gãy cả ba. */}
-      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-10 lg:pb-12">
-        <div className="rounded-block bg-panel p-3 shadow-lift [@media(max-height:820px)]:p-2">
-          {/* Hàng hành động — đúng vị trí ô tìm kiếm của TopCV.
-              Số hotline để thẻ <a href="tel:"> chứ không phải chữ thường: trên
-              điện thoại chạm là gọi luôn, khỏi phải chép tay. */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-card bg-mist px-3 py-2.5 sm:px-4 [@media(max-height:820px)]:py-2">
-            <p className="mr-1 text-sm font-medium text-ink-soft">Bạn đang cần gì?</p>
-            <Button href="#contact">{hero.nutChinh}</Button>
-            <Button variant="outline" onClick={openChat}>
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              {hero.nutPhu}
-            </Button>
-            <a
-              href={`tel:${(congTy.phone ?? "").replace(/\s/g, "")}`}
-              className="ml-auto inline-flex items-center gap-2 rounded-full px-3 py-2 text-[0.9375rem] font-semibold text-brand transition-colors hover:bg-brand-soft"
-            >
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {congTy.phone}
-            </a>
-          </div>
-
-          {/* ⚠️ grid-cols-[minmax(0,1fr)] KHÔNG PHẢI thừa — đừng rút gọn.
-              Ô lưới mặc định rộng tối thiểu bằng "min-content" của thứ nằm
-              trong. Dòng mô tả trong DongMuc dùng class `truncate`, mà
-              `truncate` kèm luôn `white-space: nowrap`, nên min-content của nó
-              là ĐỘ DÀI CẢ CÂU chứ không phải một chữ. Kết quả: trên điện thoại
-              rộng 390px, cả trang bị kéo rộng 509px và trôi ngang.
-              Đo được bằng cách nạp trang vào iframe 390px rồi đọc scrollWidth —
-              lỗi này đã lên web thật, mắt thường lướt qua không thấy vì phần
-              tràn nằm bên phải ngoài màn hình.
-              minmax(0,1fr) cho phép ô co xuống dưới min-content, lúc đó
-              `truncate` mới làm đúng việc của nó là cắt chữ kèm dấu "…". */}
-          <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,23rem)_1fr]">
-            {/* ---------- Cột trái: danh mục tự chọn đường đi ---------- */}
-            {/* ⚠️ ĐỪNG giãn đều hay căn giữa lại. Đã thử cả hai (19–20/08/2026),
-                công ty chê "nhiều khoảng trống quá". Cách đúng là làm THẺ BÊN
-                PHẢI thấp xuống — ảnh maket nay nằm cạnh chữ chứ không nằm trên
-                — để hai cột tự cao xấp xỉ nhau mà không hàng nào bị kéo giãn. */}
+      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-10 lg:pb-12 [@media(max-height:820px)]:pb-6">
+        {/* HAI THẺ RIÊNG, không phải một thẻ lớn chia đôi (theo ảnh mẫu
+            20/08/2026). Khác biệt không chỉ ở hình thức: hai thẻ rời thì mỗi
+            thẻ tự cao theo ruột của nó, không thẻ nào bị kéo giãn theo thẻ kia
+            — đúng cái gốc của lời chê "nhiều khoảng trống quá" suốt mấy đợt góp
+            ý trước. */}
+        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] [@media(max-height:820px)]:gap-2">
+          {/* ========== Thẻ trái: 7 mục ==========
+              ⚠️ NỘI DUNG BẢY MỤC GIỮ NGUYÊN TỪNG CHỮ (anh Việt: "7 mục bên
+              trái e giữ nguyên nd như a việt gửi nha, c chỉ gợi ý bố cục
+              thôi"). Ảnh mẫu có 5 mục — đó là 5 mục của công ty khác, chỉ để
+              tham khảo CÁCH BÀY. */}
+          <div className="rounded-block bg-panel p-4 shadow-lift [@media(max-height:820px)]:p-2">
+            <p className="mb-2 px-1 text-[0.9375rem] font-bold text-ink [@media(max-height:820px)]:mb-1">
+              Giải pháp nổi bật
+            </p>
+            {/* ⚠️ grid-cols-[minmax(0,1fr)] Ở THẺ CHA KHÔNG THỪA — xem ghi chú
+                lịch sử bên dưới về lỗi tràn ngang trên điện thoại. */}
             <ul className="space-y-0.5">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}
             </ul>
+          </div>
 
-            {/* ---------- Cột phải ----------
-                Ưu tiên ảnh banner nếu /admin có điền (đúng chỗ TopCV để banner
-                quảng cáo). Chưa có ảnh thì đứng thay là BĂNG CHUYỀN SẢN PHẨM —
-                thứ thật, mở ra dùng được ngay, chứ không phải một ảnh minh hoạ
-                mua sẵn về để lấp chỗ trống. */}
-            {hero.anh ? (
-              <Anh
-                src={diaChiAnh(hero.anh)}
-                alt={hero.anhMoTa || ""}
-                boc="overflow-hidden rounded-card bg-mist"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <SlideSanPham danhSach={sanPham} />
-            )}
+          {/* ========== Thẻ phải: dự án ========== */}
+          <div className="min-w-0 rounded-block bg-panel p-4 shadow-lift [@media(max-height:820px)]:p-2">
+            <SlideSanPham danhSach={sanPham} />
           </div>
         </div>
 
