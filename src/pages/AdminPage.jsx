@@ -172,7 +172,11 @@ function MucHero({ d, doi, daSua }) {
           daSua={daSua}
         />
 
-        <ODai nhan="Mô tả" giaTri={d.moTa} doi={s("moTa")} daSua={daSua} />
+        {/* ĐÃ GỠ ô "Mô tả" ngày 20/08/2026. Câu đó ("Đồng hành cùng doanh
+            nghiệp và chính quyền…") không còn được vẽ ra trang chủ nữa — xem
+            lý do trong sections/Hero.jsx. Để lại ô nhập cho một trường không
+            hiện đi đâu cả là cách chắc chắn nhất làm người soạn nội dung mất
+            thời gian rồi tưởng website hỏng. */}
 
         <div className={LUOI}>
           <O nhan="Chữ trên nút chính" giaTri={d.nutChinh} doi={s("nutChinh")} daSua={daSua} />

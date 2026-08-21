@@ -1,5 +1,4 @@
 import Hero from "../sections/Hero.jsx";
-import Projects from "../sections/Projects.jsx";
 import Services from "../sections/Services.jsx";
 import About from "../sections/About.jsx";
 import Contact from "../sections/Contact.jsx";
@@ -33,7 +32,19 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Projects />
+      {/* ĐÃ BỎ <Projects /> ngày 20/08/2026. Công ty: "xóa hết cả sản phẩm đi
+          e / bên trên có dự án nổi bật tự chuyển động rồi / để to chình ình
+          luôn."
+
+          Đúng: khối Hero đã có băng chuyền chạy qua từng dự án kèm ảnh, mô tả,
+          nút mở thử và mã QR. Khối Sản phẩm bên dưới vẽ LẠI đúng sáu dự án đó
+          một lần nữa, chỉ khác cách bày — tức là bắt khách cuộn qua một màn
+          hình để đọc lại thứ vừa xem xong.
+
+          Dữ liệu KHÔNG mất: cả hai chỗ cùng đọc khoá `projects` trong CMS, nên
+          sửa trong /admin → Sản phẩm vẫn hiện ra ở băng chuyền như cũ.
+          Component src/sections/Projects.jsx vẫn còn nguyên trong mã nguồn,
+          muốn bật lại chỉ cần thêm <Projects /> vào đây. */}
       <Services />
       <About />
       <Contact />

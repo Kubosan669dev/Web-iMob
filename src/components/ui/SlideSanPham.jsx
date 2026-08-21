@@ -193,7 +193,7 @@ export default function SlideSanPham({ danhSach }) {
                   src={diaChiAnh(s.anh)}
                   alt={`Giao diện ${s.title}`}
                   loading="lazy"
-                  className="aspect-[16/10] w-full object-cover opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100"
+                  className="aspect-[16/10] w-full object-cover opacity-90 transition-opacity duration-500 group-hover/anh:opacity-100 [@media(max-height:820px)]:aspect-[16/9]"
                 />
                 <span
                   className="pointer-events-none absolute inset-0 bg-brand/[0.07] transition-opacity duration-500 group-hover/anh:opacity-0"

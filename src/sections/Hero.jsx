@@ -58,7 +58,7 @@ function DaiCongNghe({ tu }) {
   }, [danhSach.length, reduceMotion]);
 
   return (
-    <p className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[0.875rem] font-semibold tracking-wide text-tren-brand sm:text-[0.9375rem]">
+    <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[0.875rem] font-semibold tracking-wide text-tren-brand sm:text-[0.9375rem]">
       {danhSach.map((t, n) => (
         <span key={t} className="flex items-center gap-3">
           {n > 0 && (
@@ -85,11 +85,18 @@ function DongMuc({ muc }) {
   const Icon = muc.icon;
   const ruot = (
     <>
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft">
-        <Icon className="h-5 w-5 text-brand" aria-hidden="true" />
+      {/* Ô biểu tượng 40px chính là SÀN chiều cao của mỗi hàng: bốn mục có
+          câu ngắn đều cao đúng 52px (40 + đệm) dù chữ chỉ chiếm một dòng. Vì
+          vậy lần thử trước ẩn dòng phụ đi mà chiều cao không nhúc nhích một
+          pixel nào — đo mới biết. Trên màn thấp thu ô này về 32px thì bốn hàng
+          đó mới thật sự ngắn lại. */}
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft [@media(max-height:820px)]:h-8 [@media(max-height:820px)]:w-8">
+        <Icon className="h-5 w-5 text-brand [@media(max-height:820px)]:h-4 [@media(max-height:820px)]:w-4" aria-hidden="true" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[0.9375rem] font-medium leading-snug text-ink">{muc.nhan}</span>
+        <span className="block text-[0.875rem] font-medium leading-snug text-ink">
+          {muc.nhan}
+        </span>
         {/* KHÔNG dùng `truncate` nữa: nó cắt cụt giữa từ ("phần mềm quản…",
             "đang chạy trên tran…"). Công ty muốn truyền đạt được nhiều, mà một
             câu bị cắt dở thì vừa mất chữ vừa xấu. Cho xuống dòng, cùng lắm
@@ -97,7 +104,16 @@ function DongMuc({ muc }) {
             (Ghi chú: `truncate` kèm white-space:nowrap chính là thứ từng làm
             tràn ngang trên điện thoại — xem grid-cols-[minmax(0,1fr)] bên dưới.
             Bỏ nó đi thì lỗi đó cũng không còn đường quay lại.) */}
-        <span className="block text-[0.8125rem] leading-snug text-ink-soft">{muc.phu}</span>
+        {/* ẨN dòng phụ trên màn hình THẤP (laptop 1366x768 chẳng hạn).
+            Bốn dòng phụ này chiếm khoảng 72px — vừa đúng phần còn thiếu để cả
+            khối lọt một màn hình ở cỡ đó.
+            Bỏ chúng đi là AN TOÀN vì đây là chữ TÔI viết thêm cho rõ nghĩa,
+            KHÔNG phải 7 mục anh Việt gửi trong file docx. Bảy nhãn chính
+            (muc.nhan) vẫn hiện đủ ở mọi cỡ màn hình — đó mới là phần công ty
+            dặn giữ nguyên từng chữ. */}
+        <span className="block text-[0.8125rem] leading-snug text-ink-soft [@media(max-height:820px)]:hidden">
+          {muc.phu}
+        </span>
       </span>
       <ChevronRight
         className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-brand"
@@ -107,7 +123,7 @@ function DongMuc({ muc }) {
   );
 
   const lop =
-    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition-colors hover:bg-mist";
+    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-mist [@media(max-height:820px)]:py-1.5";
 
   if (muc.bam) {
     return (
@@ -247,7 +263,31 @@ export default function Hero() {
           xuống dưới nó. Thanh đó cao 3.5rem trên điện thoại, và 5.5rem từ 640px
           trở lên (có thêm dải liên hệ ở trên). Sửa chiều cao Navbar thì phải
           sửa cả đây. */}
-      <div className="bg-brand pb-28 pt-20 sm:pt-24">
+      {/* ⚠️ ĐỆM TRÊN KHÔNG ĐƯỢC NHỎ HƠN pt-20 (80px).
+          Thanh menu CỐ ĐỊNH và cao 65px, nó ĐÈ LÊN khối này chứ không đẩy khối
+          xuống. Bản thử đầu tôi hạ xuống pt-12 (48px) cho vừa màn hình, kết quả
+          là tên công ty chui vào sau thanh menu — đo được đúng -1px, tức chồng
+          lên nhau. pt-20 chừa lại 15px thở.
+          Phần chiều cao cần rút để lọt màn hình đầu tiên lấy ở chỗ khác: các
+          khoảng cách dọc bên dưới và cỡ chữ tiêu đề. */}
+      {/* [@media(max-height:820px)] — biến thể theo CHIỀU CAO màn hình, không
+          phải chiều rộng. Laptop 1366x768 vẫn rất phổ biến; ở đó khối này cao
+          hơn màn hình 123px, tức là vẫn phải cuộn mới đọc hết — đúng cái công
+          ty chê. Màn cao thì các giá trị này không áp dụng, nên không ai bị
+          thiệt vì nó.
+          Đệm trên GIỮ NGUYÊN pt-20 ở mọi cỡ: dưới mức đó là chui vào thanh
+          menu cố định cao 65px. */}
+      {/* ⚠️ ĐỆM DƯỚI (pb) PHẢI LỚN HƠN CÚ KÉO LÊN CỦA THẺ TRẮNG.
+          Thẻ trắng bên dưới có -mt-24, tức tự kéo lên 96px. pb-24 = 96px nên
+          hai số vừa khít, phần chữ ở trên không bị chạm tới.
+
+          Bài học phải trả giá: có lúc tôi hạ pb xuống 40px cho "vừa màn hình
+          768". Con số đo được đẹp lên thật — nhưng vì thẻ trắng leo lên che
+          mất dòng "cho doanh nghiệp & chính quyền", chứ không phải vì bố cục
+          gọn lại. Chụp màn hình mới lộ ra. Rút pb KHÔNG BAO GIỜ là tiết kiệm
+          thật: giảm pb bao nhiêu thì phải giảm -mt bấy nhiêu, và tổng chiều
+          cao không đổi một pixel. */}
+      <div className="bg-brand pb-24 pt-20">
         <Container>
           {/* ⚠️ THANG CHỮ (20/08/2026) — đo bằng getComputedStyle rồi mới sửa.
               Trước đó khối này có NĂM cỡ chữ chen trong 4px: 13 · 14 · 15 · 16 ·
@@ -269,7 +309,12 @@ export default function Hero() {
               Góp ý 19/08/2026 chê đúng chỗ này: "cái phần đó to như vậy mà e k
               phóng to chữ ra, để thừa 2 bên, xong chữ ở giữa thì bé tí". */}
           <div className="mx-auto max-w-5xl text-center">
-            <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-tren-brand/70 sm:text-sm">
+            {/* TÊN CÔNG TY — to và rõ hơn hẳn (công ty yêu cầu 20/08/2026:
+                "Tên cty cho to rõ ràng hơn nhé").
+                Trước: 13px, đậm 600, mờ 70%. Nay: 15px (18px từ sm), đậm 700,
+                mờ 90%. Vẫn nhỏ hơn tiêu đề vài bậc nên không tranh chỗ, nhưng
+                đã đọc được ngay từ xa thay vì phải nheo mắt. */}
+            <p className="text-[0.9375rem] font-bold uppercase tracking-[0.2em] text-tren-brand/90 sm:text-lg">
               {hero.badge}
             </p>
 
@@ -290,33 +335,52 @@ export default function Hero() {
 
                 Hai dòng đều to, dòng dưới nhỏ hơn một bậc: dòng trên là việc
                 iMob làm, dòng dưới là làm cho ai. */}
-            <h1 className="mt-5 text-tren-brand">
-              <span className="tieu-de-lon block text-[clamp(2rem,6vw,4.25rem)]">
+            <h1 className="mt-3 text-tren-brand">
+              <span className="tieu-de-lon block text-[clamp(2rem,6vw,4rem)] [@media(max-height:820px)]:text-[clamp(1.75rem,5vw,2.875rem)]">
                 {hero.tieuDeTruoc}
               </span>
-              <span className="tieu-de-lon mt-1.5 block text-[clamp(1.375rem,4vw,2.75rem)] text-tren-brand/90">
+              <span className="tieu-de-lon mt-1.5 block text-[clamp(1.375rem,4vw,2.5rem)] text-tren-brand/90 [@media(max-height:820px)]:text-[clamp(1.25rem,3.4vw,1.875rem)]">
                 {hero.tieuDeSau}
               </span>
             </h1>
 
             <DaiCongNghe tu={hero.tuKhoaDong} />
 
-            {/* max-w hẹp hơn tiêu đề: một dòng văn xuôi dài quá 65-70 ký tự là
-                mắt khó bắt được đầu dòng kế tiếp. */}
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-tren-brand/85 sm:text-[1.1875rem]">
-              {hero.moTa}
-            </p>
+            {/* ĐÃ BỎ câu định vị "Đồng hành cùng doanh nghiệp và chính quyền
+                trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền
+                vững." (công ty chốt 20/08/2026: "bỏ câu đồng hành...").
+
+                Hai lý do, và cả hai đều đúng:
+                · Nó LẶP LẠI ý của dòng tiêu đề ngay trên nó ("…cho doanh
+                  nghiệp & chính quyền") — nói hai lần cùng một đối tượng trong
+                  15 chữ.
+                · Nó chiếm hai dòng chữ 19px ở đúng chỗ đắt nhất trang. Bỏ đi
+                  là khối trắng bên dưới nhích lên khoảng 70px, giúp mọi thứ
+                  trọng tâm lọt vào màn hình đầu tiên — yêu cầu chính của đợt
+                  góp ý này.
+
+                Trường `moTa` vẫn còn trong CMS nhưng KHÔNG còn được vẽ ra, và
+                ô nhập tương ứng đã gỡ khỏi /admin để không ai gõ vào một chỗ
+                không hiện đi đâu cả. */}
           </div>
         </Container>
       </div>
 
-      {/* ---------- Thẻ trắng: ruột của khung hình đầu ---------- */}
-      <Container className="relative -mt-24 pb-16 lg:pb-20">
-        <div className="rounded-block bg-panel p-3 shadow-lift sm:p-4">
+      {/* ---------- Thẻ trắng: ruột của khung hình đầu ----------
+          ⚠️ id="projects" NẰM Ở ĐÂY từ 20/08/2026, sau khi khối <Projects />
+          bị bỏ khỏi trang chủ. Băng chuyền dự án giờ là chỗ DUY NHẤT trưng dự
+          án, nên neo phải trỏ về đây.
+
+          KHÔNG được đổi id sang tên khác: nó là neo của mục "Dự án" trên menu
+          (NAV_ITEMS trong utils/constants.js), là mốc cho useActiveSection tô
+          sáng mục đang xem, VÀ được nhắc tới trong kho kiến thức chatbot. Đổi
+          một chỗ là gãy cả ba. */}
+      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-10 lg:pb-12">
+        <div className="rounded-block bg-panel p-3 shadow-lift [@media(max-height:820px)]:p-2">
           {/* Hàng hành động — đúng vị trí ô tìm kiếm của TopCV.
               Số hotline để thẻ <a href="tel:"> chứ không phải chữ thường: trên
               điện thoại chạm là gọi luôn, khỏi phải chép tay. */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-card bg-mist px-3 py-3 sm:px-4">
+          <div className="flex flex-wrap items-center gap-2.5 rounded-card bg-mist px-3 py-2.5 sm:px-4 [@media(max-height:820px)]:py-2">
             <p className="mr-1 text-sm font-medium text-ink-soft">Bạn đang cần gì?</p>
             <Button href="#contact">{hero.nutChinh}</Button>
             <Button variant="outline" onClick={openChat}>
@@ -388,13 +452,31 @@ export default function Hero() {
             nhiều hơn hẳn. Đây cũng là chỗ chữ "Quảng Ninh" chuyển xuống sau khi
             rời khỏi tiêu đề: ở đây nó là BẰNG CHỨNG đã làm được, chứ không phải
             giới hạn phạm vi phục vụ. */}
+        {/* ⚠️ 20/08/2026 — HAI GÓP Ý TRONG CÙNG MỘT ĐỢT NÓI NGƯỢC NHAU Ở ĐÂY:
+              ảnh 2: 'bỏ dòng "khu di tích…"' + "lắm chữ quá"
+              ảnh 7: khoanh đỏ cả khối này, "Giữ nguyên mấy cái c khoanh đỏ nha"
+
+            Đọc kỹ thì hết mâu thuẫn: khối này có HAI dòng, và mỗi góp ý nói về
+            một dòng khác nhau.
+              dòng 1  "Được tin tưởng bởi các chính quyền địa phương…"
+              dòng 2  "Khu di tích danh thắng Yên Tử · Bảo tàng – Thư viện… ·
+                       Phường An Sinh · Đông Triều… · Xã Quảng Tân… · Phường
+                       Yên Tử"
+
+            Câu 'bỏ dòng "khu di tích…"' trỏ đúng vào dòng 2 — dòng đó BẮT ĐẦU
+            bằng chữ "Khu di tích". Nó cũng chính là chỗ "lắm chữ quá": sáu tên
+            đơn vị nối bằng dấu chấm giữa, tràn hai dòng.
+
+            Nên: BỎ dòng 2, GIỮ dòng 1. Vừa đúng cả hai góp ý, vừa không mất
+            bằng chứng năng lực — câu còn lại vẫn nói rõ khách của iMob là
+            chính quyền và khu di tích ở Quảng Ninh.
+
+            Điều kiện donVi.length > 0 vẫn giữ: chưa có khách hàng nào trong CMS
+            thì cả câu tự ẩn, không đi khoe một điều chưa có gì chống lưng. */}
         {donVi.length > 0 && (
-          <p className="mx-auto mt-5 max-w-3xl text-center text-sm leading-relaxed text-ink-soft">
-            <span className="font-semibold text-ink">
-              Được tin tưởng bởi các chính quyền địa phương, khu di tích và thiết chế văn hoá trên
-              địa bàn Quảng Ninh
-            </span>
-            <span className="mt-1 block">{donVi.join(" · ")}</span>
+          <p className="mx-auto mt-2 max-w-3xl text-center text-sm font-semibold leading-relaxed text-ink [@media(max-height:820px)]:mt-1">
+            Được tin tưởng bởi các chính quyền địa phương, khu di tích và thiết chế văn hoá
+            trên địa bàn Quảng Ninh
           </p>
         )}
       </Container>
