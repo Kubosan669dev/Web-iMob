@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
-import Anh from "../components/ui/Anh.jsx";
 import SlideSanPham from "../components/ui/SlideSanPham.jsx";
 import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 import { danhSachDonVi } from "../utils/soLieu.js";
@@ -85,7 +84,7 @@ function DaiCongNghe({ tu }) {
   }, [danhSach.length, reduceMotion]);
 
   return (
-    <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start [@media(max-height:820px)]:mt-3">
+    <ul className="mt-7 flex flex-wrap justify-center gap-2.5 lg:justify-start [@media(max-height:1000px)]:mt-4 [@media(max-height:1000px)]:gap-2">
       {danhSach.map((t, n) => {
         const Icon = hinhCua(t);
         const dangSang = reduceMotion || n === index;
@@ -119,8 +118,8 @@ function DongMuc({ muc }) {
           vậy lần thử trước ẩn dòng phụ đi mà chiều cao không nhúc nhích một
           pixel nào — đo mới biết. Trên màn thấp thu ô này về 32px thì bốn hàng
           đó mới thật sự ngắn lại. */}
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft [@media(max-height:820px)]:h-8 [@media(max-height:820px)]:w-8">
-        <Icon className="h-5 w-5 text-brand [@media(max-height:820px)]:h-4 [@media(max-height:820px)]:w-4" aria-hidden="true" />
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft [@media(max-height:1000px)]:h-8 [@media(max-height:1000px)]:w-8">
+        <Icon className="h-5 w-5 text-brand [@media(max-height:1000px)]:h-4 [@media(max-height:1000px)]:w-4" aria-hidden="true" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-[0.875rem] font-medium leading-snug text-ink">
@@ -152,7 +151,7 @@ function DongMuc({ muc }) {
   );
 
   const lop =
-    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-mist [@media(max-height:820px)]:py-1";
+    "group flex w-full items-center gap-3 rounded-xl px-2.5 py-1.5 text-left transition-colors hover:bg-mist [@media(max-height:1000px)]:py-1";
 
   if (muc.bam) {
     return (
@@ -281,12 +280,20 @@ export default function Hero() {
   const donVi = danhSachDonVi(sanPham);
 
   // Ảnh cho cột phải khối đầu trang. Ưu tiên ô "Ảnh banner" trong /admin; chưa
-  // điền thì mượn ảnh của sản phẩm đầu danh sách — thứ thật, đã bàn giao.
-  // ⚠️ Lấy ảnh sản phẩm CUỐI danh sách, không phải sản phẩm đầu.
-  // Băng chuyền ở thẻ bên dưới luôn bắt đầu từ sản phẩm ĐẦU, nên lấy ảnh đầu
-  // là hai chỗ hiện y hệt một tấm cùng lúc ngay khi khách vừa vào trang —
-  // nhìn như lỗi lặp. Ảnh cuối (chụp màn hình website) cũng khác hẳn về dáng
-  // so với maket điện thoại của mấy sản phẩm đầu, nên hai bên bổ trợ nhau.
+  // điền thì mượn ảnh của sản phẩm cuối danh sách — thứ thật, đã bàn giao.
+  //
+  // ⚠️ CÒN MỘT CHỖ TRÙNG ẢNH CHƯA XỬ LÝ ĐƯỢC BẰNG MÃ (21/08/2026).
+  // Hồi còn là băng chuyền một dự án, băng chuyền luôn khởi động từ sản phẩm
+  // ĐẦU nên chỉ cần lấy ảnh sản phẩm CUỐI là hai bên không bao giờ đụng nhau.
+  // Nay thẻ phải là hàng bốn thẻ trượt qua CẢ SÁU dự án, nên đến vị trí trượt
+  // cuối thì sản phẩm cuối chắc chắn xuất hiện — và lúc đó ảnh của nó nằm cùng
+  // màn hình với chính nó ở góc trên bên phải. Đổi sang lấy ảnh sản phẩm nào
+  // cũng vậy, vì cả sáu đều lần lượt hiện ra.
+  //
+  // Cách chữa dứt điểm KHÔNG nằm ở đây mà ở nội dung: điền một ảnh riêng vào
+  // ô "Ảnh banner" (/admin → Hero). Có ảnh đó thì dòng dưới không chạy nữa và
+  // hết trùng. Vẫn giữ đường lùi này vì thà trùng một tấm còn hơn để trống hẳn
+  // cột phải khối đầu trang.
   const anhKhoiDau =
     (hero.anh || "").trim() || (sanPham[sanPham.length - 1]?.anh || "").trim();
 
@@ -307,9 +314,15 @@ export default function Hero() {
           sẽ chui vào sau nó. pt-20 = 80px, chừa 15px thở.
           ⚠️ pb-24 (96px) phải KHỚP với -mt-24 của thẻ trắng bên dưới. Rút pb
           mà không rút -mt là thẻ trắng leo lên che mất chữ. */}
-      <div className="bg-brand pb-24 pt-20">
+      {/* Nền CHUYỂN SẮC thay cho một mảng màu phẳng (21/08/2026, theo ảnh mẫu:
+          nền của họ đậm dần từ trái sang phải chứ không phẳng lì).
+          Dùng brand -> brand-deep chứ không ghim mã màu: hai token đó chính là
+          cặp màu nút bấm dùng cho trạng thái thường/nhấn, nên chữ tren-brand đã
+          được bảo đảm đọc được trên CẢ HAI ở đủ 9 bảng màu. Ghim cứng một mã
+          màu xanh navy như trong ảnh thì tám bảng còn lại hỏng hết. */}
+      <div className="bg-gradient-to-br from-brand via-brand to-brand-deep pb-24 pt-24 [@media(max-height:1000px)]:pt-20">
         <Container>
-          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10 [@media(max-height:820px)]:gap-5">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14 [@media(max-height:1000px)]:gap-6 [@media(max-height:1000px)]:lg:gap-10">
             {/* ================= Cột trái: chữ ================= */}
             <div className="text-center lg:text-left">
               {/* TÊN CÔNG TY — to và rõ (công ty yêu cầu: "Tên cty cho to rõ
@@ -325,11 +338,11 @@ export default function Hero() {
                   nên tự loại mình. Bằng chứng về Quảng Ninh chuyển xuống dòng
                   "Được tin tưởng bởi…" ở cuối — chỗ đó là chứng minh năng lực
                   chứ không phải giới hạn phạm vi. */}
-              <h1 className="mt-3 text-tren-brand">
-                <span className="tieu-de-lon block text-[clamp(1.75rem,4vw,3rem)] [@media(max-height:820px)]:text-[clamp(1.75rem,4.2vw,2.75rem)]">
+              <h1 className="mt-5 text-tren-brand [@media(max-height:1000px)]:mt-3">
+                <span className="tieu-de-lon block text-[clamp(1.75rem,4vw,3rem)] [@media(max-height:1000px)]:text-[clamp(1.75rem,4.2vw,2.75rem)]">
                   {hero.tieuDeTruoc}
                 </span>
-                <span className="tieu-de-lon mt-1 block text-[clamp(1.25rem,2.8vw,1.875rem)] text-tren-brand/85 [@media(max-height:820px)]:text-[clamp(1.25rem,3vw,1.75rem)]">
+                <span className="tieu-de-lon mt-1 block text-[clamp(1.25rem,2.8vw,1.875rem)] text-tren-brand/85 [@media(max-height:1000px)]:text-[clamp(1.25rem,3vw,1.75rem)]">
                   {hero.tieuDeSau}
                 </span>
               </h1>
@@ -342,7 +355,7 @@ export default function Hero() {
                   KHÔNG mất thứ gì: cả hai nút và số hotline bấm-gọi-được đều
                   còn nguyên, chỉ đổi chỗ. Bỏ đi đúng mấy chữ "Bạn đang cần gì?"
                   vì trong bố cục mới hai cái nút đã tự nói lên việc của chúng. */}
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start [@media(max-height:820px)]:mt-4">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start [@media(max-height:1000px)]:mt-5">
                 <Button href="#contact" variant="tren-brand">
                   {hero.nutChinh}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -388,7 +401,7 @@ export default function Hero() {
                   <img
                     src={diaChiAnh(anhKhoiDau)}
                     alt={hero.anhMoTa || `Giao diện ${sanPham[sanPham.length - 1]?.title ?? "sản phẩm iMob"}`}
-                    className="aspect-[2/1] w-full rounded-card object-cover [@media(max-height:820px)]:aspect-[21/9]"
+                    className="aspect-[2/1] w-full rounded-card object-cover [@media(max-height:1000px)]:aspect-[21/9]"
                   />
                 </div>
               </div>
@@ -406,79 +419,108 @@ export default function Hero() {
           (NAV_ITEMS trong utils/constants.js), là mốc cho useActiveSection tô
           sáng mục đang xem, VÀ được nhắc tới trong kho kiến thức chatbot. Đổi
           một chỗ là gãy cả ba. */}
-      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-10 lg:pb-12 [@media(max-height:820px)]:pb-6">
+      <Container id="projects" className="relative -mt-24 scroll-mt-24 pb-6 lg:pb-6 [@media(max-height:1000px)]:pb-2">
         {/* HAI THẺ RIÊNG, không phải một thẻ lớn chia đôi (theo ảnh mẫu
             20/08/2026). Khác biệt không chỉ ở hình thức: hai thẻ rời thì mỗi
             thẻ tự cao theo ruột của nó, không thẻ nào bị kéo giãn theo thẻ kia
             — đúng cái gốc của lời chê "nhiều khoảng trống quá" suốt mấy đợt góp
             ý trước. */}
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] [@media(max-height:820px)]:gap-2">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] [@media(max-height:1000px)]:gap-3">
           {/* ========== Thẻ trái: 7 mục ==========
               ⚠️ NỘI DUNG BẢY MỤC GIỮ NGUYÊN TỪNG CHỮ (anh Việt: "7 mục bên
               trái e giữ nguyên nd như a việt gửi nha, c chỉ gợi ý bố cục
               thôi"). Ảnh mẫu có 5 mục — đó là 5 mục của công ty khác, chỉ để
               tham khảo CÁCH BÀY. */}
-          <div className="rounded-block bg-panel p-4 shadow-lift [@media(max-height:820px)]:p-2">
-            <p className="mb-2 px-1 text-[0.9375rem] font-bold text-ink [@media(max-height:820px)]:mb-1">
+          <div className="rounded-block bg-panel p-5 shadow-lift [@media(max-height:1000px)]:p-2.5">
+            <p className="mb-4 px-1.5 text-base font-bold text-ink [@media(max-height:1000px)]:mb-1">
               Giải pháp nổi bật
             </p>
             {/* ⚠️ grid-cols-[minmax(0,1fr)] Ở THẺ CHA KHÔNG THỪA — xem ghi chú
                 lịch sử bên dưới về lỗi tràn ngang trên điện thoại. */}
-            <ul className="space-y-0.5">
+            <ul className="space-y-0.5 [@media(max-height:1000px)]:space-y-0">
               {MUC.map((m) => (
                 <DongMuc key={m.nhan} muc={m} />
               ))}
             </ul>
           </div>
 
-          {/* ========== Thẻ phải: dự án ========== */}
-          <div className="min-w-0 rounded-block bg-panel p-4 shadow-lift [@media(max-height:820px)]:p-2">
+          {/* ========== Thẻ phải: dự án ==========
+              flex flex-col: lưới kéo hai thẻ cao bằng nhau, mà cột 7 mục bên
+              trái luôn cao hơn hàng bốn thẻ dự án. Không có nó thì phần dôi ra
+              đọng thành mảng trắng ở đáy thẻ phải — đúng thứ công ty chê suốt
+              mấy đợt. Có nó thì hàng thẻ tự nở ra và căn giữa theo chiều dọc,
+              còn dòng "Được tin tưởng bởi…" bám đáy. */}
+          <div className="flex min-w-0 flex-col rounded-block bg-panel p-5 shadow-lift [@media(max-height:1000px)]:p-2.5">
             <SlideSanPham danhSach={sanPham} />
+
+            {/* ---------- Đơn vị đang dùng ----------
+                CHUYỂN VÀO TRONG THẺ DỰ ÁN 21/08/2026. Trước đây nó là một dòng
+                chữ căn giữa nằm chơ vơ bên dưới hai thẻ. Ở đây đúng chỗ hơn
+                hẳn: ngay dưới hàng ảnh sáu dự án làm cho chính những đơn vị đó,
+                câu này thành lời chú cho thứ khách vừa nhìn thấy chứ không còn
+                là một khẩu hiệu rời. Tiện thể tiết kiệm được một dòng trên
+                trang — thứ đang phải giành từng chục pixel để lọt một màn hình.
+
+                ⚠️ 20/08/2026 — HAI GÓP Ý TRONG CÙNG MỘT ĐỢT NÓI NGƯỢC NHAU Ở
+                ĐÂY:
+                  ảnh 2: 'bỏ dòng "khu di tích…"' + "lắm chữ quá"
+                  ảnh 7: khoanh đỏ cả khối này, "Giữ nguyên mấy cái c khoanh đỏ"
+
+                Đọc kỹ thì hết mâu thuẫn: khối này có HAI dòng, và mỗi góp ý nói
+                về một dòng khác nhau.
+                  dòng 1  "Được tin tưởng bởi các chính quyền địa phương…"
+                  dòng 2  "Khu di tích danh thắng Yên Tử · Bảo tàng – Thư
+                           viện… · Phường An Sinh · …"
+                Câu 'bỏ dòng "khu di tích…"' trỏ đúng vào dòng 2 — dòng đó BẮT
+                ĐẦU bằng chữ "Khu di tích", và cũng chính là chỗ "lắm chữ quá".
+                Nên: BỎ dòng 2, GIỮ dòng 1.
+
+                Điều kiện donVi.length > 0 vẫn giữ: chưa có khách hàng nào
+                trong CMS thì cả câu tự ẩn, không đi khoe một điều chưa có gì
+                chống lưng. */}
+            {donVi.length > 0 && (
+              <p className="mt-5 border-t border-line pt-4 text-center text-[0.8125rem] font-semibold leading-relaxed text-ink-soft [@media(max-height:1000px)]:mt-3 [@media(max-height:1000px)]:pt-2.5">
+                Được tin tưởng bởi các chính quyền địa phương, khu di tích và thiết
+                chế văn hoá trên địa bàn Quảng Ninh
+              </p>
+            )}
           </div>
         </div>
 
-        {/* ---------- Đơn vị đang dùng ----------
-            BỎ CON SỐ (18/08/2026). Bản trước ghi "6 sản phẩm đang chạy cho 6
-            cơ quan, đơn vị". Công ty góp ý đúng: kê rõ số lượng thì một số
-            khách sẽ nghĩ công ty nhỏ, chưa làm được nhiều.
+        {/* ---------- Dải "Hỏi iMob AI" ----------
+            CÓ TRONG ẢNH MẪU công ty gửi, nằm đúng chỗ này — dưới hai thẻ,
+            chạy hết bề ngang. Lần dựng trước tôi bỏ qua vì nghĩ đã có bong
+            bóng chat ở góc phải rồi. Nghĩ lại thì hai thứ khác việc nhau:
+            bong bóng là cái nút chờ sẵn cho ai đã biết mình muốn hỏi, còn dải
+            này là lời MỜI — nó nói cho khách biết trợ lý làm được gì, mà phần
+            đông khách vào trang giới thiệu không tự nghĩ ra chuyện bấm vào một
+            bong bóng tròn ở góc.
+            Bong bóng vẫn nguyên ở góc phải (công ty dặn: "cái chat bot vẫn để
+            ở góc phải như cũ cũng được") — dải này chỉ mở đúng cửa sổ chat đó,
+            không dựng thêm một khung chat thứ hai. */}
+        <div className="mt-4 flex flex-col items-center gap-4 rounded-block bg-brand-soft px-6 py-4 text-center sm:flex-row sm:justify-center sm:text-left [@media(max-height:1000px)]:mt-2 [@media(max-height:1000px)]:py-1.5">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand [@media(max-height:1000px)]:h-9 [@media(max-height:1000px)]:w-9">
+            <Bot className="h-6 w-6 text-tren-brand [@media(max-height:1000px)]:h-5 [@media(max-height:1000px)]:w-5" aria-hidden="true" />
+          </span>
 
-            Thay bằng TÊN khách hàng, đọc thẳng từ danh sách sản phẩm trong
-            CMS. Không bỏ đi thông tin nào, cũng không thêm lời nào không kiểm
-            được — mà "Bảo tàng – Thư viện tỉnh Quảng Ninh" thì nặng hơn hẳn
-            một con số. */}
-        {/* Câu dẫn đổi 19/08/2026 theo đúng chữ công ty đề nghị trong văn bản
-            góp ý. "Đang phục vụ" nghe như một dịch vụ đang chạy; "Được tin
-            tưởng bởi" là lời chứng thực — cùng một danh sách tên nhưng nói được
-            nhiều hơn hẳn. Đây cũng là chỗ chữ "Quảng Ninh" chuyển xuống sau khi
-            rời khỏi tiêu đề: ở đây nó là BẰNG CHỨNG đã làm được, chứ không phải
-            giới hạn phạm vi phục vụ. */}
-        {/* ⚠️ 20/08/2026 — HAI GÓP Ý TRONG CÙNG MỘT ĐỢT NÓI NGƯỢC NHAU Ở ĐÂY:
-              ảnh 2: 'bỏ dòng "khu di tích…"' + "lắm chữ quá"
-              ảnh 7: khoanh đỏ cả khối này, "Giữ nguyên mấy cái c khoanh đỏ nha"
+          <div className="min-w-0 sm:mr-auto">
+            <p className="text-base font-bold text-ink">Hỏi iMob AI</p>
+            {/* Câu mời viết đúng việc trợ lý làm được thật: nó đọc kho kiến
+                thức về dịch vụ, sản phẩm và cách làm việc của iMob rồi trả
+                lời. KHÔNG hứa "nhận giải pháp phù hợp nhất" như chữ trong ảnh
+                mẫu — đó là lời của một công ty khác, và một con bot thì không
+                thể chọn hộ khách giải pháp tốt nhất được. */}
+            <p className="mt-0.5 text-[0.8125rem] leading-relaxed text-ink-soft">
+              Đang có việc cần làm mà chưa biết bắt đầu từ đâu? Hỏi trợ lý của iMob
+              về dịch vụ, sản phẩm và cách triển khai.
+            </p>
+          </div>
 
-            Đọc kỹ thì hết mâu thuẫn: khối này có HAI dòng, và mỗi góp ý nói về
-            một dòng khác nhau.
-              dòng 1  "Được tin tưởng bởi các chính quyền địa phương…"
-              dòng 2  "Khu di tích danh thắng Yên Tử · Bảo tàng – Thư viện… ·
-                       Phường An Sinh · Đông Triều… · Xã Quảng Tân… · Phường
-                       Yên Tử"
-
-            Câu 'bỏ dòng "khu di tích…"' trỏ đúng vào dòng 2 — dòng đó BẮT ĐẦU
-            bằng chữ "Khu di tích". Nó cũng chính là chỗ "lắm chữ quá": sáu tên
-            đơn vị nối bằng dấu chấm giữa, tràn hai dòng.
-
-            Nên: BỎ dòng 2, GIỮ dòng 1. Vừa đúng cả hai góp ý, vừa không mất
-            bằng chứng năng lực — câu còn lại vẫn nói rõ khách của iMob là
-            chính quyền và khu di tích ở Quảng Ninh.
-
-            Điều kiện donVi.length > 0 vẫn giữ: chưa có khách hàng nào trong CMS
-            thì cả câu tự ẩn, không đi khoe một điều chưa có gì chống lưng. */}
-        {donVi.length > 0 && (
-          <p className="mx-auto mt-2 max-w-3xl text-center text-sm font-semibold leading-relaxed text-ink [@media(max-height:820px)]:mt-1">
-            Được tin tưởng bởi các chính quyền địa phương, khu di tích và thiết chế văn hoá
-            trên địa bàn Quảng Ninh
-          </p>
-        )}
+          <Button onClick={openChat} className="shrink-0">
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            {hero.nutPhu}
+          </Button>
+        </div>
       </Container>
     </section>
   );
