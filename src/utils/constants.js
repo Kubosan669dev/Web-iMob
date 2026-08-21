@@ -46,6 +46,12 @@ export const NAV_ITEMS = [
       { label: "Phát triển Zalo MiniApp", to: "/zalo-miniapp" },
       { label: "Giải pháp Phần mềm & Phần cứng", to: "/software-hardware" },
       { label: "Đào tạo Chuyển đổi số", to: "/digital-transformation" },
+      // Hai mục thêm 21/08/2026 cùng lúc với hai trang mới. Menu là đường
+      // duy nhất tới /vr360: mảng thực tế ảo không nằm trong bảy mục ở trang
+      // chủ (bảy mục đó là danh sách công ty tự chốt, không tự ý thêm bớt),
+      // nên không có mục này thì trang VR360 dựng xong cũng không ai tìm ra.
+      { label: "Ứng dụng Robot", to: "/robot" },
+      { label: "Thực tế ảo 360°", to: "/vr360" },
     ],
   },
   { id: "about", label: "Về chúng tôi", href: "/#about" },

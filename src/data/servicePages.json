@@ -20,8 +20,8 @@
     },
     "solutions": {
       "badge": "Ứng dụng toàn diện",
-      "title": "GIẢI PHÁP",
-      "highlight": "ĐA LĨNH VỰC",
+      "title": "Giải pháp",
+      "highlight": "đa lĩnh vực",
       "description": "Mini App phù hợp nhất với những mô hình khách quay lại nhiều lần — bên mình thiết kế theo đúng nghiệp vụ của bạn.",
       "columns": [
         {
@@ -43,8 +43,8 @@
     },
     "features": {
       "badge": "Tính năng nổi bật",
-      "title": "TÍNH NĂNG",
-      "highlight": "ĐIỂM MẠNH",
+      "title": "Tính năng",
+      "highlight": "điểm mạnh",
       "description": "Những khối chức năng bên mình dựng sẵn và ghép theo nhu cầu từng dự án.",
       "items": [
         { "title": "Đăng ký & đặt lịch online", "desc": "Khách đặt lịch, đặt bàn, đăng ký dịch vụ ngay trong Zalo — không phải gọi điện hay chờ phản hồi." },
@@ -58,8 +58,8 @@
     },
     "benefits": {
       "badge": "Tại sao chọn",
-      "title": "LỢI THẾ",
-      "highlight": "NỀN TẢNG ZALO",
+      "title": "Lợi thế",
+      "highlight": "nền tảng Zalo",
       "description": "Những điều đúng về bản thân nền tảng Zalo Mini App — không phải lời quảng cáo.",
       "columns": 3,
       "cards": [
@@ -73,8 +73,8 @@
     },
     "process": {
       "badge": "Quy trình triển khai",
-      "title": "5 BƯỚC",
-      "highlight": "ĐỒNG HÀNH",
+      "title": "5 bước",
+      "highlight": "đồng hành",
       "description": "Bạn mô tả bài toán, phần kỹ thuật và hồ sơ đăng ký để bên mình lo — hướng dẫn từng bước.",
       "steps": [
         { "title": "Ý tưởng", "desc": "Cùng làm rõ nhu cầu, mô hình kinh doanh và tính năng cần có." },
@@ -106,8 +106,8 @@
     },
     "solutions": {
       "badge": "Giải pháp tích hợp",
-      "title": "SOFTWARE &",
-      "highlight": "HARDWARE",
+      "title": "Software &",
+      "highlight": "Hardware",
       "description": "Một đầu mối lo cả phần mềm lẫn thiết bị — không phải ghép nhiều nhà cung cấp rồi tự xử lý phần kết nối.",
       "columns": [
         {
@@ -129,8 +129,8 @@
     },
     "benefits": {
       "badge": "Điểm mạnh của giải pháp",
-      "title": "VÌ SAO",
-      "highlight": "CHỌN IMOB",
+      "title": "Vì sao",
+      "highlight": "chọn iMob",
       "description": "Sáu điều bên mình cam kết trong hợp đồng từng dự án.",
       "columns": 3,
       "cards": [
@@ -144,8 +144,8 @@
     },
     "industries": {
       "badge": "Giải pháp theo ngành",
-      "title": "PHÙ HỢP",
-      "highlight": "NHIỀU NGÀNH",
+      "title": "Phù hợp",
+      "highlight": "nhiều ngành",
       "description": "Bên mình đã làm cho nhiều mô hình khác nhau — dưới đây là vài hướng thường gặp.",
       "columns": 3,
       "cards": [
@@ -159,8 +159,8 @@
     },
     "process": {
       "badge": "Quy trình phát triển",
-      "title": "5 BƯỚC",
-      "highlight": "TỪ Ý TƯỞNG ĐẾN VẬN HÀNH",
+      "title": "5 bước",
+      "highlight": "từ ý tưởng đến vận hành",
       "description": "Thời gian tùy quy mô và số tính năng từng dự án — bên mình chốt tiến độ cụ thể sau khi nghe nhu cầu.",
       "steps": [
         { "title": "Phân tích & tư vấn", "desc": "Khảo sát nghiệp vụ, làm rõ bài toán và đề xuất hướng giải quyết." },
@@ -192,8 +192,8 @@
     },
     "objectives": {
       "badge": "Mục tiêu chương trình",
-      "title": "SAU KHÓA HỌC",
-      "highlight": "ĐỘI NGŨ CỦA BẠN",
+      "title": "Sau khóa học",
+      "highlight": "đội ngũ của bạn",
       "description": "Ba điều đội ngũ đạt được khi kết thúc chương trình.",
       "columns": 3,
       "cards": [
@@ -204,8 +204,8 @@
     },
     "audience": {
       "badge": "Đối tượng tham gia",
-      "title": "DÀNH CHO",
-      "highlight": "AI",
+      "title": "Dành cho",
+      "highlight": "những ai",
       "description": "Chương trình điều chỉnh nội dung theo vai trò của từng nhóm.",
       "columns": 4,
       "cards": [
@@ -217,8 +217,8 @@
     },
     "modules": {
       "badge": "Nội dung đào tạo",
-      "title": "LỘ TRÌNH",
-      "highlight": "THIẾT KẾ RIÊNG",
+      "title": "Lộ trình",
+      "highlight": "thiết kế riêng",
       "description": "Nội dung xây theo từng doanh nghiệp chứ không dùng chung một giáo trình — dưới đây là các nhóm chủ đề thường có.",
       "items": [
         { "title": "Nền tảng số & tư duy chuyển đổi", "desc": "Bức tranh chung về chuyển đổi số, cách nhìn ra cơ hội trong chính công việc của mình." },
@@ -230,14 +230,246 @@
     },
     "formats": {
       "badge": "Hình thức triển khai",
-      "title": "LINH HOẠT",
-      "highlight": "THEO NHU CẦU",
+      "title": "Linh hoạt",
+      "highlight": "theo nhu cầu",
       "description": "Chọn hình thức phù hợp với lịch và quy mô đội ngũ của bạn.",
       "columns": 3,
       "cards": [
         { "icon": "users", "title": "Trực tiếp (offline)", "desc": "Đào tạo tại doanh nghiệp, thực hành trực tiếp cùng giảng viên." },
         { "icon": "monitor", "title": "Trực tuyến (online)", "desc": "Học từ xa linh hoạt theo lịch của đội ngũ, phù hợp nhiều chi nhánh." },
         { "icon": "presentation", "title": "Chuyên đề", "desc": "Buổi chuyên sâu theo một chủ đề cụ thể mà doanh nghiệp cần." }
+      ]
+    }
+  },
+
+  "_note_robot_vr360": "HAI TRANG THÊM 21/08/2026, dựng từ 4 tài liệu công ty gửi (hồ sơ kỹ thuật robot lễ tân, kịch bản robot tuần tra, báo giá gói VR360 + website bản đồ số, slide Zalo Mini App). Trước đó mục 'Ứng dụng robot tuần tra/lễ tân, UAV, Drone' trong 7 mục ở trang chủ KHÔNG có trang riêng — bấm vào chỉ dẫn về form liên hệ; còn mảng VR360 thì không xuất hiện ở bất kỳ đâu dù công ty đang chào bán. ⚠️ BA THỨ CÓ TRONG TÀI LIỆU NHƯNG CỐ Ý KHÔNG ĐƯA LÊN WEB: (1) đơn giá và tổng hợp đồng — báo giá đó gửi riêng cho một khách; (2) tên hãng sản xuất robot — iMob là bên triển khai, công bố tên hãng là chỉ đường cho khách mua thẳng của hãng, công ty muốn công bố thì thêm sau chứ đã công bố rồi thì không rút lại được; (3) tên và số điện thoại người phụ trách bên đối tác — thông tin cá nhân của người thuộc công ty khác. ⚠️ KHÔNG hứa 'xong trong 45 ngày': con số đó là của đúng gói 11 điểm trong báo giá ấy, gói khác số điểm khác thì sai. Mọi thông số kỹ thuật dưới đây chép nguyên từ tài liệu, không suy đoán.",
+
+  "robot": {
+    "meta": {
+      "route": "/robot",
+      "title": "Ứng dụng Robot lễ tân & Robot tuần tra | iMob Solution & Technology",
+      "description": "Robot lễ tân đón khách trong sảnh, robot tuần tra tự hành giám sát ngoài trời. iMob khảo sát mặt bằng, cấu hình tuyến và kịch bản, đào tạo và bàn giao vận hành."
+    },
+    "hero": {
+      "badge": "Robot dịch vụ & an ninh",
+      "title": "Ứng dụng",
+      "highlight": "robot theo yêu cầu",
+      "description": "Robot lễ tân tiếp đón và dẫn đường khách trong sảnh; robot tuần tra tự hành đi theo tuyến và giám sát ngoài trời. iMob lo phần triển khai từ khảo sát mặt bằng tới lúc bàn giao vận hành.",
+      "highlights": [
+        { "icon": "bot", "label": "Hội thoại & nhận diện khuôn mặt" },
+        { "icon": "monitor", "label": "Camera 4K quan sát ban đêm" },
+        { "icon": "workflow", "label": "Điều khiển & giám sát từ xa" },
+        { "icon": "headphones", "label": "Đào tạo và bảo hành 12 tháng" }
+      ]
+    },
+    "loai": {
+      "badge": "Hai nhóm robot",
+      "title": "Chọn robot",
+      "highlight": "theo bài toán",
+      "description": "Hai loại phục vụ hai việc khác hẳn nhau — một loại đứng trong sảnh tiếp khách, một loại đi tuần ngoài trời.",
+      "columns": [
+        {
+          "icon": "users",
+          "title": "Robot lễ tân",
+          "items": [
+            "Sảnh khách sạn, văn phòng",
+            "Showroom, trường học",
+            "Trung tâm dịch vụ công",
+            "Chỉ hoạt động trong nhà"
+          ]
+        },
+        {
+          "icon": "shield",
+          "title": "Robot tuần tra",
+          "items": [
+            "Sự kiện ngoài trời, chợ đêm",
+            "Khuôn viên, khu gửi xe",
+            "Tuyến tuần tra cấu hình sẵn",
+            "Đạt chuẩn bảo vệ IP65"
+          ]
+        },
+        {
+          "icon": "settings",
+          "title": "Phần iMob đảm nhận",
+          "items": [
+            "Khảo sát mặt bằng và tuyến",
+            "Dựng bản đồ, cài kịch bản",
+            "Đào tạo vận hành",
+            "Bàn giao và hỗ trợ kỹ thuật"
+          ]
+        }
+      ]
+    },
+    "letan": {
+      "badge": "Robot lễ tân",
+      "title": "Sáu việc",
+      "highlight": "robot lễ tân làm được",
+      "description": "Robot dáng đứng cao 1,2 m, màn hình cảm ứng 13,3 inch, pin chạy liên tục khoảng 8 giờ.",
+      "items": [
+        { "title": "Hội thoại bằng giọng nói", "desc": "Giao tiếp tự nhiên với khách, tra cứu được thông tin theo thời gian thực." },
+        { "title": "Nhận diện khuôn mặt", "desc": "Chủ động chào khách quen theo đúng tên riêng thay vì một câu chào chung." },
+        { "title": "Dẫn đường tận nơi", "desc": "Đưa khách tới phòng họp hay quầy dịch vụ đã cài sẵn, theo lộ trình tối ưu." },
+        { "title": "Phát video quảng cáo", "desc": "Hiển thị nội dung toàn màn hình khi robot đang ở trạng thái chờ — sảnh không có lúc nào chết." },
+        { "title": "Gọi video tới nhân viên", "desc": "Gặp yêu cầu phức tạp thì kết nối thẳng tới người tư vấn, khách không phải đi tìm." },
+        { "title": "Cử động biểu cảm", "desc": "Sáu bậc tự do cho đầu và tay; kể chuyện, hát và tương tác để khách đỡ ngại lúc chờ." }
+      ]
+    },
+    "tuantra": {
+      "badge": "Robot tuần tra",
+      "title": "Giám sát",
+      "highlight": "cả khi trời tối",
+      "description": "Robot đi theo tuyến đã cấu hình, dừng tại từng điểm chốt, truyền hình ảnh thời gian thực về trung tâm.",
+      "columns": 3,
+      "cards": [
+        { "icon": "monitor", "title": "Camera quang học 4K", "desc": "Cảm biến 8 MP có HDR nên nhìn được trong điều kiện thiếu sáng; zoom quang 30x để quan sát mục tiêu ở xa." },
+        { "icon": "gauge", "title": "Gimbal chống rung 3 trục", "desc": "Độ ổn định ±0,01° — phóng to nhìn xa mà khung hình vẫn đứng yên, không rung theo bước di chuyển." },
+        { "icon": "bell", "title": "Cảnh báo bất thường", "desc": "Hệ thống đẩy cảnh báo về trung tâm; việc xác minh và định danh do người trực quyết định, không phải robot tự xử." },
+        { "icon": "headphones", "title": "Loa, đèn và micro hai chiều", "desc": "Phát thông báo công cộng và nói chuyện trực tiếp với khu vực robot đang tuần tra." },
+        { "icon": "workflow", "title": "Điều khiển từ xa", "desc": "Người được phân quyền dừng khẩn cấp hoặc chuyển sang lái robot từ xa qua Wi-Fi hoặc 4G/5G." },
+        { "icon": "shield", "title": "Bền với thời tiết", "desc": "Chuẩn IP65, chịu 10–50°C, lội nước 130 mm, vượt vật cản 150 mm, leo dốc 20%. Pin đi khoảng 30 km một lần sạc." }
+      ]
+    },
+    "dieuKien": {
+      "badge": "Trước khi lắp đặt",
+      "title": "Mặt bằng cần",
+      "highlight": "đáp ứng gì",
+      "description": "Kê ra trước để bạn tự đối chiếu — vướng chỗ nào thì bên mình xử lý cùng, chứ không để phát hiện lúc robot đã về tới nơi.",
+      "columns": [
+        {
+          "icon": "monitor",
+          "title": "Robot lễ tân — trong nhà",
+          "items": [
+            "Sàn dốc tối đa 5°, gờ cao tối đa 10 mm",
+            "Wi-Fi phủ mạnh toàn bộ khu vực",
+            "Vách kính dán decal mờ ngang tầm cảm biến",
+            "Trạm sạc sát tường, thoáng bán kính 1 m",
+            "Đủ sáng, tránh ngược sáng mạnh"
+          ]
+        },
+        {
+          "icon": "map",
+          "title": "Robot tuần tra — ngoài trời",
+          "items": [
+            "Lối đi đủ rộng, thân robot rộng 71 cm",
+            "Đủ bán kính quay đầu trên tuyến",
+            "Wi-Fi hoặc 4G/5G ổn định dọc tuyến",
+            "Nhiệt độ môi trường 10–50°C",
+            "Tuyến tuần tra cấu hình trước khi chạy"
+          ]
+        }
+      ]
+    },
+    "process": {
+      "badge": "Quy trình triển khai",
+      "title": "5 bước",
+      "highlight": "từ khảo sát đến vận hành",
+      "description": "Robot không phải thiết bị cắm điện là chạy — phần lớn công sức nằm ở khảo sát và cấu hình.",
+      "steps": [
+        { "title": "Khảo sát mặt bằng", "desc": "Đo lối đi, độ dốc, vách kính, sóng mạng và vị trí đặt trạm sạc." },
+        { "title": "Chọn cấu hình", "desc": "Chốt loại robot và các tuỳ chọn cần thêm, ví dụ camera nhiệt hay trạm sạc tự động." },
+        { "title": "Dựng bản đồ & tuyến", "desc": "Vẽ bản đồ khu vực, đặt điểm chốt và cấu hình tuyến robot sẽ đi." },
+        { "title": "Cài kịch bản", "desc": "Nội dung tiếp đón, câu trả lời, nội dung quảng cáo hoặc quy tắc cảnh báo theo yêu cầu đơn vị." },
+        { "title": "Đào tạo & bàn giao", "desc": "Đào tạo vận hành, chạy thử tại chỗ, bàn giao kèm bảo hành 12 tháng và hỗ trợ kỹ thuật từ xa 3 tháng." }
+      ]
+    }
+  },
+
+  "vr360": {
+    "meta": {
+      "route": "/vr360",
+      "title": "Thực tế ảo 360° & Số hoá di tích | iMob Solution & Technology",
+      "description": "Số hoá di tích, danh thắng và trụ sở thành tour tham quan 360° kèm thuyết minh tự động song ngữ, ghép thẳng vào website bản đồ số của địa phương."
+    },
+    "hero": {
+      "badge": "Số hoá di sản",
+      "title": "Thực tế ảo",
+      "highlight": "360°",
+      "description": "Đưa di tích, danh thắng và trụ sở lên không gian số thành tour tham quan xem được ngay trên web hoặc bằng kính thực tế ảo — kèm thuyết minh tự động song ngữ.",
+      "highlights": [
+        { "icon": "expand", "label": "Quay flycam & máy ảnh cơ" },
+        { "icon": "headphones", "label": "Thuyết minh song ngữ" },
+        { "icon": "map", "label": "Mã QR & định vị bản đồ" },
+        { "icon": "database", "label": "Bàn giao tư liệu lưu trữ" }
+      ]
+    },
+    "goiGom": {
+      "badge": "Trong một gói",
+      "title": "Sáu hạng mục",
+      "highlight": "làm trọn từ đầu tới cuối",
+      "description": "Không phải chỉ đi chụp rồi ghép ảnh — phần lớn giá trị nằm ở hậu kỳ, thuyết minh và cách dẫn người xem đi trong tour.",
+      "items": [
+        { "title": "Quay dựng tour 360°", "desc": "Flycam chuyên dụng cho các điểm trên cao và toàn cảnh, máy ảnh cơ chất lượng cao cho những góc cần thật sắc nét. Làm được cả trong nhà lẫn ngoài trời." },
+        { "title": "Thuyết minh tự động song ngữ", "desc": "Thu âm và dựng theo chủ đề hoặc theo câu chuyện của từng điểm, để lịch sử địa phương được kể đúng và đủ ý nghĩa." },
+        { "title": "Hiệu ứng chỉ đường trong tour", "desc": "Biển chỉ dẫn và hiệu ứng dẫn hướng để người xem đi mạch lạc, không bị lạc giữa các điểm. Phối hợp được với kính thực tế ảo." },
+        { "title": "Ảnh 2D kèm chú giải", "desc": "Ảnh chính diện từng điểm, giới thiệu theo chủ đề lịch sử và văn hoá chứ không để người xem tự đoán." },
+        { "title": "Mã QR & định vị Google Map", "desc": "Mỗi điểm một mã QR và một điểm định vị — khách quét là vào thẳng tour, hoặc bấm là có đường đi." },
+        { "title": "Bàn giao tư liệu lưu trữ", "desc": "Toàn bộ hình ảnh đã xử lý hậu kỳ được bàn giao để đơn vị giữ làm tư liệu dùng về sau, không phụ thuộc vào bên làm." }
+      ]
+    },
+    "loiIch": {
+      "badge": "Dùng để làm gì",
+      "title": "Một tour",
+      "highlight": "nhiều việc",
+      "description": "Số hoá xong thì nó không chỉ nằm đó — đây là những chỗ đơn vị dùng tới nhiều nhất.",
+      "columns": 3,
+      "cards": [
+        { "icon": "landmark", "title": "Quảng bá di tích, di sản", "desc": "Người ở xa xem được trước khi đến; người đã đến rồi vẫn xem lại được phần mình bỏ lỡ." },
+        { "icon": "graduation-cap", "title": "Tư liệu giáo dục địa phương", "desc": "Nhà trường và đơn vị văn hoá dùng làm học liệu, thay cho việc chỉ đọc chữ trên giấy." },
+        { "icon": "database", "title": "Lưu trữ hiện trạng", "desc": "Ghi lại đúng hiện trạng tại thời điểm số hoá — thứ không quay lại được nếu công trình xuống cấp hay thay đổi." },
+        { "icon": "globe", "title": "Ghép vào website địa phương", "desc": "Tour gắn thẳng vào website bản đồ số, khách chọn điểm nào là xem tour điểm đó ngay trên trang." },
+        { "icon": "smartphone", "title": "Quét mã tại chỗ", "desc": "Đặt mã QR ngay tại điểm tham quan để khách nghe thuyết minh bằng điện thoại của chính mình." },
+        { "icon": "wrench", "title": "Sửa nội dung khi cần", "desc": "Có tư liệu mới hay thông tin cần đính chính thì cập nhật được, bên mình hỗ trợ chỉnh sửa trong quá trình sử dụng." }
+      ]
+    },
+    "banDoSo": {
+      "badge": "Đi cùng tour 360°",
+      "title": "Website",
+      "highlight": "bản đồ số địa phương",
+      "description": "Nơi tour 360° có chỗ đứng và người dân, du khách tìm thấy được. Bên mình đã làm cho Đông Triều và xã Quảng Tân.",
+      "columns": [
+        {
+          "icon": "map",
+          "title": "Bản đồ & tour",
+          "items": [
+            "Gắn vị trí toàn bộ địa điểm nổi bật",
+            "Tìm kiếm và ước lượng xa gần",
+            "Tour 360° từng điểm xem trên web",
+            "Video và giới thiệu địa phương"
+          ]
+        },
+        {
+          "icon": "store",
+          "title": "Hệ sinh thái dịch vụ",
+          "items": [
+            "Đặc sản OCOP và ẩm thực",
+            "Lưu trú: khách sạn, nhà nghỉ, homestay",
+            "Taxi và vận chuyển",
+            "ATM, nhà thuốc, trạm y tế"
+          ]
+        },
+        {
+          "icon": "headphones",
+          "title": "Kênh chính thống",
+          "items": [
+            "Địa chỉ và đường dây nóng của địa phương",
+            "Thông tin liên hệ kèm định vị",
+            "Phím tắt tới từng danh mục",
+            "Người xem tự đổi được màu nền trang"
+          ]
+        }
+      ]
+    },
+    "process": {
+      "badge": "Cách làm",
+      "title": "5 bước",
+      "highlight": "từ khảo sát đến bàn giao",
+      "description": "Thời gian phụ thuộc số điểm cần số hoá và đặc điểm từng nơi, nên bước khảo sát quyết định phần lớn.",
+      "steps": [
+        { "title": "Khảo sát & chốt điểm", "desc": "Đi thực địa, chốt danh sách điểm cần số hoá và số góc quay cho từng điểm." },
+        { "title": "Chuẩn bị tư liệu", "desc": "Cùng đơn vị thu thập nội dung lịch sử, văn hoá làm cơ sở viết lời thuyết minh." },
+        { "title": "Quay dựng tại chỗ", "desc": "Quay flycam và máy ảnh cơ; nơi trong nhà thiếu sáng thì bổ sung thiết bị chiếu sáng." },
+        { "title": "Hậu kỳ & thuyết minh", "desc": "Xử lý hình ảnh, ghép tour, tạo hiệu ứng chỉ đường, thu âm thuyết minh song ngữ." },
+        { "title": "Bàn giao & hướng dẫn", "desc": "Ghép tour vào website, tạo mã QR, hướng dẫn sử dụng và bàn giao toàn bộ tư liệu." }
       ]
     }
   }

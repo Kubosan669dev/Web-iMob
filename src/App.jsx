@@ -16,6 +16,11 @@ const SoftwareHardwarePage = lazy(
 const DigitalTransformationPage = lazy(
   () => import("./pages/DigitalTransformationPage.jsx"),
 );
+// Hai trang thêm 21/08/2026 từ tài liệu công ty gửi. /robot là đích thật cho
+// mục thứ 4 trong bảy mục ở trang chủ — trước đó mục đó chỉ dẫn về form liên
+// hệ vì chưa có trang nào để đi tới.
+const RobotPage = lazy(() => import("./pages/RobotPage.jsx"));
+const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
 // LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
@@ -62,6 +67,8 @@ export default function App() {
                     path="/digital-transformation"
                     element={<DigitalTransformationPage />}
                   />
+                  <Route path="/robot" element={<RobotPage />} />
+                  <Route path="/vr360" element={<Vr360Page />} />
                   <Route
                     path="/privacy-policy"
                     element={<LegalPage slug="privacy-policy" />}

@@ -231,8 +231,14 @@ const MUC = [
     icon: ShieldCheck,
   },
   {
+    // ĐÍCH ĐỔI 21/08/2026: "/#contact" -> "/robot".
+    // Trước đó mục này đẩy thẳng khách xuống form liên hệ, tức là bắt để lại
+    // số điện thoại TRƯỚC khi được biết bên mình làm được gì — cách chắc chắn
+    // nhất để mất một khách đang tìm hiểu. Lúc ấy không còn cách nào khác vì
+    // chưa có tài liệu để dựng trang. Nay đã có hồ sơ kỹ thuật hai loại robot.
     nhan: "Ứng dụng các loại robot tuần tra/lễ tân, UAV, Drone theo yêu cầu",
-    den: "/#contact",
+    phu: "Robot lễ tân và robot tuần tra tự hành",
+    den: "/robot",
     icon: PlaneTakeoff,
   },
   {
