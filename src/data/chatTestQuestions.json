@@ -239,6 +239,18 @@
     { "q": "Có dịch vụ giám sát an ninh mạng 24/7 và ứng cứu sự cố không?", "expect": "giam-sat-ung-cuu", "phai_co": ["ứng cứu"] },
     { "q": "Bên bạn có cung cấp robot tuần tra và drone không?", "expect": "robot-uav-drone", "phai_co": ["robot"] },
     { "q": "ben ban co lam uav khong", "expect": "robot-uav-drone" },
+
+    { "q": "Robot lễ tân của bên bạn làm được những gì?", "expect": "robot-le-tan", "phai_co": ["nhận diện khuôn mặt"] },
+    { "q": "toi muon dat robot don khach o sanh khach san", "expect": "robot-le-tan", "phai_co": ["dẫn đường"] },
+    { "q": "Robot tuần tra có quan sát được ban đêm không?", "expect": "robot-tuan-tra", "phai_co": ["HDR"] },
+    { "q": "robot an ninh di duoc bao xa moi lan sac", "expect": "robot-tuan-tra", "phai_co": ["30 km"] },
+    { "q": "Chỗ tôi cần hạ tầng gì thì lắp robot được?", "expect": "robot-dieu-kien", "phai_co": ["Wi-Fi"] },
+    { "q": "robot co leo doc duoc khong", "expect": "robot-dieu-kien" },
+
+    { "q": "Bên bạn có làm tour thực tế ảo 360 độ cho di tích không?", "expect": "vr360-dich-vu", "phai_co": ["flycam"] },
+    { "q": "toi muon so hoa di tich cua xa", "expect": "vr360-dich-vu" },
+    { "q": "Tour 360 có thuyết minh song ngữ không?", "expect": "vr360-thuyet-minh", "phai_co": ["song ngữ"] },
+    { "q": "Website bản đồ số cho xã gồm những gì?", "expect": "vr360-ban-do-so", "phai_co": ["OCOP"] },
     { "q": "Tôi muốn xây trợ lý AI riêng cho công ty tôi thì làm thế nào?", "expect": "tro-ly-ai-doanh-nghiep", "phai_co": ["trợ lý AI riêng"] },
     { "q": "Công ty có đủ điều kiện tham gia đấu thầu dự án công không?", "expect": "dau-thau", "phai_co": ["hồ sơ năng lực"] },
     { "q": "Dữ liệu công dân lưu ở đâu, có đúng Nghị định 13/2023 không?", "expect": "data-security", "phai_co": ["Nghị định 13"] },

@@ -1194,6 +1194,87 @@
         "escalate"
       ],
       "text": "Website iMob không công bố các thông tin sau, chatbot phải trả lời chưa có thông tin công khai và chuyển hotline: Bảng giá hoặc khoảng ngân sách tham chiếu cho từng dịch vụ; Thời lượng khóa đào tạo (số buổi/giờ) và lịch khai giảng; Case study / khách hàng tham chiếu cụ thể kèm kết quả; Phương thức thanh toán, tiến độ thanh toán, điều khoản hợp đồng, chính sách hoàn/hủy; Công nghệ/stack sử dụng, khả năng tích hợp với các hệ thống phổ biến; Giờ làm việc và SLA cụ thể bằng con số (phản hồi trong bao lâu); Hồ sơ pháp lý: năm thành lập, mã số thuế, quy mô nhân sự; Link mạng xã hội (footer có icon nhưng chưa gắn link); Nội dung chi tiết dịch vụ Digital Consulting (chỉ có ở footer)."
+    },
+    {
+      "id": "C023",
+      "title": "Robot lễ tân NEO E1 — chức năng và thông số",
+      "service": "software_hardware",
+      "tags": [
+        "robot",
+        "robot lễ tân",
+        "tiếp đón",
+        "sảnh",
+        "NEO E1"
+      ],
+      "text": "iMob triển khai ROBOT LỄ TÂN NEO E1 — robot dịch vụ AI dáng đứng dùng cho công tác tiếp đón và hướng dẫn khách tại sảnh khách sạn, văn phòng, showroom, trường học và trung tâm dịch vụ công. Sáu chức năng chính: (1) Hội thoại AI — giao tiếp giọng nói tự nhiên, truy xuất thông tin thời gian thực từ Internet; (2) Nhận diện khuôn mặt — chủ động chào khách thân thiết theo tên riêng; (3) Dẫn đường — đưa khách tới vị trí cài sẵn như phòng họp, quầy dịch vụ theo lộ trình tối ưu; (4) Giải trí tương tác — kể chuyện, hát, cử động tay và đầu biểu cảm; (5) Phát video quảng cáo toàn màn hình khi ở trạng thái chờ; (6) Hỗ trợ từ xa — gọi video tới nhân viên tư vấn khi gặp yêu cầu phức tạp. Thông số: kích thước 460 x 460 x 1200 mm, nặng 19 kg, màn hình cảm ứng 13,3 inch HD, 6 bậc tự do, pin 20Ah chạy liên tục khoảng 8 giờ, hệ điều hành Android. An toàn: nhận diện người đi bộ bằng công nghệ RGBD để giảm tốc hoặc né tránh; nút dừng khẩn cấp vật lý phía sau ngắt điện tức thì bộ phận chuyển động; quản lý truy cập bằng mật khẩu quản trị; mạch bảo vệ pin lithium chống quá nhiệt và đoản mạch. Robot này chỉ hoạt động TRONG NHÀ. iMob là bên triển khai: khảo sát mặt bằng, dựng bản đồ, cài kịch bản tiếp đón, đào tạo và bàn giao vận hành."
+    },
+    {
+      "id": "C024",
+      "title": "Robot tuần tra tự hành — năng lực giám sát an ninh",
+      "service": "software_hardware",
+      "tags": [
+        "robot",
+        "robot tuần tra",
+        "an ninh",
+        "giám sát",
+        "camera"
+      ],
+      "text": "iMob triển khai ROBOT TUẦN TRA TỰ HÀNH cho công tác giám sát an ninh ngoài trời, đã dựng kịch bản cho sự kiện đêm tại Bảo tàng – Thư viện tỉnh Quảng Ninh. Robot di chuyển tự hành theo tuyến cấu hình sẵn và dừng tại các điểm chốt (cổng ra vào, khu ẩm thực, lối đi chính, khu gửi xe). Giám sát hình ảnh: camera quang học 4K Ultra HD, cảm biến 1/2.7 inch, 8 MP, hỗ trợ HDR nên quan sát được trong điều kiện ánh sáng yếu — phù hợp vận hành buổi tối; zoom quang học 30x, hybrid 180x; gimbal PTZ chống rung 3 trục ổn định ±0,01° nên phóng to quan sát mục tiêu ở xa mà hình vẫn đứng yên. Phát hiện bất thường: hệ thống xử lý ảnh đẩy cảnh báo về trung tâm giám sát; việc xác minh và định danh đối tượng DO NGƯỜI VẬN HÀNH thực hiện, không phải robot tự quyết. Tương tác tại chỗ: đèn cảnh báo, loa phát thanh, micro liên lạc hai chiều — phát được thông báo công cộng và nói chuyện trực tiếp với khu vực robot đang tuần tra. Điều khiển từ xa: truyền video thời gian thực về trung tâm, người được phân quyền dừng khẩn cấp hoặc chuyển sang lái từ xa. Vận hành: tốc độ dưới 8 km/h; pin LFP đi khoảng 30 km một lần sạc, sạc 80% trong khoảng 1,5 giờ và đầy trong khoảng 2,5 giờ; chuẩn bảo vệ IP65; nhiệt độ 10–50°C; vượt vật cản cao tối đa 150 mm; lội nước 130 mm; leo dốc tối đa 20%; thân robot 850 x 710 x 840 mm, nặng khoảng 90 kg. Tuỳ chọn mở rộng: camera nhiệt IR phát hiện sớm điểm nóng phục vụ phòng ngừa cháy; màn hình quảng cáo hai bên thân robot; trạm sạc tự động cho ca tuần tra kéo dài."
+    },
+    {
+      "id": "C025",
+      "title": "Điều kiện hạ tầng để triển khai robot",
+      "service": "software_hardware",
+      "tags": [
+        "robot",
+        "điều kiện",
+        "hạ tầng",
+        "lắp đặt",
+        "khảo sát"
+      ],
+      "text": "ĐIỀU KIỆN TRIỂN KHAI ROBOT LỄ TÂN (trong nhà): độ dốc mặt sàn tối đa 5°; vượt gờ cao tối đa 10 mm; đủ ánh sáng tiêu chuẩn cho camera nhận diện khuôn mặt, tránh ngược sáng mạnh; Wi-Fi 2.4G/5G ổn định trên toàn bộ mặt bằng, cường độ tín hiệu trên 90%; trạm sạc đặt sát tường nơi phẳng, thông thoáng bán kính 1 m; vách kính phải dán decal nhám hoặc mờ ngang tầm cảm biến radar, không thì robot không nhận ra kính; cần smartphone hoặc tablet Android để dựng bản đồ qua ứng dụng. ĐIỀU KIỆN TRIỂN KHAI ROBOT TUẦN TRA (ngoài trời): lối đi và bán kính quay đầu phải phù hợp kích thước robot (rộng 710 mm) để di chuyển an toàn nơi đông người; hạ tầng kết nối Wi-Fi hoặc 4G/5G ổn định dọc tuyến; nhiệt độ môi trường 10–50°C; tuyến tuần tra phải được cấu hình trước khi vận hành. Gói tiêu chuẩn gồm đào tạo vận hành 1 buổi, hỗ trợ kỹ thuật từ xa miễn phí 3 tháng trong giờ hành chính, bảo hành 12 tháng. Bảo hành không áp dụng cho hư hỏng do va chạm, dùng sai hướng dẫn, tự ý sửa chữa, nguồn điện không phù hợp, ngập nước, thời tiết vượt điều kiện công bố và sự kiện bất khả kháng."
+    },
+    {
+      "id": "C026",
+      "title": "Thực tế ảo 360° — số hoá di tích và danh thắng",
+      "service": "general",
+      "tags": [
+        "vr360",
+        "thực tế ảo",
+        "tour ảo",
+        "di tích",
+        "số hoá",
+        "virtual tour"
+      ],
+      "text": "iMob cung cấp GÓI THỰC TẾ ẢO 360° (VR360) — sản phẩm số hoá di tích, danh thắng và trụ sở thành tour tham quan xem được trên web hoặc bằng kính thực tế ảo. Mục đích: tăng cường quảng bá di tích và di sản, giúp lịch sử địa phương được hiểu đúng và đầy đủ ý nghĩa. Một gói trọn vẹn gồm: quay dựng tour 360° bằng flycam chuyên dụng cho các điểm trên cao và toàn cảnh, kết hợp máy ảnh cơ chất lượng cao cho những cảnh cần độ sắc nét, làm được cả trong nhà lẫn ngoài trời; xử lý hậu kỳ và bàn giao sản phẩm để đơn vị lưu trữ thành tư liệu dùng về sau; tạo hiệu ứng chỉ đường và biển chỉ dẫn để tour tham quan mạch lạc, phối hợp được với kính thực tế ảo; quay chụp ảnh 2D chính diện giới thiệu theo chủ đề lịch sử và văn hoá của từng điểm; thu âm và render âm thanh THUYẾT MINH TỰ ĐỘNG SONG NGỮ theo chủ đề hoặc theo câu chuyện của từng bức ảnh; tạo mã QR và gắn định vị Google Map cho mỗi điểm; hỗ trợ chỉnh sửa nội dung trong quá trình sử dụng. Gói kèm dịch vụ cloud lưu trữ cho các điểm đã số hoá. Tour ghép trực tiếp được vào website bản đồ số của địa phương. iMob đã báo giá gói này cho xã Quảng Tân với 11 điểm di tích và danh thắng. Báo giá phụ thuộc số điểm cần số hoá và đặc điểm từng nơi nên phải khảo sát trước."
+    },
+    {
+      "id": "C027",
+      "title": "Website bản đồ số cho xã/phường — các hạng mục",
+      "service": "general",
+      "tags": [
+        "bản đồ số",
+        "website",
+        "xã",
+        "phường",
+        "du lịch",
+        "OCOP"
+      ],
+      "text": "iMob làm WEBSITE BẢN ĐỒ SỐ cho xã/phường, đã triển khai cho Đông Triều và xã Quảng Tân. Các hạng mục của một trang: (1) Trang chủ — giới thiệu tổng quan địa phương, video giới thiệu, các địa điểm nổi bật, bản đồ số; (2) Giới thiệu — giới thiệu chung, bản sắc và tự nhiên, dẫn sang mục dịch vụ; (3) Dịch vụ — hệ sinh thái đời sống và đặc sản OCOP, ẩm thực, lưu trú (khách sạn, nhà nghỉ, homestay), ăn uống (nhà hàng, quán ăn), taxi và vận chuyển, dịch vụ thiết yếu (cây ATM, nhà thuốc, trạm y tế, bệnh viện); (4) Bản đồ số — toàn bộ dịch vụ và địa điểm nổi bật được gắn vị trí, người dùng tìm kiếm và ước lượng được khoảng cách; (5) Tour thực tế ảo — tích hợp các điểm đã số hoá 360° kèm thuyết minh, chọn điểm nào là trải nghiệm ngay trên web; (6) Liên hệ — địa chỉ, thông tin liên hệ, đường dây nóng chính thống để người dân tra cứu; (7) Footer — liên kết nhanh sang nền tảng khác, thông tin liên hệ và định vị, phím tắt tới các danh mục; (8) Giao diện — người dùng tự đổi được màu nền website theo ý thích."
+    },
+    {
+      "id": "C028",
+      "title": "Zalo Mini App cho chính quyền xã/phường — bộ tính năng",
+      "service": "zalo_miniapp",
+      "tags": [
+        "zalo mini app",
+        "chính quyền",
+        "phường",
+        "xã",
+        "dịch vụ công",
+        "người dân"
+      ],
+      "text": "MÔ HÌNH HỆ THỐNG ZALO MINI APP CHO CHÍNH QUYỀN gồm hai phần: Zalo Mini App cho người dân, và website quản trị cho UBND do iMob cấp — admin của uỷ ban được quyền xem, thêm, xoá, sửa nội dung trong từng module. Người dân không cần tải thêm ứng dụng, dùng ngay trên Zalo, ghim được Mini App ra màn hình chính, đăng nhập bằng tài khoản Zalo (hỗ trợ nhận diện công dân bước đầu), và tích hợp Zalo OA để chính quyền gửi thông báo chính thống. Bộ tính năng: tra cứu dịch vụ công; lịch tiếp dân; tra cứu phạt nguội; gửi phản ánh – kiến nghị trực tiếp lên chính quyền (môi trường, rác thải, an ninh trật tự, sự cố điện nước) mà không cần đến trực tiếp UBND; nhận thông báo từ chính quyền; broadcast tin tức hàng loạt; trợ lý ảo AI giải đáp thủ tục; giải đáp thắc mắc – hỗ trợ trực tuyến hai chiều; thư viện pháp luật; bản đồ du lịch và di tích, danh lam thắng cảnh, dịch vụ lưu trú, ăn uống, điểm vui chơi; nông sản OCOP; đường dây nóng; thông báo khẩn; lịch cắt điện, cắt nước; lịch tiêm chủng; thông tin tuyển dụng; tạo cuộc thi online; liên kết phường; bản đồ quy hoạch. Lợi ích cho chính quyền: quản lý tập trung, loại bỏ thao tác lặp, tăng hiệu quả tuyên truyền, nắm được các nội dung nổi cộm trên địa bàn qua kênh phản ánh của người dân. Hệ thống dễ mở rộng cho nhiều đơn vị hoặc mở rộng thêm tính năng."
     }
   ],
   "faqs": [
@@ -1938,6 +2019,89 @@
         "dùng dữ liệu của tôi làm gì"
       ],
       "answer": "Thông tin anh/chị để lại chỉ dùng để đội tư vấn liên hệ và đề xuất giải pháp. Chi tiết anh/chị xem tại imob.vn/privacy-policy và imob.vn/terms-of-service ạ."
+    },
+    {
+      "id": "F062",
+      "service": "software_hardware",
+      "intent": "robot_le_tan",
+      "questions": [
+        "robot lễ tân làm được gì",
+        "robot tiếp đón khách có chức năng gì",
+        "robot đón khách ở sảnh",
+        "robot lễ tân giá bao nhiêu",
+        "robot hướng dẫn khách",
+        "có robot lễ tân không"
+      ],
+      "answer": "Robot lễ tân NEO E1 của bên mình cao 1,2 m, màn hình cảm ứng 13,3 inch, dùng cho sảnh khách sạn, văn phòng, showroom và trung tâm dịch vụ công.\n\nViệc nó làm được: hội thoại bằng giọng nói tự nhiên và tra cứu thông tin thời gian thực; nhận diện khuôn mặt để chào khách quen theo tên; dẫn đường khách tới phòng họp hay quầy dịch vụ; phát video quảng cáo toàn màn hình khi rảnh; gọi video tới nhân viên khi gặp yêu cầu phức tạp.\n\nMáy nặng 19 kg, pin chạy liên tục khoảng 8 giờ, có nút dừng khẩn cấp ngắt điện tức thì. Robot này chỉ chạy trong nhà.\n\niMob làm phần triển khai: khảo sát mặt bằng, dựng bản đồ, cài kịch bản tiếp đón và bàn giao vận hành. Chi phí phụ thuộc cấu hình và phạm vi triển khai nên bên mình cần khảo sát trước khi báo giá."
+    },
+    {
+      "id": "F063",
+      "service": "software_hardware",
+      "intent": "robot_tuan_tra",
+      "questions": [
+        "robot tuần tra làm được gì",
+        "robot an ninh giám sát",
+        "robot tuần tra ban đêm",
+        "robot đi tuần tự động",
+        "robot tuần tra đi được bao xa",
+        "có robot an ninh không"
+      ],
+      "answer": "Robot tuần tra tự hành đi theo tuyến cấu hình sẵn, dừng tại từng điểm chốt, dùng được ngoài trời.\n\nNăng lực chính: camera quang học 4K có HDR nên quan sát được cả buổi tối, zoom quang 30x; gimbal chống rung 3 trục nên phóng to nhìn xa mà hình vẫn đứng yên; phát hiện bất thường rồi đẩy cảnh báo về trung tâm để người trực xác minh; đèn cảnh báo, loa và micro hai chiều để phát thông báo và nói chuyện tại chỗ; điều khiển từ xa kèm dừng khẩn cấp.\n\nVận hành: chuẩn IP65, chịu 10–50°C, lội nước 130 mm, vượt vật cản 150 mm, leo dốc 20%. Pin đi khoảng 30 km một lần sạc, sạc 80% mất chừng 1,5 giờ.\n\nLắp thêm được camera nhiệt để phát hiện sớm điểm nóng — hữu ích ở nơi đông người, nhiều nguồn nhiệt. Bên mình đã dựng kịch bản tuần tra cho sự kiện đêm tại Bảo tàng – Thư viện tỉnh Quảng Ninh."
+    },
+    {
+      "id": "F064",
+      "service": "software_hardware",
+      "intent": "robot_dieu_kien",
+      "questions": [
+        "lắp robot cần điều kiện gì",
+        "chỗ tôi có lắp robot được không",
+        "hạ tầng cho robot",
+        "robot cần wifi không",
+        "robot leo dốc được không",
+        "robot chạy ngoài trời được không"
+      ],
+      "answer": "Tuỳ loại robot ạ.\n\nRobot lễ tân (trong nhà): sàn dốc tối đa 5°, vượt gờ cao tối đa 10 mm; Wi-Fi phủ mạnh toàn bộ khu vực; vách kính cần dán decal mờ ngang tầm cảm biến, không thì robot không nhận ra kính; trạm sạc đặt sát tường, chừa thoáng bán kính 1 m; đủ sáng cho camera nhận diện khuôn mặt, tránh ngược sáng mạnh.\n\nRobot tuần tra (ngoài trời): lối đi đủ rộng và đủ bán kính quay đầu vì thân robot rộng 71 cm; sóng Wi-Fi hoặc 4G/5G ổn định dọc tuyến; nhiệt độ môi trường 10–50°C; tuyến tuần tra phải được cấu hình trước khi chạy.\n\nGói tiêu chuẩn có đào tạo vận hành 1 buổi, hỗ trợ kỹ thuật từ xa miễn phí 3 tháng trong giờ hành chính và bảo hành 12 tháng."
+    },
+    {
+      "id": "F065",
+      "service": "general",
+      "intent": "vr360_gioi_thieu",
+      "questions": [
+        "vr360 là gì",
+        "làm tour thực tế ảo 360",
+        "số hoá di tích",
+        "tham quan ảo",
+        "virtual tour cho di tích",
+        "quay 360 độ di tích",
+        "có làm thực tế ảo không"
+      ],
+      "answer": "Bên mình có gói thực tế ảo 360° — số hoá di tích, danh thắng và trụ sở thành tour tham quan xem được ngay trên web hoặc bằng kính thực tế ảo.\n\nMột gói gồm: quay dựng tour 360° bằng flycam cho cảnh trên cao và toàn cảnh, máy ảnh cơ cho những góc cần sắc nét, làm được cả trong nhà lẫn ngoài trời; thuyết minh tự động song ngữ thu theo chủ đề hoặc câu chuyện của từng điểm; hiệu ứng chỉ đường và biển chỉ dẫn trong tour; ảnh 2D chính diện kèm chú giải lịch sử – văn hoá; mã QR và định vị Google Map cho mỗi điểm; bàn giao toàn bộ tư liệu để đơn vị lưu trữ dùng về sau.\n\nTour ghép thẳng được vào website bản đồ số của địa phương. Bên mình đã làm gói 11 điểm cho xã Quảng Tân.\n\nBáo giá phụ thuộc số điểm cần số hoá và đặc điểm từng nơi nên phải khảo sát trước. Bạn cho mình biết định số hoá những điểm nào nhé."
+    },
+    {
+      "id": "F066",
+      "service": "general",
+      "intent": "website_ban_do_so",
+      "questions": [
+        "website bản đồ số gồm những gì",
+        "làm bản đồ số cho xã",
+        "trang bản đồ số phường",
+        "bản đồ du lịch số địa phương",
+        "web bản đồ số có tính năng gì"
+      ],
+      "answer": "Website bản đồ số cho xã/phường — bên mình đã làm cho Đông Triều và xã Quảng Tân.\n\nMột trang gồm: bản đồ số gắn vị trí toàn bộ địa điểm nổi bật và dịch vụ để người dùng tìm và ước lượng xa gần; tour thực tế ảo 360° của từng điểm xem thẳng trên web; hệ sinh thái dịch vụ gồm đặc sản OCOP, ẩm thực, lưu trú, taxi – vận chuyển và các dịch vụ thiết yếu như ATM, nhà thuốc, trạm y tế; phần giới thiệu địa phương kèm video; mục liên hệ với địa chỉ và đường dây nóng chính thống; và người xem tự đổi được màu nền trang.\n\nBạn phụ trách địa phương nào ạ? Bên mình gửi bản đã làm cho bạn xem thử."
+    },
+    {
+      "id": "F067",
+      "service": "zalo_miniapp",
+      "intent": "zma_chinh_quyen_tinh_nang",
+      "questions": [
+        "zalo mini app cho phường có tính năng gì",
+        "mini app chính quyền gồm những gì",
+        "mini app cho xã làm được gì",
+        "mini app phường có phản ánh kiến nghị không",
+        "mini app tra cứu phạt nguội"
+      ],
+      "answer": "Zalo Mini App cho chính quyền của bên mình gồm hai phần: Mini App cho người dân, và website quản trị cho UBND — cán bộ được cấp tài khoản để tự xem, thêm, sửa, xoá nội dung từng module.\n\nNgười dân dùng được: tra cứu dịch vụ công; lịch tiếp dân; tra cứu phạt nguội; gửi phản ánh – kiến nghị thẳng lên chính quyền về môi trường, rác thải, an ninh trật tự, sự cố điện nước mà không phải đến UBND; nhận thông báo và tin tức chính thống; hỏi trợ lý ảo AI về thủ tục; thư viện pháp luật; bản đồ du lịch, di tích, lưu trú, ăn uống, điểm vui chơi; nông sản OCOP; đường dây nóng; thông báo khẩn; lịch cắt điện, cắt nước; lịch tiêm chủng; thông tin tuyển dụng; bản đồ quy hoạch.\n\nNgười dân không phải tải thêm ứng dụng nào, đăng nhập bằng chính tài khoản Zalo, và ghim được Mini App ra màn hình chính cho tiện."
     }
   ],
   "smalltalk": [
@@ -2707,6 +2871,11 @@
       "priority": 9,
       "item": "Nội dung chi tiết dịch vụ Digital Consulting (chỉ có ở footer)",
       "impact": "Thấp"
+    },
+    {
+      "priority": 10,
+      "item": "UAV/drone: chưa có tài liệu kỹ thuật nào, trong khi robot đã có đủ hồ sơ",
+      "impact": "Trung bình — mục dịch vụ số 4 kê cả UAV và drone nhưng bot chỉ trả lời chung chung được"
     }
   ]
 }

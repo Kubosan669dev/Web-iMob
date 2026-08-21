@@ -397,13 +397,59 @@
     {
       "id": "robot-uav",
       "ten": "Robot, UAV & Drone",
-      "mo_ta": "Robot tuần tra/lễ tân, UAV, drone theo yêu cầu. Nguồn: danh mục dịch vụ công ty chốt 18/08/2026. KHÔNG nêu hãng, model hay thông số — chưa có tài liệu nào để dẫn.",
+      "mo_ta": "Robot tuần tra/lễ tân, UAV, drone. CẬP NHẬT 21/08/2026 — trước đây mục này ghi 'KHÔNG nêu hãng, model hay thông số vì chưa có tài liệu nào để dẫn'; nay công ty đã gửi hồ sơ kỹ thuật hai loại robot nên mọi thông số dưới đây đều CHÉP TỪ TÀI LIỆU, không suy đoán. ⚠️ HAI ĐIỀU CỐ Ý KHÔNG VIẾT VÀO ĐÂY: (1) tên hãng sản xuất — iMob là bên triển khai, nói tên hãng ra là chỉ đường cho khách mua thẳng của hãng; công ty muốn công bố thì thêm sau, chứ đã công bố rồi thì không rút lại được. (2) tên và số điện thoại người phụ trách bên đối tác có trong tài liệu — đó là thông tin cá nhân của người thuộc công ty khác, đưa lên bot công khai là sai.",
       "intents": [
         {
           "id": "robot-uav-drone",
           "nguon": "soan",
-          "keywords": ["robot", "drone", "uav", "flycam", "thiết bị bay", "robot tuần tra", "robot lễ tân", "máy bay không người lái"],
-          "answer": "iMob triển khai **robot tuần tra, robot lễ tân, UAV và drone theo yêu cầu** ạ.\n\nLoại thiết bị và cấu hình phụ thuộc bài toán cụ thể của từng đơn vị nên bên mình cần trao đổi trước, chứ không có gói bán sẵn.\n\nBạn mô tả nhu cầu rồi để lại **số điện thoại**, hoặc gọi thẳng **{{cong_ty.dien_thoai}}** nhé."
+          "_note": "Từ khoá chỉ giữ loại CHUNG. Cụm 'robot lễ tân' / 'robot tuần tra' đã chuyển hẳn sang hai intent riêng bên dưới — để lại ở đây thì hoà điểm, mà hoà điểm thì intent đứng TRƯỚC thắng, tức là câu hỏi cụ thể sẽ nhận được câu trả lời chung chung. \"và drone\" thì NGƯỢC LẠI, cố ý để ở đây: câu kể tên nhiều loại cùng lúc ('robot tuần tra và drone') là câu hỏi tổng quan, trả lời bằng bản mô tả chi tiết một loại là bỏ sót hẳn phần còn lại. Cụm 2 từ này đủ để kéo điểm intent tổng quan vượt cụm 'robot tuần tra' 3 từ.",
+          "keywords": ["robot", "drone", "uav", "flycam", "thiết bị bay", "máy bay không người lái", "và drone", "robot và drone"],
+          "answer": "iMob triển khai **robot tuần tra, robot lễ tân, UAV và drone** ạ 🤖\n\nHai loại robot bên mình đang triển khai:\n\n- **Robot lễ tân** — tiếp đón, hướng dẫn và dẫn đường khách trong sảnh toà nhà\n- **Robot tuần tra tự hành** — đi tuần theo tuyến ngoài trời, giám sát hình ảnh và cảnh báo\n\niMob làm phần **triển khai**: khảo sát mặt bằng, cấu hình tuyến/bản đồ, cài kịch bản vận hành, đào tạo và bàn giao. Thiết bị thì tuỳ bài toán mà chọn cấu hình phù hợp.\n\nBạn quan tâm loại nào để mình nói kỹ hơn ạ?"
+        },
+        {
+          "id": "robot-le-tan",
+          "nguon": "tai-lieu",
+          "keywords": ["robot lễ tân", "robot tiếp đón", "robot đón khách", "robot hướng dẫn khách", "robot sảnh", "lễ tân tự động", "robot khách sạn", "robot dẫn đường"],
+          "answer": "**Robot lễ tân NEO E1** 🤖 — robot dịch vụ dáng đứng, cao 1,2 m, màn hình cảm ứng 13,3 inch. Dùng cho sảnh khách sạn, văn phòng, showroom và trung tâm dịch vụ công.\n\nNhững việc nó làm được:\n\n- **Hội thoại bằng giọng nói** tự nhiên, tra cứu được thông tin theo thời gian thực\n- **Nhận diện khuôn mặt** — chủ động chào khách quen theo đúng tên\n- **Dẫn đường** khách tới phòng họp hay quầy dịch vụ theo lộ trình đặt sẵn\n- **Phát video quảng cáo** toàn màn hình lúc đang rảnh\n- **Gọi video** tới nhân viên khi gặp yêu cầu phức tạp\n\nMáy nặng 19 kg, 6 bậc tự do cho cử động đầu và tay, pin chạy liên tục khoảng 8 tiếng, có nút dừng khẩn cấp ngắt điện tức thì.\n\nRobot này **chạy trong nhà**. Bạn cho mình biết mặt bằng định đặt ở đâu nhé — mình xem điều kiện lắp đặt giúp."
+        },
+        {
+          "id": "robot-tuan-tra",
+          "nguon": "tai-lieu",
+          "keywords": ["robot tuần tra", "robot an ninh", "robot giám sát", "tuần tra tự động", "robot đi tuần", "robot canh gác", "robot bảo vệ"],
+          "answer": "**Robot tuần tra tự hành** 🛡️ — đi theo tuyến đã cấu hình sẵn, dừng ở từng điểm chốt (cổng ra vào, lối đi chính, khu gửi xe), dùng được ngoài trời.\n\nNăng lực chính:\n\n- **Camera quang học 4K**, zoom quang 30x, có HDR nên **quan sát được cả buổi tối**\n- **Gimbal chống rung 3 trục** — phóng to nhìn mục tiêu ở xa mà hình vẫn đứng yên\n- **Phát hiện bất thường** rồi đẩy cảnh báo về trung tâm; người trực xác minh qua hình ảnh thời gian thực\n- **Đèn cảnh báo, loa và micro hai chiều** — phát thông báo và nói chuyện trực tiếp tại chỗ\n- **Điều khiển từ xa**, có dừng khẩn cấp\n\nVận hành: chuẩn bảo vệ IP65, chịu 10–50°C, lội nước 130 mm, vượt vật cản 150 mm, leo dốc 20%. Pin đi được khoảng 30 km một lần sạc, sạc 80% mất chừng 1,5 tiếng.\n\nCó thể lắp thêm **camera nhiệt** để phát hiện sớm điểm nóng — hữu ích ở nơi đông người, nhiều nguồn nhiệt.\n\nBạn mô tả khu vực cần tuần tra để mình tư vấn tuyến và cấu hình nhé!"
+        },
+        {
+          "id": "robot-dieu-kien",
+          "nguon": "tai-lieu",
+          "_note": "Câu hỏi trước khi mua hay gặp nhất: 'chỗ tôi có lắp được không'. Trả lời thẳng bằng điều kiện thật trong hồ sơ kỹ thuật thì khách tự loại được phương án sai ngay, đỡ mất công cả hai bên.",
+          "keywords": ["robot cần gì", "điều kiện lắp robot", "hạ tầng cho robot", "robot chạy được không", "robot có leo dốc", "robot ngoài trời", "robot cần wifi", "lắp robot", "đặt robot", "hạ tầng gì", "robot leo dốc"],
+          "answer": "Tuỳ loại robot ạ:\n\n**Robot lễ tân (trong nhà)**\n\n- Sàn dốc tối đa 5°, vượt gờ cao tối đa 10 mm\n- Wi-Fi phủ mạnh toàn bộ khu vực robot chạy\n- Vách kính cần dán decal mờ ngang tầm cảm biến, không thì robot không \"thấy\" kính\n- Trạm sạc đặt sát tường, chừa thoáng bán kính 1 m\n- Đủ sáng cho camera nhận diện khuôn mặt, tránh ngược sáng mạnh\n\n**Robot tuần tra (ngoài trời)**\n\n- Lối đi đủ rộng và đủ bán kính quay đầu — thân robot rộng 71 cm\n- Sóng Wi-Fi hoặc 4G/5G ổn định dọc tuyến\n- Nhiệt độ môi trường trong khoảng 10–50°C\n- Tuyến tuần tra phải được cấu hình trước khi chạy\n\nBạn kể mình nghe mặt bằng bên bạn, mình xem có vướng gì không nhé."
+        }
+      ]
+    },
+    {
+      "id": "vr360",
+      "ten": "Thực tế ảo 360° & số hoá di tích",
+      "mo_ta": "DỊCH VỤ MỚI THÊM VÀO BOT 21/08/2026, lấy từ bản báo giá gói VR360 do giám đốc ký. Trước đó cả website lẫn bot đều không nhắc một chữ nào về mảng này dù công ty đang chào bán. ⚠️ TUYỆT ĐỐI KHÔNG ĐƯA GIÁ VÀO ĐÂY: tài liệu nguồn là báo giá gửi RIÊNG cho một khách, đơn giá từng hạng mục và tổng hợp đồng đều là thông tin thương mại. Bot hỏi giá thì đẩy sang mục chi-phi-thoi-gian như mọi dịch vụ khác. Cũng KHÔNG nêu 'xong trong 45 ngày' — con số đó là của đúng gói 11 điểm trong báo giá ấy, gói khác số điểm khác thì sai.",
+      "intents": [
+        {
+          "id": "vr360-dich-vu",
+          "nguon": "tai-lieu",
+          "_note": "KHÔNG thêm 'số hóa di tích' bên cạnh 'số hoá di tích': chatBrain.js bỏ dấu trước khi so, hai cách viết đều thành 'so hoa di tich' nên chỉ cần một dòng — để cả hai thì bộ kiểm tra báo trùng từ khoá.",
+          "keywords": ["vr360", "vr 360", "thực tế ảo", "tour ảo", "tham quan ảo", "virtual tour", "tour 360", "quay 360", "số hoá di tích", "tham quan trực tuyến"],
+          "answer": "**Thực tế ảo 360°** 🎥 — bên mình số hoá di tích, danh thắng và trụ sở thành tour tham quan xem được ngay trên web hoặc bằng kính thực tế ảo.\n\nMột gói trọn vẹn gồm:\n\n- **Quay dựng tour 360°** bằng flycam cho cảnh trên cao và toàn cảnh, máy ảnh cơ cho những góc cần thật sắc nét — cả trong nhà lẫn ngoài trời\n- **Thuyết minh tự động song ngữ** — thu âm theo chủ đề hoặc theo câu chuyện của từng điểm\n- **Hiệu ứng chỉ đường, biển chỉ dẫn** trong tour để người xem đi mạch lạc, không lạc\n- **Ảnh 2D chính diện** kèm chú giải lịch sử – văn hoá cho từng điểm\n- **Mã QR và định vị Google Map** cho mỗi điểm\n- **Bàn giao toàn bộ tư liệu** để đơn vị lưu trữ dùng về sau\n\nTour ghép thẳng được vào **website bản đồ số** của địa phương, khách chọn điểm nào là xem tour điểm đó.\n\nBạn định số hoá những điểm nào ạ? Mình cần biết số điểm và đặc điểm từng nơi để tư vấn."
+        },
+        {
+          "id": "vr360-thuyet-minh",
+          "nguon": "tai-lieu",
+          "keywords": ["thuyết minh tự động", "thuyết minh song ngữ", "audio guide", "giọng đọc thuyết minh", "có thuyết minh không", "thuyết minh cho tour"],
+          "answer": "Có ạ — tour 360° của bên mình đi kèm **thuyết minh tự động song ngữ**.\n\nPhần âm thanh được thu và dựng riêng theo **chủ đề hoặc câu chuyện của từng điểm**, chứ không phải đọc một đoạn chung cho cả khu. Mục đích là để lịch sử địa phương được kể **đúng và đủ ý nghĩa**, thay vì khách chỉ nhìn ảnh rồi đoán.\n\nNội dung thuyết minh bên mình **hỗ trợ chỉnh sửa trong quá trình sử dụng**, nên có tư liệu mới là cập nhật được."
+        },
+        {
+          "id": "vr360-ban-do-so",
+          "nguon": "tai-lieu",
+          "keywords": ["website bản đồ số", "web bản đồ số", "bản đồ số xã", "bản đồ số phường", "trang bản đồ số", "bản đồ số địa phương", "bản đồ du lịch số"],
+          "answer": "**Website bản đồ số** cho xã/phường 🗺️ — bên mình đã làm cho Đông Triều và xã Quảng Tân.\n\nMột trang gồm:\n\n- **Bản đồ số** gắn vị trí toàn bộ địa điểm nổi bật và dịch vụ, khách tìm và ước lượng được xa gần\n- **Tour thực tế ảo 360°** của từng điểm, xem thẳng trên web\n- **Hệ sinh thái dịch vụ**: đặc sản OCOP, ẩm thực, lưu trú, taxi – vận chuyển, và các dịch vụ thiết yếu như ATM, nhà thuốc, trạm y tế\n- **Giới thiệu địa phương** — bản sắc, tự nhiên, video giới thiệu\n- **Liên hệ chính thống**: địa chỉ, đường dây nóng, hòm thư của địa phương\n- Người xem **tự đổi được màu nền** trang cho hợp mắt\n\nBạn phụ trách địa phương nào ạ? Mình gửi bản đã làm cho bạn xem thử."
         }
       ]
     },

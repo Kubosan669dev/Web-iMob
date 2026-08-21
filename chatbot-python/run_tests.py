@@ -66,6 +66,62 @@ def kiem_tra(inp: str, ans: str):
     return kq
 
 
+# ============================================================
+# BỘ ĐO RIÊNG CHO CHỐT CHẶN GIÁ (thêm 21/08/2026)
+#
+# Vì sao tách riêng: chua_so_gia() là chốt chặn CUỐI trong bot.tra_loi() — hễ
+# nó kêu là cả câu trả lời bị vứt, thay bằng câu báo giá chuẩn. Nên nó sai kiểu
+# nào cũng nguy:
+#   · bỏ sót  -> bot đọc số tiền ra cho khách, đúng thứ tuyệt đối không được
+#   · bắt oan -> bot trả lời lạc đề mà KHÔNG có lỗi nào hiện ra
+#
+# Vế "bắt oan" đã xảy ra thật và nằm im rất lâu: biểu thức cũ bắt "một con số
+# rồi tới chữ k" mà không kiểm sau chữ k là gì, nên "30 km" và "19 kg" bị đọc
+# thành "30 nghìn", "19 nghìn". Mọi câu hỏi về robot đều nhận câu báo giá.
+# Chỉ lộ ra khi kho kiến thức bắt đầu có thông số kỹ thuật.
+#
+# Hai danh sách dưới đây khoá cả hai chiều lại.
+# ============================================================
+PHAI_CHAN = [
+    "gia 50 trieu dong",
+    "khoang 1,5 ty",
+    "chi 200k thoi",
+    "2.000.000 vnd",
+    "$500",
+    "500 $",
+    "150 usd",
+    "tu 30 nghin",
+    "1.500k mot goi",
+]
+
+KHONG_DUOC_CHAN = [
+    "pin di duoc 30 km mot lan sac",
+    "may nang 19 kg",
+    "robot nang 90 kg",
+    "camera 4K Ultra HD",
+    "do phan giai 8K",
+    "man hinh 13,3 inch",
+    "sac 80% trong khoang 1,5 gio",
+    "vuot vat can 150 mm",
+    "loi nuoc 130 mm",
+    "nhiet do 10-50 do C",
+    "uptime 99,9%",
+    "ho tro 24/7",
+    "kich thuoc 460 x 460 x 1200 mm",
+    "toc do duoi 8 km/h",
+]
+
+
+def kiem_chot_chan_gia():
+    """Trả về danh sách (tên_kiểm_tra, đạt?)."""
+    kq = []
+    for c in PHAI_CHAN:
+        kq.append(("chan dung so tien: %r" % c, gr.chua_so_gia(c)))
+    for c in KHONG_DUOC_CHAN:
+        kq.append(("khong bat oan thong so: %r" % c, not gr.chua_so_gia(c)))
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -87,6 +143,15 @@ def main():
             tong += 1
             dat += 1 if ok else 0
             print(f"      {'PASS' if ok else 'FAIL'} — {ten}")
+
+    print("\n[chot-chan-gia] Do rieng bieu thuc nhan dien so tien")
+    for ten, ok in kiem_chot_chan_gia():
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            print(f"      FAIL — {ten}")
+    print(f"      {len(PHAI_CHAN)} cau phai chan · "
+          f"{len(KHONG_DUOC_CHAN)} cau khong duoc bat oan")
 
     print("\n" + "=" * 55)
     print(f"KẾT QUẢ: {dat}/{tong} kiểm tra ĐẠT.")

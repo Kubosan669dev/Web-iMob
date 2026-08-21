@@ -31,10 +31,35 @@ CUM_HOI_GIA = [
 ]
 
 # --- 3. Chặn số tiền trong câu trả lời (số + đơn vị tiền tệ) ---
-# Đòi phải có đơn vị tiền (trieu/ty/nghin/k/d/vnd/usd/$) nên '2 nam', '99,9%',
+# Đòi phải có đơn vị tiền (trieu/ty/nghin/vnd/usd/k/$) nên '2 nam', '99,9%',
 # '24/7' hay số điện thoại KHÔNG bị chặn nhầm.
+#
+# ⚠️ SỬA 21/08/2026 — NHÁNH "k" TRƯỚC ĐÂY BẮT OAN GẦN HẾT THÔNG SỐ KỸ THUẬT.
+#
+# Bản cũ viết `\d+([.,]\d+)?\s*[k\$]`, tức là "một con số rồi tới chữ k" là chặn,
+# KHÔNG kiểm sau chữ k là gì. Hậu quả:
+#       "30 km một lần sạc"  ->  đọc thành "30 nghìn"
+#       "nặng 19 kg"         ->  đọc thành "19 nghìn"
+# Mà chốt chặn này nằm ở tra_loi(): hễ thấy giống số tiền là VỨT nguyên câu trả
+# lời, thay bằng câu báo giá chuẩn. Nên mọi câu hỏi về robot đều nhận được câu
+# "chi phí phụ thuộc phạm vi..." — trả lời hoàn toàn lạc đề mà không có lỗi nào
+# hiện ra. Lỗi này có sẵn từ trước, chỉ chưa lộ vì kho kiến thức chưa có thông
+# số kỹ thuật nào dùng đơn vị bắt đầu bằng chữ k.
+#
+# Bản mới đòi HAI điều kiện cho nhánh "k":
+#   · sau chữ k không được có chữ cái hay chữ số — loại km, kg, kW, kHz, kbps
+#   · phải có ÍT NHẤT HAI chữ số đứng trước — loại "4K", "8K" (độ phân giải
+#     camera), vốn luôn là một chữ số. Tiền viết tắt kiểu này trong thực tế
+#     luôn từ hai chữ số trở lên: 50k, 200k, 1.500k.
+#
+# Nới ra một chút thì có lọt được gì không: chỉ lọt đúng dạng "5k" trở xuống,
+# tức dưới mười nghìn đồng — không có dịch vụ nào của công ty ở mức đó, và các
+# cách viết giá thật (triệu, tỷ, VNĐ, USD, $) vẫn bị chặn nguyên như cũ.
 REGEX_SO_GIA = re.compile(
-    r"\d+([.,]\d+)?\s*(trieu|ty|nghin|ngan|vnd|usd)\b|\d+([.,]\d+)?\s*[k\$]|\$\s*\d",
+    r"\d+([.,]\d+)?\s*(trieu|ty|nghin|ngan|vnd|usd)\b"
+    r"|\d{2,}([.,]\d+)?\s*k(?![a-z0-9])"
+    r"|\d+([.,]\d+)?\s*\$"
+    r"|\$\s*\d",
     re.IGNORECASE,
 )
 

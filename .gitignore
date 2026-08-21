@@ -29,3 +29,35 @@ npm-debug.log*
 # ...trừ file mẫu, file này CẦN nằm trong repo để người mới biết phải điền gì.
 !.env.example
 
+# ============================================================
+# TÀI LIỆU GỐC CỦA CÔNG TY — TUYỆT ĐỐI KHÔNG ĐẨY LÊN GITHUB
+#
+# Thêm 21/08/2026 sau khi suýt xảy ra chuyện: thư mục "New folder" nằm ngay
+# trong repo, chưa bị chặn, mà quy trình làm việc ở đây hay dùng `git add -A`.
+# Chỉ cần thêm một lần là toàn bộ nằm vĩnh viễn trong lịch sử một repo CÔNG
+# KHAI — xoá file ở commit sau cũng không gỡ được, phải viết lại lịch sử.
+#
+# Trong đó có những thứ không được ra ngoài:
+#   · báo giá gửi khách, kèm đầy đủ đơn giá từng hạng mục và tổng hợp đồng
+#   · tài liệu kỹ thuật và tên + số điện thoại người phụ trách bên đối tác
+#   · bộ slide chào hàng chưa công bố
+#
+# Nội dung cần dùng cho website/chatbot thì CHÉP RA THÀNH CHỮ rồi bỏ vào
+# src/data/ hoặc chatbot-python/data/ — chỉ chép phần được phép công bố, KHÔNG
+# bao giờ chép giá và thông tin liên hệ của bên thứ ba.
+#
+# Tốt nhất là để hẳn thư mục tài liệu gốc RA NGOÀI repo.
+# ============================================================
+New folder/
+tai-lieu-goc/
+*.docx
+*.pptx
+*.xlsx
+*.doc
+*.ppt
+*.xls
+# PDF: chặn ở thư mục gốc thôi. public/ có thể cần PDF để đăng công khai
+# (hồ sơ năng lực, brochure) — thứ đó là CỐ Ý đưa lên nên không chặn.
+/*.pdf
+/New folder/*.pdf
+
