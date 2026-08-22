@@ -5,7 +5,7 @@ import { useDoiTac } from "../context/NoiDungContext.jsx";
 import { diaChiAnh } from "../utils/anh.js";
 
 // ============================================================
-// DoiTac — dải tên các đơn vị đã đồng hành, CHẠY NGANG liên tục.
+// DoiTac — dải LOGO các đơn vị đã đồng hành, chạy ngang liên tục.
 //
 // Thêm 22/08/2026 theo yêu cầu của công ty:
 //   "ở trên phần dịch vụ mình để chạy 1 dòng các đối tác và đơn vị đã triển
@@ -13,20 +13,22 @@ import { diaChiAnh } from "../utils/anh.js";
 // kèm ảnh chụp trang cmc.com.vn làm mẫu (dải logo Samsung SDS · TIME ·
 // Microsoft chạy dưới mục Đối tác).
 //
-// ---- Vì sao là CHỮ chứ không phải LOGO như trang mẫu ----
-// Bảy trong mười một đơn vị là phường, xã, thành phố. Cơ quan hành chính không
-// có logo riêng; thứ duy nhất đại diện cho họ là Quốc huy, mà Quốc huy đặt
-// trên dải quảng bá của một công ty tư nhân là việc không nên làm. Bốn đơn vị
-// còn lại là doanh nghiệp/đơn vị sự nghiệp — họ CÓ logo, nhưng logo là nhãn
-// hiệu của họ, muốn đăng phải xin phép bằng văn bản.
+// ---- Bản dựng đầu là LOGO + TÊN, nay chỉ còn LOGO ----
+// Lúc chưa có logo nào, dải này là biểu tượng + tên chữ. Khi công ty gửi logo
+// thì tôi ghép cả hai — logo đứng trước, tên đứng sau. Công ty xem rồi chốt
+// lại: "ý tôi là chỉ hiện logo và cho các logo chạy theo ấy". Đúng với ảnh mẫu
+// họ gửi từ đầu: cmc.com.vn chỉ có logo, không có tên.
 //
-// Nên dải này dựng bằng TÊN + biểu tượng theo nhóm. Có thêm một cái lợi ngoài
-// dự tính: tên đọc được, còn một hàng logo lạ thì phần lớn khách không nhận ra
-// logo nào của ai. Với khách của iMob là cơ quan nhà nước, chữ "Bảo tàng –
-// Thư viện tỉnh Quảng Ninh" nặng hơn hẳn một hình tròn không tên.
+// Bỏ chữ đi được hai thứ: mỗi ô hẹp lại chừng một nửa nên nhìn một lượt thấy
+// được nhiều đơn vị hơn, và logo được phóng to gấp rưỡi (28px -> 40px) — ở cỡ
+// cũ nhiều logo chỉ còn là một chấm màu.
 //
-// Xin được logo lúc nào thì điền đường dẫn vào trường `logo` trong
-// data/doiTac.json — khối này tự đổi sang hiện ảnh, không phải sửa file này.
+// ---- Ba đơn vị CHƯA CÓ LOGO thì làm gì ----
+// Phường Hà An, phường An Sinh, Thuỷ điện Sapa. KHÔNG bỏ họ ra khỏi dải: đây
+// là danh sách khách hàng thật, vắng mặt ai là bớt đi một bằng chứng năng lực.
+// Ba đơn vị đó hiện một ô CHỮ — cùng khung, cùng chiều cao với ô logo, nên
+// hàng vẫn đều. Có logo lúc nào thì điền vào doiTac.json là ô chữ tự thành ô
+// ảnh, không phải sửa file này.
 //
 // ---- Vì sao KHÔNG đặt trong <Reveal> ----
 // Reveal chỉ chạy khi CUỘN TỚI. Dải này nằm ngay dưới khối đầu trang, phần lớn
@@ -34,10 +36,9 @@ import { diaChiAnh } from "../utils/anh.js";
 // độ mờ 0 cho tới khi người ta cuộn, tức là mất hẳn.
 // ============================================================
 
-/* Biểu tượng theo nhóm đơn vị. Cố ý dùng lại đúng bộ biểu tượng đang có trong
-   projects.json (landmark / library / building-2) để cả site nói cùng một thứ
-   tiếng hình ảnh: khách thấy hình toà nhà cột trụ ở dải này rồi lại thấy nó ở
-   thẻ dự án bên trên thì hiểu ngay hai chỗ đang nói về cùng một loại đơn vị. */
+/* Biểu tượng theo nhóm đơn vị, dùng cho ô chữ của đơn vị chưa có logo. Cố ý
+   lấy lại đúng bộ biểu tượng đang có trong projects.json (landmark / library /
+   building-2) để cả site nói cùng một thứ tiếng hình ảnh. */
 const HINH_NHOM = {
   "chinh-quyen": Landmark,
   "van-hoa": Library,
@@ -46,50 +47,54 @@ const HINH_NHOM = {
   "doanh-nghiep": Building2,
 };
 
-/** Phần đứng trước cái tên: ảnh logo nếu có, không thì biểu tượng của nhóm.
-    `alt=""` cho ảnh là cố ý — tên đơn vị nằm ngay bên cạnh dưới dạng chữ, để
-    alt nữa là trình đọc màn hình đọc tên hai lần.
+/* Số giây cho MỘT đơn vị trôi qua hết màn hình. Nhân với số đơn vị ra thời
+   gian một vòng, nên thêm bớt đơn vị thì TỐC ĐỘ KHÔNG ĐỔI — chỉ vòng dài ra.
+   Ghim cứng một con số giây cho cả vòng thì mỗi lần thêm khách hàng là dải lại
+   chạy nhanh thêm một chút, đến lúc nào đó thành nhấp nháy.
+   2,8 giây/đơn vị ứng với khoảng 55px mỗi giây ở cỡ ô hiện tại: đủ chậm để
+   nhận ra logo, đủ nhanh để không ai thấy nó đứng im. */
+const GIAY_MOI_DON_VI = 2.8;
+
+/** Một ô trong dải: ảnh logo nếu có, không thì tên đơn vị dạng chữ.
 
     ---- Vì sao logo phải nằm trong một Ô NỀN chứ không đặt thẳng lên dải ----
     Tám logo công ty gửi có đủ kiểu nền: nền trắng đặc (Bảo tàng, EVNGENCO1),
-    nền trong suốt, và một cái là chữ TRẮNG trên nền trong suốt (VHunter).
-    Thả thẳng lên dải nền xám nhạt thì cái có nền trắng thành một ô trắng lệch
-    tông, còn VHunter thì mất hút hẳn. Cho tất cả vào cùng một ô bo góc nền
-    trắng thì chúng thành một bộ — đây cũng đúng cách trang cmc.com.vn mà công
-    ty gửi làm mẫu đang làm.
+    nền trong suốt, và một cái là chữ TRẮNG trên nền trong suốt (VHunter). Thả
+    thẳng lên dải nền xám nhạt thì cái có nền trắng thành một ô trắng lệch tông,
+    còn VHunter mất hút hẳn. Cho tất cả vào cùng một ô bo góc nền trắng thì
+    chúng thành một bộ — đây cũng đúng cách trang cmc.com.vn đang làm.
 
-    `logoNenToi` cho riêng những logo chữ sáng: ô của chúng đổi sang nền tối.
-    Một ô tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì. */
-function DauDong({ dv }) {
-  if (dv.logo) {
-    return (
-      <span
-        className={
-          "flex h-11 shrink-0 items-center justify-center rounded-xl px-2.5 " +
-          (dv.logoNenToi ? "bg-ink" : "bg-paper shadow-soft")
-        }
-      >
-        <img
-          src={diaChiAnh(dv.logo)}
-          alt=""
-          loading="lazy"
-          className="h-7 w-auto max-w-[9rem] object-contain"
-        />
-      </span>
-    );
-  }
+    `logoNenToi` cho riêng logo chữ sáng: ô của chúng đổi sang nền tối. Một ô
+    tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì. */
+function OChip({ dv }) {
   const Icon = HINH_NHOM[dv.nhom] ?? Building2;
-  return <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />;
-}
 
-function TenDonVi({ dv }) {
   return (
     // mr-* nằm trên <li> chứ không phải gap trên <ul> — xem ghi chú của
     // --animate-chay-ngang trong styles/index.css, vòng lặp phụ thuộc vào đó.
-    <li className="mr-10 flex shrink-0 items-center gap-2.5 lg:mr-14">
-      <DauDong dv={dv} />
-      <span className="whitespace-nowrap text-[0.9375rem] font-semibold text-ink-soft">
-        {dv.ten}
+    <li className="mr-4 shrink-0 lg:mr-6">
+      <span
+        className={
+          "flex h-16 items-center justify-center rounded-2xl px-5 " +
+          (dv.logoNenToi ? "bg-ink" : "bg-paper shadow-soft")
+        }
+      >
+        {dv.logo ? (
+          /* alt là TÊN ĐƠN VỊ, không để trống. Bản trước để alt="" vì tên nằm
+             ngay bên cạnh dưới dạng chữ; nay chữ đã bỏ, alt là thứ DUY NHẤT
+             cho người dùng trình đọc màn hình biết đây là đơn vị nào. */
+          <img
+            src={diaChiAnh(dv.logo)}
+            alt={dv.ten}
+            loading="lazy"
+            className="h-10 w-auto max-w-[10rem] object-contain"
+          />
+        ) : (
+          <span className="flex items-center gap-2 whitespace-nowrap text-[0.9375rem] font-bold text-ink-soft">
+            <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+            {dv.ten}
+          </span>
+        )}
       </span>
     </li>
   );
@@ -98,7 +103,10 @@ function TenDonVi({ dv }) {
 export default function DoiTac() {
   const doiTac = useDoiTac();
   const reduceMotion = useReducedMotion();
-  const danhSach = doiTac.danhSach ?? [];
+
+  // Lọc đơn vị hỏng ngay tại đây: danh sách này sửa được trong /admin, một
+  // dòng lỡ để trống tên không được phép làm hiện ra một ô rỗng giữa dải.
+  const danhSach = (doiTac.danhSach ?? []).filter((dv) => (dv?.ten ?? "").trim());
 
   // Chưa có đơn vị nào thì ẩn hẳn khối — không để lại một dải trống có mỗi
   // dòng tiêu đề, đúng cách các khối khác trong site đang làm.
@@ -117,40 +125,39 @@ export default function DoiTac() {
       {reduceMotion ? (
         /* Người bật "giảm chuyển động": bày thành nhiều dòng, đứng yên. KHÔNG
            dùng lại băng chạy rồi tắt animation — băng chạy rộng gấp đôi màn
-           hình nên đứng yên là mất hút quá nửa số tên. */
-        <Container className="mt-6">
-          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+           hình nên đứng yên là mất hút quá nửa số logo. */
+        <Container className="mt-7">
+          {/* CHỈ gap-y. Khoảng hở NGANG đã nằm trên từng ô (mr-* trong OChip,
+              băng chạy cần nó ở đó) — thêm gap-x nữa là các ô cách nhau gấp
+              đôi so với lúc chạy. Hở DỌC thì mr không lo được, phải khai. */}
+          <ul className="flex flex-wrap items-center justify-center gap-y-4">
             {danhSach.map((dv) => (
-              <li key={dv.ten} className="flex items-center gap-2.5">
-                <DauDong dv={dv} />
-                <span className="text-[0.9375rem] font-semibold text-ink-soft">
-                  {dv.ten}
-                </span>
-              </li>
+              <OChip key={dv.ten} dv={dv} />
             ))}
           </ul>
         </Container>
       ) : (
         /* Băng chạy.
            · overflow-hidden ở ngoài để phần chưa tới lượt nằm ngoài khung.
-           · mask hai mép: tên không "bốp" một cái hiện ra ở rìa mà mờ dần vào
-             nền — không có nó thì mắt bị mép cắt chữ kéo sự chú ý.
-           · dừng khi rê chuột: đang đọc dở một cái tên mà nó trôi mất thì bực. */
-        <div
-          className="mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]"
-        >
-          <div className="flex w-max animate-chay-ngang hover:[animation-play-state:paused]">
-            {/* Bản 1 — bản người dùng thật sự đọc */}
+           · mask hai mép: logo không "bốp" một cái hiện ra ở rìa mà mờ dần vào
+             nền — không có nó thì mắt bị mép cắt ngang kéo sự chú ý.
+           · dừng khi rê chuột: đang nhìn một logo mà nó trôi mất thì bực. */
+        <div className="mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]">
+          <div
+            className="flex w-max animate-chay-ngang hover:[animation-play-state:paused]"
+            style={{ animationDuration: `${danhSach.length * GIAY_MOI_DON_VI}s` }}
+          >
+            {/* Bản 1 — bản người dùng thật sự nhìn */}
             <ul className="flex items-center">
               {danhSach.map((dv) => (
-                <TenDonVi key={dv.ten} dv={dv} />
+                <OChip key={dv.ten} dv={dv} />
               ))}
             </ul>
             {/* Bản 2 — bản chạy nối đuôi cho liền mạch. aria-hidden để trình
                 đọc màn hình không đọc danh sách khách hàng hai lần. */}
             <ul className="flex items-center" aria-hidden="true">
               {danhSach.map((dv) => (
-                <TenDonVi key={dv.ten} dv={dv} />
+                <OChip key={dv.ten} dv={dv} />
               ))}
             </ul>
           </div>

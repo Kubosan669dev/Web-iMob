@@ -135,8 +135,12 @@
      trên từng <li>, KHÔNG dùng gap trên <ul>). Có gap thì bản sao thứ hai
      rộng hơn bản đầu đúng một khoảng hở, -50% rơi vào giữa chừng và cứ mỗi
      vòng lại giật một cái.
-     45 giây cho một vòng là chậm — cố ý: đây là tên khách hàng để người ta
-     ĐỌC, không phải hiệu ứng để ngắm. Chạy nhanh thì không ai kịp đọc tên nào. */
+     ⚠️ 45s Ở ĐÂY CHỈ LÀ GIÁ TRỊ DỰ PHÒNG. DoiTac.jsx ghi đè animation-duration
+     bằng style nội tuyến, tính theo SỐ ĐƠN VỊ (số giây mỗi đơn vị × số đơn vị)
+     để thêm bớt khách hàng thì tốc độ không đổi, chỉ vòng dài ra. Ghim cứng
+     một con số cho cả vòng thì mỗi lần thêm khách là dải chạy nhanh thêm một
+     chút, đến lúc nào đó thành nhấp nháy. Sửa tốc độ thì sửa GIAY_MOI_DON_VI
+     trong DoiTac.jsx, không phải sửa số ở đây. */
   --animate-chay-ngang: chayNgang 45s linear infinite;
 
   @keyframes chayNgang {
