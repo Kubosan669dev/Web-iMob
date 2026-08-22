@@ -51,9 +51,11 @@ const HINH_NHOM = {
    gian một vòng, nên thêm bớt đơn vị thì TỐC ĐỘ KHÔNG ĐỔI — chỉ vòng dài ra.
    Ghim cứng một con số giây cho cả vòng thì mỗi lần thêm khách hàng là dải lại
    chạy nhanh thêm một chút, đến lúc nào đó thành nhấp nháy.
-   2,8 giây/đơn vị ứng với khoảng 55px mỗi giây ở cỡ ô hiện tại: đủ chậm để
-   nhận ra logo, đủ nhanh để không ai thấy nó đứng im. */
-const GIAY_MOI_DON_VI = 2.8;
+   3,2 giây/đơn vị. Trước là 2,8; nới ra khi phóng to logo (22/08/2026): ô to
+   hơn thì cùng một khoảng thời gian phải đi qua nhiều pixel hơn, giữ nguyên
+   2,8 là dải chạy từ ~51 lên ~61px/giây — vật càng to trôi càng nhanh thì mắt
+   càng thấy vội. 3,2 kéo lại về khoảng 54px/giây, gần đúng nhịp cũ. */
+const GIAY_MOI_DON_VI = 3.2;
 
 /** Một ô trong dải: ảnh logo nếu có, không thì tên đơn vị dạng chữ.
 
@@ -65,17 +67,33 @@ const GIAY_MOI_DON_VI = 2.8;
     chúng thành một bộ — đây cũng đúng cách trang cmc.com.vn đang làm.
 
     `logoNenToi` cho riêng logo chữ sáng: ô của chúng đổi sang nền tối. Một ô
-    tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì. */
+    tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì.
+
+    ---- CỠ LOGO: 64px, và đó là TRẦN chứ không phải sở thích (22/08/2026) ----
+    Công ty: "phóng to logo ra". Đo trước khi chỉnh: tám tệp trong
+    public/anh/logo/ đều cao đúng 128px. Màn hình đời nay phần lớn là 2 điểm
+    ảnh vật lý trên 1 điểm CSS, nên 128px tệp gốc hiện nét căng ở đúng 64px và
+    bắt đầu nhoè từ 65px trở lên. Vì vậy h-16 (64px) là cỡ LỚN NHẤT còn nét —
+    to hơn nữa thì phải xuất lại tệp, mà logo EVNGENCO1 bản gốc chỉ cao 90px
+    (New folder/logo-goc) nên riêng nó không phóng thêm được bao nhiêu.
+    Ô cao 96px = 64 logo + 16 đệm trên dưới.
+
+    ---- max-w-[15rem] để một logo BỀ NGANG không đè bẹp cả hàng ----
+    Bảy trên tám logo gần vuông (tỉ lệ 0,80–1,04). Riêng EVNGENCO1 là chữ nằm
+    ngang, tỉ lệ 5,13 — để cao 64px thì nó rộng 328px, gấp năm lần các ô kia.
+    Chặn bề ngang ở 240px thì object-contain tự hạ nó xuống còn cao ~47px:
+    vừa không có logo nào bị bóp méo, vừa cân về mặt thị giác (một dòng chữ
+    dài cao bằng một con dấu tròn thì nhìn nó to gấp mấy lần). */
 function OChip({ dv }) {
   const Icon = HINH_NHOM[dv.nhom] ?? Building2;
 
   return (
     // mr-* nằm trên <li> chứ không phải gap trên <ul> — xem ghi chú của
     // --animate-chay-ngang trong styles/index.css, vòng lặp phụ thuộc vào đó.
-    <li className="mr-4 shrink-0 lg:mr-6">
+    <li className="mr-5 shrink-0 lg:mr-7">
       <span
         className={
-          "flex h-16 items-center justify-center rounded-2xl px-5 " +
+          "flex h-24 items-center justify-center rounded-2xl px-6 " +
           (dv.logoNenToi ? "bg-ink" : "bg-paper shadow-soft")
         }
       >
@@ -87,11 +105,11 @@ function OChip({ dv }) {
             src={diaChiAnh(dv.logo)}
             alt={dv.ten}
             loading="lazy"
-            className="h-10 w-auto max-w-[10rem] object-contain"
+            className="h-16 w-auto max-w-[15rem] object-contain"
           />
         ) : (
-          <span className="flex items-center gap-2 whitespace-nowrap text-[0.9375rem] font-bold text-ink-soft">
-            <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+          <span className="flex items-center gap-2.5 whitespace-nowrap text-base font-bold text-ink-soft">
+            <Icon className="h-6 w-6 shrink-0 text-accent" aria-hidden="true" />
             {dv.ten}
           </span>
         )}
@@ -123,19 +141,32 @@ export default function DoiTac() {
       </Container>
 
       {reduceMotion ? (
-        /* Người bật "giảm chuyển động": bày thành nhiều dòng, đứng yên. KHÔNG
-           dùng lại băng chạy rồi tắt animation — băng chạy rộng gấp đôi màn
-           hình nên đứng yên là mất hút quá nửa số logo. */
-        <Container className="mt-7">
-          {/* CHỈ gap-y. Khoảng hở NGANG đã nằm trên từng ô (mr-* trong OChip,
-              băng chạy cần nó ở đó) — thêm gap-x nữa là các ô cách nhau gấp
-              đôi so với lúc chạy. Hở DỌC thì mr không lo được, phải khai. */}
-          <ul className="flex flex-wrap items-center justify-center gap-y-4">
+        /* ---- Máy bật "giảm chuyển động" ----
+           MỘT HÀNG NGANG, đứng yên, kéo ngang được bằng tay.
+
+           ⚠️ Bản trước chỗ này bày thành NHIỀU DÒNG và đó là lỗi: công ty đặt
+           hàng "các logo xếp thành 1 hàng ngang sau đó chạy liên tục", mà máy
+           nào bật giảm chuyển động thì lại thấy hai hàng chữ nhật đứng im —
+           khác hẳn thứ đã duyệt. Nay cả hai trường hợp đều là MỘT hàng; khác
+           nhau đúng một điểm: hàng đó có tự chạy hay không.
+
+           Vẫn KHÔNG dùng lại băng chạy rồi tắt animation: băng chạy chứa hai
+           bản sao của danh sách, đứng yên là trình đọc màn hình đọc tên khách
+           hàng hai lượt.
+
+           Đánh đổi đã biết: một hàng thì không thấy hết 11 đơn vị cùng lúc,
+           phải kéo. Hai mép mờ dần chính là dấu hiệu "còn nữa ở bên kia";
+           trên điện thoại thì vuốt là chạy. Ẩn thanh cuộn vì một thanh cuộn
+           ngang xám nằm dưới dải logo trông như lỗi giao diện. */
+        <div className="mt-7 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* px-16 = đúng bề rộng dải mờ hai bên: không có nó thì ô đầu và ô
+              cuối nằm luôn trong vùng mờ, lúc kéo hết cỡ vẫn không đọc được. */}
+          <ul className="flex w-max items-center px-16">
             {danhSach.map((dv) => (
               <OChip key={dv.ten} dv={dv} />
             ))}
           </ul>
-        </Container>
+        </div>
       ) : (
         /* Băng chạy.
            · overflow-hidden ở ngoài để phần chưa tới lượt nằm ngoài khung.
