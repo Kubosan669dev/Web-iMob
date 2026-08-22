@@ -21,7 +21,11 @@ import {
   dienThongTin,
   normalize,
 } from "../src/services/chatBrain.js";
-import { demSoLieu, danhSachMarkdown } from "../src/utils/soLieu.js";
+import {
+  demSoLieu,
+  danhSachMarkdown,
+  danhSachDoiTacMarkdown,
+} from "../src/utils/soLieu.js";
 
 // Đọc dữ liệu (đọc bằng fs để chạy được trên Node không cần cấu hình JSON import)
 function docJson(duongDan) {
@@ -32,6 +36,7 @@ const knowledge = docJson("../src/data/kienThuc.json");
 const company = docJson("../src/data/company.json");
 const { cases } = docJson("../src/data/chatTestQuestions.json");
 const projects = docJson("../src/data/projects.json");
+const doiTac = docJson("../src/data/doiTac.json");
 
 // Số liệu bot đọc cho khách nghe được ĐẾM từ danh sách sản phẩm, y như lúc
 // chạy thật (xem src/utils/soLieu.js) — test phải dùng cùng một nguồn, không
@@ -39,6 +44,7 @@ const projects = docJson("../src/data/projects.json");
 const soLieu = {
   ...demSoLieu(projects.danhSach),
   danhSach: danhSachMarkdown(projects.danhSach),
+  doiTac: danhSachDoiTacMarkdown(doiTac),
 };
 
 const intents = gomIntents(knowledge);

@@ -8,6 +8,7 @@ import {
   Download,
   FileDown,
   FileText,
+  Handshake,
   Inbox,
   KeyRound,
   LayoutDashboard,
@@ -78,6 +79,7 @@ const MUC_CHINH = [
 const MUC_TRANG_CHU = [
   { id: "hero", nhan: "Hero", khoa: "hero", icon: Sparkles, neo: "/#home" },
   { id: "san-pham", nhan: "Sản phẩm", khoa: "projects", icon: Package, neo: "/#projects" },
+  { id: "doi-tac", nhan: "Đối tác", khoa: "doiTac", icon: Handshake, neo: "/#services" },
   { id: "about", nhan: "Giới thiệu", khoa: "about", icon: Building2, neo: "/#about" },
   { id: "lien-he", nhan: "Liên hệ", khoa: "company", icon: Phone, neo: "/#contact" },
 ];
@@ -189,7 +191,7 @@ function MucHero({ d, doi, daSua }) {
             giaTri={d.anh}
             doi={s("anh")}
             daSua={daSua}
-            moTa="Để TRỐNG thì ô đó chạy băng chuyền lần lượt qua các sản phẩm, kèm mã QR mở thử — thường là lựa chọn tốt hơn một ảnh minh hoạ."
+            moTa="Để TRỐNG thì ô đó hiện hình vẽ ba màn hình (website · bản đồ số · app) — hình chung chung, không phải của dự án nào. Chỉ điền khi có một tấm ảnh riêng cho banner; đừng điền ảnh của một dự án, vì hàng dự án ngay bên dưới cũng chạy qua đúng ảnh đó."
           />
           <O
             nhan="Mô tả ảnh"
@@ -247,6 +249,91 @@ function MucAbout({ d, doi, daSua }) {
           Ba con số thống kê, bốn giá trị cốt lõi và dải năng lực nổi bật bên
           dưới khối này chưa sửa được ở đây — còn nằm trong{" "}
           <span className="font-mono text-ink">src/data/about.json</span>.
+        </p>
+      </div>
+    </Khung>
+  );
+}
+
+/* ================= Đối tác =================
+   Dải tên đơn vị chạy ngang phía trên khối Công nghệ (sections/DoiTac.jsx).
+
+   Ô nhập là MỘT khung văn bản, mỗi dòng một đơn vị — không phải một hàng thẻ
+   có nút thêm/xoá như mục Sản phẩm. Cố ý: danh sách này chỉ có tên, không ảnh
+   không mô tả, nên gõ liền một mạch (hoặc dán thẳng từ tin nhắn Zalo sang) là
+   nhanh nhất. Dựng hẳn một trình soạn từng dòng ở đây chỉ tổ bắt người dùng
+   bấm thêm chục cái nút cho cùng một kết quả.
+
+   Bù lại phải TỰ ĐOÁN nhóm để biết vẽ biểu tượng nào. Đoán sai thì cùng lắm
+   ra biểu tượng toà nhà chung chung — không có gì hỏng. */
+const LUAT_NHOM_DOI_TAC = [
+  // Cơ quan hành chính: khớp ở ĐẦU TÊN. Không khớp giữa câu vì "Nhiệt điện
+  // Quảng Ninh" cũng có chữ tỉnh/thành trong tên đầy đủ của nhiều doanh nghiệp.
+  [/^(phường|xã|thị trấn|thành phố|thị xã|huyện|tỉnh|ubnd)\s/i, "chinh-quyen"],
+  [/(trường|đại học|cao đẳng)/i, "giao-duc"],
+  [/(bảo tàng|thư viện|di tích|nhà văn ho)/i, "van-hoa"],
+  [/(điện|năng lượng)/i, "nang-luong"],
+];
+
+/* ⚠️ CÁC MẪU TRÊN CỐ Ý KHÔNG DÙNG "ranh giới từ" của JavaScript.
+   Ranh giới từ tính theo bảng ASCII, mà "đ", "ệ", "ă"… đều không phải ký tự
+   ASCII — mẫu nào kẹp ranh giới từ quanh chữ "điện" sẽ KHÔNG BAO GIỜ khớp
+   "Nhiệt điện". Lỗi này im lặng: mẫu vẫn hợp lệ, chỉ là không khớp bao giờ.
+   Đổi lại, mẫu khớp CHỨA nên "điện" cũng khớp "điện tử", "điện máy" — chấp
+   nhận được, vì đoán sai nhóm thì cùng lắm ra sai một cái biểu tượng. */
+function nhomTheoTen(ten) {
+  const t = (ten ?? "").trim();
+  return LUAT_NHOM_DOI_TAC.find(([re]) => re.test(t))?.[1] ?? "doanh-nghiep";
+}
+
+function MucDoiTac({ d, doi, daSua }) {
+  const ds = d.danhSach ?? [];
+
+  // Gõ lại danh sách thì GIỮ NGUYÊN đơn vị nào đã có, chỉ dựng mới cho tên
+  // chưa từng thấy. Nhờ vậy đường dẫn logo đã điền tay trong doiTac.json
+  // không bị xoá mất chỉ vì có người sửa một dấu cách ở dòng khác.
+  const doiTen = (tenMoi) => {
+    const cu = new Map(ds.map((dv) => [(dv.ten ?? "").trim(), dv]));
+    doi({
+      ...d,
+      danhSach: tenMoi.map((ten) => {
+        const t = ten.trim();
+        return cu.get(t) ?? { ten: t, nhom: nhomTheoTen(t), logo: "" };
+      }),
+    });
+  };
+
+  return (
+    <Khung>
+      <TieuDeMuc
+        ghiChu="Dải tên chạy ngang, nằm giữa khối đầu trang và khối Công nghệ"
+        neo="/#services"
+      >
+        Đối tác
+      </TieuDeMuc>
+      <div className="space-y-5">
+        <O
+          nhan="Dòng tiêu đề"
+          giaTri={d.tieuDe}
+          doi={(v) => doi({ ...d, tieuDe: v })}
+          daSua={daSua}
+          moTa="Chữ nhỏ in hoa phía trên dải tên."
+        />
+        <ODanhSach
+          nhan="Đơn vị"
+          danhSach={ds.map((dv) => dv.ten ?? "")}
+          doi={doiTen}
+          daSua={daSua}
+          dongToiThieu={12}
+          moTa="Mỗi dòng là một đơn vị. Biểu tượng đứng trước tên tự chọn theo tên (phường/xã → trụ sở, trường → mũ tốt nghiệp, bảo tàng/thư viện → sách, có chữ điện → tia sét, còn lại → toà nhà)."
+        />
+        <p className="rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
+          Dải này hiện <strong className="font-semibold text-ink">tên chữ</strong>,
+          chưa hiện logo. Phường, xã, thành phố không có logo riêng — thứ duy
+          nhất đại diện cho họ là Quốc huy, không nên đưa lên đây. Logo của
+          doanh nghiệp thì phải được họ đồng ý mới đăng được; xin xong thì bỏ
+          file vào <span className="font-mono text-ink">public/anh/logo/</span> và
+          điền vào <span className="font-mono text-ink">src/data/doiTac.json</span>.
         </p>
       </div>
     </Khung>
@@ -868,6 +955,11 @@ export default function AdminPage() {
   /* --------- Lưu --------- */
   const donDep = (khoa, duLieu) => {
     // Người soạn hay để lại dòng Enter thừa ở cuối các danh sách.
+    if (khoa === "doiTac")
+      return {
+        ...duLieu,
+        danhSach: (duLieu.danhSach ?? []).filter((dv) => (dv?.ten ?? "").trim()),
+      };
     if (khoa !== "legalPages") return duLieu;
     return Object.fromEntries(
       Object.entries(duLieu).map(([slug, trang]) => [
@@ -1140,6 +1232,13 @@ export default function AdminPage() {
                   </TieuDeMuc>
                   <MucSanPham d={noiDung.projects} doi={dat("projects")} />
                 </Khung>
+              )}
+              {muc === "doi-tac" && (
+                <MucDoiTac
+                  d={noiDung.doiTac}
+                  doi={dat("doiTac")}
+                  daSua={suaKhoa("doiTac")}
+                />
               )}
               {muc === "giao-dien" && (
                 <MucGiaoDien

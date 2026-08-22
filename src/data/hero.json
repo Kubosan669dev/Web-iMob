@@ -14,7 +14,7 @@
   "moTa": "Đồng hành cùng doanh nghiệp và chính quyền trên hành trình chuyển đổi số – hiện đại hoá – phát triển bền vững.",
   "nutChinh": "Nhận khảo sát miễn phí",
   "nutPhu": "Chat với AI",
-  "_huongdan_anh": "Trường `anh` để trống là khối ảnh tự ẩn, Hero vẫn đẹp như hiện nay. Điền vào là tự hiện. Bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png'. Nên dùng ảnh ngang, rộng tối thiểu 1600px. Xem HUONG-DAN-ANH.md.",
+  "_huongdan_anh": "Trường `anh` ĐỂ TRỐNG là ô bên phải hiện hình vẽ ba màn hình (website · bản đồ số · app) — src/components/ui/MinhHoaThietBi.jsx. Đó là trạng thái MẶC ĐỊNH và công ty đã chốt ngày 22/08/2026: hình phải chung chung, không lấy của dự án nào. Điền vào thì ảnh đó thay chỗ hình vẽ: bỏ file vào public/anh/ rồi ghi '/anh/ten-file.png', ảnh ngang tỉ lệ 2:1, rộng tối thiểu 1600px. ⚠️ ĐỪNG điền ảnh của một dự án — hàng thẻ dự án ngay bên dưới trượt qua cả sáu dự án nên sẽ trùng. Xem HUONG-DAN-ANH.md.",
   "anh": "",
   "anhMoTa": ""
 }

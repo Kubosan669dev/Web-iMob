@@ -70,3 +70,21 @@ export function danhSachDonVi(sanPham) {
     ),
   ];
 }
+
+/**
+ * Tên các ĐỐI TÁC / đơn vị đã đồng hành, dạng markdown cho chatbot đọc.
+ *
+ * KHÁC danhSachDonVi() ở trên, và khác có chủ đích:
+ *   danhSachDonVi()      = đơn vị rút ra từ SẢN PHẨM đã bàn giao (6 đơn vị)
+ *   danhSachDoiTacMarkdown() = danh sách công ty tự kê trong doiTac.json (11)
+ * Danh sách thứ hai rộng hơn vì có cả đơn vị mới chỉ TẬP HUẤN chuyển đổi số
+ * chứ chưa có sản phẩm bàn giao. Gộp hai thứ làm một là hoặc bỏ sót đơn vị,
+ * hoặc kể một đơn vị tập huấn như thể đã có sản phẩm chạy — sai cả hai đường.
+ */
+export function danhSachDoiTacMarkdown(doiTac) {
+  return (doiTac?.danhSach ?? [])
+    .map((dv) => (dv?.ten ?? "").trim())
+    .filter(Boolean)
+    .map((ten) => `- ${ten}`)
+    .join("\n");
+}

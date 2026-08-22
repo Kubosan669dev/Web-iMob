@@ -22,6 +22,7 @@ import {
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
 import SlideSanPham from "../components/ui/SlideSanPham.jsx";
+import MinhHoaThietBi from "../components/ui/MinhHoaThietBi.jsx";
 import { useHero, useCongTy, useSanPham } from "../context/NoiDungContext.jsx";
 import { danhSachDonVi } from "../utils/soLieu.js";
 import { openChat } from "../utils/chatBus.js";
@@ -285,23 +286,18 @@ export default function Hero() {
   const sanPham = useSanPham();
   const donVi = danhSachDonVi(sanPham);
 
-  // Ảnh cho cột phải khối đầu trang. Ưu tiên ô "Ảnh banner" trong /admin; chưa
-  // điền thì mượn ảnh của sản phẩm cuối danh sách — thứ thật, đã bàn giao.
+  // Ảnh cho cột phải khối đầu trang — CHỈ lấy từ ô "Ảnh banner" trong /admin.
   //
-  // ⚠️ CÒN MỘT CHỖ TRÙNG ẢNH CHƯA XỬ LÝ ĐƯỢC BẰNG MÃ (21/08/2026).
-  // Hồi còn là băng chuyền một dự án, băng chuyền luôn khởi động từ sản phẩm
-  // ĐẦU nên chỉ cần lấy ảnh sản phẩm CUỐI là hai bên không bao giờ đụng nhau.
-  // Nay thẻ phải là hàng bốn thẻ trượt qua CẢ SÁU dự án, nên đến vị trí trượt
-  // cuối thì sản phẩm cuối chắc chắn xuất hiện — và lúc đó ảnh của nó nằm cùng
-  // màn hình với chính nó ở góc trên bên phải. Đổi sang lấy ảnh sản phẩm nào
-  // cũng vậy, vì cả sáu đều lần lượt hiện ra.
+  // ⚠️ ĐÃ BỎ ĐƯỜNG LÙI "mượn ảnh của sản phẩm cuối danh sách" (22/08/2026).
+  // Đường lùi đó chính là lỗi công ty chỉ ra: "đoạn này dùng hình minh họa
+  // khác đi em, ở dưới có rồi trông nó thừa ra". Hàng thẻ dự án ngay bên dưới
+  // trượt qua CẢ SÁU dự án, nên mượn ảnh của bất kỳ dự án nào thì cũng có lúc
+  // nó nằm cùng màn hình với chính nó — không có cách nào chọn khéo hơn được.
   //
-  // Cách chữa dứt điểm KHÔNG nằm ở đây mà ở nội dung: điền một ảnh riêng vào
-  // ô "Ảnh banner" (/admin → Hero). Có ảnh đó thì dòng dưới không chạy nữa và
-  // hết trùng. Vẫn giữ đường lùi này vì thà trùng một tấm còn hơn để trống hẳn
-  // cột phải khối đầu trang.
-  const anhKhoiDau =
-    (hero.anh || "").trim() || (sanPham[sanPham.length - 1]?.anh || "").trim();
+  // Ô trống nay không còn nghĩa là "cột phải để trắng": chưa điền ảnh banner
+  // thì hiện <MinhHoaThietBi /> — hình vẽ ba màn hình chung chung, đúng thứ
+  // công ty dặn ("Lấy hình chung chung thôi nhé đừng lấy cửa dự án nào cả").
+  const anhBanner = (hero.anh || "").trim();
 
   return (
     <section id="home" className="relative">
@@ -393,38 +389,43 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* ================= Cột phải: ảnh sản phẩm =================
-                Ảnh mẫu công ty gửi có một cụm maket nhiều thiết bị kèm các thẻ
-                nổi xung quanh. Cụm đó là ẢNH THIẾT KẾ SẴN, không dựng lại được
-                bằng mã — nên chỗ này dùng thứ mình có thật: ảnh chụp màn hình
-                sản phẩm đã bàn giao.
+            {/* ================= Cột phải: hình minh hoạ =================
+                Ảnh mẫu công ty gửi có một cụm maket nhiều thiết bị. Lần dựng
+                trước tôi kết luận "cụm đó là ảnh thiết kế sẵn, không dựng lại
+                được bằng mã" nên thay tạm bằng ảnh chụp một dự án — và đó là
+                thứ công ty chê thừa. Kết luận ấy sai: một cụm maket phẳng thì
+                vẽ bằng div và SVG được, xem MinhHoaThietBi.jsx.
 
-                Thứ tự lấy ảnh: ô "Ảnh banner" trong /admin trước, không có thì
-                lấy ảnh của sản phẩm đầu danh sách. Cả hai đều trống thì cột này
-                TỰ ẨN và cột chữ tự chiếm trọn bề ngang — không để lại một ô
-                trống toang hoác. */}
-            {anhKhoiDau && (
-              <div className="hidden lg:block">
-                <div className="overflow-hidden rounded-block bg-tren-brand/10 p-2 ring-1 ring-tren-brand/20">
-                  {/* 16/9 chứ không phải 16/10 như thẻ dự án bên dưới.
-                      Lý do là chiều cao, không phải thẩm mỹ: cột này CAO HƠN
-                      cột chữ bên trái, mà lưới đang căn giữa (items-center) nên
-                      phần dôi ra bị chia đôi thành hai mảng trống trên và dưới
-                      phần chữ — đo được 25px thừa phía trên riêng ở màn 1440.
-                      Đã đo hai lần mới ra đúng số: 16/10 -> 16/9 vẫn còn
-                      dôi, phải xuống 2/1 thì cột ảnh (~235px) mới ngang bằng
-                      cột chữ (~235px) và mảng trống biến mất hẳn.
-                      Đây cũng là lý do rút lề bên trong CỘT CHỮ không ăn thua
-                      gì: lưới căn giữa nên chiều cao lấy theo cột CAO NHẤT,
-                      mà cột cao nhất là cột ảnh. Đo mới biết. */}
+                Nay cột này có hai trạng thái, KHÔNG còn trạng thái nào để
+                trống:
+                  · điền "Ảnh banner" trong /admin  -> hiện đúng ảnh đó
+                  · để trống (mặc định)             -> hiện hình vẽ ba màn hình
+                Cả hai đều nằm trong CÙNG một khung nền mờ, cùng tỉ lệ 2/1, nên
+                đổi qua lại không xô lệch chiều cao cột. */}
+            <div className="hidden lg:block">
+              {/* ⚠️ TỈ LỆ 2/1 — CẢ HAI NHÁNH DƯỚI ĐÂY PHẢI DÙNG CHUNG.
+                  Đây là con số đo được, không phải thẩm mỹ: cột này CAO HƠN
+                  cột chữ bên trái, mà lưới đang căn giữa (items-center) nên
+                  phần dôi ra bị chia đôi thành hai mảng trống trên và dưới
+                  phần chữ — đo được 25px thừa phía trên riêng ở màn 1440.
+                  Đã đo hai lần mới ra đúng số: 16/10 -> 16/9 vẫn còn dôi,
+                  phải xuống 2/1 thì cột ảnh (~235px) mới ngang bằng cột chữ
+                  (~235px) và mảng trống biến mất hẳn.
+                  Đây cũng là lý do rút lề bên trong CỘT CHỮ không ăn thua gì:
+                  lưới căn giữa nên chiều cao lấy theo cột CAO NHẤT, mà cột cao
+                  nhất là cột này. Đo mới biết. */}
+              <div className="overflow-hidden rounded-block bg-tren-brand/10 p-2 ring-1 ring-tren-brand/20">
+                {anhBanner ? (
                   <img
-                    src={diaChiAnh(anhKhoiDau)}
-                    alt={hero.anhMoTa || `Giao diện ${sanPham[sanPham.length - 1]?.title ?? "sản phẩm iMob"}`}
+                    src={diaChiAnh(anhBanner)}
+                    alt={hero.anhMoTa || "Ảnh giới thiệu iMob"}
                     className="aspect-[2/1] w-full rounded-card object-cover [@media(max-height:1000px)]:aspect-[21/9]"
                   />
-                </div>
+                ) : (
+                  <MinhHoaThietBi className="aspect-[2/1] w-full [@media(max-height:1000px)]:aspect-[21/9]" />
+                )}
               </div>
-            )}
+            </div>
           </div>
         </Container>
       </div>

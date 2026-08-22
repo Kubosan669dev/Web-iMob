@@ -1,9 +1,14 @@
 import knowledge from "../data/kienThuc.json";
 import companyMacDinh from "../data/company.json";
 import projectsMacDinh from "../data/projects.json";
+import doiTacMacDinh from "../data/doiTac.json";
 import { API_BASE_URL } from "../utils/constants.js";
 import { findAnswer, chongLap } from "./chatBrain.js";
-import { demSoLieu, danhSachMarkdown } from "../utils/soLieu.js";
+import {
+  demSoLieu,
+  danhSachMarkdown,
+  danhSachDoiTacMarkdown,
+} from "../utils/soLieu.js";
 
 // ============================================================
 // chatService: "tổng đài" — nơi DUY NHẤT giao diện gọi để lấy câu trả lời.
@@ -112,14 +117,19 @@ async function callBackendChat(message, history = []) {
  *   chỗ {{cong_ty.*}} trong kho kiến thức, nên sửa SĐT ở /admin là bot nói theo
  *   ngay. Không truyền thì dùng bản đóng gói sẵn.
  */
-export async function sendMessage(message, history = [], congTy, sanPham) {
+export async function sendMessage(message, history = [], congTy, sanPham, doiTac) {
   const company = congTy ?? companyMacDinh;
 
   // Số liệu bot đọc cho khách nghe được ĐẾM từ danh sách sản phẩm mới nhất
   // (sửa ở /admin), không chép tay vào kho kiến thức — cùng lý do với congTy
   // ở trên. Nơi gọi không truyền thì dùng bản đóng gói sẵn.
   const ds = sanPham?.length ? sanPham : projectsMacDinh.danhSach;
-  const soLieu = { ...demSoLieu(ds), danhSach: danhSachMarkdown(ds) };
+  const dsDoiTac = doiTac?.danhSach?.length ? doiTac : doiTacMacDinh;
+  const soLieu = {
+    ...demSoLieu(ds),
+    danhSach: danhSachMarkdown(ds),
+    doiTac: danhSachDoiTacMarkdown(dsDoiTac),
+  };
 
   // Tầng 1: kho kiến thức trong trình duyệt (0ms, không cần mạng)
   const result = findAnswer(message, knowledge, company, soLieu);

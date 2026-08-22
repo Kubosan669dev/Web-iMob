@@ -62,6 +62,12 @@
     { "q": "có dự án tiêu biểu nào không", "expect": "portfolio" },
     { "q": "đã làm cho khách hàng nào", "expect": "portfolio" },
 
+    { "q": "iMob có những đối tác nào?", "expect": "doi-tac" },
+    { "q": "cho xem danh sách đối tác", "expect": "doi-tac" },
+    { "q": "ben minh da hop tac voi nhung ai", "expect": "doi-tac" },
+    { "q": "những đơn vị đồng hành cùng công ty", "expect": "doi-tac" },
+    { "q": "bên mình từng hợp tác với cơ quan nào", "expect": "doi-tac" },
+
     { "q": "Làm sao liên hệ với bên bạn?", "expect": "contact" },
     { "q": "cho minh xin so dien thoai", "expect": "contact" },
     { "q": "email của shop là gì", "expect": "contact" },

@@ -1275,6 +1275,23 @@
         "người dân"
       ],
       "text": "MÔ HÌNH HỆ THỐNG ZALO MINI APP CHO CHÍNH QUYỀN gồm hai phần: Zalo Mini App cho người dân, và website quản trị cho UBND do iMob cấp — admin của uỷ ban được quyền xem, thêm, xoá, sửa nội dung trong từng module. Người dân không cần tải thêm ứng dụng, dùng ngay trên Zalo, ghim được Mini App ra màn hình chính, đăng nhập bằng tài khoản Zalo (hỗ trợ nhận diện công dân bước đầu), và tích hợp Zalo OA để chính quyền gửi thông báo chính thống. Bộ tính năng: tra cứu dịch vụ công; lịch tiếp dân; tra cứu phạt nguội; gửi phản ánh – kiến nghị trực tiếp lên chính quyền (môi trường, rác thải, an ninh trật tự, sự cố điện nước) mà không cần đến trực tiếp UBND; nhận thông báo từ chính quyền; broadcast tin tức hàng loạt; trợ lý ảo AI giải đáp thủ tục; giải đáp thắc mắc – hỗ trợ trực tuyến hai chiều; thư viện pháp luật; bản đồ du lịch và di tích, danh lam thắng cảnh, dịch vụ lưu trú, ăn uống, điểm vui chơi; nông sản OCOP; đường dây nóng; thông báo khẩn; lịch cắt điện, cắt nước; lịch tiêm chủng; thông tin tuyển dụng; tạo cuộc thi online; liên kết phường; bản đồ quy hoạch. Lợi ích cho chính quyền: quản lý tập trung, loại bỏ thao tác lặp, tăng hiệu quả tuyên truyền, nắm được các nội dung nổi cộm trên địa bàn qua kênh phản ánh của người dân. Hệ thống dễ mở rộng cho nhiều đơn vị hoặc mở rộng thêm tính năng."
+    },
+    {
+      "id": "C029",
+      "title": "Đối tác và các đơn vị đã đồng hành cùng iMob",
+      "service": "chung",
+      "tags": [
+        "đối tác",
+        "danh sách đối tác",
+        "đơn vị đồng hành",
+        "đã đồng hành",
+        "đã hợp tác",
+        "từng hợp tác",
+        "làm việc với",
+        "khách hàng",
+        "cơ quan nào"
+      ],
+      "text": "CÁC ĐƠN VỊ ĐÃ ĐỒNG HÀNH CÙNG iMob: Phường Hà An; Phường Yên Tử; Phường An Sinh; Phường Đông Triều; Xã Quảng Tân; Thành phố Uông Bí; Công ty CP Nhiệt điện Quảng Ninh; Thuỷ điện Sapa; Bảo tàng – Thư viện tỉnh Quảng Ninh; Trường Cao đẳng Việt – Hàn Quảng Ninh; VHunter. Trong danh sách có đơn vị đã triển khai dự án và có đơn vị được iMob tập huấn chuyển đổi số — phường Hà An là đơn vị đã tập huấn. Vì vậy không phải đơn vị nào trong danh sách cũng đã có sản phẩm bàn giao; danh sách sản phẩm đang chạy là một danh sách riêng, ngắn hơn. Đây chỉ là danh sách tên: phạm vi công việc, giá trị hợp đồng và thời gian triển khai ở từng nơi thì iMob cần trao đổi trực tiếp mới trả lời chính xác được."
     }
   ],
   "faqs": [
@@ -2102,6 +2119,15 @@
         "mini app tra cứu phạt nguội"
       ],
       "answer": "Zalo Mini App cho chính quyền của bên mình gồm hai phần: Mini App cho người dân, và website quản trị cho UBND — cán bộ được cấp tài khoản để tự xem, thêm, sửa, xoá nội dung từng module.\n\nNgười dân dùng được: tra cứu dịch vụ công; lịch tiếp dân; tra cứu phạt nguội; gửi phản ánh – kiến nghị thẳng lên chính quyền về môi trường, rác thải, an ninh trật tự, sự cố điện nước mà không phải đến UBND; nhận thông báo và tin tức chính thống; hỏi trợ lý ảo AI về thủ tục; thư viện pháp luật; bản đồ du lịch, di tích, lưu trú, ăn uống, điểm vui chơi; nông sản OCOP; đường dây nóng; thông báo khẩn; lịch cắt điện, cắt nước; lịch tiêm chủng; thông tin tuyển dụng; bản đồ quy hoạch.\n\nNgười dân không phải tải thêm ứng dụng nào, đăng nhập bằng chính tài khoản Zalo, và ghim được Mini App ra màn hình chính cho tiện."
+    },
+    {
+      "q": "iMob đã đồng hành cùng những đơn vị nào?",
+      "a": "Bên mình đã đồng hành cùng Phường Hà An, Phường Yên Tử, Phường An Sinh, Phường Đông Triều, Xã Quảng Tân, Thành phố Uông Bí và một số đơn vị khác nữa ạ. Có nơi đã triển khai dự án, có nơi bên mình tập huấn chuyển đổi số. Anh/chị muốn nghe kỹ phần việc iMob làm ở đơn vị nào ạ?",
+      "tags": [
+        "đối tác",
+        "đơn vị đồng hành",
+        "khách hàng"
+      ]
     }
   ],
   "smalltalk": [

@@ -1,4 +1,5 @@
 import Hero from "../sections/Hero.jsx";
+import DoiTac from "../sections/DoiTac.jsx";
 import Services from "../sections/Services.jsx";
 import About from "../sections/About.jsx";
 import Contact from "../sections/Contact.jsx";
@@ -13,8 +14,10 @@ import ChonBangMau from "../components/ui/ChonBangMau.jsx";
 //
 //   1. Hero      — MỤC LỤC. Ai dừng ở đây vẫn biết đủ: làm gì, cho ai, đã chạy
 //                  ở đâu, gọi số nào. Ai quan tâm mục nào thì bấm đi tiếp.
-//   2. Sản phẩm  — bằng chứng. Khách lớn nhất của iMob là cơ quan nhà nước, và
-//                  với nhóm đó câu hỏi đầu tiên luôn là "đã làm cho ai chưa".
+//                  (Khối Sản phẩm cũ đã gộp vào đây — xem ghi chú bên dưới.)
+//   2. Đối tác   — MỘT DÒNG chạy ngang, không phải một khối. Thêm 22/08/2026.
+//                  Nó trả lời câu hỏi bật ra ngay sau khi xem xong dự án —
+//                  "làm cho những ai" — nên không tính là một slide mới.
 //   3. Dịch vụ   — ba mảng, mỗi mảng có trang riêng cho ai muốn đọc kỹ.
 //   4. Về iMob   — gộp Giới thiệu + Trợ lý AI (xem lý do trong About.jsx).
 //   5. Liên hệ.
@@ -45,6 +48,19 @@ export default function HomePage() {
           sửa trong /admin → Sản phẩm vẫn hiện ra ở băng chuyền như cũ.
           Component src/sections/Projects.jsx vẫn còn nguyên trong mã nguồn,
           muốn bật lại chỉ cần thêm <Projects /> vào đây. */}
+
+      {/* Dải tên đối tác chạy ngang — thêm 22/08/2026, đúng chỗ công ty dặn:
+          "ở trên phần dịch vụ mình để chạy 1 dòng các đối tác và đơn vị đã
+          triển khai dự án cùng mình nhé".
+
+          Đặt giữa Hero và Công nghệ có lý của nó, không chỉ là làm theo lời:
+          khách vừa xem xong sáu dự án ở khối trên, câu hỏi tiếp theo trong đầu
+          họ là "làm cho những ai" — dải này trả lời đúng câu đó, rồi mới tới
+          phần chào hàng dịch vụ. Đặt sau phần dịch vụ thì thành lời khoe muộn.
+
+          Nhịp nền vẫn đúng: khối này nền XÁM, Hero phía trên và Công nghệ phía
+          dưới đều nền TRẮNG. */}
+      <DoiTac />
       <Services />
       <About />
       <Contact />

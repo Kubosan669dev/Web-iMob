@@ -75,6 +75,7 @@ const KHOA_SO_LIEU = {
   don_vi: "donVi",
   nhom: "nhom",
   danh_sach: "danhSach", // danh sách sản phẩm dạng markdown
+  doi_tac: "doiTac", // danh sách đối tác / đơn vị đã đồng hành
 };
 
 export function dienThongTin(text, congTy, soLieu) {

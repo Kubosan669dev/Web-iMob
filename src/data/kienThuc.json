@@ -486,6 +486,14 @@
           "answer": "Các sản phẩm iMob đã bàn giao và đang chạy:\n\n{{so_lieu.danh_sach}}\n\nBạn quan tâm nhóm nào (Zalo Mini App, bản đồ số, website) để mình giới thiệu sát hơn ạ?"
         },
         {
+          "_note": "ĐẶT NGAY SAU `portfolio` là cố ý. Hai intent này hoà điểm ở khá nhiều câu, mà hoà thì intent đứng TRƯỚC thắng. Câu hỏi chung chung kiểu 'iMob đã làm gì rồi' nên ra danh sách SẢN PHẨM (có ảnh, có link mở thử trên trang) chứ không phải một danh sách tên đơn vị. Danh sách đối tác rộng hơn danh sách sản phẩm vì có cả đơn vị mới tập huấn chuyển đổi số, chưa có sản phẩm bàn giao — nguồn là src/data/doiTac.json, cùng file với dải chạy ngang ở trang chủ.",
+          "id": "doi-tac",
+          "nguon": "soan",
+          "keywords": ["đối tác", "đơn vị đồng hành", "đã đồng hành", "danh sách đối tác", "đã hợp tác", "từng hợp tác", "hợp tác với những ai", "hợp tác với ai", "đã làm việc với"],
+          "tru": ["muốn hợp tác", "xin hợp tác", "đề nghị hợp tác", "cơ hội hợp tác", "hợp tác kinh doanh"],
+          "answer": "Ngoài các sản phẩm đã bàn giao, iMob còn đồng hành cùng nhiều đơn vị khác — có nơi đã triển khai dự án, có nơi bên mình tập huấn chuyển đổi số:\n\n{{so_lieu.doi_tac}}\n\nBạn muốn nghe kỹ phần việc bên mình đã làm ở đơn vị nào ạ?"
+        },
+        {
           "id": "du-an-nha-hang",
           "nguon": "web",
           "keywords": ["dự án nhà hàng", "làm cho nhà hàng chưa", "từng làm nhà hàng", "kinh nghiệm làm nhà hàng", "dự án quán ăn"],

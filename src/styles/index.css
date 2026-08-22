@@ -102,6 +102,25 @@
       transform: translateY(-14px);
     }
   }
+
+  /* Dải đối tác chạy ngang (sections/DoiTac.jsx).
+     ⚠️ -50% CHỈ ĐÚNG KHI băng chạy chứa ĐÚNG HAI bản sao giống hệt nhau của
+     danh sách, và mỗi đơn vị tự mang khoảng hở bên phải của nó (margin-right
+     trên từng <li>, KHÔNG dùng gap trên <ul>). Có gap thì bản sao thứ hai
+     rộng hơn bản đầu đúng một khoảng hở, -50% rơi vào giữa chừng và cứ mỗi
+     vòng lại giật một cái.
+     45 giây cho một vòng là chậm — cố ý: đây là tên khách hàng để người ta
+     ĐỌC, không phải hiệu ứng để ngắm. Chạy nhanh thì không ai kịp đọc tên nào. */
+  --animate-chay-ngang: chayNgang 45s linear infinite;
+
+  @keyframes chayNgang {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 /* ---------------- Base ---------------- */

@@ -5,6 +5,7 @@ import heroMacDinh from "../data/hero.json";
 import aboutMacDinh from "../data/about.json";
 import giaoDienMacDinh from "../data/giaoDien.json";
 import projectsMacDinh from "../data/projects.json";
+import doiTacMacDinh from "../data/doiTac.json";
 import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
@@ -39,6 +40,7 @@ const MAC_DINH = {
   about: aboutMacDinh,
   giaoDien: giaoDienMacDinh,
   projects: projectsMacDinh,
+  doiTac: doiTacMacDinh,
 };
 
 // Không để khách chờ lâu vì nội dung: quá hạn này thì dùng bản mặc định.
@@ -167,6 +169,19 @@ export function useSanPham() {
   const noiDung = useNoiDung();
   const ds = noiDung.projects?.danhSach ?? projectsMacDinh.danhSach ?? [];
   return ds.filter((sp) => sp && sp.id && sp.title);
+}
+
+/**
+ * Dải đối tác / đơn vị đã đồng hành, chạy ngang trên khối Công nghệ.
+ *
+ * Trả về CẢ CỤC (tieuDe + danhSach) chứ không chỉ mảng như useSanPham():
+ * tiêu đề của dải này là chỗ dễ nói quá lời nhất ("đã triển khai dự án" trong
+ * khi có đơn vị mới chỉ tập huấn), nên nó phải sửa được cùng chỗ với danh
+ * sách, không được ghim cứng trong mã.
+ */
+export function useDoiTac() {
+  const noiDung = useNoiDung();
+  return noiDung.doiTac ?? doiTacMacDinh;
 }
 
 export { NoiDungContext, MAC_DINH };

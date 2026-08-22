@@ -11,6 +11,7 @@
     "test:chat": "node scripts/test-chatbot.mjs",
     "test:chat:flow": "node scripts/test-chatbot-flow.mjs",
     "test:congty": "node scripts/kiem-tra-congty-dong.mjs",
+    "test:doitac": "node scripts/kiem-tra-doi-tac.mjs",
     "bangmau": "node scripts/kiem-tra-bang-mau.mjs"
   },
   "dependencies": {

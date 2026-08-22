@@ -1,0 +1,19 @@
+{
+  "_note": "ĐỐI TÁC & ĐƠN VỊ ĐÃ ĐỒNG HÀNH — dải chữ chạy ngang nằm ngay trên khối Công nghệ ở trang chủ (src/sections/DoiTac.jsx). Thêm 22/08/2026 theo yêu cầu của công ty: 'ở trên phần dịch vụ mình để chạy 1 dòng các đối tác và đơn vị đã triển khai dự án cùng mình nhé'. Danh sách đúng 11 đơn vị công ty gửi, không thêm không bớt. Thứ tự thì XẾP LẠI THEO NHÓM (chính quyền → năng lượng → văn hoá → giáo dục → doanh nghiệp) chứ không theo thứ tự công ty gõ trong tin nhắn: đây là dải CHẠY NGANG, đơn vị cùng loại đi liền nhau thì mắt bắt được nhóm ngay, còn xen kẽ thì thành một danh sách lộn xộn. Muốn theo đúng thứ tự gốc thì đảo lại trong mảng này, mã không phụ thuộc thứ tự.",
+  "_note_tieu_de": "Tiêu đề dùng chữ 'đã đồng hành' chứ không phải 'đã triển khai dự án' như câu nhắn gốc, vì trong 11 đơn vị có đơn vị mới chỉ TẬP HUẤN chuyển đổi số (phường Hà An) chứ chưa triển khai dự án. Một chữ sai ở dải này là khoe quá lời với chính khách hàng của mình — họ đọc được. Muốn dùng đúng câu gốc thì phải tách hai nhóm ra.",
+  "_huongdan_logo": "Mỗi đơn vị hiện dưới dạng CHỮ + biểu tượng theo nhóm, KHÔNG dùng ảnh logo. Lý do: (1) phường/xã/thành phố không có logo riêng, thứ duy nhất đại diện là Quốc huy — mà Quốc huy đưa lên dải quảng bá của một công ty tư nhân là chuyện không nên làm; (2) logo của doanh nghiệp là nhãn hiệu của họ, đăng lên phải được họ đồng ý bằng văn bản. Khi nào công ty xin được logo thì bỏ file vào public/anh/logo/ rồi điền đường dẫn vào trường `logo` của đơn vị đó — có `logo` thì DoiTac.jsx tự hiện ảnh thay cho biểu tượng, không phải sửa mã.",
+  "tieuDe": "Đối tác và các đơn vị đã đồng hành cùng iMob",
+  "danhSach": [
+    { "ten": "Phường Hà An", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Phường Yên Tử", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Phường An Sinh", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Phường Đông Triều", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Xã Quảng Tân", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Thành phố Uông Bí", "nhom": "chinh-quyen", "logo": "" },
+    { "ten": "Công ty CP Nhiệt điện Quảng Ninh", "nhom": "nang-luong", "logo": "" },
+    { "ten": "Thuỷ điện Sapa", "nhom": "nang-luong", "logo": "" },
+    { "ten": "Bảo tàng – Thư viện tỉnh Quảng Ninh", "nhom": "van-hoa", "logo": "" },
+    { "ten": "Trường Cao đẳng Việt – Hàn Quảng Ninh", "nhom": "giao-duc", "logo": "" },
+    { "ten": "VHunter", "nhom": "doanh-nghiep", "logo": "" }
+  ]
+}
