@@ -129,6 +129,26 @@
     }
   }
 
+  /* Ô biểu tượng nổi trong hình minh hoạ đầu trang
+     (components/ui/MinhHoaThietBi.jsx).
+     ⚠️ KHÔNG dùng lại --animate-float cho chỗ đó: biên độ 14px so với ô cao
+     30px là ô đi lạc hẳn khỏi cụm thiết bị chứ không còn là "nổi nhẹ". 5px là
+     đủ để mắt thấy nó sống mà không kéo sự chú ý khỏi phần chữ bên trái.
+     ⚠️ 7s Ở ĐÂY CHỈ LÀ GIÁ TRỊ DỰ PHÒNG. MinhHoaThietBi ghi đè duration và
+     delay bằng style nội tuyến, mỗi ô một con số lệch nhau — cùng chu kỳ thì
+     bốn ô nhấp nhô đồng loạt như một khối, mất hẳn cảm giác trôi độc lập. */
+  --animate-troi: troi 7s ease-in-out infinite;
+
+  @keyframes troi {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
   /* Dải đối tác chạy ngang (sections/DoiTac.jsx).
      ⚠️ -50% CHỈ ĐÚNG KHI băng chạy chứa ĐÚNG HAI bản sao giống hệt nhau của
      danh sách, và mỗi đơn vị tự mang khoảng hở bên phải của nó (margin-right
