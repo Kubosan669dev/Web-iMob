@@ -1,5 +1,5 @@
-import { useReducedMotion } from "motion/react";
-import { Building2, GraduationCap, Landmark, Library, Zap } from "lucide-react";
+import { useState } from "react";
+import { Building2, GraduationCap, Landmark, Library, Pause, Play, Zap } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import { useDoiTac } from "../context/NoiDungContext.jsx";
 import { diaChiAnh } from "../utils/anh.js";
@@ -20,8 +20,18 @@ import { diaChiAnh } from "../utils/anh.js";
 // họ gửi từ đầu: cmc.com.vn chỉ có logo, không có tên.
 //
 // Bỏ chữ đi được hai thứ: mỗi ô hẹp lại chừng một nửa nên nhìn một lượt thấy
-// được nhiều đơn vị hơn, và logo được phóng to gấp rưỡi (28px -> 40px) — ở cỡ
-// cũ nhiều logo chỉ còn là một chấm màu.
+// được nhiều đơn vị hơn, và logo được phóng to (28px -> 40px, rồi -> 64px) —
+// ở cỡ đầu nhiều logo chỉ còn là một chấm màu.
+//
+// ---- LỊCH SỬ "vẫn đứng yên nè" — đọc trước khi đụng vào chuyển động ----
+// Công ty báo hai lần là dải không chạy. Nguyên nhân KHÔNG nằm trong file này
+// mà nằm ở chỗ máy của họ tắt hiệu ứng Windows, nên trình duyệt khai
+// prefers-reduced-motion: reduce, và có HAI thứ cùng chặn:
+//   1. nhánh useReducedMotion() ngay trong file này (đã bỏ);
+//   2. luật quét cả site trong styles/index.css rút mọi animation xuống
+//      0,01ms kèm !important (nay miễn trừ riêng cho dải này).
+// Sửa một trong hai mà quên cái kia thì dải vẫn đứng im. Chi tiết và lý lẽ
+// nằm ở khối băng chạy bên dưới và ở index.css.
 //
 // ---- Ba đơn vị CHƯA CÓ LOGO thì làm gì ----
 // Phường Hà An, phường An Sinh, Thuỷ điện Sapa. KHÔNG bỏ họ ra khỏi dải: đây
@@ -120,7 +130,7 @@ function OChip({ dv }) {
 
 export default function DoiTac() {
   const doiTac = useDoiTac();
-  const reduceMotion = useReducedMotion();
+  const [dangChay, setDangChay] = useState(true);
 
   // Lọc đơn vị hỏng ngay tại đây: danh sách này sửa được trong /admin, một
   // dòng lỡ để trống tên không được phép làm hiện ra một ô rỗng giữa dải.
@@ -135,65 +145,103 @@ export default function DoiTac() {
   return (
     <section className="border-t border-line bg-mist py-10 lg:py-12">
       <Container>
-        <p className="text-center text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-          {tieuDe}
-        </p>
+        {/* Tiêu đề và nút tạm dừng nằm CÙNG MỘT HÀNG, căn giữa. Nút đặt cạnh
+            tiêu đề chứ không đặt ở góc dải: ở góc thì nó đè lên logo, mà thu
+            nhỏ dải lại để chừa chỗ thì mất chỗ của chính thứ cần khoe. */}
+        <div className="flex items-center justify-center gap-2">
+          <p className="text-center text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+            {tieuDe}
+          </p>
+
+          {/* ---- Nút tạm dừng: BẮT BUỘC PHẢI CÓ, không phải để cho đẹp ----
+              Chuẩn WCAG 2.2.2 (mức A): thứ gì tự chạy quá 5 giây thì phải có
+              cách dừng lại được. Bản trước lấy "rê chuột thì dừng" làm cách
+              đó — nhưng rê chuột thì bàn phím không làm được, màn hình cảm
+              ứng cũng không. Nay dải chạy cho cả người đã bật "giảm chuyển
+              động" (xem ghi chú ở khối băng chạy bên dưới), nên càng phải có
+              một cái nút thật: bấm được, tab tới được, đọc màn hình hiểu được.
+
+              Không dùng aria-pressed vì đây không phải công tắc bật/tắt một
+              trạng thái — nhãn đổi theo việc bấm vào sẽ LÀM GÌ, đúng cách một
+              nút play/pause thường làm. */}
+          <button
+            type="button"
+            onClick={() => setDangChay((v) => !v)}
+            aria-label={dangChay ? "Tạm dừng dải logo đối tác" : "Cho dải logo đối tác chạy"}
+            title={dangChay ? "Tạm dừng" : "Cho chạy"}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-line/70 text-ink-soft transition-colors hover:bg-line hover:text-ink"
+          >
+            {/* fill-current: hai vạch của biểu tượng Pause vốn chỉ có nét
+                viền, ở khổ 16px thì mảnh đến mức nhìn như vết bẩn. Tô đặc
+                mới ra hình cái nút tạm dừng. */}
+            {dangChay ? (
+              <Pause className="h-4 w-4 fill-current" aria-hidden="true" />
+            ) : (
+              <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </Container>
 
-      {reduceMotion ? (
-        /* ---- Máy bật "giảm chuyển động" ----
-           MỘT HÀNG NGANG, đứng yên, kéo ngang được bằng tay.
+      {/* ---- Băng chạy — CHỈ CÒN MỘT NHÁNH, không còn bản đứng yên ----
 
-           ⚠️ Bản trước chỗ này bày thành NHIỀU DÒNG và đó là lỗi: công ty đặt
-           hàng "các logo xếp thành 1 hàng ngang sau đó chạy liên tục", mà máy
-           nào bật giảm chuyển động thì lại thấy hai hàng chữ nhật đứng im —
-           khác hẳn thứ đã duyệt. Nay cả hai trường hợp đều là MỘT hàng; khác
-           nhau đúng một điểm: hàng đó có tự chạy hay không.
+          ⚠️ ĐỌC TRƯỚC KHI ĐỊNH "TRẢ LẠI" NHÁNH GIẢM CHUYỂN ĐỘNG:
+          Trước đây chỗ này rẽ hai nhánh theo useReducedMotion(). Công ty báo
+          hai lần "vẫn đứng yên nè". Đo ra thì máy của họ có
+          SPI_GETCLIENTAREAANIMATION = 0, tức Windows đang tắt hiệu ứng, nên
+          trình duyệt khai prefers-reduced-motion: reduce và họ luôn rơi vào
+          nhánh đứng yên.
 
-           Vẫn KHÔNG dùng lại băng chạy rồi tắt animation: băng chạy chứa hai
-           bản sao của danh sách, đứng yên là trình đọc màn hình đọc tên khách
-           hàng hai lượt.
+          Vấn đề không nằm ở một cái máy. Trên Windows, công tắc đó vừa mang
+          nghĩa "tôi bị chóng mặt vì chuyển động" vừa mang nghĩa "máy tôi yếu,
+          tắt hiệu ứng cho nhanh" — và máy văn phòng nhà nước thường bị tắt vì
+          nghĩa thứ hai. Khách hàng thật của iMob dùng đúng loại máy đó. Nghe
+          theo tín hiệu này là một phần khách không bao giờ thấy dải chạy.
 
-           Đánh đổi đã biết: một hàng thì không thấy hết 11 đơn vị cùng lúc,
-           phải kéo. Hai mép mờ dần chính là dấu hiệu "còn nữa ở bên kia";
-           trên điện thoại thì vuốt là chạy. Ẩn thanh cuộn vì một thanh cuộn
-           ngang xám nằm dưới dải logo trông như lỗi giao diện. */
-        <div className="mt-7 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {/* px-16 = đúng bề rộng dải mờ hai bên: không có nó thì ô đầu và ô
-              cuối nằm luôn trong vùng mờ, lúc kéo hết cỡ vẫn không đọc được. */}
-          <ul className="flex w-max items-center px-16">
+          Nên: dải chạy cho MỌI NGƯỜI, và đổi lại phải có nút dừng thật ở trên
+          — đó mới là thứ chuẩn WCAG 2.2.2 đòi, và nó tốt hơn hẳn "rê chuột thì
+          dừng" của bản cũ vì bàn phím và cảm ứng đều dùng được.
+
+          ⚠️ Chỉ sửa ở đây là CHƯA ĐỦ. styles/index.css còn một luật quét cả
+          site trong @media (prefers-reduced-motion: reduce) rút mọi animation
+          xuống 0,01ms kèm !important. Băng này được miễn trừ riêng ở đó — sửa
+          một chỗ mà quên chỗ kia thì dải lại đứng im.
+
+          · overflow-hidden ở ngoài để phần chưa tới lượt nằm ngoài khung.
+          · mask hai mép: logo không "bốp" một cái hiện ra ở rìa mà mờ dần vào
+            nền — không có nó thì mắt bị mép cắt ngang kéo sự chú ý.
+          · rê chuột vẫn dừng: đang nhìn một logo mà nó trôi mất thì bực. */}
+      <div className="mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]">
+        {/* Hai biến CSS thay cho việc đặt thẳng animation-duration /
+            animation-play-state:
+            · --nhip-chay  : luật miễn trừ trong index.css cần đọc lại đúng con
+                             số này, mà nó không với tới style nội tuyến được.
+            · --chay       : đặt thẳng animation-play-state bằng style nội tuyến
+                             thì style nội tuyến thắng luôn cả lớp hover, tức là
+                             rê chuột hết dừng. Qua biến thì hai lớp cùng hạng,
+                             lớp hover đứng sau nên thắng — giữ được cả hai. */}
+        <div
+          className="flex w-max animate-chay-ngang [animation-play-state:var(--chay)] hover:[animation-play-state:paused]"
+          style={{
+            "--nhip-chay": `${danhSach.length * GIAY_MOI_DON_VI}s`,
+            "--chay": dangChay ? "running" : "paused",
+          }}
+        >
+          {/* Bản 1 — bản người dùng thật sự nhìn */}
+          <ul className="flex items-center">
+            {danhSach.map((dv) => (
+              <OChip key={dv.ten} dv={dv} />
+            ))}
+          </ul>
+          {/* Bản 2 — bản chạy nối đuôi cho liền mạch. aria-hidden để trình
+              đọc màn hình không đọc danh sách khách hàng hai lần. */}
+          <ul className="flex items-center" aria-hidden="true">
             {danhSach.map((dv) => (
               <OChip key={dv.ten} dv={dv} />
             ))}
           </ul>
         </div>
-      ) : (
-        /* Băng chạy.
-           · overflow-hidden ở ngoài để phần chưa tới lượt nằm ngoài khung.
-           · mask hai mép: logo không "bốp" một cái hiện ra ở rìa mà mờ dần vào
-             nền — không có nó thì mắt bị mép cắt ngang kéo sự chú ý.
-           · dừng khi rê chuột: đang nhìn một logo mà nó trôi mất thì bực. */
-        <div className="mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]">
-          <div
-            className="flex w-max animate-chay-ngang hover:[animation-play-state:paused]"
-            style={{ animationDuration: `${danhSach.length * GIAY_MOI_DON_VI}s` }}
-          >
-            {/* Bản 1 — bản người dùng thật sự nhìn */}
-            <ul className="flex items-center">
-              {danhSach.map((dv) => (
-                <OChip key={dv.ten} dv={dv} />
-              ))}
-            </ul>
-            {/* Bản 2 — bản chạy nối đuôi cho liền mạch. aria-hidden để trình
-                đọc màn hình không đọc danh sách khách hàng hai lần. */}
-            <ul className="flex items-center" aria-hidden="true">
-              {danhSach.map((dv) => (
-                <OChip key={dv.ten} dv={dv} />
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+      </div>
     </section>
   );
 }

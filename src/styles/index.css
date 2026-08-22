@@ -155,12 +155,18 @@
      trên từng <li>, KHÔNG dùng gap trên <ul>). Có gap thì bản sao thứ hai
      rộng hơn bản đầu đúng một khoảng hở, -50% rơi vào giữa chừng và cứ mỗi
      vòng lại giật một cái.
-     ⚠️ 45s Ở ĐÂY CHỈ LÀ GIÁ TRỊ DỰ PHÒNG. DoiTac.jsx ghi đè animation-duration
-     bằng style nội tuyến, tính theo SỐ ĐƠN VỊ (số giây mỗi đơn vị × số đơn vị)
-     để thêm bớt khách hàng thì tốc độ không đổi, chỉ vòng dài ra. Ghim cứng
-     một con số cho cả vòng thì mỗi lần thêm khách là dải chạy nhanh thêm một
-     chút, đến lúc nào đó thành nhấp nháy. Sửa tốc độ thì sửa GIAY_MOI_DON_VI
-     trong DoiTac.jsx, không phải sửa số ở đây. */
+     ⚠️ 45s Ở ĐÂY CHỈ LÀ GIÁ TRỊ DỰ PHÒNG khi --nhip-chay chưa được đặt.
+     DoiTac.jsx đặt --nhip-chay bằng style nội tuyến, tính theo SỐ ĐƠN VỊ (số
+     giây mỗi đơn vị × số đơn vị) để thêm bớt khách hàng thì tốc độ không đổi,
+     chỉ vòng dài ra. Ghim cứng một con số cho cả vòng thì mỗi lần thêm khách
+     là dải chạy nhanh thêm một chút, đến lúc nào đó thành nhấp nháy. Sửa tốc
+     độ thì sửa GIAY_MOI_DON_VI trong DoiTac.jsx, không phải sửa số ở đây.
+
+     ⚠️ Đi qua BIẾN --nhip-chay chứ không đặt thẳng animation-duration trong
+     style nội tuyến, vì luật giảm-chuyển-động ở @layer base cần đọc lại đúng
+     con số này để miễn trừ cho dải logo — mà luật CSS thì không với tới style
+     nội tuyến được. Xem ghi chú ở .animate-chay-ngang trong khối
+     @media (prefers-reduced-motion: reduce). */
   --animate-chay-ngang: chayNgang 45s linear infinite;
 
   @keyframes chayNgang {
@@ -177,6 +183,25 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+
+  /* ---- Thời lượng một vòng của dải logo đối tác (sections/DoiTac.jsx) ----
+     Đọc từ biến --nhip-chay mà DoiTac đặt trên chính thẻ băng chạy, tính theo
+     số đơn vị.
+
+     ⚠️ Vì sao KHÔNG nhét var() đó thẳng vào token --animate-chay-ngang ở khối
+     @theme: một var() nằm lồng trong giá trị của biến CSS khác thì được thay
+     TẠI CHỖ KHAI BÁO biến ngoài (ở đây là :root), rồi mới di truyền xuống —
+     nên nó không bao giờ nhìn thấy --nhip-chay đặt trên thẻ con, và luôn rơi
+     về giá trị dự phòng 45s. Đã đo đúng lỗi này: bảng chạy ra 45s thay vì
+     35,2s. Phải là một thuộc tính THƯỜNG đọc biến trên chính thẻ đó.
+
+     ⚠️ !important là bắt buộc, không phải cho tiện: luật giảm-chuyển-động bên
+     dưới rút mọi animation-duration xuống 0,01ms cũng bằng !important. Cùng
+     hạng !important thì bộ chọn chọn lọc hơn thắng — `.animate-chay-ngang`
+     (0,1,0) hơn `*` (0,0,0) — nên một luật này lo được cả hai trường hợp. */
+  .animate-chay-ngang {
+    animation-duration: var(--nhip-chay, 45s) !important;
   }
 
   /* Anchor không bị navbar (fixed) che mất tiêu đề section.
@@ -219,6 +244,31 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+
+    /* ---- NGOẠI LỆ DUY NHẤT: dải logo đối tác (sections/DoiTac.jsx) ----
+
+       Luật `*` ở trên quét cả site, nên nó tắt luôn dải logo — công ty báo hai
+       lần "vẫn đứng yên nè". Đo máy họ ra SPI_GETCLIENTAREAANIMATION = 0:
+       Windows đang tắt hiệu ứng, trình duyệt khai reduce, dải chết theo.
+
+       Trên Windows công tắc đó vừa nghĩa "tôi bị chóng mặt vì chuyển động"
+       vừa nghĩa "máy tôi yếu, tắt cho nhanh" — máy văn phòng nhà nước, tức
+       đúng khách hàng của iMob, thường tắt vì nghĩa thứ hai. Vì vậy riêng dải
+       này không nghe theo tín hiệu đó nữa; bù lại nó có NÚT TẠM DỪNG thật ở
+       cạnh tiêu đề (bấm được bằng bàn phím và cảm ứng), đúng thứ WCAG 2.2.2
+       đòi hỏi và mạnh hơn cách "rê chuột thì dừng" của bản cũ.
+
+       ⚠️ CHỈ MIỄN TRỪ ĐÚNG DẢI NÀY. Mọi hiệu ứng khác của site vẫn tắt bình
+       thường khi người dùng bật giảm chuyển động — đừng nới luật này ra.
+
+       Vì sao phải !important và phải đọc qua biến: luật `*` ở trên có
+       !important nên style nội tuyến của React thua nó; chỉ một luật khác
+       cũng !important mà chọn lọc hơn (`.animate-chay-ngang` là lớp, hơn hẳn
+       `*`) mới giành lại được. Con số giây thì đi qua --nhip-chay vì luật CSS
+       không với tới style nội tuyến. */
+    .animate-chay-ngang {
+      animation-iteration-count: infinite !important;
     }
   }
 
