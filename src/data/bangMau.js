@@ -9,17 +9,42 @@
 // <html>, KHÔNG phải build lại: Tailwind v4 biên dịch mọi utility thành
 // var(--color-*), nên đổi biến là cả trang đổi theo ngay lập tức.
 //
-// Mọi bảng đã qua 16 phép đo tương phản WCAG.
+// Mọi bảng đã qua 20 phép đo tương phản WCAG.
 // ============================================================
 
 /** Bảng màu dùng khi chưa ai chọn gì. Là màu trong logo iMob. */
-export const KHOA_MAC_DINH = "cham-tim";
+export const KHOA_MAC_DINH = "cyber-indigo";
 
 export const BANG_MAU = [
   {
+    khoa: "cyber-indigo",
+    ten: "Cyber Indigo",
+    moTa: "Chàm điện tử — chàm sâu + lam ngọc, mặc định",
+    toi: false,
+    bien: {
+      "--color-paper": "#ffffff",
+      "--color-mist": "#eef1fc",
+      "--color-panel": "#ffffff",
+      "--color-ink": "#0d0e2b",
+      "--color-ink-soft": "#4a4e7c",
+      "--color-ink-faint": "#5c6089",
+      "--color-line": "#dbdff5",
+      "--color-brand": "#4318d9",
+      "--color-brand-deep": "#2c0fa3",
+      "--color-brand-soft": "#e8e3fe",
+      "--color-tren-brand": "#ffffff",
+      "--color-accent": "#00707f",
+      "--color-accent-soft": "#d5f1f3",
+      "--color-loi": "#b3261e",
+      "--color-loi-nen": "#fdecea",
+      "--color-canhbao": "#955405",
+      "--color-canhbao-cham": "#d97706",
+    },
+  },
+  {
     khoa: "cham-tim",
     ten: "Chàm tím iMob",
-    moTa: "Màu trong logo, mặc định",
+    moTa: "Bản gốc, đúng màu logo",
     toi: false,
     bien: {
       "--color-paper": "#ffffff",
@@ -33,6 +58,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#2f1d96",
       "--color-brand-soft": "#eeeafc",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#0e7490",
+      "--color-accent-soft": "#d9f1f8",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -56,6 +83,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#5c460f",
       "--color-brand-soft": "#f6efdc",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#155e75",
+      "--color-accent-soft": "#daeef5",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -79,6 +108,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#96300b",
       "--color-brand-soft": "#ffe9de",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#0f766e",
+      "--color-accent-soft": "#d6f2ef",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -102,6 +133,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#0a534d",
       "--color-brand-soft": "#d2f1eb",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#6d28d9",
+      "--color-accent-soft": "#eae3fb",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -125,6 +158,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#0d4881",
       "--color-brand-soft": "#dbe9fb",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#0f766e",
+      "--color-accent-soft": "#d6f2ef",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -148,6 +183,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#204d24",
       "--color-brand-soft": "#dcedd9",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#92400e",
+      "--color-accent-soft": "#f7e6d5",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -171,6 +208,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#93144a",
       "--color-brand-soft": "#fbdde9",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#6d28d9",
+      "--color-accent-soft": "#eae3fb",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -194,6 +233,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#333c4d",
       "--color-brand-soft": "#e3e5ea",
       "--color-tren-brand": "#ffffff",
+      "--color-accent": "#0f766e",
+      "--color-accent-soft": "#d9f0ed",
       "--color-loi": "#b3261e",
       "--color-loi-nen": "#fdecea",
       "--color-canhbao": "#955405",
@@ -217,6 +258,8 @@ export const BANG_MAU = [
       "--color-brand-deep": "#ff94a3",
       "--color-brand-soft": "#33161d",
       "--color-tren-brand": "#1a0409",
+      "--color-accent": "#c4b5fd",
+      "--color-accent-soft": "#241d3d",
       "--color-loi": "#ff8a80",
       "--color-loi-nen": "#33161a",
       "--color-canhbao": "#ffb74d",

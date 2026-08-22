@@ -46,21 +46,40 @@ const HINH_NHOM = {
   "doanh-nghiep": Building2,
 };
 
-/** Phần đứng trước cái tên: ảnh logo nếu đã xin được, không thì biểu tượng
-    của nhóm. `alt=""` cho ảnh là cố ý — tên đơn vị nằm ngay bên cạnh dưới
-    dạng chữ, để alt nữa là trình đọc màn hình đọc tên hai lần. */
+/** Phần đứng trước cái tên: ảnh logo nếu có, không thì biểu tượng của nhóm.
+    `alt=""` cho ảnh là cố ý — tên đơn vị nằm ngay bên cạnh dưới dạng chữ, để
+    alt nữa là trình đọc màn hình đọc tên hai lần.
+
+    ---- Vì sao logo phải nằm trong một Ô NỀN chứ không đặt thẳng lên dải ----
+    Tám logo công ty gửi có đủ kiểu nền: nền trắng đặc (Bảo tàng, EVNGENCO1),
+    nền trong suốt, và một cái là chữ TRẮNG trên nền trong suốt (VHunter).
+    Thả thẳng lên dải nền xám nhạt thì cái có nền trắng thành một ô trắng lệch
+    tông, còn VHunter thì mất hút hẳn. Cho tất cả vào cùng một ô bo góc nền
+    trắng thì chúng thành một bộ — đây cũng đúng cách trang cmc.com.vn mà công
+    ty gửi làm mẫu đang làm.
+
+    `logoNenToi` cho riêng những logo chữ sáng: ô của chúng đổi sang nền tối.
+    Một ô tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì. */
 function DauDong({ dv }) {
   if (dv.logo) {
     return (
-      <img
-        src={diaChiAnh(dv.logo)}
-        alt=""
-        className="h-7 w-auto max-w-[7rem] shrink-0 object-contain"
-      />
+      <span
+        className={
+          "flex h-11 shrink-0 items-center justify-center rounded-xl px-2.5 " +
+          (dv.logoNenToi ? "bg-ink" : "bg-paper shadow-soft")
+        }
+      >
+        <img
+          src={diaChiAnh(dv.logo)}
+          alt=""
+          loading="lazy"
+          className="h-7 w-auto max-w-[9rem] object-contain"
+        />
+      </span>
     );
   }
   const Icon = HINH_NHOM[dv.nhom] ?? Building2;
-  return <Icon className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />;
+  return <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />;
 }
 
 function TenDonVi({ dv }) {

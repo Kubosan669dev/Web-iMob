@@ -29,8 +29,13 @@ export default function ServiceHero({
   description,
   highlights = [],
 }) {
+  // Nền không còn trắng trơn (22/08/2026). Một lớp màu rất nhạt loang từ trên
+  // xuống rồi tan hẳn vào nền trang — đủ để đầu trang dịch vụ có chiều sâu,
+  // không đủ để ảnh hưởng tới độ đọc của bất cứ chữ nào (chữ nằm ở giữa khối,
+  // chỗ màu đã tan gần hết). Cùng lý do với dải đầu trang chủ: trước đó cả
+  // site chỉ có đúng một màu, và công ty chê thẳng là nhạt.
   return (
-    <section className="flex min-h-[80vh] items-center justify-center py-32 lg:py-40">
+    <section className="flex min-h-[80vh] items-center justify-center bg-gradient-to-b from-brand-soft via-paper to-paper py-32 lg:py-40">
       <Container>
         <motion.div
           variants={container}

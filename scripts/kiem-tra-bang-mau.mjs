@@ -45,53 +45,84 @@ const CHUNG_SANG = {
 };
 
 const BANG = {
+  // ---- BẢNG MẶC ĐỊNH TỪ 22/08/2026 ----
+  // Công ty xem bản chàm-tím rồi nhắn: "màu trông đơn điệu quá, cty công nghệ
+  // mà nhạt nhẽo thế à", kèm 10 ảnh trang web mẫu và một combo màu trên
+  // TikTok. Đo màu chủ đạo của 10 ảnh đó bằng máy (gom pixel theo vùng
+  // hue/sat/light) thì chúng dồn vào đúng HAI họ:
+  //     · chàm / tím sẫm   H240-270  — nền và khối chính
+  //     · lam ngọc điện tử H195      — điểm nhấn, chiếm ~6% pixel của cả bộ
+  // Bảng này dựng theo đúng hai họ đó, và giữ chàm tím của logo iMob làm màu
+  // chính nên không mất nhận diện.
+  //
+  // ⚠️ THỨ CHỮA "ĐƠN ĐIỆU" KHÔNG PHẢI MÃ MÀU MỚI, MÀ LÀ CÓ MÀU THỨ HAI.
+  // Bản cũ chỉ có một sắc chàm dùng cho mọi thứ: nút, biểu tượng, dải đầu
+  // trang, nhãn. Đổi sắc chàm đó sang sắc khác thì vẫn là một-màu-cho-tất-cả.
+  // Vì vậy đợt này thêm hẳn cặp accent / accentSoft vào MỌI bảng màu, và dải
+  // đầu trang chuyển từ chàm sang lam ngọc — hai màu thật, không phải một màu
+  // đậm nhạt.
+  "cyber-indigo": {
+    ten: "Cyber Indigo", mo: "Chàm điện tử — chàm sâu + lam ngọc, mặc định", toi: false,
+    paper: "#ffffff", mist: "#eef1fc", panel: "#ffffff",
+    ink: "#0d0e2b", inkSoft: "#4a4e7c", inkFaint: "#5c6089", line: "#dbdff5",
+    brand: "#4318d9", brandDeep: "#2c0fa3", brandSoft: "#e8e3fe",
+    accent: "#00707f", accentSoft: "#d5f1f3", ...CHUNG_SANG,
+  },
   "cham-tim": {
-    ten: "Chàm tím iMob", mo: "Màu trong logo, mặc định", toi: false,
+    ten: "Chàm tím iMob", mo: "Bản gốc, đúng màu logo", toi: false,
     paper: "#ffffff", mist: "#f5f5f7", panel: "#ffffff",
     ink: "#1a1a2e", inkSoft: "#55556b", inkFaint: "#6f6f80", line: "#e5e5ea",
-    brand: "#4b31d4", brandDeep: "#2f1d96", brandSoft: "#eeeafc", ...CHUNG_SANG,
+    brand: "#4b31d4", brandDeep: "#2f1d96", brandSoft: "#eeeafc",
+    accent: "#0e7490", accentSoft: "#d9f1f8", ...CHUNG_SANG,
   },
   "paper-heritage": {
     ten: "Paper Heritage", mo: "Sang, sáng, dễ đọc", toi: false,
     paper: "#fdfbf6", mist: "#f4efe2", panel: "#ffffff",
     ink: "#241f16", inkSoft: "#5a5142", inkFaint: "#6f6555", line: "#e6dcc6",
-    brand: "#7a5d18", brandDeep: "#5c460f", brandSoft: "#f6efdc", ...CHUNG_SANG,
+    brand: "#7a5d18", brandDeep: "#5c460f", brandSoft: "#f6efdc",
+    accent: "#155e75", accentSoft: "#daeef5", ...CHUNG_SANG,
   },
   "coral-sunrise": {
     ten: "Coral Sunrise", mo: "San hô ấm, năng động", toi: false,
     paper: "#fffaf8", mist: "#ffeee7", panel: "#ffffff",
     ink: "#26160f", inkSoft: "#6a5246", inkFaint: "#82675a", line: "#f4ddd1",
-    brand: "#c03d10", brandDeep: "#96300b", brandSoft: "#ffe9de", ...CHUNG_SANG,
+    brand: "#c03d10", brandDeep: "#96300b", brandSoft: "#ffe9de",
+    accent: "#0f766e", accentSoft: "#d6f2ef", ...CHUNG_SANG,
   },
   "teal-paradise": {
     ten: "Teal Paradise", mo: "Xanh ngọc tươi", toi: false,
     paper: "#f9fefd", mist: "#e6f6f2", panel: "#ffffff",
     ink: "#10231f", inkSoft: "#475e59", inkFaint: "#566d67", line: "#cde8e2",
-    brand: "#0e6f67", brandDeep: "#0a534d", brandSoft: "#d2f1eb", ...CHUNG_SANG,
+    brand: "#0e6f67", brandDeep: "#0a534d", brandSoft: "#d2f1eb",
+    accent: "#6d28d9", accentSoft: "#eae3fb", ...CHUNG_SANG,
   },
   "ha-long-blue": {
     ten: "Hạ Long Blue", mo: "Xanh biển vịnh Hạ Long", toi: false,
     paper: "#f9fcff", mist: "#e8f1fb", panel: "#ffffff",
     ink: "#101c28", inkSoft: "#475868", inkFaint: "#5c6f80", line: "#d2e1f0",
-    brand: "#125da6", brandDeep: "#0d4881", brandSoft: "#dbe9fb", ...CHUNG_SANG,
+    brand: "#125da6", brandDeep: "#0d4881", brandSoft: "#dbe9fb",
+    accent: "#0f766e", accentSoft: "#d6f2ef", ...CHUNG_SANG,
   },
   "forest-zen": {
     ten: "Forest Zen", mo: "Ngọc lục rừng thiền", toi: false,
     paper: "#fafdf9", mist: "#eaf4e8", panel: "#ffffff",
     ink: "#14210f", inkSoft: "#4c5c47", inkFaint: "#60715b", line: "#d6e5d2",
-    brand: "#2b6630", brandDeep: "#204d24", brandSoft: "#dcedd9", ...CHUNG_SANG,
+    brand: "#2b6630", brandDeep: "#204d24", brandSoft: "#dcedd9",
+    accent: "#92400e", accentSoft: "#f7e6d5", ...CHUNG_SANG,
   },
   "rose-lotus": {
     ten: "Rose Lotus", mo: "Hồng sen mềm", toi: false,
     paper: "#fffafc", mist: "#fce9f0", panel: "#ffffff",
     ink: "#26101a", inkSoft: "#684755", inkFaint: "#805c6b", line: "#f2d5df",
-    brand: "#b81a5c", brandDeep: "#93144a", brandSoft: "#fbdde9", ...CHUNG_SANG,
+    brand: "#b81a5c", brandDeep: "#93144a", brandSoft: "#fbdde9",
+    accent: "#6d28d9", accentSoft: "#eae3fb", ...CHUNG_SANG,
   },
   "zen-neutral": {
     ten: "Zen Neutral", mo: "Trung tính, tối giản", toi: false,
     paper: "#fbfbfa", mist: "#efefed", panel: "#ffffff",
     ink: "#1a1a1a", inkSoft: "#54545a", inkFaint: "#6c6c73", line: "#e1e1df",
-    brand: "#465166", brandDeep: "#333c4d", brandSoft: "#e3e5ea", ...CHUNG_SANG,
+    brand: "#465166", brandDeep: "#333c4d", brandSoft: "#e3e5ea",
+    accent: "#0f766e", accentSoft: "#d9f0ed", ...CHUNG_SANG,
   },
   // Bảng NỀN TỐI: cố ý KHÔNG dùng CHUNG_SANG. Hai chỗ phải đảo ngược so với
   // bảng sáng, quên là hỏng ngay:
@@ -102,6 +133,7 @@ const BANG = {
     paper: "#101017", mist: "#24242f", panel: "#1a1a24",
     ink: "#f2f2f7", inkSoft: "#a9a9bb", inkFaint: "#8e8ea0", line: "#2c2c3a",
     brand: "#ff6b7f", brandDeep: "#ff94a3", brandSoft: "#33161d",
+    accent: "#c4b5fd", accentSoft: "#241d3d",
     trenBrand: "#1a0409", loi: "#ff8a80", loiNen: "#33161a",
     canhbao: "#ffb74d", canhbaoCham: "#ffb74d",
   },
@@ -121,6 +153,17 @@ const KIEM = [
   ["brand", "brandSoft", 4.5, "chữ thương hiệu trong ô nhãn"],
   ["trenBrand", "brand", 4.5, "chữ trên nút chính"],
   ["trenBrand", "brandDeep", 4.5, "chữ trên nút chính lúc rê chuột"],
+  // --- Màu nhấn (thêm 22/08/2026) ---
+  // Đo y hệt brand, KHÔNG nới lỏng. Màu nhấn dùng cả làm chữ lẫn làm nền nút
+  // và làm điểm dừng thứ hai của dải màu đầu trang, nên nó phải qua đúng
+  // những cửa mà brand phải qua. Cyan/lam ngọc tươi trông rất "công nghệ"
+  // nhưng chỉ đạt chừng 2,5:1 khi làm chữ trên nền trắng — các tông ở đây đã
+  // bị nén đậm xuống cho đủ 4,5:1.
+  ["accent", "paper", 4.5, "chữ màu nhấn trên nền trang"],
+  ["accent", "mist", 4.5, "chữ màu nhấn trên dải nền phụ"],
+  ["accent", "accentSoft", 4.5, "chữ màu nhấn trong ô nhãn màu nhấn"],
+  ["trenBrand", "accent", 4.5, "chữ trắng trên nền màu nhấn"],
+
   ["loi", "loiNen", 4.5, "chữ lỗi trong khối lỗi"],
   ["loi", "paper", 4.5, "chữ lỗi trên nền trang"],
   ["canhbao", "mist", 4.5, "chữ cảnh báo trên nền phụ"],
@@ -178,6 +221,7 @@ const TEN_BIEN = [
   ["inkFaint", "--color-ink-faint"], ["line", "--color-line"],
   ["brand", "--color-brand"], ["brandDeep", "--color-brand-deep"],
   ["brandSoft", "--color-brand-soft"], ["trenBrand", "--color-tren-brand"],
+  ["accent", "--color-accent"], ["accentSoft", "--color-accent-soft"],
   ["loi", "--color-loi"], ["loiNen", "--color-loi-nen"],
   ["canhbao", "--color-canhbao"], ["canhbaoCham", "--color-canhbao-cham"],
 ];
@@ -198,7 +242,7 @@ const dau = [
   "// ============================================================",
   "",
   "/** Bảng màu dùng khi chưa ai chọn gì. Là màu trong logo iMob. */",
-  'export const KHOA_MAC_DINH = "cham-tim";',
+  'export const KHOA_MAC_DINH = "cyber-indigo";',
   "",
   "export const BANG_MAU = [",
 ];

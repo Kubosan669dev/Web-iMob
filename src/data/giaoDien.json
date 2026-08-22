@@ -1,7 +1,7 @@
 {
   "_note": "Giao diện của website. Sửa được trong /admin, mục Giao diện.",
-  "_bangMau": "Khoá bảng màu. Danh sách khoá hợp lệ nằm trong src/data/bangMau.js (sinh từ scripts/kiem-tra-bang-mau.mjs). Khoá lạ thì website tự lùi về chàm tím.",
-  "bangMau": "cham-tim",
+  "_bangMau": "Khoá bảng màu. Danh sách khoá hợp lệ nằm trong src/data/bangMau.js (sinh từ scripts/kiem-tra-bang-mau.mjs). Khoá lạ thì website tự lùi về bảng mặc định (KHOA_MAC_DINH trong bangMau.js, hiện là cyber-indigo).",
+  "bangMau": "cyber-indigo",
   "_chat": "Khung chat trợ lý AI. tuMo = tự chào khách khi vừa vào trang. tre = chờ mấy giây rồi mới chào. loiChao = câu hiện cạnh nút trên điện thoại.",
   "chat": {
     "tuMo": true,

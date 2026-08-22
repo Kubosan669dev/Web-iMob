@@ -4,8 +4,9 @@
    Theo chuẩn CSS, @import bắt buộc nằm trên cùng nên nó đứng TRƯỚC khối @theme
    bên dưới — nhưng vẫn thắng, vì bộ chọn trong đó là `html[data-bang-mau=...]`
    có độ ưu tiên (0,1,1), cao hơn `:root` (0,1,0) mà Tailwind sinh ra.
-   Không có thuộc tính data-bang-mau thì trang chạy bằng đúng khối @theme, tức
-   là chàm tím. */
+   Không có thuộc tính data-bang-mau thì trang chạy bằng đúng khối @theme —
+   nên khối đó phải luôn khai ĐÚNG bảng mặc định (hiện là cyber-indigo), không
+   thì lúc mới mở trang loé lên một bảng màu rồi mới đổi sang bảng thật. */
 @import "./bangMau.css";
 
 /* ============================================================
@@ -22,9 +23,16 @@
 
    Ngôn ngữ thiết kế lấy theo apple.com:
    • Chỉ hai nền: trắng tinh và xám rất nhạt, xen kẽ nhau. KHÔNG lưới, KHÔNG
-     quầng sáng, KHÔNG hạt bay — Apple sạch được là nhờ nền phẳng tuyệt đối.
-   • MỘT màu nhấn duy nhất. Bỏ hẳn màu phụ vàng cát của bản trước.
-   • Nhấn mạnh bằng CỠ CHỮ và KHOẢNG TRẮNG, không bằng viền, bóng hay gradient.
+     hạt bay — nền phẳng là thứ làm giao diện sạch.
+   • Nhấn mạnh bằng CỠ CHỮ và KHOẢNG TRẮNG, không bằng viền hay bóng.
+
+   ⚠️ HAI ĐIỀU ĐÃ SỬA LẠI NGÀY 22/08/2026, theo góp ý "màu trông đơn điệu quá,
+   cty công nghệ mà nhạt nhẽo thế à":
+   • Bản trước ghi "MỘT màu nhấn duy nhất". Nay có HAI: brand (chàm) và accent
+     (lam ngọc). Một màu cho cả trang chính là gốc của lời chê trên.
+   • Bản trước cấm hẳn gradient và quầng sáng. Nay dải đầu trang có gradient
+     hai màu và một quầng sáng mờ. Vẫn giữ tinh thần dè dặt: đúng MỘT khối
+     trên cả trang được phép làm vậy, phần còn lại nền phẳng như cũ.
    • Card bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng — chính chênh lệch
      sắc độ giữa card và nền làm nhiệm vụ phân tách.
 
@@ -43,24 +51,42 @@
 
   /* --- Nền trang khách: chỉ hai bậc, xen kẽ nhau --- */
   --color-paper: #ffffff;
-  --color-mist: #f5f5f7; /* xám rất nhạt — dải nền xen kẽ VÀ mặt card */
+  --color-mist: #eef1fc; /* xám NGẢ CHÀM — dải nền xen kẽ VÀ mặt card */
   --color-panel: #ffffff;
 
   /* --- Mực (chữ & viền) — đã kiểm tra tương phản trên nền trắng ---
      ink 17:1 · ink-soft 7.1:1 · ink-faint 4.9:1 (vẫn đạt chuẩn AA, cố ý đậm
      hơn màu xám nhạt Apple hay dùng vì màu đó chỉ đạt ~3.5:1). */
-  --color-ink: #1a1a2e;
-  --color-ink-soft: #55556b;
-  --color-ink-faint: #6f6f80;
-  --color-line: #e5e5ea;
+  --color-ink: #0d0e2b;
+  --color-ink-soft: #4a4e7c;
+  --color-ink-faint: #5c6089;
+  --color-line: #dbdff5;
 
   /* --- Chàm tím: màu thương hiệu, lấy từ logo iMob ---
      Khác bản trước ở một điểm quan trọng: màu này đạt 7.8:1 trên nền trắng,
      nên DÙNG ĐƯỢC CẢ làm chữ lẫn làm nền nút. Không phải chia đôi thành hai
      biến "màu để tô" và "màu để viết" như bảng ngọc bích cũ. */
-  --color-brand: #4b31d4;
-  --color-brand-deep: #2f1d96; /* trạng thái hover / nhấn */
-  --color-brand-soft: #eeeafc; /* nền nhạt cho nhãn, ô icon */
+  --color-brand: #4318d9;
+  --color-brand-deep: #2c0fa3; /* trạng thái hover / nhấn */
+  --color-brand-soft: #e8e3fe; /* nền nhạt cho nhãn, ô icon */
+
+  /* --- MÀU NHẤN: màu thứ HAI của trang (thêm 22/08/2026) ---
+     Vì sao có nó: công ty chê bản cũ "màu trông đơn điệu quá, cty công nghệ mà
+     nhạt nhẽo thế à" — và lời chê đó đúng về mặt cấu trúc chứ không phải gu.
+     Bản cũ chỉ có MỘT sắc chàm dùng cho tất cả: nút, biểu tượng, dải đầu
+     trang, nhãn, đường dẫn. Cả trang vì thế chỉ có một màu đậm nhạt khác nhau.
+     Đổi sắc chàm sang sắc khác cũng không chữa được, vì vẫn là một màu.
+
+     Lam ngọc chọn theo màu đo được từ 10 ảnh mẫu công ty gửi (vùng H≈195 là
+     điểm nhấn nổi trội nhất trong cả bộ). Đã nén đậm xuống đủ 4,5:1 cả khi làm
+     chữ trên nền trắng lẫn khi làm nền cho chữ trắng — xem 4 phép đo "màu
+     nhấn" trong scripts/kiem-tra-bang-mau.mjs.
+
+     ⚠️ DÙNG DÈ. Màu nhấn chỉ nên xuất hiện ở vài chỗ có chủ đích (điểm dừng
+     thứ hai của dải đầu trang, dải Hỏi iMob AI, khối phụ trong hình minh hoạ).
+     Rải khắp nơi thì lại thành đơn điệu hai màu thay vì một. */
+  --color-accent: #00707f;
+  --color-accent-soft: #d5f1f3;
 
   /* Chữ đặt TRÊN nền màu thương hiệu.
      Bản trước viết cứng text-white ở 8 chỗ. Chỉ đúng chừng nào màu thương hiệu
@@ -88,7 +114,7 @@
      lên trên mặt phẳng trang (khung chat, menu xổ xuống). */
   --shadow-soft: 0 1px 2px rgba(26, 26, 46, 0.04), 0 8px 24px -12px rgba(26, 26, 46, 0.1);
   --shadow-lift: 0 4px 12px rgba(26, 26, 46, 0.06), 0 24px 48px -20px rgba(26, 26, 46, 0.2);
-  --shadow-brand: 0 8px 24px -10px rgba(75, 49, 212, 0.5);
+  --shadow-brand: 0 8px 24px -10px rgba(67, 24, 217, 0.5);
 
   /* --- Animations --- */
   --animate-float: float 6s ease-in-out infinite;

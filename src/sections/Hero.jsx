@@ -329,14 +329,33 @@ export default function Hero() {
             hai của tiêu đề. Chỉ ảnh chụp mới lộ ra.
           · Tăng pb hay giảm -mt đều làm trang CAO THÊM đúng bấy nhiêu pixel.
             Không có cách nào giãn chỗ này mà miễn phí. */}
-      {/* Nền CHUYỂN SẮC thay cho một mảng màu phẳng (21/08/2026, theo ảnh mẫu:
-          nền của họ đậm dần từ trái sang phải chứ không phẳng lì).
-          Dùng brand -> brand-deep chứ không ghim mã màu: hai token đó chính là
-          cặp màu nút bấm dùng cho trạng thái thường/nhấn, nên chữ tren-brand đã
-          được bảo đảm đọc được trên CẢ HAI ở đủ 9 bảng màu. Ghim cứng một mã
-          màu xanh navy như trong ảnh thì tám bảng còn lại hỏng hết. */}
-      <div className="bg-gradient-to-br from-brand via-brand to-brand-deep pb-32 pt-24 [@media(max-height:1000px)]:pt-20">
-        <Container>
+      {/* ---------- Nền dải màu đầu trang ----------
+          21/08/2026: đổi từ một mảng màu phẳng sang chuyển sắc.
+          22/08/2026: đổi tiếp từ chuyển sắc MỘT MÀU (brand -> brand-deep, tức
+          là chỉ đậm nhạt) sang chuyển sắc HAI MÀU (brand-deep -> brand ->
+          accent). Đây là chỗ chính chữa lời chê "màu trông đơn điệu quá, cty
+          công nghệ mà nhạt nhẽo thế à": một dải chàm đậm dần thì mắt vẫn chỉ
+          đọc ra một màu, phải có màu thứ hai thì mới thành chuyển sắc thật.
+
+          ⚠️ CẢ BA ĐIỂM DỪNG ĐỀU LÀ TOKEN, không ghim mã màu.
+          brand, brand-deep và accent đều đã qua phép đo "chữ trắng đọc được
+          trên nền này" ở CẢ 10 bảng màu (xem scripts/kiem-tra-bang-mau.mjs).
+          Ghim một mã xanh navy như trong ảnh mẫu thì chín bảng còn lại hỏng
+          hết — và chữ trắng trên đó có thể tụt xuống dưới chuẩn mà không ai
+          hay, vì không phép đo nào chạy qua mã ghim cứng. */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-deep via-brand to-accent pb-32 pt-24 [@media(max-height:1000px)]:pt-20">
+        {/* Quầng sáng mờ — thứ duy nhất trong cả trang được phép làm nền không
+            phẳng. Đặt lệch hẳn sang phải và xuống dưới, tức là NẰM SAU cột
+            hình minh hoạ chứ không sau cột chữ: nó chỉ thêm chiều sâu, không
+            đụng tới nền của bất kỳ dòng chữ nào. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 top-1/3 h-[28rem] w-[28rem] rounded-full bg-accent/40 blur-3xl"
+        />
+        {/* `relative` KHÔNG THỪA: quầng sáng ở trên là phần tử đã định vị, nên
+            theo thứ tự vẽ của CSS nó nằm TRÊN mọi phần tử tĩnh đứng sau. Không
+            có dòng này thì cả cột chữ và cột hình bị một mảng mờ phủ lên. */}
+        <Container className="relative">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14 [@media(max-height:1000px)]:gap-6 [@media(max-height:1000px)]:lg:gap-10">
             {/* ================= Cột trái: chữ ================= */}
             <div className="text-center lg:text-left">
@@ -534,7 +553,10 @@ export default function Hero() {
             Bong bóng vẫn nguyên ở góc phải (công ty dặn: "cái chat bot vẫn để
             ở góc phải như cũ cũng được") — dải này chỉ mở đúng cửa sổ chat đó,
             không dựng thêm một khung chat thứ hai. */}
-        <div className="mt-3 flex flex-col items-center gap-4 rounded-block bg-brand-soft px-6 py-2.5 text-center sm:flex-row sm:justify-center sm:text-left">
+        {/* Nền dải này đổi từ một màu phẳng (bg-brand-soft) sang chuyển sắc
+            hai màu nhạt 22/08/2026 — cùng lý do với dải đầu trang, và cố ý
+            dùng LẠI ĐÚNG cặp màu đó ở dạng nhạt để hai khối nhìn ra là một bộ. */}
+        <div className="mt-3 flex flex-col items-center gap-4 rounded-block bg-gradient-to-r from-brand-soft to-accent-soft px-6 py-2.5 text-center sm:flex-row sm:justify-center sm:text-left">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand [@media(max-height:1000px)]:h-9 [@media(max-height:1000px)]:w-9">
             <Bot className="h-6 w-6 text-tren-brand [@media(max-height:1000px)]:h-5 [@media(max-height:1000px)]:w-5" aria-hidden="true" />
           </span>

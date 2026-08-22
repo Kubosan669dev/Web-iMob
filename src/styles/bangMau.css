@@ -3,7 +3,29 @@
    Nguồn: scripts/kiem-tra-bang-mau.mjs  ·  chạy lại: npm run bangmau
    ============================================================ */
 
-/* Chàm tím iMob — Màu trong logo, mặc định */
+/* Cyber Indigo — Chàm điện tử — chàm sâu + lam ngọc, mặc định */
+html[data-bang-mau="cyber-indigo"] {
+  color-scheme: light;
+  --color-paper: #ffffff;
+  --color-mist: #eef1fc;
+  --color-panel: #ffffff;
+  --color-ink: #0d0e2b;
+  --color-ink-soft: #4a4e7c;
+  --color-ink-faint: #5c6089;
+  --color-line: #dbdff5;
+  --color-brand: #4318d9;
+  --color-brand-deep: #2c0fa3;
+  --color-brand-soft: #e8e3fe;
+  --color-tren-brand: #ffffff;
+  --color-accent: #00707f;
+  --color-accent-soft: #d5f1f3;
+  --color-loi: #b3261e;
+  --color-loi-nen: #fdecea;
+  --color-canhbao: #955405;
+  --color-canhbao-cham: #d97706;
+}
+
+/* Chàm tím iMob — Bản gốc, đúng màu logo */
 html[data-bang-mau="cham-tim"] {
   color-scheme: light;
   --color-paper: #ffffff;
@@ -17,6 +39,8 @@ html[data-bang-mau="cham-tim"] {
   --color-brand-deep: #2f1d96;
   --color-brand-soft: #eeeafc;
   --color-tren-brand: #ffffff;
+  --color-accent: #0e7490;
+  --color-accent-soft: #d9f1f8;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -37,6 +61,8 @@ html[data-bang-mau="paper-heritage"] {
   --color-brand-deep: #5c460f;
   --color-brand-soft: #f6efdc;
   --color-tren-brand: #ffffff;
+  --color-accent: #155e75;
+  --color-accent-soft: #daeef5;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -57,6 +83,8 @@ html[data-bang-mau="coral-sunrise"] {
   --color-brand-deep: #96300b;
   --color-brand-soft: #ffe9de;
   --color-tren-brand: #ffffff;
+  --color-accent: #0f766e;
+  --color-accent-soft: #d6f2ef;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -77,6 +105,8 @@ html[data-bang-mau="teal-paradise"] {
   --color-brand-deep: #0a534d;
   --color-brand-soft: #d2f1eb;
   --color-tren-brand: #ffffff;
+  --color-accent: #6d28d9;
+  --color-accent-soft: #eae3fb;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -97,6 +127,8 @@ html[data-bang-mau="ha-long-blue"] {
   --color-brand-deep: #0d4881;
   --color-brand-soft: #dbe9fb;
   --color-tren-brand: #ffffff;
+  --color-accent: #0f766e;
+  --color-accent-soft: #d6f2ef;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -117,6 +149,8 @@ html[data-bang-mau="forest-zen"] {
   --color-brand-deep: #204d24;
   --color-brand-soft: #dcedd9;
   --color-tren-brand: #ffffff;
+  --color-accent: #92400e;
+  --color-accent-soft: #f7e6d5;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -137,6 +171,8 @@ html[data-bang-mau="rose-lotus"] {
   --color-brand-deep: #93144a;
   --color-brand-soft: #fbdde9;
   --color-tren-brand: #ffffff;
+  --color-accent: #6d28d9;
+  --color-accent-soft: #eae3fb;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -157,6 +193,8 @@ html[data-bang-mau="zen-neutral"] {
   --color-brand-deep: #333c4d;
   --color-brand-soft: #e3e5ea;
   --color-tren-brand: #ffffff;
+  --color-accent: #0f766e;
+  --color-accent-soft: #d9f0ed;
   --color-loi: #b3261e;
   --color-loi-nen: #fdecea;
   --color-canhbao: #955405;
@@ -177,6 +215,8 @@ html[data-bang-mau="midnight-crimson"] {
   --color-brand-deep: #ff94a3;
   --color-brand-soft: #33161d;
   --color-tren-brand: #1a0409;
+  --color-accent: #c4b5fd;
+  --color-accent-soft: #241d3d;
   --color-loi: #ff8a80;
   --color-loi-nen: #33161a;
   --color-canhbao: #ffb74d;

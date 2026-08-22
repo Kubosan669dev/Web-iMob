@@ -46,12 +46,12 @@
     Vẽ giọt nước chứ không vẽ chấm tròn là có lý do: bản dựng đầu dùng chấm
     tròn ở các ngã ba, ảnh chụp ra một thứ giống sơ đồ mạng máy tính hơn là bản
     đồ. Hình giọt nước thì không lẫn vào đâu được — nhìn phát biết ngay. */
-function GhimBanDo({ x, y }) {
+function GhimBanDo({ x, y, mauNhan = false }) {
   return (
     <g transform={`translate(${x} ${y}) scale(0.78)`}>
       <path
         d="M0 0 C-4 -6 -7.5 -9.5 -7.5 -13.5 A7.5 7.5 0 1 1 7.5 -13.5 C7.5 -9.5 4 -6 0 0 Z"
-        className="fill-brand"
+        className={mauNhan ? "fill-accent" : "fill-brand"}
         stroke="var(--color-paper)"
         strokeWidth="1.6"
       />
@@ -65,7 +65,7 @@ function ONhoApp({ dam }) {
   return (
     <span
       className={
-        "block aspect-square rounded-[3px] " + (dam ? "bg-brand/70" : "bg-brand/25")
+        "block aspect-square rounded-[3px] " + (dam ? "bg-accent/80" : "bg-brand/25")
       }
     />
   );
@@ -147,7 +147,7 @@ export default function MinhHoaThietBi({ className = "" }) {
               <path d="M88 -2 L84 78" className="stroke-ink/10" strokeWidth="2.5" fill="none" />
 
               <GhimBanDo x={62} y={44} />
-              <GhimBanDo x={100} y={30} />
+              <GhimBanDo x={100} y={30} mauNhan />
               <GhimBanDo x={84} y={68} />
             </svg>
           </div>
@@ -175,9 +175,12 @@ export default function MinhHoaThietBi({ className = "" }) {
               <div className="h-[13px] w-3/5 rounded-sm bg-brand" />
               <div className="h-[6px] w-2/5 rounded-sm bg-ink/15" />
               <div className="grid grid-cols-3 gap-[9px] pt-[2px]">
+                {/* Thẻ đầu màu thương hiệu, hai thẻ sau màu nhấn — hình minh
+                    hoạ phải mang đủ HAI màu của trang, không thì nó lại là một
+                    mảng chàm nhạt nữa giữa một dải chàm. */}
                 <div className="h-[52px] rounded-[5px] bg-brand/25" />
-                <div className="h-[52px] rounded-[5px] bg-brand/15" />
-                <div className="h-[52px] rounded-[5px] bg-brand/15" />
+                <div className="h-[52px] rounded-[5px] bg-accent/25" />
+                <div className="h-[52px] rounded-[5px] bg-accent/15" />
               </div>
               <div className="flex gap-[9px] pt-[2px]">
                 <div className="h-[6px] w-1/4 rounded-sm bg-ink/10" />

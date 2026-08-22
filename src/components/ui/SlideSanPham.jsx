@@ -89,7 +89,6 @@ function TheDuAn({ sp, hienQR }) {
       rel={sp.lienKet ? "noopener noreferrer" : undefined}
       className="group/the flex h-full flex-col"
     >
-      {/* ---------- Ảnh ---------- */}
       {/* ---------- Ảnh ----------
           ⚠️ TRÊN MÀN RỘNG, Ô ẢNH KHÔNG CÓ TỈ LỆ CỐ ĐỊNH — nó NỞ RA lấp hết
           chỗ còn thừa (lg:flex-1). Đây là cách chữa tận gốc cho việc thẻ phải
@@ -105,29 +104,61 @@ function TheDuAn({ sp, hienQR }) {
           Ba cái chốt chặn để nó không nở bậy:
             · dưới lg giữ nguyên aspect-[4/3] — ở đó thẻ đứng một mình, không
               bị ai kéo cao, nên flex-1 sẽ co ảnh về 0.
-            · lg:min-h-[8rem]  — sàn, phòng khi cột trái bỗng ngắn lại.
-            · lg:max-h-[13rem] — trần. Ảnh gốc là 16:10; nở quá vuông thì
-              object-cover xén hai bên nhiều tới mức mất nội dung. Chạm trần
-              thì phần thừa còn lại rơi xuống đáy thẻ, chấp nhận được.
+            · lg:min-h-[7rem]  — sàn, phòng khi cột trái bỗng ngắn lại.
+            · lg:max-h-[11rem] — trần. Rút từ 13rem xuống 11rem ngày
+              22/08/2026, cùng lúc với việc đổi sang object-contain, và con số
+              này là kết quả của việc ĐO RỒI NHÌN chứ không phải ước lượng:
+              ảnh 16:10 nằm trong ô rộng 179px thì luôn cao đúng 112px, bao
+              nhiêu chiều cao dôi ra cũng chỉ thành vành nền nhoè chứ ảnh không
+              to thêm được. 13rem cho vành 48px mỗi bên — ảnh nhìn như lọt
+              thỏm. 9rem cho vành 16px, ảnh sắc nét nhưng đáy thẻ hụt hẳn một
+              mảng trắng ~110px. 11rem là chỗ giao: vành 32px trông như một
+              lớp nền có chủ ý, mảng trắng còn ~70px thì vừa bằng khoảng thở
+              trước dòng "Được tin tưởng bởi…".
 
           Hai khối chữ bên dưới bị ghim min-h đúng hai dòng CŨNG LÀ VÌ VIỆC
           NÀY: bốn thẻ phải có phần chữ cao bằng nhau thì bốn ô ảnh mới nở ra
           bằng nhau. Không ghim thì thẻ tên một dòng có ảnh cao hơn thẻ tên hai
           dòng, hàng ảnh nhấp nhô như răng cưa. */}
-      <div className="relative aspect-[4/3] min-h-0 overflow-hidden rounded-card bg-mist lg:aspect-auto lg:min-h-[8rem] lg:max-h-[13rem] lg:flex-1">
+      <div className="relative aspect-[4/3] min-h-0 overflow-hidden rounded-card bg-mist lg:aspect-auto lg:min-h-[7rem] lg:max-h-[11rem] lg:flex-1">
         {sp.anh ? (
-          <img
-            src={diaChiAnh(sp.anh)}
-            alt={`Giao diện ${sp.title}`}
-            loading="lazy"
-            /* object-cover: ô rộng bao nhiêu cao bao nhiêu thì ảnh phủ kín
-               bấy nhiêu, xén phần dôi ra ở hai bên. Ảnh gốc 16:10 mà ô thì cao
-               hơn thế, nên phần bị xén là lề trái/phải. Cả sáu ảnh đều là ảnh
-               chụp màn hình có lề rộng hai bên (ba ảnh điện thoại còn có nền mờ
-               bao quanh) — đã soi từng ảnh sau khi đổi, không ảnh nào mất chữ
-               hay mất phần chính. */
-            className="h-full w-full object-cover transition-transform duration-500 group-hover/the:scale-[1.04]"
-          />
+          /* HAI LỚP CÙNG MỘT TẤM ẢNH — nền nhoè phủ kín, ảnh thật lọt trọn.
+             Trình duyệt chỉ tải MỘT lần rồi dùng lại, không tốn thêm mạng.
+
+             ⚠️ ĐÂY LÀ BẢN SỬA MỘT LỖI ĐÃ LÊN WEB THẬT (22/08/2026).
+             Chỗ này từng là một tấm object-cover, và ghi chú cũ khẳng định
+             "đã soi từng ảnh, không ảnh nào mất chữ". Sai. Đo lại mới ra con
+             số thật: ô ảnh ở màn 1440 là 179x208 (tỉ lệ 0,86 — KHỔ DỌC), còn
+             cả sáu ảnh đều 16:10 (tỉ lệ 1,60 — KHỔ NGANG). object-cover khớp
+             theo chiều CAO nên ảnh bị phóng lên 333px rồi cắt còn 179 —
+             tức là MẤT 46% BỀ NGANG, xén 23% mỗi bên. Công ty nhìn ra ngay ở
+             hai ảnh có chữ chạy rộng: "KHÁM PHÁ QUẢNG TÂN" và web phường Yên
+             Tử, cả hai bị cụt đầu cụt đuôi.
+
+             Vì sao chữa bằng nền nhoè chứ không chỉnh tỉ lệ ô:
+             tỉ lệ ô KHÔNG CỐ ĐỊNH — ô cao 208px không đổi còn bề ngang thẻ co
+             theo cửa sổ, nên tỉ lệ chạy từ khoảng 0,58 (màn 1024) tới 0,86
+             (màn 1440). Không có một tỉ lệ ảnh nào khớp được cả dải đó. Ghim
+             ô về đúng 16:10 thì hết xén, nhưng mảng trắng dưới đáy thẻ quay
+             lại — đúng thứ đã mất công chữa. object-contain trên nền nhoè
+             được cả hai: ô vẫn nở lấp hết chỗ thừa, mà ảnh không mất một chữ,
+             ở MỌI cỡ màn hình và với MỌI tỉ lệ ảnh công ty gửi sau này. */
+          <>
+            <img
+              src={diaChiAnh(sp.anh)}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              /* scale-110 để mép ảnh sau khi làm nhoè không lòi ra viền nhạt. */
+              className="absolute inset-0 h-full w-full scale-110 object-cover blur-lg"
+            />
+            <img
+              src={diaChiAnh(sp.anh)}
+              alt={`Giao diện ${sp.title}`}
+              loading="lazy"
+              className="relative h-full w-full object-contain transition-transform duration-500 group-hover/the:scale-[1.04]"
+            />
+          </>
         ) : (
           /* Dự án mới thêm trong /admin chưa kịp có ảnh: vẫn giữ đúng chỗ để
              bốn thẻ trong hàng bằng nhau, thay vì thẻ đó tụt lên trên. */
@@ -171,7 +202,13 @@ function TheDuAn({ sp, hienQR }) {
         {sp.title}
       </h3>
 
-      <p className="mt-1.5 line-clamp-2 min-h-[2.65rem] text-[0.8125rem] leading-relaxed text-ink-soft">
+      {/* BA dòng chứ không phải hai (22/08/2026). Mô tả mới của dự án Yên Tử
+          Số — "Zalo Mini App phục vụ chính quyền, người dân và du khách", do
+          công ty gửi nguyên văn — dài đúng 3 dòng ở bề ngang thẻ này; để 2
+          dòng thì nó cụt ở "và du…", mất mất nhóm khách quan trọng nhất của
+          một khu di tích. Nới ra còn ăn thêm được ~21px mảng trắng dưới đáy
+          thẻ. min-h: 13px × leading-relaxed (1,625) × 3 dòng ≈ 63px. */}
+      <p className="mt-1.5 line-clamp-3 min-h-[3.95rem] text-[0.8125rem] leading-relaxed text-ink-soft">
         {phuDe(sp)}
       </p>
 
