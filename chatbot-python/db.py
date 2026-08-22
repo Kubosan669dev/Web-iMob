@@ -54,6 +54,13 @@ NGUON_NAP = {
     "doiTac": THU_MUC_DATA / "doiTac.json",
 }
 
+# Giá trị cột `nguoi_sua` cho bản do MÁY nạp từ file JSON trong mã nguồn.
+# Đây là DẤU HIỆU "khoá này chưa ai sửa tay", và _nap_noi_dung_lan_dau() dựa
+# hẳn vào nó để biết được phép cập nhật khoá nào. ⚠️ Đổi chuỗi này là mọi bản
+# ghi cũ trong database bỗng trở thành "có người sửa" và không bao giờ được
+# cập nhật theo mã nguồn nữa.
+NGUOI_SUA_TU_DONG = "nạp lần đầu"
+
 _pool: ConnectionPool | None = None
 
 # Có ĐẶT DATABASE_URL hay không. Khác với co_db(): biến này chỉ nói "người dùng
@@ -212,16 +219,32 @@ def khoi_tao() -> bool:
 
 
 def _nap_noi_dung_lan_dau() -> None:
-    """Bảng noi_dung trống khóa nào thì đổ file JSON tương ứng vào khóa đó.
+    """Đổ file JSON trong mã nguồn vào bảng noi_dung — nhưng CHỈ những khoá
+    chưa từng có người sửa trong trang admin.
 
-    Chỉ nạp khi THIẾU, nên chạy lại nhiều lần cũng không ghi đè nội dung bạn
-    đã sửa trong trang admin.
+    ---- Vì sao phải phân biệt "ai sửa" (đổi 22/08/2026) ----
+    Bản trước dùng ON CONFLICT DO NOTHING: có rồi thì thôi. An toàn nhưng sai
+    ở một chỗ đắt giá — sửa file JSON trong mã rồi deploy thì database VẪN GIỮ
+    BẢN CŨ, mà website lại lấy database phủ lên bản mặc định. Kết quả: mã
+    nguồn đúng, web chạy sai, và không có lỗi nào hiện ra.
 
-    Mặt trái của việc "chỉ nạp khi thiếu": sửa file JSON trong mã nguồn rồi
-    deploy thì database VẪN GIỮ BẢN CŨ, và website lấy database phủ lên bản
-    mặc định nên khách thấy nội dung cũ dù mã nguồn đã đúng. Muốn ép lấy bản
-    mới thì vào /admin bấm "Nạp lại từ file gốc" — nút đó đọc JSON từ bundle
-    của website (luôn mới) rồi PUT đè, không cần chạy tay câu DELETE ở đây.
+    Đã dính đúng lỗi này ngay hôm thêm dải đối tác: lần deploy đầu nạp danh
+    sách 11 đơn vị CHƯA có logo; lần deploy sau file JSON đã có đủ 8 logo
+    nhưng database không nhận, nên trên web thật dải đối tác không có logo
+    nào. Bảng màu mới cũng vậy — máy chủ vẫn trả về bảng cũ.
+
+    Cách phân biệt: cột `nguoi_sua`. Chỉ có ĐÚNG HAI nơi ghi vào bảng này —
+    hàm này (ghi hằng NGUOI_SUA_TU_DONG) và ghi_noi_dung() khi người dùng bấm
+    Lưu trong /admin (ghi tên đăng nhập). Nên `nguoi_sua` còn nguyên giá trị
+    tự động nghĩa là CHƯA AI ĐỘNG TỚI khoá đó, cập nhật theo mã nguồn là an
+    toàn tuyệt đối. Ngược lại, khoá nào người dùng đã sửa thì giữ nguyên —
+    công sức gõ trong admin không bao giờ bị deploy xoá mất.
+
+    `IS DISTINCT FROM` để không dập cap_nhat_luc mỗi lần khởi động lại máy chủ
+    khi nội dung y hệt.
+
+    Muốn ép lấy bản trong mã cho một khoá ĐÃ TỪNG SỬA thì vào /admin bấm
+    "Nạp lại từ file gốc" — nút đó đọc JSON từ bundle của website rồi PUT đè.
     """
     for khoa, duong_dan in NGUON_NAP.items():
         if not duong_dan.exists():
@@ -235,14 +258,20 @@ def _nap_noi_dung_lan_dau() -> None:
             du_lieu = json.load(f)
 
         with pool().connection() as conn:
-            conn.execute(
+            kq = conn.execute(
                 """
                 INSERT INTO noi_dung (khoa, du_lieu, nguoi_sua)
-                VALUES (%s, %s, 'nạp lần đầu')
-                ON CONFLICT (khoa) DO NOTHING
+                VALUES (%s, %s, %s)
+                ON CONFLICT (khoa) DO UPDATE
+                       SET du_lieu      = EXCLUDED.du_lieu,
+                           cap_nhat_luc = now()
+                     WHERE noi_dung.nguoi_sua = %s
+                       AND noi_dung.du_lieu IS DISTINCT FROM EXCLUDED.du_lieu
                 """,
-                (khoa, Jsonb(du_lieu)),
+                (khoa, Jsonb(du_lieu), NGUOI_SUA_TU_DONG, NGUOI_SUA_TU_DONG),
             )
+            if kq.rowcount:
+                log.info("Khoá '%s' lấy theo bản trong mã nguồn.", khoa)
 
 
 def _dat_tai_khoan_admin() -> None:
