@@ -70,14 +70,22 @@ const GIAY_MOI_DON_VI = 3.2;
 /** Một ô trong dải: ảnh logo nếu có, không thì tên đơn vị dạng chữ.
 
     ---- Vì sao logo phải nằm trong một Ô NỀN chứ không đặt thẳng lên dải ----
-    Tám logo công ty gửi có đủ kiểu nền: nền trắng đặc (Bảo tàng, EVNGENCO1),
-    nền trong suốt, và một cái là chữ TRẮNG trên nền trong suốt (VHunter). Thả
-    thẳng lên dải nền xám nhạt thì cái có nền trắng thành một ô trắng lệch tông,
-    còn VHunter mất hút hẳn. Cho tất cả vào cùng một ô bo góc nền trắng thì
-    chúng thành một bộ — đây cũng đúng cách trang cmc.com.vn đang làm.
+    Tám logo công ty gửi có đủ kiểu nền: nền trắng đặc (Bảo tàng, EVNGENCO1)
+    và nền trong suốt. Thả thẳng lên dải nền xám nhạt thì cái có nền trắng
+    thành một ô trắng lệch tông giữa những logo không nền. Cho tất cả vào cùng
+    một ô bo góc nền trắng thì chúng thành một bộ — đây cũng đúng cách trang
+    cmc.com.vn đang làm.
 
-    `logoNenToi` cho riêng logo chữ sáng: ô của chúng đổi sang nền tối. Một ô
-    tối giữa các ô trắng nhìn vẫn thuận, còn hơn một logo không thấy gì.
+    ⚠️ MỌI Ô ĐỀU NỀN TRẮNG. Đã có một bản để riêng ô VHunter nền tối và công
+    ty chỉ ngay ra: "cái logo này đang k trùng màu với tất cả". Họ đúng — một
+    ô đen giữa mười ô trắng thì mắt đọc là lỗi giao diện chứ không đọc là dụng
+    ý. Lý do làm vậy cũng sai nốt: tôi tưởng logo VHunter là CHỮ TRẮNG trên
+    nền trong suốt nên đặt trên nền trắng sẽ mất hút. Soi lại tệp gốc thì nó
+    là hình XANH LÁ có viền trắng — trên nền trắng viền tan vào nền, còn hình
+    và chữ vẫn đọc rõ, đúng như logo đó được vẽ ra để làm.
+
+    Rút ra cho lần sau: tệp PNG nền trong suốt thì lúc xuất .webp phải DÁN LÊN
+    NỀN TRẮNG rồi mới lưu. Dán lên nền tối là tự tạo ra một ô lệch tông.
 
     ---- CỠ LOGO: 64px, và đó là TRẦN chứ không phải sở thích (22/08/2026) ----
     Công ty: "phóng to logo ra". Đo trước khi chỉnh: tám tệp trong
@@ -101,12 +109,9 @@ function OChip({ dv }) {
     // mr-* nằm trên <li> chứ không phải gap trên <ul> — xem ghi chú của
     // --animate-chay-ngang trong styles/index.css, vòng lặp phụ thuộc vào đó.
     <li className="mr-5 shrink-0 lg:mr-7">
-      <span
-        className={
-          "flex h-24 items-center justify-center rounded-2xl px-6 " +
-          (dv.logoNenToi ? "bg-ink" : "bg-paper shadow-soft")
-        }
-      >
+      {/* Nền trắng cho MỌI ô, không có ngoại lệ — xem ghi chú ở trên. Logo
+          nào không đọc được trên nền trắng thì sửa TỆP ẢNH, đừng đổi màu ô. */}
+      <span className="flex h-24 items-center justify-center rounded-2xl bg-paper px-6 shadow-soft">
         {dv.logo ? (
           /* alt là TÊN ĐƠN VỊ, không để trống. Bản trước để alt="" vì tên nằm
              ngay bên cạnh dưới dạng chữ; nay chữ đã bỏ, alt là thứ DUY NHẤT
