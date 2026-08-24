@@ -80,9 +80,21 @@ export default function DeLaiLienHe({ hotline, ghiChu }) {
     }
   }
 
+  /* ⚠️ CẢ BA TRẠNG THÁI DƯỚI ĐÂY PHẢI CÙNG px-3 — sửa một chỗ là hỏng hai chỗ
+     kia. Hai lý do:
+
+     1. Thẳng hàng với ô nhập ngay bên dưới. Đo ở khung chat: mép khối chân ở
+        1000px, ô nhập ở 1012 (px-3), chữ trong vùng tin nhắn ở 1016 (px-4).
+        Bản trước dòng này để px-1 nên chữ bắt đầu ở 1004 — thò ra bên trái ô
+        nhập đúng 8px, và đó là chỗ công ty chỉ ra ngày 23/08/2026 ("chỉnh cái
+        này lệch sang tí dc không"). Ba mép trái khác nhau xếp chồng lên nhau
+        thì mắt bắt được ngay dù không đo.
+     2. Bấm vào là dòng này đổi từ CHỮ MỜI sang Ô NHẬP rồi sang CÂU BÁO XONG.
+        Ba trạng thái mà lề khác nhau thì mỗi lần đổi cả dòng lại nhảy ngang
+        một cái. */
   if (trangThai === "xong") {
     return (
-      <p className="flex items-center gap-2 px-1 py-2 text-[12.5px] text-ink-soft">
+      <p className="flex items-center gap-2 px-3 py-2 text-[12.5px] text-ink-soft">
         <Check className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
         Đã nhận liên hệ của bạn. Bên mình sẽ gọi lại sớm nhé!
       </p>
@@ -94,7 +106,7 @@ export default function DeLaiLienHe({ hotline, ghiChu }) {
       <button
         type="button"
         onClick={() => setMo(true)}
-        className="group flex w-full items-center gap-1.5 px-1 py-2 text-left text-[12.5px] text-ink-soft transition-colors hover:text-brand"
+        className="group flex w-full items-center gap-1.5 px-3 py-2 text-left text-[12.5px] text-ink-soft transition-colors hover:text-brand"
       >
         Quan tâm? Để lại số điện thoại hoặc email, iMob gọi lại
         <ChevronRight
@@ -106,7 +118,7 @@ export default function DeLaiLienHe({ hotline, ghiChu }) {
   }
 
   return (
-    <form onSubmit={gui} className="px-1 py-2">
+    <form onSubmit={gui} className="px-3 py-2">
       <div className="flex items-center gap-1.5">
         <input
           type="text"
