@@ -203,7 +203,14 @@ chown "${NGUOI_CHAY}:${NGUOI_CHAY}" "$FILE_ENV"
 chmod 600 "$FILE_ENV"
 
 systemctl daemon-reload
-nginx -t
+# enable: để API tự bật lại sau khi máy chủ khởi động lại. Thiếu dòng này thì
+# mọi thứ chạy tốt cho tới lần reboot đầu tiên — rồi web sống, API chết.
+systemctl enable imob-api >/dev/null 2>&1
+
+# nginx -t CHỈ kiểm tra cú pháp, KHÔNG nạp cấu hình mới. Thiếu reload thì nginx
+# vẫn phục vụ trang "Welcome to nginx!" mặc định trong khi mọi file đều đúng —
+# mất khá lâu mới nghĩ ra vì không có lỗi nào hiện lên cả.
+nginx -t && systemctl reload nginx
 
 cat <<XONG
 

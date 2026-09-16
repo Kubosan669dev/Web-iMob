@@ -123,8 +123,13 @@ done
 
 # Kiểm tra qua nginx chứ không chỉ gọi thẳng uvicorn — để bắt được cả trường
 # hợp nginx trỏ sai thư mục sau khi symlink đổi.
-curl -fsS --max-time 5 http://127.0.0.1/ >/dev/null 2>&1 \
-  || quay_lui "nginx không trả được trang chủ."
+#
+# Phải soi NỘI DUNG chứ không chỉ xem mã trả về. Bản đầu chỉ kiểm tra "có 200
+# không" — và nó báo thành công trong khi nginx đang phục vụ trang mặc định
+# "Welcome to nginx!", vì trang đó cũng trả 200. Kiểm tra kiểu ấy không sai,
+# nó chỉ không kiểm tra đúng thứ mình cần biết.
+curl -fsS --max-time 5 http://127.0.0.1/ 2>/dev/null | grep -q 'id="root"' \
+  || quay_lui "nginx không trả về trang của mình (có thể đang trả trang mặc định)."
 
 echo "==> Dọn bản cũ (giữ $GIU_LAI bản gần nhất)"
 cd "$GOC/releases"
