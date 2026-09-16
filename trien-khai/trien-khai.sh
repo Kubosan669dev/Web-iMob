@@ -128,8 +128,21 @@ done
 # không" — và nó báo thành công trong khi nginx đang phục vụ trang mặc định
 # "Welcome to nginx!", vì trang đó cũng trả 200. Kiểm tra kiểu ấy không sai,
 # nó chỉ không kiểm tra đúng thứ mình cần biết.
-curl -fsS --max-time 5 http://127.0.0.1/ 2>/dev/null | grep -q 'id="root"' \
-  || quay_lui "nginx không trả về trang của mình (có thể đang trả trang mặc định)."
+#
+# Ba điều kiện phải có, thiếu một là báo hỏng oan:
+#   --resolve  ép tên miền trỏ về chính máy này, không đi vòng ra internet;
+#              nhờ vậy vẫn kiểm tra được cả khi DNS đang trục trặc.
+#   -L         đi theo chuyển hướng. Sau khi bật HTTPS, cổng 80 trả 301 sang
+#              https — không có -L thì nhận về một thân rỗng và script tưởng
+#              web hỏng rồi quay lui, dù web hoàn toàn bình thường.
+#   Tên miền   lấy thẳng từ cấu hình nginx, khỏi phải sửa script khi đổi tên.
+TEN_MIEN_KT="$(grep -m1 -oP 'server_name\s+\K[^ ;]+' /etc/nginx/sites-available/imob 2>/dev/null || true)"
+TEN_MIEN_KT="${TEN_MIEN_KT:-127.0.0.1}"
+curl -fsSL --max-time 10 \
+     --resolve "${TEN_MIEN_KT}:80:127.0.0.1" \
+     --resolve "${TEN_MIEN_KT}:443:127.0.0.1" \
+     "http://${TEN_MIEN_KT}/" 2>/dev/null | grep -q 'id="root"' \
+  || quay_lui "nginx không trả về trang của mình (thử qua ${TEN_MIEN_KT})."
 
 echo "==> Dọn bản cũ (giữ $GIU_LAI bản gần nhất)"
 cd "$GOC/releases"
