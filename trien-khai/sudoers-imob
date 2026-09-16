@@ -1,0 +1,28 @@
+# ============================================================
+# Quyền hẹp cho người triển khai.
+#
+# Cài (KHÔNG chép tay bằng cp — sai cú pháp file sudoers là hỏng sudo toàn máy,
+# lệnh visudo kiểm tra cú pháp trước khi ghi):
+#
+#     sudo visudo -f /etc/sudoers.d/imob-deploy
+#     (dán nội dung bên dưới, thay NGUOI_TRIEN_KHAI bằng tài khoản thật)
+#
+# VÌ SAO PHẢI CÓ FILE NÀY:
+# Người triển khai cần khởi động lại dịch vụ và đọc nhật ký — chỉ vậy thôi.
+# Cho hẳn quyền root để làm hai việc đó là cho luôn quyền xoá cơ sở dữ liệu,
+# đọc mật khẩu trong .env, cài thêm phần mềm lạ lên máy.
+#
+# Bốn dòng dưới cho đúng bốn việc cần, không hơn.
+# ============================================================
+
+NGUOI_TRIEN_KHAI ALL=(root) NOPASSWD: /usr/bin/systemctl restart imob-api
+NGUOI_TRIEN_KHAI ALL=(root) NOPASSWD: /usr/bin/systemctl status imob-api
+NGUOI_TRIEN_KHAI ALL=(root) NOPASSWD: /usr/bin/systemctl start imob-api
+NGUOI_TRIEN_KHAI ALL=(root) NOPASSWD: /usr/bin/journalctl -u imob-api *
+
+# ⚠️ KHÔNG bao giờ thêm dòng kiểu:
+#       NGUOI_TRIEN_KHAI ALL=(ALL) NOPASSWD: ALL
+#   Dòng đó = quyền root đầy đủ, chỉ khác cái tên.
+#
+# ⚠️ Cũng KHÔNG cho người triển khai vào nhóm 'docker'. Có docker là gắn được
+#   ổ đĩa gốc vào container rồi sửa bất cứ thứ gì — tương đương root.

@@ -1,0 +1,66 @@
+# ============================================================
+# Dịch vụ API Python (FastAPI) chạy nền trên máy chủ CMC Cloud.
+#
+# Chép lên máy chủ:  sudo cp imob-api.service /etc/systemd/system/
+# Bật:               sudo systemctl enable --now imob-api
+# Xem nhật ký:       sudo journalctl -u imob-api -f
+# ============================================================
+
+[Unit]
+Description=iMob API - FastAPI + chatbot
+# Đợi mạng VÀ cơ sở dữ liệu sẵn sàng rồi mới khởi động, không thì lần bật máy
+# sau khi reboot sẽ chết vì PostgreSQL chưa lên.
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=imob
+Group=imob
+
+# Trỏ qua symlink "current". systemd phân giải đường dẫn lúc KHỞI ĐỘNG, mà
+# trien-khai.sh luôn chuyển symlink xong mới restart — nên mỗi lần khởi động
+# lại là tự động chạy đúng bản mới nhất.
+WorkingDirectory=/var/www/imob/current/chatbot-python
+
+# Biến môi trường nằm ở shared/ nên sống sót qua mọi lần deploy.
+# Dấu - ở đầu = thiếu file thì vẫn khởi động, để lỗi hiện ra ở nhật ký chứ
+# không chết câm.
+EnvironmentFile=-/var/www/imob/shared/.env
+
+# ⚠️ --host 127.0.0.1 CHỨ KHÔNG PHẢI 0.0.0.0.
+#
+# Trên Render thì 0.0.0.0 là đúng, vì Render tự bọc một lớp proxy bên ngoài.
+# Trên máy chủ CMC có Elastic IP công khai thì 0.0.0.0 nghĩa là CẢ INTERNET gọi
+# thẳng được vào cổng 8001 — bỏ qua nginx, bỏ qua giới hạn tần suất, bỏ qua
+# nhật ký truy cập. Sổ tay CMC (Phụ lục B) cũng ghi rõ: cổng ứng dụng backend
+# KHÔNG mở ra Internet.
+ExecStart=/var/www/imob/moitruong/bin/uvicorn main:app --host 127.0.0.1 --port 8001
+
+Restart=always
+RestartSec=5
+
+# ---- Trần tài nguyên ----
+# Trả lời cho câu "dev thấy server còn thừa bộ nhớ, cài thêm thứ khác gây sập".
+# Không quản được bằng cách dặn dò. Đặt trần thì dịch vụ nào vượt trần CHỈ
+# CHÍNH NÓ bị dừng và khởi động lại, các dịch vụ khác trên máy vẫn sống.
+#
+# Số dưới hợp với máy 2 vCPU / 4 GB (cấu hình sổ tay CMC gợi ý ở Mục 3.3 cho
+# "dự án thật giai đoạn đầu"). Máy to hơn thì nới ra, nhưng luôn chừa phần cho
+# PostgreSQL và hệ điều hành — đừng đặt bằng tổng RAM.
+#
+# scikit-learn ngốn bộ nhớ lúc NẠP mô hình rồi mới hạ xuống, nên trần phải
+# rộng hơn mức chạy bình thường khá nhiều.
+MemoryHigh=900M
+MemoryMax=1200M
+CPUQuota=80%
+TasksMax=200
+
+# ---- Chặn bớt quyền ----
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
