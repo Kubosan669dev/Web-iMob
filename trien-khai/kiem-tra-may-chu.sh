@@ -100,6 +100,14 @@ journalctl -u ssh --since "30 days ago" --no-pager 2>/dev/null \
 echo "   >> Dia chi IP la = co nguoi ngoai danh sach da vao duoc."
 
 echo
+echo "--- 1b. TEN MIEN DA DUOC DUNG DE VAO MAY CHU NAY ---"
+# Chi ke nhung dong co dang ten mien o cot dau (bo qua dia chi IP va dong cu
+# theo dinh dang mac dinh). Ten mien LA o day = co nguoi tro ten mien cua ho
+# ve may chu nay ma khong bao ai.
+cat /var/log/nginx/access.log /var/log/nginx/access.log.1 2>/dev/null   | awk '$1 ~ /^[a-zA-Z]/ && $1 ~ /\./ {print $1}' | sort | uniq -c | sort -rn | head -15 | sed 's/^/   /'
+echo "   >> Chi imob.vn, www.imob.vn va dia chi IP la hop le."
+echo "   >> Ten mien khac xuat hien = co nguoi muon may chu nay chay ke cho ho."
+echo
 echo "--- 2. DO MAT KHAU THAT BAI ---"
 SO_HONG=$(journalctl -u ssh --since "30 days ago" --no-pager 2>/dev/null | grep -c 'Failed password')
 echo "   So lan sai mat khau 30 ngay qua: ${SO_HONG:-0}"
