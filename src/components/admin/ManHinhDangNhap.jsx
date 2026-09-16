@@ -230,18 +230,22 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
 
             {/* ⚠️ CÂU NÀY CHỈ HIỆN KHI THẬT SỰ CHỜ LÂU (quá NGUONG_CHO_LAU).
                 Trước 21/08/2026 nó hiện NGAY khi bấm Đăng nhập, kèm con số
-                "30–50 giây". Đo lại thì đăng nhập chỉ mất 1,9 giây và máy chủ
-                không hề ngủ (healthCheckPath trong render.yaml giữ nó thức) —
-                nghĩa là câu đó vừa sai vừa phản tác dụng: nó BẢO người ta rằng
+                "30–50 giây" — vừa sai vừa phản tác dụng: nó BẢO người ta rằng
                 sắp phải chờ nửa phút, nên một cái chờ 2 giây cũng thành cảm
                 giác lâu. Đúng phàn nàn đã nhận: "bấm Đăng nhập rồi ngồi chờ".
 
-                Vẫn giữ câu này chứ không xoá: gói free có thể ngủ trở lại nếu
-                healthCheckPath bị bỏ, và lúc đó một màn hình im lặng 40 giây
-                thì tưởng là hỏng. Nay nó chỉ lên tiếng khi có chuyện thật. */}
+                16/09/2026 — chuyển sang máy chủ riêng ở CMC: câu cũ nói "máy
+                chủ đang thức dậy, mất 30–50 giây". Đó là hiện tượng của gói
+                free trên Render, nơi dịch vụ tự ngủ sau 15 phút không ai gọi.
+                Máy chủ riêng chạy liên tục, không bao giờ ngủ. Giữ nguyên câu
+                đó thì mỗi lần mạng chậm lại đổ tội cho một nguyên nhân không
+                còn tồn tại, và người đọc sẽ ngồi đợi thay vì đi tìm lỗi thật.
+
+                Vẫn giữ một câu nào đó chứ không xoá hẳn: màn hình im lặng quá
+                4 giây thì người dùng tưởng là hỏng và bấm lại lần nữa. */}
             {choLau && (
               <p className="text-center text-[0.8125rem] text-ink-faint">
-                Máy chủ đang thức dậy, việc này có thể mất 30–50 giây.
+                Máy chủ phản hồi chậm hơn bình thường, vui lòng đợi thêm giây lát.
               </p>
             )}
 

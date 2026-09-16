@@ -1,11 +1,13 @@
-"""API iMob — FastAPI, deploy trên Render.com.
+"""API iMob — FastAPI, chạy trên máy chủ riêng ở CMC Cloud.
 
-Chạy local:   python -m uvicorn main:app --reload --port 8000
-Trên Render:  uvicorn main:app --host 0.0.0.0 --port $PORT   (xem render.yaml)
+Chạy ở máy:    python -m uvicorn main:app --reload --port 8000
+Trên máy chủ:  systemd chạy uvicorn ở 127.0.0.1:8001, nginx đứng trước
+               (xem trien-khai/imob-api.service và trien-khai/nginx-imob.conf).
+               CHỈ nghe trong máy — cửa duy nhất ra internet là nginx.
 
 Các nhóm đường dẫn:
   GET  /              — thông tin dịch vụ (mở bằng trình duyệt để kiểm tra sống/chết)
-  GET  /health        — Render gọi định kỳ để biết service còn khỏe
+  GET  /health        — script triển khai gọi để biết dịch vụ còn khỏe
   GET  /docs          — trang thử API tự sinh của FastAPI
   POST /api/chat      — nơi website gửi câu hỏi của khách
   POST /api/dang-nhap — đăng nhập trang quản trị        (api_auth.py)
