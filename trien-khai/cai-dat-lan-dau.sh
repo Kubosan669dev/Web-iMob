@@ -169,8 +169,19 @@ python3 -m venv "$GOC/moitruong"
 
 echo "==> 9/9  Dịch vụ nền, nginx và phân quyền"
 cp "$TAM/ma/trien-khai/imob-api.service" /etc/systemd/system/
-sed "s/TEN_MIEN\.VN/${TEN_MIEN}/g" "$TAM/ma/trien-khai/nginx-imob.conf" \
-  > /etc/nginx/sites-available/imob
+
+# KHÔNG ghi đè cấu hình nginx đã có. certbot sửa thẳng vào file này khi bật
+# HTTPS (thêm khối cổng 443, thêm chuyển hướng, trỏ tới chứng chỉ). Chạy lại
+# script cài đặt mà ghi đè thì HTTPS biến mất, web tụt về http — mà không có
+# lỗi nào hiện ra, chỉ là trình duyệt báo "không bảo mật".
+if [[ -f /etc/nginx/sites-available/imob ]]; then
+  cp /etc/nginx/sites-available/imob "/etc/nginx/sites-available/imob.sao-luu-$(date +%Y%m%d-%H%M%S)"
+  echo "    cấu hình nginx đã có — GIỮ NGUYÊN (đã sao lưu một bản)"
+  echo "    muốn lấy bản mới: xoá /etc/nginx/sites-available/imob rồi chạy lại"
+else
+  sed "s/TEN_MIEN\.VN/${TEN_MIEN}/g" "$TAM/ma/trien-khai/nginx-imob.conf" \
+    > /etc/nginx/sites-available/imob
+fi
 ln -sfn /etc/nginx/sites-available/imob /etc/nginx/sites-enabled/imob
 rm -f /etc/nginx/sites-enabled/default
 
