@@ -97,11 +97,20 @@ CREATE TABLE IF NOT EXISTS noi_dung (
     nguoi_sua     TEXT
 );
 
--- Tài khoản quản trị. Chỉ lưu BĂM của mật khẩu, không bao giờ lưu mật khẩu thô.
+-- Tài khoản. Chỉ lưu BĂM của mật khẩu, không bao giờ lưu mật khẩu thô.
+--
+-- MỘT BẢNG CHO CẢ HAI VAI (quản trị và thành viên tự đăng ký), phân biệt bằng
+-- cột vai_tro. Tách làm hai bảng thì đăng nhập phải tra hai nơi, và cái đó đẻ
+-- ra một câu hỏi không có lời đáp hay: cùng một tên đăng nhập tồn tại ở cả hai
+-- bảng thì ai thắng? Một bảng thì khóa chính tự chặn trùng, khỏi phải nghĩ.
 CREATE TABLE IF NOT EXISTS nguoi_dung (
     ten_dang_nhap TEXT PRIMARY KEY,
     mat_khau_hash TEXT NOT NULL,
     vai_tro       TEXT NOT NULL DEFAULT 'quan_tri',
+    -- Tên hiển thị do thành viên tự đặt, có dấu, có khoảng trắng. Khác
+    -- ten_dang_nhap (chỉ chữ thường không dấu, dùng để gõ lúc đăng nhập).
+    ho_ten        TEXT,
+    dang_nhap_luc TIMESTAMPTZ,
     tao_luc       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -109,6 +118,14 @@ CREATE TABLE IF NOT EXISTS nguoi_dung (
 -- nên phải thêm cột riêng. Mọi tài khoản cũ mặc định là quản trị đầy đủ.
 ALTER TABLE nguoi_dung
     ADD COLUMN IF NOT EXISTS vai_tro TEXT NOT NULL DEFAULT 'quan_tri';
+ALTER TABLE nguoi_dung ADD COLUMN IF NOT EXISTS ho_ten TEXT;
+ALTER TABLE nguoi_dung ADD COLUMN IF NOT EXISTS dang_nhap_luc TIMESTAMPTZ;
+
+-- Tra tài khoản KHÔNG PHÂN BIỆT HOA THƯỜNG (xem lay_nguoi_dung). Không có chỉ
+-- mục này thì mỗi lần đăng nhập Postgres phải quét cả bảng, vì LOWER() làm khóa
+-- chính thành vô dụng. Vài chục tài khoản thì không ai thấy, vài nghìn thì thấy.
+CREATE INDEX IF NOT EXISTS nguoi_dung_ten_thuong
+    ON nguoi_dung (LOWER(ten_dang_nhap));
 
 -- Ảnh tải lên từ trang quản trị.
 --
@@ -324,7 +341,13 @@ def _dat_tai_khoan_admin() -> None:
 
     Đánh đổi: nếu sau này làm chức năng "đổi mật khẩu" ngay trong trang admin
     thì mỗi lần khởi động lại máy chủ sẽ kéo mật khẩu về đúng giá trị của biến
-    môi trường. Lúc đó phải sửa lại chỗ này. Hiện chưa có chức năng đó."""
+    môi trường. Lúc đó phải sửa lại chỗ này. Hiện chưa có chức năng đó.
+
+    Câu lệnh ghi đè CẢ vai_tro, không chỉ mật khẩu. Nếu không, đặt ADMIN_USER
+    trùng tên một thành viên đã đăng ký sẽ cho ra một tài khoản mang mật khẩu
+    admin nhưng vẫn đeo vai thanh_vien — đăng nhập được mà vào /admin thì bị
+    chặn, và không có thông báo nào chỉ ra vì sao. (Chiều ngược lại đã bịt:
+    api_thanh_vien.py không cho ai đăng ký trùng tên ADMIN_USER.)"""
     from auth import bam_mat_khau  # import tại chỗ cho khỏi vòng lặp import
 
     ten = os.getenv("ADMIN_USER", "").strip()
@@ -332,7 +355,14 @@ def _dat_tai_khoan_admin() -> None:
 
     if not ten or not mat_khau:
         with pool().connection() as conn:
-            co_ai = conn.execute("SELECT 1 FROM nguoi_dung LIMIT 1").fetchone()
+            # Phải lọc theo vai_tro. Trước 21/09/2026 câu này là
+            #     SELECT 1 FROM nguoi_dung LIMIT 1
+            # — đúng hồi bảng chỉ chứa admin. Từ khi khách tự đăng ký được, một
+            # thành viên bất kỳ cũng làm câu đó trả về 1, nên cảnh báo "chưa có
+            # tài khoản admin nào" sẽ im lặng đúng lúc cần kêu nhất.
+            co_ai = conn.execute(
+                "SELECT 1 FROM nguoi_dung WHERE vai_tro = 'quan_tri' LIMIT 1"
+            ).fetchone()
         if not co_ai:
             log.warning(
                 "Chưa có tài khoản admin nào và chưa đặt ADMIN_USER/ADMIN_PASSWORD "
@@ -346,10 +376,11 @@ def _dat_tai_khoan_admin() -> None:
     with pool().connection() as conn:
         conn.execute(
             """
-            INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash)
-            VALUES (%s, %s)
+            INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash, vai_tro)
+            VALUES (%s, %s, 'quan_tri')
             ON CONFLICT (ten_dang_nhap) DO UPDATE
-                SET mat_khau_hash = EXCLUDED.mat_khau_hash
+                SET mat_khau_hash = EXCLUDED.mat_khau_hash,
+                    vai_tro       = 'quan_tri'
             """,
             (ten, bam_mat_khau(mat_khau)),
         )
@@ -392,14 +423,83 @@ def ghi_noi_dung(khoa: str, du_lieu, nguoi_sua: str) -> None:
 # ============================================================
 # Tài khoản
 # ============================================================
+COT_NGUOI_DUNG = "ten_dang_nhap, mat_khau_hash, vai_tro, ho_ten, dang_nhap_luc, tao_luc"
+
+
 def lay_nguoi_dung(ten_dang_nhap: str) -> dict | None:
+    """Tra tài khoản theo tên, KHÔNG phân biệt hoa thường.
+
+    Vì sao không so khớp nguyên văn như trước: thành viên đăng ký thì tên được
+    hạ về chữ thường hết (xem them_thanh_vien). Một người đăng ký "Nam" sẽ được
+    lưu thành "nam", rồi hôm sau gõ đúng cái tên mình nhớ là "Nam" và bị báo sai
+    mật khẩu — mà không cách nào đoán ra vì sao. Đây là kiểu lỗi người dùng
+    không báo, họ chỉ bỏ đi.
+
+    An toàn vì bảng KHÔNG THỂ có hai tên chỉ khác nhau hoa thường: thành viên
+    luôn vào ở dạng chữ thường nên khóa chính tự chặn, còn admin chỉ có một và
+    do biến môi trường đặt.
+    """
     if not co_db():
         return None
     with pool().connection() as conn:
         return conn.execute(
-            "SELECT ten_dang_nhap, mat_khau_hash, vai_tro FROM nguoi_dung WHERE ten_dang_nhap = %s",
+            f"SELECT {COT_NGUOI_DUNG} FROM nguoi_dung WHERE LOWER(ten_dang_nhap) = LOWER(%s)",
             (ten_dang_nhap,),
         ).fetchone()
+
+
+def them_thanh_vien(ten_dang_nhap: str, mat_khau_hash: str, ho_ten: str) -> dict | None:
+    """Tạo tài khoản thành viên. Trả về None nếu tên đã có người dùng.
+
+    ⚠️ vai_tro VIẾT CỨNG là 'thanh_vien', cố ý không nhận từ tham số. Hàm này
+    phục vụ một đường dẫn công khai ai gọi cũng được; để vai trò đi vào từ bên
+    ngoài thì chỉ cần một chỗ quên lọc là có người tự đăng ký ra tài khoản quản
+    trị. Muốn thêm admin thì đặt ADMIN_USER/ADMIN_PASSWORD, không đi lối này.
+
+    ON CONFLICT DO NOTHING chứ không kiểm tra trước rồi mới ghi: giữa hai bước
+    "kiểm" và "ghi" có một khe thời gian, hai người bấm Đăng ký cùng lúc sẽ cùng
+    thấy tên còn trống. Để chính database phân xử thì không có khe nào.
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            f"""
+            INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash, vai_tro, ho_ten)
+            VALUES (%s, %s, 'thanh_vien', %s)
+            ON CONFLICT (ten_dang_nhap) DO NOTHING
+            RETURNING {COT_NGUOI_DUNG}
+            """,
+            (ten_dang_nhap, mat_khau_hash, ho_ten or None),
+        ).fetchone()
+
+
+def ghi_nhan_dang_nhap(ten_dang_nhap: str) -> None:
+    """Đánh dấu mốc đăng nhập gần nhất. Hỏng thì kệ, đừng chặn người ta vào."""
+    try:
+        with pool().connection() as conn:
+            conn.execute(
+                "UPDATE nguoi_dung SET dang_nhap_luc = now() WHERE ten_dang_nhap = %s",
+                (ten_dang_nhap,),
+            )
+    except Exception:  # noqa: BLE001
+        log.warning("Không ghi được mốc đăng nhập của %s", ten_dang_nhap)
+
+
+def doi_ho_ten(ten_dang_nhap: str, ho_ten: str) -> bool:
+    with pool().connection() as conn:
+        kq = conn.execute(
+            "UPDATE nguoi_dung SET ho_ten = %s WHERE ten_dang_nhap = %s RETURNING 1",
+            (ho_ten or None, ten_dang_nhap),
+        ).fetchone()
+    return kq is not None
+
+
+def doi_mat_khau(ten_dang_nhap: str, mat_khau_hash: str) -> bool:
+    with pool().connection() as conn:
+        kq = conn.execute(
+            "UPDATE nguoi_dung SET mat_khau_hash = %s WHERE ten_dang_nhap = %s RETURNING 1",
+            (mat_khau_hash, ten_dang_nhap),
+        ).fetchone()
+    return kq is not None
 
 
 # ============================================================

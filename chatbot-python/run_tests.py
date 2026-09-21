@@ -24,6 +24,8 @@ from pathlib import Path
 os.environ["GEMINI_API_KEY"] = ""
 
 from api_bai_viet import LOAI_HOP_LE, tao_duong_dan  # noqa: E402
+import api_thanh_vien as tv  # noqa: E402
+import auth  # noqa: E402
 from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
@@ -164,6 +166,94 @@ def kiem_duong_dan():
     return kq
 
 
+# ============================================================
+# Tai khoan thanh vien (21/09/2026)
+# ============================================================
+# Vi sao cac phep kiem nay dang gia: dang ky la duong dan CONG KHAI, ai goi
+# cung duoc, va no ghi thang mot dong moi vao bang tai khoan. Mot lo hong o
+# day khong bao loi — no chi lang le de lot mot cai ten, roi hau qua hien ra
+# o cho khac va muon hon nhieu.
+TEN_DUOC = ["nam.tran", "hoa_2026", "abc", "a" * 24, "user-1"]
+TEN_BI_CHAN = [
+    ("ab", "qua ngan"),
+    ("a" * 25, "qua dai"),
+    ("Nam", "con chu hoa"),
+    ("nam tran", "co khoang trang"),
+    ("nguyen.van", None),          # hop le — de lam doi chung, xu ly ben duoi
+    ("admin", "ten cua cong ty"),
+    ("hotro", "ten cua cong ty"),
+    ("-abc", "bat dau bang dau gach"),
+    (".abc", "bat dau bang dau cham"),
+]
+
+
+def kiem_tai_khoan():
+    kq = []
+
+    # --- Ten dang nhap ---
+    for ten in TEN_DUOC:
+        kq.append((f"ten {ten!r} phai duoc nhan", tv.kiem_ten(ten) is None))
+    for ten, vi_sao in TEN_BI_CHAN:
+        if vi_sao is None:
+            kq.append((f"ten {ten!r} phai duoc nhan", tv.kiem_ten(ten) is None))
+        else:
+            kq.append((f"ten {ten!r} phai bi chan ({vi_sao})",
+                       tv.kiem_ten(ten) is not None))
+
+    kq.append(("chuan_hoa_ten cat khoang trang va ha chu thuong",
+               tv.chuan_hoa_ten("  NAM.Tran  ") == "nam.tran"))
+
+    # --- Mat khau ---
+    kq.append(("mat khau 7 ky tu bi chan",
+               tv.kiem_mat_khau_moi("1234567", "nam") is not None))
+    kq.append(("mat khau 8 ky tu binh thuong duoc nhan",
+               tv.kiem_mat_khau_moi("caychuoi92", "nam") is None))
+    kq.append(("mat khau qua de bi chan",
+               tv.kiem_mat_khau_moi("12345678", "nam") is not None))
+    kq.append(("mat khau trung ten dang nhap bi chan",
+               tv.kiem_mat_khau_moi("nam.tran", "nam.tran") is not None))
+    # bcrypt cat cut o 72 byte ma khong keu. Phai chan truoc, khong thi nguoi
+    # dat mat khau dai se mat phan duoi ma khong biet.
+    kq.append(("mat khau qua 72 byte bi chan",
+               tv.kiem_mat_khau_moi("Mật khẩu rất dài " * 8, "nam") is not None))
+
+    # --- Ten hien thi ---
+    kq.append(("ho ten gom khoang trang thua",
+               tv.don_ho_ten("  Trần   Văn  Nam  ") == "Trần Văn Nam"))
+    # Xuong dong phai thanh KHOANG TRANG, khong phai bi xoa thang — xoa thang
+    # thi hai chu bi dinh lien vao nhau.
+    kq.append(("ho ten: xuong dong -> khoang trang",
+               tv.don_ho_ten("Tran" + chr(10) + "Nam") == "Tran Nam"))
+    kq.append(("ho ten: tab -> khoang trang",
+               tv.don_ho_ten("Tran" + chr(9) + "Nam") == "Tran Nam"))
+    kq.append((f"ho ten cat con {tv.DAI_HO_TEN_TOI_DA} ky tu",
+               len(tv.don_ho_ten("x" * 200)) == tv.DAI_HO_TEN_TOI_DA))
+
+    # --- Vai tro ---
+    # Chuoi nay phai khop TUNG KY TU voi ban JavaScript
+    # (src/services/taiKhoanService.js). Lech mot chu thi giao dien tuong moi
+    # nguoi deu la quan tri — hoac nguoc lai.
+    kq.append((f"vai thanh vien dung chuoi 'thanh_vien' (nhan {auth.VAI_THANH_VIEN!r})",
+               auth.VAI_THANH_VIEN == "thanh_vien"))
+    kq.append(("hai vai khac nhau", auth.VAI_QUAN_TRI != auth.VAI_THANH_VIEN))
+
+    # tao_ve BAT BUOC ghi ro vai. Bo mac dinh di la de mot cho quen vai se vo
+    # ngay luc chay, thay vi lang le phat ve quan tri cho khach.
+    try:
+        auth.tao_ve("ai-do")
+        thieu_vai_bi_chan = False
+    except TypeError:
+        thieu_vai_bi_chan = True
+    kq.append(("tao_ve khong cho bo trong vai tro", thieu_vai_bi_chan))
+
+    # Than request dang ky KHONG duoc co o nao ten vai_tro. Co la khach tu
+    # chon duoc vai cho minh.
+    kq.append(("yeu cau dang ky khong nhan vai_tro",
+               "vai_tro" not in tv.YeuCauDangKy.model_fields))
+
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -206,6 +296,19 @@ def main():
             print(f"      FAIL — {ten}")
     print(f"      {len(DUONG_DAN_MONG_DOI)} tieu de + 2 rang buoc do dai"
           f"{'' if so_loi == 0 else f' — {so_loi} loi'}")
+
+    print()
+    print("[tai-khoan] Luat dat ten, mat khau va vai tro")
+    phep = kiem_tai_khoan()
+    so_loi = 0
+    for ten, ok in phep:
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            so_loi += 1
+            print(f"      FAIL - {ten}")
+    print(f"      {len(phep)} phep kiem"
+          f"{'' if so_loi == 0 else f' - {so_loi} loi'}")
 
     print("\n" + "=" * 55)
     print(f"KẾT QUẢ: {dat}/{tong} kiểm tra ĐẠT.")

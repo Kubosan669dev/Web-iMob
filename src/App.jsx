@@ -6,6 +6,7 @@ import ScrollToTop from "./components/util/ScrollToTop.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
 import { BangMauProvider } from "./context/BangMauContext.jsx";
+import { TaiKhoanProvider } from "./context/TaiKhoanContext.jsx";
 
 // Các trang dịch vụ tách bundle bằng lazy() — khách vào trang chủ không tải
 // kèm. Nội dung từng trang đọc từ data/servicePages.json.
@@ -30,6 +31,12 @@ const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
 // LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
+// Tài khoản thành viên (21/09/2026): đăng ký, đăng nhập, hồ sơ. Cùng lazy()
+// — phần lớn khách vào xem website không bao giờ mở tới ba trang này.
+const DangNhapPage = lazy(() => import("./pages/DangNhapPage.jsx"));
+const DangKyPage = lazy(() => import("./pages/DangKyPage.jsx"));
+const TaiKhoanPage = lazy(() => import("./pages/TaiKhoanPage.jsx"));
+
 const LegalPage = lazy(() => import("./pages/LegalPage.jsx"));
 
 // Style-guide nội bộ: tách khỏi bundle chính bằng lazy() vì khách
@@ -57,6 +64,11 @@ export default function App() {
             thức từ nội dung, và nằm NGOÀI router vì màu áp cho cả site — kể cả
             trang /admin, để không phải nhớ hai bộ màu. */}
         <BangMauProvider>
+          {/* TaiKhoanProvider bọc NGOÀI router vì thanh menu (luôn hiện) và
+              trang /tai-khoan phải nhìn cùng một sự thật về "ai đang đăng
+              nhập". Để mỗi nơi tự đọc trình duyệt thì bấm Đăng xuất xong,
+              thanh menu vẫn hiện tên cho tới lúc tải lại trang. */}
+          <TaiKhoanProvider>
           <BrowserRouter>
             <ScrollToTop />
             <Suspense fallback={null}>
@@ -95,6 +107,9 @@ export default function App() {
                     path="/tin-tuc/:duongDan"
                     element={<BaiVietPage mucMacDinh="tin_cong_ty" />}
                   />
+                  <Route path="/dang-nhap" element={<DangNhapPage />} />
+                  <Route path="/dang-ky" element={<DangKyPage />} />
+                  <Route path="/tai-khoan" element={<TaiKhoanPage />} />
                   <Route
                     path="/privacy-policy"
                     element={<LegalPage slug="privacy-policy" />}
@@ -113,6 +128,7 @@ export default function App() {
               </Routes>
             </Suspense>
           </BrowserRouter>
+          </TaiKhoanProvider>
         </BangMauProvider>
       </NoiDungProvider>
     </MotionConfig>

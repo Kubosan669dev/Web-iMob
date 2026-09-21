@@ -77,7 +77,27 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
     setLoi("");
     setDangGui(true);
     try {
-      khiXong(await api.dangNhap(ten.trim(), matKhau));
+      const tenVao = await api.dangNhap(ten.trim(), matKhau);
+
+      // Tài khoản thành viên (đăng ký ngoài website) gõ đúng mật khẩu thì máy
+      // chủ vẫn phát vé — vé đó hợp lệ, chỉ là mang vai khác. Chặn ngay tại
+      // đây, nếu không họ sẽ đi qua màn hình này vào thẳng trang quản trị và
+      // thấy MỌI khung đều báo lỗi 403: trông y như website hỏng, chứ không
+      // ai đoán được là do mình vào nhầm cửa.
+      //
+      // Đây là chuyện lịch sự với người dùng, KHÔNG phải hàng rào an ninh —
+      // hàng rào nằm ở máy chủ (auth.chi_quan_tri), và nó chặn kể cả khi
+      // người ta bỏ qua hẳn màn hình này.
+      if (api.layVaiTro() !== api.VAI_QUAN_TRI) {
+        api.dangXuat();
+        setLoi(
+          "Đây là tài khoản thành viên, không vào được trang quản trị. " +
+            "Bạn xem tài khoản của mình ở trang /tai-khoan nhé.",
+        );
+        return;
+      }
+
+      khiXong(tenVao);
     } catch (err) {
       setLoi(err.message);
     } finally {

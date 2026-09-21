@@ -1,4 +1,13 @@
-"""Đường dẫn đăng nhập trang quản trị."""
+"""Đường dẫn đăng nhập — dùng chung cho CẢ quản trị lẫn thành viên.
+
+Một đường dẫn cho cả hai vai, cố ý. Làm hai đường riêng (/api/dang-nhap và
+/api/dang-nhap-thanh-vien) thì phải trả lời được câu "gõ tài khoản thành viên
+vào ô đăng nhập của admin thì sao?" — và mọi câu trả lời đều tệ: hoặc lộ ra
+tài khoản đó có thật, hoặc báo một lỗi mà người gõ không hiểu. Ở đây ai gõ
+đúng thì vào, còn đi được tới đâu thì vai trò trong vé quyết định.
+
+Việc phân quyền nằm ở auth.chi_quan_tri(), không nằm ở đây.
+"""
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
@@ -19,6 +28,7 @@ class KetQuaDangNhap(BaseModel):
     het_han_sau: int  # số giây
     ten_dang_nhap: str
     vai_tro: str
+    ho_ten: str = ""
 
 
 @router.post("/api/dang-nhap", response_model=KetQuaDangNhap)
@@ -59,12 +69,18 @@ def dang_nhap(yeu_cau: YeuCauDangNhap, request: Request):
         )
 
     auth.xoa_dem_sai(request)
-    vai_tro = nguoi.get("vai_tro") or auth.VAI_QUAN_TRI
+    # Thiếu vai thì coi là THÀNH VIÊN, tức quyền thấp nhất. Cột vai_tro trong
+    # database là NOT NULL nên diện này gần như không xảy ra; để mặc định rơi
+    # về quan_tri (như bản trước 21/09/2026) thì một dòng dữ liệu hỏng sẽ phát
+    # ra vé quản trị, còn rơi về thanh_vien thì cùng lắm là vào không được.
+    vai_tro = nguoi.get("vai_tro") or auth.VAI_THANH_VIEN
     ve, het_han_sau = auth.tao_ve(nguoi["ten_dang_nhap"], vai_tro)
+    db.ghi_nhan_dang_nhap(nguoi["ten_dang_nhap"])
     return {
         "ve": ve,
         "het_han_sau": het_han_sau,
         "ten_dang_nhap": nguoi["ten_dang_nhap"],
         "vai_tro": vai_tro,
+        "ho_ten": nguoi.get("ho_ten") or "",
     }
 

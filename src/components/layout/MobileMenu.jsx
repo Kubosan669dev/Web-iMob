@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Phone } from "lucide-react";
+import { X, Phone, UserRound } from "lucide-react";
 import Button from "../ui/Button.jsx";
 import Logo from "../ui/Logo.jsx";
 import { NAV_ITEMS } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
+import { useTaiKhoan } from "../../context/TaiKhoanContext.jsx";
+import { tenGoi } from "../../services/taiKhoanService.js";
 
 // Hiệu ứng panel + stagger từng item
 const panelVariants = {
@@ -28,6 +30,7 @@ const itemVariants = {
 // trong Navbar.jsx cho khớp.
 export default function MobileMenu({ open, onClose, activeId }) {
   const congTy = useCongTy();
+  const { nguoi, dangXuat } = useTaiKhoan();
 
   // Khóa scroll body khi menu đang mở
   useEffect(() => {
@@ -130,6 +133,53 @@ export default function MobileMenu({ open, onClose, activeId }) {
               variants={itemVariants}
               className="space-y-2.5 border-t border-line p-5"
             >
+              {/* TÀI KHOẢN nằm ở khối đáy này chứ không nằm cuối danh sách menu.
+                  Đã thử để cuối danh sách và ảnh chụp trên màn 420×900 cho thấy
+                  nó rơi hẳn xuống dưới vùng nhìn thấy: khách phải cuộn trong
+                  menu mới biết là có chỗ đăng nhập. Khối đáy thì luôn hiện. */}
+              <div className="flex items-center justify-between gap-3 pb-1.5">
+                {nguoi ? (
+                  <>
+                    <Link
+                      to="/tai-khoan"
+                      onClick={onClose}
+                      className="flex min-w-0 items-center gap-2 font-semibold text-ink transition-colors hover:text-brand"
+                    >
+                      <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <span className="truncate">{tenGoi(nguoi)}</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        dangXuat();
+                        onClose();
+                      }}
+                      className="shrink-0 text-sm text-ink-soft transition-colors hover:text-brand"
+                    >
+                      Đăng xuất
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/dang-nhap"
+                      onClick={onClose}
+                      className="flex items-center gap-2 font-semibold text-ink transition-colors hover:text-brand"
+                    >
+                      <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      Đăng nhập
+                    </Link>
+                    <Link
+                      to="/dang-ky"
+                      onClick={onClose}
+                      className="shrink-0 text-sm text-ink-soft transition-colors hover:text-brand"
+                    >
+                      Tạo tài khoản
+                    </Link>
+                  </>
+                )}
+              </div>
+
               <Button
                 href={`tel:${congTy.phone.replace(/\s/g, "")}`}
                 className="w-full"

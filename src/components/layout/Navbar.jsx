@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, Menu, UserRound } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import Logo from "../ui/Logo.jsx";
 import Button from "../ui/Button.jsx";
@@ -8,6 +8,8 @@ import MobileMenu from "./MobileMenu.jsx";
 import useActiveSection from "../../hooks/useActiveSection.js";
 import { NAV_ITEMS } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
+import { useTaiKhoan } from "../../context/TaiKhoanContext.jsx";
+import { tenGoi } from "../../services/taiKhoanService.js";
 
 // Mảng id section — khai báo ngoài component để tham chiếu ổn định
 // (useActiveSection phụ thuộc vào nó, xem comment trong hook)
@@ -76,6 +78,39 @@ function NavItem({ item, active }) {
   );
 }
 
+// Nút tài khoản ở góc phải. Chưa đăng nhập thì là chữ "Đăng nhập"; đã đăng
+// nhập thì là tên người dùng.
+//
+// Vì sao là chữ chứ không phải một cái icon người: icon người đứng một mình
+// không nói được đang đăng nhập hay chưa, mà đó chính là điều duy nhất người
+// ta cần biết khi liếc lên góc phải. max-w + truncate để tên dài không đẩy
+// nút "Nhận tư vấn" ra khỏi màn hình.
+function NutTaiKhoan() {
+  const { nguoi } = useTaiKhoan();
+
+  if (!nguoi) {
+    return (
+      <Link
+        to="/dang-nhap"
+        className="hidden items-center gap-1.5 px-3 py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink lg:inline-flex"
+      >
+        <UserRound className="h-4 w-4" aria-hidden="true" />
+        Đăng nhập
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      to="/tai-khoan"
+      className="hidden max-w-[11rem] items-center gap-1.5 px-3 py-2 text-[0.9375rem] font-medium text-ink transition-colors hover:text-brand lg:inline-flex"
+    >
+      <UserRound className="h-4 w-4 shrink-0" aria-hidden="true" />
+      <span className="truncate">{tenGoi(nguoi)}</span>
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const congTy = useCongTy();
   const activeId = useActiveSection(SECTION_IDS);
@@ -110,8 +145,9 @@ export default function Navbar() {
           </nav>
 
           {/* ---------- Bên phải: CTA + hamburger ---------- */}
-          <div className="flex items-center gap-3">
-            <Button href="/#contact" size="sm" className="hidden lg:inline-flex">
+          <div className="flex items-center gap-1 lg:gap-2">
+            <NutTaiKhoan />
+            <Button href="/#contact" size="sm" className="ml-2 hidden lg:inline-flex">
               Nhận tư vấn
             </Button>
             <button

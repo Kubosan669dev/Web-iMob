@@ -32,17 +32,26 @@ SO_GIO_HAN_VE = 8
 # ============================================================
 # VAI TRÒ
 #
-# quan_tri — tài khoản của công ty, vào được /admin và làm được mọi thứ.
+# quan_tri  — tài khoản của công ty, vào được /admin và làm được mọi thứ.
+#             CHỈ CÓ MỘT, đặt bằng biến môi trường ADMIN_USER/ADMIN_PASSWORD.
+#             Không có đường nào tự đăng ký ra vai này.
+#
+# thanh_vien — khách tự đăng ký ngoài website (21/09/2026). Chỉ đụng được vào
+#             hồ sơ của chính mình và tư liệu do mình gửi. KHÔNG vào /admin.
 #
 # Vai 'khach_thu' (tài khoản dùng thử, mật khẩu hiện công khai ở màn hình đăng
-# nhập) đã BỎ HẲN ngày 21/09/2026 theo yêu cầu: chỉ còn đúng MỘT tài khoản quản
-# trị. Mọi tài khoản mang vai đó bị xoá khi máy chủ khởi động (xem db.py).
+# nhập) đã BỎ HẲN ngày 21/09/2026 theo yêu cầu. Mọi tài khoản mang vai đó bị
+# xoá khi máy chủ khởi động (xem db.py).
 #
-# Bộ máy phân vai vẫn giữ nguyên chứ không gỡ bỏ, vì sắp có vai 'thanh_vien'
-# cho khách đăng ký ngoài website. Lúc đó chi_quan_tri() là thứ duy nhất ngăn
-# một thành viên dùng vé của mình để gọi thẳng vào API quản trị.
+# ⚠️ HAI VAI DÙNG CHUNG MỘT LÒ PHÁT VÉ. Vé của thành viên và vé của quản trị
+# khác nhau ĐÚNG MỘT CHỮ trong phần "vai", còn chữ ký thì cùng một khóa. Nghĩa
+# là chi_quan_tri() là thứ DUY NHẤT ngăn một thành viên gọi thẳng vào API quản
+# trị bằng vé của chính mình — không có hàng rào thứ hai nào ở dưới. Thêm một
+# đường dẫn quản trị mới mà quên gắn nó vào thì ai đăng ký cũng sửa được
+# website, và sẽ không có lỗi nào báo cho bạn biết.
 # ============================================================
 VAI_QUAN_TRI = "quan_tri"
+VAI_THANH_VIEN = "thanh_vien"
 
 # bcrypt chỉ xử lý tối đa 72 byte; dài hơn là phần thừa bị bỏ lặng lẽ.
 GIOI_HAN_BYTE_MAT_KHAU = 72
@@ -156,11 +165,16 @@ def kiem_mat_khau_gia(mat_khau: str) -> bool:
 # ============================================================
 # Vé JWT
 # ============================================================
-def tao_ve(ten_dang_nhap: str, vai_tro: str = VAI_QUAN_TRI) -> tuple[str, int]:
+def tao_ve(ten_dang_nhap: str, vai_tro: str) -> tuple[str, int]:
     """Trả về (vé, số giây còn hiệu lực).
 
     Vai trò nằm TRONG vé và vé có chữ ký, nên client không tự nâng quyền cho
     mình được: sửa một ký tự trong vé là chữ ký sai, máy chủ từ chối ngay.
+
+    `vai_tro` CỐ Ý không có giá trị mặc định. Trước 21/09/2026 nó mặc định là
+    quan_tri, hồi đó vô hại vì chỉ có một vai. Giờ đã có thành viên tự đăng ký,
+    một chỗ gọi tao_ve(ten) mà quên vai sẽ lặng lẽ phát vé QUẢN TRỊ cho khách —
+    không lỗi, không cảnh báo. Bắt buộc ghi rõ thì chỗ quên sẽ vỡ ngay lúc chạy.
     """
     het_han = datetime.now(timezone.utc) + timedelta(hours=SO_GIO_HAN_VE)
     ve = jwt.encode(
@@ -192,10 +206,14 @@ def _giai_ve(thong_tin: HTTPAuthorizationCredentials | None) -> tuple[str, str]:
     ten = noi_dung.get("sub")
     if not ten:
         raise loi
-    # Vé phát TRƯỚC khi có hệ vai trò thì không mang khóa "vai". Coi là quản trị
-    # để người đang đăng nhập dở không bị đá ra giữa chừng lúc deploy bản mới.
-    # Vé chỉ sống 8 tiếng nên diện này tự hết sau một ngày làm việc.
-    return ten, noi_dung.get("vai") or VAI_QUAN_TRI
+    # Vé không mang khóa "vai" -> coi là THÀNH VIÊN, tức quyền thấp nhất.
+    #
+    # Trước 21/09/2026 chỗ này coi vé thiếu vai là QUẢN TRỊ, để người đang đăng
+    # nhập dở không bị đá ra lúc deploy bản có hệ vai trò. Nay phải lật ngược:
+    # đoán nhầm về phía quản trị thì một tấm vé dị dạng mở được cả trang quản
+    # trị; đoán nhầm về phía thành viên thì cùng lắm admin phải đăng nhập lại.
+    # Vé chỉ sống 8 tiếng nên chuyện "đăng nhập lại" cũng chỉ xảy ra một lần.
+    return ten, noi_dung.get("vai") or VAI_THANH_VIEN
 
 
 def yeu_cau_dang_nhap(
@@ -293,3 +311,39 @@ def ghi_nhan_sai(request: Request) -> None:
 
 def xoa_dem_sai(request: Request) -> None:
     _dem_sai.pop(_ip_cua(request), None)
+
+
+# ============================================================
+# Chặn đăng ký hàng loạt
+# ============================================================
+# Đăng ký là đường dẫn CÔNG KHAI, ai cũng gọi được, và mỗi lần gọi là một dòng
+# mới trong database cộng một lần băm bcrypt. Không chặn thì một script có thể
+# bơm hàng nghìn tài khoản rác trong vài phút — vừa phình database vừa làm
+# ngập hàng đợi duyệt tư liệu.
+#
+# Đếm theo IP, lưu trong bộ nhớ (khởi động lại là mất), giống _dem_sai ở trên.
+# Đây không phải hàng rào kín: ai đổi IP là đếm lại từ đầu. Nó chỉ để một người
+# ngồi bấm hoặc một script viết vội không phá được — đúng mức cần cho một
+# website công ty.
+SO_LAN_DANG_KY_TOI_DA = 3
+SO_GIAY_DEM_DANG_KY = 60 * 60
+
+_dem_dang_ky: dict[str, list[float]] = {}
+
+
+def kiem_tra_dang_ky_qua_nhieu(request: Request) -> None:
+    ip = _ip_cua(request)
+    bay_gio = time.time()
+    # Bỏ các lần đã quá cũ trước khi đếm, nếu không thì một IP đăng ký 3 lần
+    # hồi năm ngoái sẽ bị cấm vĩnh viễn.
+    moc = [t for t in _dem_dang_ky.get(ip, []) if bay_gio - t < SO_GIAY_DEM_DANG_KY]
+    _dem_dang_ky[ip] = moc
+    if len(moc) >= SO_LAN_DANG_KY_TOI_DA:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Bạn vừa tạo khá nhiều tài khoản. Thử lại sau một giờ nhé.",
+        )
+
+
+def ghi_nhan_dang_ky(request: Request) -> None:
+    _dem_dang_ky.setdefault(_ip_cua(request), []).append(time.time())
