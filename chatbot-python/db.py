@@ -224,6 +224,45 @@ ALTER TABLE bai_viet
 -- mới nhất trước" — ba cột đúng thứ tự đó.
 CREATE INDEX IF NOT EXISTS bai_viet_theo_loai
     ON bai_viet (loai, da_dang, dang_luc DESC);
+
+-- Tư liệu thành viên gửi cho trợ lý ảo (22/09/2026).
+--
+-- DẠNG HỎI–ĐÁP, không phải một ô văn bản tự do. Kho kiến thức của chatbot
+-- vốn đã là hỏi–đáp (mục "faqs" trong data/imob_chatbot_data.json), nên thu
+-- đúng dạng đó thì bài được duyệt ghép thẳng vào được. Thu văn bản tự do thì
+-- ai đó vẫn phải ngồi tách ra thành câu hỏi và câu trả lời — và người đó sẽ
+-- là quản trị, mỗi ngày, mãi mãi.
+--
+-- KHÔNG CÓ GÌ TỰ ĐỘNG VÀO KHO. Mọi dòng vào đây đều mang trang_thai
+-- 'cho_duyet'; chỉ quản trị đổi được sang 'da_duyet'. Đây là điều đã hứa với
+-- người gửi ngay trên trang đăng ký ("iMob xem lại. Không có gì tự động lên"),
+-- nên đừng ai thêm một đường tắt nào ở đây.
+CREATE TABLE IF NOT EXISTS tu_lieu (
+    id           BIGSERIAL PRIMARY KEY,
+    -- ON DELETE SET NULL chứ không CASCADE: xoá một tài khoản thì xoá thông
+    -- tin cá nhân của họ, nhưng tư liệu ĐÃ DUYỆT vẫn đang nằm trong kho kiến
+    -- thức. Cho nó biến mất cùng tài khoản là mất dấu vết của thứ chatbot
+    -- đang nói ra mỗi ngày — không lỗi, chỉ là không ai truy được nữa.
+    nguoi_gui    TEXT REFERENCES nguoi_dung (ten_dang_nhap) ON DELETE SET NULL,
+    cau_hoi      TEXT NOT NULL,
+    cau_tra_loi  TEXT NOT NULL,
+    ghi_chu      TEXT NOT NULL DEFAULT '',
+    -- 'cho_duyet' | 'da_duyet' | 'tu_choi'
+    trang_thai   TEXT NOT NULL DEFAULT 'cho_duyet',
+    -- Lý do từ chối, hiện lại CHO CHÍNH NGƯỜI GỬI xem. Từ chối mà không nói vì
+    -- sao thì họ gửi lại đúng cái đó lần nữa, và cả hai bên cùng mất công.
+    ly_do        TEXT NOT NULL DEFAULT '',
+    tao_luc      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    duyet_luc    TIMESTAMPTZ,
+    nguoi_duyet  TEXT
+);
+
+-- Hàng đợi của quản trị: "đang chờ duyệt, cũ nhất trước" (ai gửi trước được
+-- xem trước). Trang của thành viên: "của tôi, mới nhất trước".
+CREATE INDEX IF NOT EXISTS tu_lieu_hang_doi
+    ON tu_lieu (trang_thai, tao_luc);
+CREATE INDEX IF NOT EXISTS tu_lieu_theo_nguoi
+    ON tu_lieu (nguoi_gui, tao_luc DESC);
 """
 
 
@@ -786,3 +825,129 @@ def xoa_bai_viet(ma: int) -> bool:
         return conn.execute(
             "DELETE FROM bai_viet WHERE id = %s RETURNING id", (ma,)
         ).fetchone() is not None
+
+
+# ============================================================
+# Tư liệu thành viên gửi cho trợ lý ảo
+# ============================================================
+TRANG_THAI_CHO = "cho_duyet"
+TRANG_THAI_DUYET = "da_duyet"
+TRANG_THAI_TU_CHOI = "tu_choi"
+
+COT_TU_LIEU = (
+    "id, nguoi_gui, cau_hoi, cau_tra_loi, ghi_chu, trang_thai, ly_do, "
+    "tao_luc, duyet_luc, nguoi_duyet"
+)
+
+
+def them_tu_lieu(nguoi_gui: str, cau_hoi: str, cau_tra_loi: str, ghi_chu: str) -> dict:
+    """Ghi một tư liệu mới, LUÔN ở trạng thái chờ duyệt.
+
+    trang_thai viết cứng trong câu lệnh, không nhận từ tham số — xem ghi chú
+    ở phần tạo bảng. Muốn duyệt thì đi qua duyet_tu_lieu().
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            f"""
+            INSERT INTO tu_lieu (nguoi_gui, cau_hoi, cau_tra_loi, ghi_chu, trang_thai)
+            VALUES (%s, %s, %s, %s, 'cho_duyet')
+            RETURNING {COT_TU_LIEU}
+            """,
+            (nguoi_gui, cau_hoi, cau_tra_loi, ghi_chu),
+        ).fetchone()
+
+
+def tu_lieu_cua_toi(nguoi_gui: str, gioi_han: int = 100) -> list[dict]:
+    with pool().connection() as conn:
+        return conn.execute(
+            f"SELECT {COT_TU_LIEU} FROM tu_lieu WHERE nguoi_gui = %s "
+            "ORDER BY tao_luc DESC LIMIT %s",
+            (nguoi_gui, gioi_han),
+        ).fetchall()
+
+
+def dem_tu_lieu_dang_cho(nguoi_gui: str) -> int:
+    """Đếm số tư liệu của MỘT người còn đang chờ duyệt.
+
+    Dùng để chặn gửi dồn: một người gửi 500 dòng trong mười phút thì hàng đợi
+    của quản trị thành vô dụng, mà không có gì trong mã ngăn chuyện đó cả.
+    """
+    with pool().connection() as conn:
+        kq = conn.execute(
+            "SELECT count(*) AS n FROM tu_lieu WHERE nguoi_gui = %s AND trang_thai = 'cho_duyet'",
+            (nguoi_gui,),
+        ).fetchone()
+    return int(kq["n"]) if kq else 0
+
+
+def lay_tu_lieu(ma: int) -> dict | None:
+    with pool().connection() as conn:
+        return conn.execute(
+            f"SELECT {COT_TU_LIEU} FROM tu_lieu WHERE id = %s", (ma,)
+        ).fetchone()
+
+
+def xoa_tu_lieu_cua_toi(ma: int, nguoi_gui: str) -> bool:
+    """Người gửi tự rút lại tư liệu CỦA CHÍNH MÌNH khi chưa ai duyệt.
+
+    Điều kiện nguoi_gui nằm NGAY TRONG câu lệnh chứ không kiểm ở tầng trên:
+    kiểm ở tầng trên thì một chỗ gọi quên kiểm là xoá được bài của người khác,
+    và lỗi đó không báo gì — chỉ là bài của ai đó biến mất.
+
+    Đã duyệt rồi thì không rút được nữa: lúc đó nó đã nằm trong kho kiến thức,
+    gỡ là việc của quản trị.
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            "DELETE FROM tu_lieu WHERE id = %s AND nguoi_gui = %s "
+            "AND trang_thai = 'cho_duyet' RETURNING id",
+            (ma, nguoi_gui),
+        ).fetchone() is not None
+
+
+def danh_sach_tu_lieu(trang_thai: str | None = None, gioi_han: int = 200) -> list[dict]:
+    """Hàng đợi cho quản trị. Không lọc thì trả về tất cả, mới nhất trước.
+
+    Riêng 'cho_duyet' thì CŨ NHẤT TRƯỚC — ai gửi trước được xem trước. Sắp mới
+    nhất trước thì người gửi sớm bị đẩy xuống đáy mãi mãi mỗi khi có bài mới.
+    """
+    dieu_kien = "WHERE trang_thai = %s" if trang_thai else ""
+    thu_tu = "tao_luc ASC" if trang_thai == TRANG_THAI_CHO else "tao_luc DESC"
+    tham_so = (trang_thai, gioi_han) if trang_thai else (gioi_han,)
+    with pool().connection() as conn:
+        return conn.execute(
+            f"SELECT {COT_TU_LIEU} FROM tu_lieu {dieu_kien} "
+            f"ORDER BY {thu_tu} LIMIT %s",
+            tham_so,
+        ).fetchall()
+
+
+def dem_tu_lieu_theo_trang_thai() -> dict[str, int]:
+    """{'cho_duyet': 3, 'da_duyet': 12, ...} — cho con số trên nút ở /admin."""
+    with pool().connection() as conn:
+        hang = conn.execute(
+            "SELECT trang_thai, count(*) AS n FROM tu_lieu GROUP BY trang_thai"
+        ).fetchall()
+    return {h["trang_thai"]: int(h["n"]) for h in hang}
+
+
+def duyet_tu_lieu(ma: int, trang_thai: str, ly_do: str, nguoi_duyet: str) -> dict | None:
+    """Đổi trạng thái một tư liệu. Trả về dòng sau khi đổi, hoặc None nếu không có.
+
+    duyet_luc chỉ đặt khi RỜI KHỎI trạng thái chờ. Đưa một bài đã duyệt quay
+    lại hàng đợi thì xoá luôn mốc đó, nếu không lịch sử sẽ ghi là đã duyệt
+    trong khi nó đang nằm chờ.
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            f"""
+            UPDATE tu_lieu
+               SET trang_thai  = %s,
+                   ly_do       = %s,
+                   duyet_luc   = CASE WHEN %s = 'cho_duyet' THEN NULL ELSE now() END,
+                   nguoi_duyet = CASE WHEN %s = 'cho_duyet' THEN NULL ELSE %s END
+             WHERE id = %s
+            RETURNING {COT_TU_LIEU}
+            """,
+            (trang_thai, ly_do, trang_thai, trang_thai, nguoi_duyet, ma),
+        ).fetchone()

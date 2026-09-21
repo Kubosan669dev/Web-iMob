@@ -209,3 +209,32 @@ export function ngayViet(chuoi) {
     year: "numeric",
   });
 }
+
+// ---------- Tư liệu gửi cho trợ lý ảo ----------
+// Ba chuỗi trạng thái này phải khớp TỪNG KÝ TỰ với db.py bên máy chủ. Lệch một
+// chữ thì giao diện lặng lẽ xếp mọi tư liệu vào nhóm "khác" và không hiện ra
+// đâu cả — không có lỗi nào báo.
+export const CHO_DUYET = "cho_duyet";
+export const DA_DUYET = "da_duyet";
+export const TU_CHOI = "tu_choi";
+
+export const NHAN_TRANG_THAI = {
+  [CHO_DUYET]: "Đang chờ iMob xem",
+  [DA_DUYET]: "Đã nhận",
+  [TU_CHOI]: "Chưa nhận",
+};
+
+export function guiTuLieu({ cauHoi, cauTraLoi, ghiChu }) {
+  return goi("/api/tu-lieu", {
+    method: "POST",
+    than: { cau_hoi: cauHoi, cau_tra_loi: cauTraLoi, ghi_chu: ghiChu || "" },
+  });
+}
+
+export function tuLieuCuaToi() {
+  return goi("/api/tu-lieu");
+}
+
+export function rutLaiTuLieu(ma) {
+  return goi(`/api/tu-lieu/${ma}`, { method: "DELETE" });
+}

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Check, Loader2, LogOut, Shield, Sparkles, UserRound } from "lucide-react";
+import { Check, Loader2, LogOut, Shield, UserRound } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
 import { OChu } from "../components/taikhoan/KhungXacThuc.jsx";
+import GuiTuLieu from "../components/taikhoan/GuiTuLieu.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { useTaiKhoan } from "../context/TaiKhoanContext.jsx";
@@ -159,19 +160,10 @@ export default function TaiKhoanPage() {
         </header>
 
         <div className="space-y-6">
-          {/* Khối này là lý do tài khoản tồn tại, nên để trên cùng. Phần gửi
-              tư liệu làm ở bước sau; chưa xong thì nói thẳng là chưa xong,
-              đừng để một nút bấm vào không ra gì. */}
-          <The
-            tieuDe="Gửi tư liệu cho trợ lý ảo"
-            mo_ta="Bạn biết điều gì mà trợ lý ảo của iMob chưa biết — kinh nghiệm dùng sản phẩm, câu khách hay hỏi, thông tin cần đính chính — thì gửi vào đây. iMob xem rồi mới đưa vào."
-          >
-            <p className="flex items-start gap-2 rounded-xl bg-brand-soft px-4 py-3 text-sm leading-relaxed text-brand">
-              <Sparkles className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              Phần này đang được làm nốt. Tài khoản của bạn đã sẵn sàng, mở lại
-              trang này ít hôm nữa là dùng được.
-            </p>
-          </The>
+          {/* Khối này là lý do tài khoản tồn tại, nên để trên cùng — trước
+              cả tên hiển thị và đổi mật khẩu. Hai thứ đó người ta đụng tới
+              mỗi năm một lần, còn đây là việc họ vào đây để làm. */}
+          <GuiTuLieu />
 
           <The tieuDe="Tên hiển thị" mo_ta="Tên mọi người thấy. Tên đăng nhập thì không đổi được.">
             <form onSubmit={guiTen} className="space-y-4">

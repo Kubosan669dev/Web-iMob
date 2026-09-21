@@ -269,3 +269,18 @@ export function danhSachAnh() {
 export function xoaAnh(ma) {
   return goi(`/api/anh/${encodeURIComponent(ma)}`, { method: "DELETE" });
 }
+
+// ---------- Tư liệu thành viên gửi ----------
+// Đường dẫn dưới gốc /api/quan-tri/… nên máy chủ đòi vai quan_tri, không phải
+// chỉ "đã đăng nhập". Thành viên gọi vào đây sẽ nhận 403.
+export function hangDoiTuLieu(trangThai) {
+  const q = trangThai ? `?trang_thai=${encodeURIComponent(trangThai)}` : "";
+  return goi(`/api/quan-tri/tu-lieu${q}`);
+}
+
+export function duyetTuLieu(ma, trangThai, lyDo = "") {
+  return goi(`/api/quan-tri/tu-lieu/${ma}`, {
+    method: "PUT",
+    than: { trang_thai: trangThai, ly_do: lyDo },
+  });
+}

@@ -177,26 +177,61 @@ export default function KhungXacThuc({ tieuDe, dan, loi, onSubmit, children, cha
   );
 }
 
-// Ô nhập có nhãn. `goiY` là dòng chữ nhỏ dưới ô — nối vào ô bằng
-// aria-describedby để trình đọc màn hình đọc kèm, chứ không chỉ để nhìn.
-export function OChu({ nhan, id, goiY, ...props }) {
-  const maGoiY = goiY ? `${id}-goi-y` : undefined;
+// Kiểu dáng dùng chung cho ô một dòng và ô nhiều dòng. Để riêng một hằng số
+// chứ không chép hai lần: chép hai lần thì sửa một bên là hai ô lệch nhau, mà
+// chúng đứng cạnh nhau trên cùng một form nên nhìn ra ngay.
+const KIEU_O =
+  "w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-[0.9375rem] " +
+  "text-ink outline-none transition placeholder:text-ink-faint/70 " +
+  "focus:border-brand focus:ring-2 focus:ring-brand/20 " +
+  "disabled:bg-mist disabled:text-ink-faint";
+
+// Nhãn + ô + dòng gợi ý. `goiY` nối vào ô bằng aria-describedby để trình đọc
+// màn hình đọc kèm, chứ không chỉ để nhìn.
+function Boc({ nhan, id, goiY, dem, children }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-ink">
-        {nhan}
-      </label>
-      <input
-        id={id}
-        aria-describedby={maGoiY}
-        className="w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-[0.9375rem] text-ink outline-none transition placeholder:text-ink-faint/70 focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:bg-mist disabled:text-ink-faint"
-        {...props}
-      />
+      <div className="mb-1.5 flex items-baseline justify-between gap-3">
+        <label htmlFor={id} className="block text-sm font-medium text-ink">
+          {nhan}
+        </label>
+        {dem && <span className="text-xs tabular-nums text-ink-faint">{dem}</span>}
+      </div>
+      {children}
       {goiY && (
-        <p id={maGoiY} className="mt-1.5 text-xs leading-relaxed text-ink-faint">
+        <p id={`${id}-goi-y`} className="mt-1.5 text-xs leading-relaxed text-ink-faint">
           {goiY}
         </p>
       )}
     </div>
+  );
+}
+
+export function OChu({ nhan, id, goiY, dem, ...props }) {
+  return (
+    <Boc nhan={nhan} id={id} goiY={goiY} dem={dem}>
+      <input
+        id={id}
+        aria-describedby={goiY ? `${id}-goi-y` : undefined}
+        className={KIEU_O}
+        {...props}
+      />
+    </Boc>
+  );
+}
+
+// Ô nhiều dòng. `dem` để nơi gọi hiện "123 / 300" — người viết cần biết mình
+// còn bao nhiêu chỗ TRƯỚC khi gõ hết, chứ không phải lúc bấm Gửi mới bị báo.
+export function OVan({ nhan, id, goiY, dem, hang = 4, ...props }) {
+  return (
+    <Boc nhan={nhan} id={id} goiY={goiY} dem={dem}>
+      <textarea
+        id={id}
+        rows={hang}
+        aria-describedby={goiY ? `${id}-goi-y` : undefined}
+        className={`${KIEU_O} resize-y leading-relaxed`}
+        {...props}
+      />
+    </Boc>
   );
 }

@@ -25,7 +25,9 @@ os.environ["GEMINI_API_KEY"] = ""
 
 from api_bai_viet import LOAI_HOP_LE, tao_duong_dan  # noqa: E402
 import api_thanh_vien as tv  # noqa: E402
+import api_tu_lieu as tl  # noqa: E402
 import auth  # noqa: E402
+import db  # noqa: E402
 from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
@@ -254,6 +256,49 @@ def kiem_tai_khoan():
     return kq
 
 
+# ============================================================
+# Tu lieu thanh vien gui (22/09/2026)
+# ============================================================
+def kiem_tu_lieu():
+    kq = []
+    XD = chr(10)   # xuong dong
+    TAB = chr(9)
+
+    # don_chu GIU xuong dong (cau tra loi dai can chia doan) nhung bo moi ky
+    # tu dieu khien khac. Bo het xuong dong thi ca bai thanh mot cuc chu.
+    kq.append(("don_chu giu xuong dong",
+               tl.don_chu("Doan mot." + XD + XD + "Doan hai.", 999)
+               == "Doan mot." + XD + XD + "Doan hai."))
+    kq.append(("don_chu doi tab thanh khoang trang",
+               tl.don_chu("Tran" + TAB + "Nam", 999) == "Tran Nam"))
+    kq.append(("don_chu gom khoang trang thua",
+               tl.don_chu("  Tran   Van   Nam  ", 999) == "Tran Van Nam"))
+    kq.append(("don_chu gom 3 dong trong thanh 1",
+               tl.don_chu("A" + XD * 5 + "B", 999) == "A" + XD + XD + "B"))
+    kq.append(("don_chu cat dung do dai", len(tl.don_chu("x" * 500, 300)) == 300))
+    kq.append(("don_chu chiu duoc chuoi rong", tl.don_chu("", 300) == ""))
+
+    # Ba chuoi trang thai phai khop TUNG KY TU voi ban JavaScript
+    # (src/services/taiKhoanService.js va components/admin/MucTuLieu.jsx).
+    # Lech mot chu thi giao dien xep bai vao nhom khong ai nhin thay.
+    kq.append((f"du 3 trang thai (nhan {sorted(tl.TRANG_THAI_HOP_LE)})",
+               tl.TRANG_THAI_HOP_LE == {"cho_duyet", "da_duyet", "tu_choi"}))
+    kq.append(("trang thai mac dinh la cho_duyet", db.TRANG_THAI_CHO == "cho_duyet"))
+
+    # Gioi han do dai phai khop voi ban JavaScript. Lech thi nguoi dung go du
+    # so ky tu giao dien cho phep roi bi may chu cat bot ma khong bao gi.
+    kq.append(("gioi han cau hoi 300", tl.DAI_CAU_HOI_TOI_DA == 300))
+    kq.append(("gioi han cau tra loi 4000", tl.DAI_CAU_TRA_LOI_TOI_DA == 4000))
+    kq.append(("gioi han ghi chu 1000", tl.DAI_GHI_CHU_TOI_DA == 1000))
+
+    # Than request gui tu lieu KHONG duoc co o nao ten trang_thai hay
+    # nguoi_duyet — co la thanh vien tu duyet cho minh duoc.
+    o = set(tl.YeuCauGui.model_fields)
+    kq.append((f"yeu cau gui chi nhan 3 o (nhan {sorted(o)})",
+               o == {"cau_hoi", "cau_tra_loi", "ghi_chu"}))
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -300,6 +345,19 @@ def main():
     print()
     print("[tai-khoan] Luat dat ten, mat khau va vai tro")
     phep = kiem_tai_khoan()
+    so_loi = 0
+    for ten, ok in phep:
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            so_loi += 1
+            print(f"      FAIL - {ten}")
+    print(f"      {len(phep)} phep kiem"
+          f"{'' if so_loi == 0 else f' - {so_loi} loi'}")
+
+    print()
+    print("[tu-lieu] Don chu, trang thai va gioi han do dai")
+    phep = kiem_tu_lieu()
     so_loi = 0
     for ten, ok in phep:
         tong += 1

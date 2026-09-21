@@ -11,6 +11,7 @@ import {
   FileText,
   Handshake,
   Inbox,
+  Lightbulb,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -32,6 +33,7 @@ import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
 import MucBaiViet from "../components/admin/MucBaiViet.jsx";
+import MucTuLieu from "../components/admin/MucTuLieu.jsx";
 import MucSanPham from "../components/admin/MucSanPham.jsx";
 import MucTongQuan from "../components/admin/MucTongQuan.jsx";
 
@@ -88,6 +90,8 @@ const MUC_KHAC = [
   // khoa: null vì bài viết KHÔNG nằm trong bảng noi_dung mà có bảng riêng
   // (bai_viet). Mục này tự lưu lấy, không đi qua thanh lưu chung ở dưới.
   { id: "bai-viet", nhan: "Bài viết", khoa: null, icon: BookOpen, neo: "/tin-tuc" },
+  // khoa: null — tu lieu co bang rieng (tu_lieu), muc nay tu luu lay.
+  { id: "tu-lieu", nhan: "Tư liệu", khoa: null, icon: Lightbulb },
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
   { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
   { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", icon: FileText, neo: "/privacy-policy" },
@@ -1176,6 +1180,13 @@ export default function AdminPage() {
                 Bài viết
               </TieuDeMuc>
               <MucBaiViet />
+            </Khung>
+          ) : muc === "tu-lieu" ? (
+            <Khung>
+              <TieuDeMuc ghiChu="Thành viên gửi cho trợ lý ảo">
+                Tư liệu
+              </TieuDeMuc>
+              <MucTuLieu />
             </Khung>
           ) : muc === "tin-nhan" ? (
             <MucTinNhan />

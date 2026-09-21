@@ -43,6 +43,7 @@ import api_bai_viet
 import api_lien_he
 import api_noi_dung
 import api_thanh_vien
+import api_tu_lieu
 import auth
 import db
 from imob_bot import ChatBot, KienThuc
@@ -162,6 +163,7 @@ app.include_router(api_lien_he.router)
 app.include_router(api_anh.router)
 app.include_router(api_bai_viet.router)
 app.include_router(api_thanh_vien.router)
+app.include_router(api_tu_lieu.router)
 
 # ============================================================
 # Mỗi khách một phiên chat riêng
