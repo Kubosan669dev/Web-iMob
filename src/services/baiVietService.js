@@ -14,11 +14,48 @@ import { goiApi } from "./adminService.js";
 // chốt của tính năng này là bài nháp không được lọt ra trang công khai.
 // ============================================================
 
+// ============================================================
+// HAI LOẠI BÀI
+//
+// Chuỗi ở đây phải khớp TỪNG KÝ TỰ với LOAI_HOP_LE trong
+// chatbot-python/api_bai_viet.py. Lệch một chữ thì máy chủ trả 400 và bài
+// không lưu được — đỡ hơn là lưu im lặng vào một loại không trang nào hiện.
+// ============================================================
+export const LOAI_CAU_CHUYEN = "cau_chuyen";
+export const LOAI_TIN_CONG_TY = "tin_cong_ty";
+
+export const LOAI = {
+  [LOAI_CAU_CHUYEN]: {
+    nhan: "Câu chuyện khách hàng",
+    nhanNgan: "Câu chuyện",
+    duongDan: "/cau-chuyen",
+    moTa: "Sản phẩm đã bàn giao, kể từ góc nhìn của người dùng thật.",
+  },
+  [LOAI_TIN_CONG_TY]: {
+    nhan: "Tin công ty",
+    nhanNgan: "Tin công ty",
+    duongDan: "/tin-tuc",
+    moTa: "Ký kết, sự kiện và những việc iMob đang làm.",
+  },
+};
+
+/** Địa chỉ trang đọc của một bài, đặt theo đúng loại của nó.
+ *
+ *  Dùng hàm này ở mọi chỗ cần dựng link thay vì tự nối chuỗi: loại nào nằm
+ *  dưới đường dẫn nào chỉ được quyết định ở MỘT nơi, nên sau này muốn đổi
+ *  cũng chỉ sửa một chỗ. */
+export function duongDanBai(bai) {
+  const goc = LOAI[bai?.loai]?.duongDan ?? LOAI[LOAI_CAU_CHUYEN].duongDan;
+  return `${goc}/${bai.duong_dan}`;
+}
+
 // ---------- Công khai ----------
 
-/** Danh sách bài đã đăng, mới nhất trước. Không kèm thân bài. */
-export function danhSachBaiViet() {
-  return goiApi("/api/bai-viet", { canVe: false });
+/** Danh sách bài đã đăng, mới nhất trước. Không kèm thân bài.
+ *  Bỏ trống `loai` thì lấy cả hai loại. */
+export function danhSachBaiViet(loai) {
+  const q = loai ? `?loai=${encodeURIComponent(loai)}` : "";
+  return goiApi(`/api/bai-viet${q}`, { canVe: false });
 }
 
 /** Một bài đầy đủ theo đường dẫn (phần đuôi URL). */

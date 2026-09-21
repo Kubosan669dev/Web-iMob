@@ -30,11 +30,18 @@ const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
    ---------------------------------------------------------------- */
 
 // Một item trên menu desktop; item có children sẽ kèm dropdown (mở bằng CSS group-hover)
+//
+// Item có `to` là TRANG KHÁC trong cùng ứng dụng -> đi bằng <Link> để không
+// tải lại cả web. Item có `href` là một khối trên trang chủ (dạng "/#about")
+// -> vẫn là <a>, vì nhảy tới neo #... là việc của trình duyệt.
 function NavItem({ item, active }) {
+  const The = item.to ? Link : "a";
+  const dich = item.to ? { to: item.to } : { href: item.href };
+
   return (
     <div className="group relative">
-      <a
-        href={item.href}
+      <The
+        {...dich}
         className={
           "flex items-center gap-1 px-3.5 py-2 text-[0.9375rem] font-medium transition-colors duration-200 " +
           (active ? "text-brand" : "text-ink-soft hover:text-ink")
@@ -47,7 +54,7 @@ function NavItem({ item, active }) {
             aria-hidden="true"
           />
         )}
-      </a>
+      </The>
 
       {/* Dropdown (chỉ item có children). pt-2 tạo "cầu" hover không bị hụt */}
       {item.children && (

@@ -82,10 +82,16 @@ export default function MobileMenu({ open, onClose, activeId }) {
                 bấm rộng, và trên điện thoại menu chiếm gần trọn màn hình nên
                 không phải tiết kiệm chỗ. */}
             <nav className="flex-1 overflow-y-auto px-5 py-6">
-              {NAV_ITEMS.map((item) => (
+              {NAV_ITEMS.map((item) => {
+                // Xem ghi chú cùng chuyện này trong Navbar.jsx: `to` là trang
+                // khác (đi bằng <Link>), `href` là một khối trên trang chủ.
+                const The = item.to ? Link : "a";
+                const dich = item.to ? { to: item.to } : { href: item.href };
+
+                return (
                 <motion.div key={item.id} variants={itemVariants} className="py-1">
-                  <a
-                    href={item.href}
+                  <The
+                    {...dich}
                     onClick={onClose}
                     className={
                       "block py-2.5 text-2xl tracking-tight transition-colors " +
@@ -95,7 +101,7 @@ export default function MobileMenu({ open, onClose, activeId }) {
                     }
                   >
                     {item.label}
-                  </a>
+                  </The>
 
                   {/* Sub-link của Dịch vụ: liệt kê thẳng, không dropdown trên mobile */}
                   {item.children && (
@@ -113,7 +119,8 @@ export default function MobileMenu({ open, onClose, activeId }) {
                     </div>
                   )}
                 </motion.div>
-              ))}
+                );
+              })}
             </nav>
 
             {/* CTA dưới cùng — có cả nút GỌI vì thanh liên hệ trên cùng bị ẩn ở

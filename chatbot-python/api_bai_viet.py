@@ -24,7 +24,7 @@ công khai của công ty, đứng tên iMob.
 import re
 import unicodedata
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
 import db
@@ -39,6 +39,21 @@ CHI_QUAN_TRI_XOA = chi_quan_tri("Tài khoản dùng thử không xoá được b
 DAI_NHAT_TIEU_DE = 200
 DAI_NHAT_TOM_TAT = 500
 DAI_NHAT_NOI_DUNG = 40_000
+
+# ============================================================
+# HAI LOẠI BÀI
+#
+#   cau_chuyen  — câu chuyện khách hàng, kể về một sản phẩm đã bàn giao
+#   tin_cong_ty — thông báo của iMob (ký kết, sự kiện, tuyển dụng…)
+#
+# Danh sách này là NGUỒN SỰ THẬT: giá trị lạ bị từ chối ngay ở cửa. Không
+# chặn thì một lỗi gõ trong trang quản trị sẽ tạo ra một loại thứ ba mà
+# không trang nào hiển thị — bài viết biến mất mà chẳng có lỗi nào báo.
+# Giao diện phải dùng đúng hai chuỗi này (xem services/baiVietService.js).
+# ============================================================
+LOAI_CAU_CHUYEN = "cau_chuyen"
+LOAI_TIN_CONG_TY = "tin_cong_ty"
+LOAI_HOP_LE = {LOAI_CAU_CHUYEN, LOAI_TIN_CONG_TY}
 
 
 # ============================================================
@@ -97,14 +112,23 @@ def _can_db() -> None:
 # Công khai
 # ============================================================
 @router.get("/api/bai-viet")
-def danh_sach_cong_khai():
+def danh_sach_cong_khai(
+    loai: str | None = Query(default=None, description="cau_chuyen | tin_cong_ty"),
+):
     """Danh sách bài ĐÃ ĐĂNG, mới nhất trước. Không kèm thân bài.
+
+    Bỏ trống `loai` thì trả về cả hai loại.
 
     Chưa có database thì trả danh sách RỖNG chứ không báo lỗi — cả website đã
     theo nguyên tắc "database hỏng thì tắt riêng phần đó" (xem db.py), và một
     mục bài viết trống thì vô hại, còn một trang báo lỗi đỏ thì không.
     """
-    return db.danh_sach_bai_viet(chi_da_dang=True)
+    if loai is not None and loai not in LOAI_HOP_LE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Loại '{loai}' không có. Chỉ nhận: {', '.join(sorted(LOAI_HOP_LE))}.",
+        )
+    return db.danh_sach_bai_viet(chi_da_dang=True, loai=loai)
 
 
 @router.get("/api/bai-viet/{duong_dan}")
@@ -123,6 +147,7 @@ def doc_bai_cong_khai(duong_dan: str):
 # ============================================================
 class BaiVietVao(BaseModel):
     tieu_de: str = Field(min_length=1, max_length=DAI_NHAT_TIEU_DE)
+    loai: str = LOAI_CAU_CHUYEN
     tom_tat: str = Field(default="", max_length=DAI_NHAT_TOM_TAT)
     noi_dung: str = Field(default="", max_length=DAI_NHAT_NOI_DUNG)
     # id của ảnh trong bảng `anh` (tải lên qua /api/anh), hoặc bỏ trống.
@@ -144,6 +169,15 @@ def _chot_duong_dan(than: BaiVietVao, tru_ma: int | None = None) -> str:
             )
         return goc
     return duong_dan_chua_dung(than.tieu_de, tru_ma)
+
+
+def _chot_loai(than: BaiVietVao) -> str:
+    if than.loai not in LOAI_HOP_LE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Loại '{than.loai}' không có. Chỉ nhận: {', '.join(sorted(LOAI_HOP_LE))}.",
+        )
+    return than.loai
 
 
 def _chan_khach_thu_dang(vai: str, da_dang: bool) -> None:
@@ -182,6 +216,7 @@ def them_bai(than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
     _chan_khach_thu_dang(vai, than.da_dang)
     return db.them_bai_viet(
         duong_dan=_chot_duong_dan(than),
+        loai=_chot_loai(than),
         tieu_de=than.tieu_de.strip(),
         tom_tat=than.tom_tat.strip(),
         noi_dung=than.noi_dung.strip(),
@@ -213,6 +248,7 @@ def sua_bai(ma: int, than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_
     bai = db.sua_bai_viet(
         ma=ma,
         duong_dan=_chot_duong_dan(than, tru_ma=ma),
+        loai=_chot_loai(than),
         tieu_de=than.tieu_de.strip(),
         tom_tat=than.tom_tat.strip(),
         noi_dung=than.noi_dung.strip(),

@@ -16,8 +16,12 @@ import Anh from "../ui/Anh.jsx";
 import { diaChiAnh } from "../../utils/anh.js";
 import { laKhachThu } from "../../services/adminService.js";
 import {
+  LOAI,
+  LOAI_CAU_CHUYEN,
+  LOAI_TIN_CONG_TY,
   danhSachBaiVietQuanTri,
   docBaiVietQuanTri,
+  duongDanBai,
   suaBaiViet,
   themBaiViet,
   xoaBaiViet,
@@ -60,6 +64,7 @@ const NUT_PHU =
   "font-medium text-ink-soft transition hover:border-brand hover:text-brand disabled:opacity-50";
 
 const BAI_TRONG = {
+  loai: LOAI_CAU_CHUYEN,
   tieu_de: "",
   tom_tat: "",
   noi_dung: "",
@@ -68,6 +73,15 @@ const BAI_TRONG = {
   duong_dan: "",
   da_dang: false,
 };
+
+/** Nhãn loại bài — để phân biệt ngay trong danh sách chung. */
+function NhanLoai({ loai }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-line px-2.5 py-0.5 text-[0.75rem] font-medium text-ink-faint">
+      {LOAI[loai]?.nhanNgan ?? loai}
+    </span>
+  );
+}
 
 /** Dòng trạng thái: nháp hay đã đăng. */
 function Nhan({ daDang }) {
@@ -195,6 +209,7 @@ export default function MucBaiViet() {
     setBao("");
     try {
       const gui = {
+        loai: ban.loai,
         tieu_de: ban.tieu_de,
         tom_tat: ban.tom_tat,
         noi_dung: ban.noi_dung,
@@ -250,8 +265,8 @@ export default function MucBaiViet() {
 
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm leading-relaxed text-ink-soft">
-            Bài nháp chỉ mình bạn thấy. Chỉ bài đã đăng mới hiện ở{" "}
-            <span className="font-mono text-ink">/cau-chuyen</span>.
+            Bài nháp chỉ mình bạn thấy. Chỉ bài đã đăng mới hiện ra ngoài web,
+            ở mục tương ứng với loại của nó.
           </p>
           <button type="button" onClick={moBaiMoi} className={NUT_CHINH}>
             <Plus className="h-4 w-4" aria-hidden="true" />
@@ -285,10 +300,11 @@ export default function MucBaiViet() {
                     <span className="truncate text-[0.9375rem] font-semibold text-ink">
                       {bai.tieu_de}
                     </span>
+                    <NhanLoai loai={bai.loai} />
                     <Nhan daDang={bai.da_dang} />
                   </p>
                   <p className="mt-0.5 truncate text-[0.8125rem] text-ink-faint">
-                    <span className="font-mono">/cau-chuyen/{bai.duong_dan}</span>
+                    <span className="font-mono">{duongDanBai(bai)}</span>
                     {bai.da_dang && bai.dang_luc
                       ? ` · đăng ${ngayViet(bai.dang_luc)}`
                       : ""}
@@ -371,6 +387,35 @@ export default function MucBaiViet() {
       )}
 
       <div className="space-y-4">
+        {/* Chọn loại đặt TRÊN CÙNG vì nó quyết định bài nằm ở mục nào và địa
+            chỉ ra sao — biết trước thì khỏi viết xong mới phát hiện nhầm mục. */}
+        <fieldset>
+          <legend className="mb-1.5 block text-[0.8125rem] font-semibold text-ink-soft">
+            Bài này thuộc mục nào
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {[LOAI_CAU_CHUYEN, LOAI_TIN_CONG_TY].map((ma) => (
+              <button
+                key={ma}
+                type="button"
+                onClick={() => doi("loai")(ma)}
+                aria-pressed={ban.loai === ma}
+                className={
+                  "rounded-xl px-3.5 py-2 text-sm font-medium transition " +
+                  (ban.loai === ma
+                    ? "bg-brand text-tren-brand"
+                    : "border border-line text-ink-soft hover:border-brand hover:text-brand")
+                }
+              >
+                {LOAI[ma].nhan}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-ink-faint">
+            {LOAI[ban.loai]?.moTa}
+          </p>
+        </fieldset>
+
         <O
           nhan="Tiêu đề"
           giaTri={ban.tieu_de}
@@ -417,7 +462,7 @@ export default function MucBaiViet() {
             <>
               Địa chỉ bài trên web:{" "}
               <span className="font-mono text-ink-soft">
-                /cau-chuyen/{ban.duong_dan || "…"}
+                {LOAI[ban.loai]?.duongDan}/{ban.duong_dan || "…"}
               </span>
               . Bài đã đăng rồi thì ĐỪNG đổi — mọi link đã chia sẻ sẽ hỏng hết.
             </>

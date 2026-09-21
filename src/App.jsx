@@ -22,10 +22,10 @@ const DigitalTransformationPage = lazy(
 const RobotPage = lazy(() => import("./pages/RobotPage.jsx"));
 const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 
-// Mục "Câu chuyện khách hàng" — danh sách và trang đọc từng bài. Nội dung nằm
-// trong bảng bai_viet, soạn ở /admin. Cũng lazy(): khách vào trang chủ không
-// tải kèm, và mục này còn chưa có trong menu chính.
-const CauChuyenPage = lazy(() => import("./pages/CauChuyenPage.jsx"));
+// Bài viết: hai mục "Câu chuyện khách hàng" và "Tin công ty" dùng CHUNG một
+// component danh sách, khác nhau ở prop `loai`. Nội dung nằm trong bảng
+// bai_viet, soạn ở /admin. Cùng lazy() — khách vào trang chủ không tải kèm.
+const DanhSachBaiVietPage = lazy(() => import("./pages/DanhSachBaiVietPage.jsx"));
 const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
@@ -75,10 +75,25 @@ export default function App() {
                   />
                   <Route path="/robot" element={<RobotPage />} />
                   <Route path="/vr360" element={<Vr360Page />} />
-                  <Route path="/cau-chuyen" element={<CauChuyenPage />} />
+                  {/* Chuỗi "cau_chuyen"/"tin_cong_ty" viết thẳng ở đây thay
+                      vì import hằng số từ services/baiVietService.js: import
+                      sẽ kéo cả module dịch vụ vào bundle chính, trong khi hai
+                      trang kia đang cố ý tách ra bằng lazy(). */}
+                  <Route
+                    path="/cau-chuyen"
+                    element={<DanhSachBaiVietPage loai="cau_chuyen" />}
+                  />
                   <Route
                     path="/cau-chuyen/:duongDan"
-                    element={<BaiVietPage />}
+                    element={<BaiVietPage mucMacDinh="cau_chuyen" />}
+                  />
+                  <Route
+                    path="/tin-tuc"
+                    element={<DanhSachBaiVietPage loai="tin_cong_ty" />}
+                  />
+                  <Route
+                    path="/tin-tuc/:duongDan"
+                    element={<BaiVietPage mucMacDinh="tin_cong_ty" />}
                   />
                   <Route
                     path="/privacy-policy"

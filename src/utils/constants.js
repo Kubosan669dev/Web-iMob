@@ -55,28 +55,26 @@ export const NAV_ITEMS = [
     ],
   },
   { id: "about", label: "Về chúng tôi", href: "/#about" },
-  { id: "contact", label: "Liên hệ", href: "/#contact" },
 
-  // ─────────────────────────────────────────────────────────────
-  // MỤC "CÂU CHUYỆN" — ĐÃ LÀM XONG, CỐ Ý CHƯA BẬT.
+  // Mục "Tin tức" có danh sách con, giống mục "Công nghệ" ở trên.
   //
-  // Trang /cau-chuyen chạy bình thường và vào được bằng đường dẫn trực tiếp;
-  // chỉ là chưa có trong menu. Lý do: một mục menu dẫn tới trang mới có một
-  // hai bài trông thưa thớt hơn là chưa có mục nào.
+  // Đặt TRƯỚC "Liên hệ" cho đúng thứ tự đọc: xem dự án -> đọc chuyện khách ->
+  // liên hệ. Liên hệ luôn là mục cuối cùng.
   //
-  // KHI NÀO BẬT: có đủ khoảng 3 bài đã đăng. Bật bằng cách bỏ hai dấu // ở
-  // dòng dưới — không phải sửa gì thêm ở đâu khác.
-  //
-  // Đặt trước "Liên hệ" thì đúng thứ tự đọc hơn (xem sản phẩm → đọc chuyện
-  // khách → liên hệ), nhớ chuyển dòng lên trên lúc bật.
-  //
-  // Lưu ý nhỏ: mục cấp một trong Navbar vẽ bằng thẻ <a> chứ không phải <Link>,
-  // nên bấm vào sẽ tải lại cả trang thay vì chuyển mượt như các mục trong
-  // dropdown. Vẫn tới đúng trang, chỉ chậm hơn một nhịp. Muốn mượt thì cho
-  // mục này vào `children` của một mục khác, hoặc thêm nhánh <Link> cho
-  // NavItem trong components/layout/Navbar.jsx.
-  // { id: "cau-chuyen", label: "Câu chuyện", href: "/cau-chuyen" },
-  // ─────────────────────────────────────────────────────────────
+  // `to` (không phải `href`) vì đây là trang khác trong cùng ứng dụng: đi bằng
+  // <Link> thì chuyển trang không tải lại cả web. `href` chỉ dành cho các mục
+  // nhảy tới một khối trên trang chủ (dạng "/#about").
+  {
+    id: "tin-tuc",
+    label: "Tin tức",
+    to: "/tin-tuc",
+    children: [
+      { label: "Câu chuyện khách hàng", to: "/cau-chuyen" },
+      { label: "Tin công ty", to: "/tin-tuc" },
+    ],
+  },
+
+  { id: "contact", label: "Liên hệ", href: "/#contact" },
 ];
 
 // Mạng xã hội hiển thị ở Footer — id khớp với icon map trong Footer.jsx,

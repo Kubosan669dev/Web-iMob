@@ -1,35 +1,57 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Loader2, ArrowRight } from "lucide-react";
+import { BookOpen, Loader2, ArrowRight, Newspaper } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Anh from "../components/ui/Anh.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { diaChiAnh } from "../utils/anh.js";
-import { danhSachBaiViet, ngayViet } from "../services/baiVietService.js";
+import {
+  LOAI,
+  LOAI_CAU_CHUYEN,
+  LOAI_TIN_CONG_TY,
+  danhSachBaiViet,
+  duongDanBai,
+  ngayViet,
+} from "../services/baiVietService.js";
 
 // ============================================================
-// CauChuyenPage — danh sách "Câu chuyện khách hàng".
+// DanhSachBaiVietPage — MỘT component cho CẢ HAI mục:
+//   /cau-chuyen  câu chuyện khách hàng
+//   /tin-tuc     tin công ty
 //
-// VỀ CÁI TÊN: mục này được gọi là "Câu chuyện khách hàng" chứ không phải
-// "Tin tức". Chữ "tin tức" ngầm hứa có bài mới thường xuyên; ba tháng không
-// đăng là khách đọc thành "công ty này đang ảm đạm". "Câu chuyện" thì mỗi quý
-// một bài vẫn đàng hoàng — cùng một nội dung, cùng một công sức, nhưng bỏ
-// được cái bẫy tự đặt ra cho mình.
+// VÌ SAO DÙNG CHUNG chứ không viết hai trang: hai mục giống hệt nhau, chỉ
+// khác cái tên và câu dẫn. Hai file song song thì sớm muộn cũng có một bên
+// được sửa mà bên kia quên — và cái quên đó không báo lỗi, chỉ là hai mục
+// trên cùng một web bỗng trông khác nhau.
 //
-// VỀ TRẠNG THÁI TRỐNG: chưa có bài nào thì trang KHÔNG hiện lưới rỗng mà hiện
-// một câu tử tế. Một mục mở ra thấy trắng trơn còn tệ hơn là chưa có mục nào.
+// VỀ CÁI TÊN "CÂU CHUYỆN": mục chuyện khách hàng cố ý KHÔNG gọi là "tin tức".
+// Chữ "tin tức" ngầm hứa có bài mới thường xuyên; ba tháng không đăng là khách
+// đọc thành "công ty này đang ảm đạm". Mục "Tin công ty" thì đúng là tin tức
+// nên gọi thẳng như vậy.
+//
+// VỀ TRẠNG THÁI TRỐNG: chưa có bài nào thì KHÔNG hiện lưới rỗng mà hiện một
+// câu tử tế kèm lối đi tiếp. Một mục mở ra thấy trắng trơn còn tệ hơn là chưa
+// có mục nào.
 // ============================================================
-export default function CauChuyenPage() {
+export default function DanhSachBaiVietPage({ loai = LOAI_CAU_CHUYEN }) {
   const congTy = useCongTy();
-  useDocumentTitle(`Câu chuyện khách hàng — ${congTy.name}`);
+  const muc = LOAI[loai] ?? LOAI[LOAI_CAU_CHUYEN];
+  const Icon = loai === LOAI_TIN_CONG_TY ? Newspaper : BookOpen;
+
+  useDocumentTitle(`${muc.nhan} — ${congTy.name}`);
 
   const [baiViet, setBaiViet] = useState(null); // null = đang tải
   const [loi, setLoi] = useState("");
 
   useEffect(() => {
     let conHieuLuc = true;
-    danhSachBaiViet()
+    // Đổi mục là phải xoá danh sách cũ đi: không xoá thì trong lúc chờ máy chủ
+    // trả lời, khách vẫn đang nhìn bài của mục vừa rời khỏi.
+    setBaiViet(null);
+    setLoi("");
+
+    danhSachBaiViet(loai)
       .then((ds) => conHieuLuc && setBaiViet(Array.isArray(ds) ? ds : []))
       .catch((err) => {
         if (!conHieuLuc) return;
@@ -42,7 +64,7 @@ export default function CauChuyenPage() {
     return () => {
       conHieuLuc = false;
     };
-  }, []);
+  }, [loai]);
 
   return (
     <section className="relative overflow-hidden py-28 lg:py-32">
@@ -54,16 +76,36 @@ export default function CauChuyenPage() {
       <Container rong="max-w-5xl" className="relative">
         <header className="mb-12 border-b border-line pb-8">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand-soft px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand">
-            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-            Câu chuyện
+            <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+            {muc.nhanNgan}
           </span>
           <h1 className="text-3xl font-black tracking-tight text-ink sm:text-4xl">
-            Câu chuyện khách hàng
+            {muc.nhan}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft">
-            Những sản phẩm {congTy.name} đã bàn giao, kể lại từ góc nhìn của
-            người dùng thật — họ cần gì, chúng tôi làm gì, và kết quả ra sao.
+            {muc.moTa}
           </p>
+
+          {/* Chuyển qua lại giữa hai mục ngay tại đây. Khách vào được trang này
+              từ menu, nhưng đọc xong một bài thì quay lại danh sách chứ không
+              quay lên menu — chỗ này là nơi họ đang đứng. */}
+          <nav className="mt-6 flex flex-wrap gap-2" aria-label="Chọn mục">
+            {[LOAI_CAU_CHUYEN, LOAI_TIN_CONG_TY].map((ma) => (
+              <Link
+                key={ma}
+                to={LOAI[ma].duongDan}
+                aria-current={ma === loai ? "page" : undefined}
+                className={
+                  "rounded-full px-3.5 py-1.5 text-sm font-medium transition " +
+                  (ma === loai
+                    ? "bg-brand text-tren-brand"
+                    : "border border-line text-ink-soft hover:border-brand hover:text-brand")
+                }
+              >
+                {LOAI[ma].nhan}
+              </Link>
+            ))}
+          </nav>
         </header>
 
         {baiViet === null ? (
@@ -74,7 +116,9 @@ export default function CauChuyenPage() {
         ) : baiViet.length === 0 ? (
           <div className="rounded-2xl border border-line bg-paper/40 px-6 py-14 text-center">
             <p className="text-base font-semibold text-ink">
-              Chúng tôi đang viết những câu chuyện đầu tiên.
+              {loai === LOAI_TIN_CONG_TY
+                ? "Chưa có tin nào ở mục này."
+                : "Chúng tôi đang viết những câu chuyện đầu tiên."}
             </p>
             <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-soft">
               {loi
@@ -94,7 +138,7 @@ export default function CauChuyenPage() {
             {baiViet.map((bai) => (
               <li key={bai.id}>
                 <Link
-                  to={`/cau-chuyen/${bai.duong_dan}`}
+                  to={duongDanBai(bai)}
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-paper/40 transition hover:border-brand/40 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   <Anh

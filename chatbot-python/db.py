@@ -189,6 +189,10 @@ CREATE INDEX IF NOT EXISTS lien_he_moi_nhat ON lien_he (tao_luc DESC);
 CREATE TABLE IF NOT EXISTS bai_viet (
     id            BIGSERIAL PRIMARY KEY,
     duong_dan     TEXT UNIQUE NOT NULL,
+    -- 'cau_chuyen' (chuyện khách hàng) hoặc 'tin_cong_ty' (thông báo của iMob).
+    -- Hai loại nằm chung MỘT bảng vì chúng giống hệt nhau về cấu trúc và về
+    -- cách soạn; tách hai bảng là nhân đôi mọi thứ để đổi lấy một chữ.
+    loai          TEXT NOT NULL DEFAULT 'cau_chuyen',
     tieu_de       TEXT NOT NULL,
     tom_tat       TEXT NOT NULL DEFAULT '',
     noi_dung      TEXT NOT NULL DEFAULT '',
@@ -201,8 +205,16 @@ CREATE TABLE IF NOT EXISTS bai_viet (
     nguoi_sua     TEXT
 );
 
--- Câu truy vấn của trang công khai luôn là "da_dang = true, mới nhất trước".
-CREATE INDEX IF NOT EXISTS bai_viet_da_dang ON bai_viet (da_dang, dang_luc DESC);
+-- Bảng đã tạo từ bản trước (chạy thật 21/09/2026) thì CREATE TABLE IF NOT
+-- EXISTS ở trên không đụng tới, nên phải thêm cột riêng. Bài cũ mặc định là
+-- câu chuyện khách hàng — đúng với thực tế vì lúc đó chưa có loại nào khác.
+ALTER TABLE bai_viet
+    ADD COLUMN IF NOT EXISTS loai TEXT NOT NULL DEFAULT 'cau_chuyen';
+
+-- Câu truy vấn của trang công khai luôn là "đúng loại, da_dang = true,
+-- mới nhất trước" — ba cột đúng thứ tự đó.
+CREATE INDEX IF NOT EXISTS bai_viet_theo_loai
+    ON bai_viet (loai, da_dang, dang_luc DESC);
 """
 
 
@@ -667,12 +679,17 @@ def vai_tro_cua(ten_dang_nhap: str) -> str | None:
 # Danh sách KHÔNG kéo theo cột noi_dung: thân bài có thể vài nghìn chữ, mà
 # trang danh sách chỉ vẽ tiêu đề với tóm tắt. Xem thêm ghi chú ở danh_sach_anh.
 COT_TOM_LUOC = (
-    "id, duong_dan, tieu_de, tom_tat, anh_bia, ten_khach, "
+    "id, duong_dan, loai, tieu_de, tom_tat, anh_bia, ten_khach, "
     "da_dang, dang_luc, tao_luc, cap_nhat_luc, nguoi_sua"
 )
 
 
-def danh_sach_bai_viet(chi_da_dang: bool = True, gioi_han: int = 100) -> list[dict]:
+def danh_sach_bai_viet(
+    chi_da_dang: bool = True,
+    loai: str | None = None,
+    gioi_han: int = 100,
+) -> list[dict]:
+    """loai=None nghĩa là lấy mọi loại — trang quản trị dùng kiểu đó."""
     if not co_db():
         return []
     with pool().connection() as conn:
@@ -681,10 +698,11 @@ def danh_sach_bai_viet(chi_da_dang: bool = True, gioi_han: int = 100) -> list[di
                 f"""
                 SELECT {COT_TOM_LUOC} FROM bai_viet
                 WHERE da_dang = true
+                  AND (%s::text IS NULL OR loai = %s)
                 ORDER BY dang_luc DESC NULLS LAST, id DESC
                 LIMIT %s
                 """,
-                (gioi_han,),
+                (loai, loai, gioi_han),
             ).fetchall()
         # Trang quản trị: bài nháp lên trước để người viết thấy ngay việc dở dang.
         return conn.execute(
@@ -729,6 +747,7 @@ def duong_dan_dang_dung(duong_dan: str, tru_ma: int | None = None) -> bool:
 
 def them_bai_viet(
     duong_dan: str,
+    loai: str,
     tieu_de: str,
     tom_tat: str,
     noi_dung: str,
@@ -741,13 +760,13 @@ def them_bai_viet(
     with pool().connection() as conn:
         return conn.execute(
             """
-            INSERT INTO bai_viet (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia,
-                                  ten_khach, da_dang, dang_luc, nguoi_sua)
-            VALUES (%s, %s, %s, %s, %s, %s, %s,
+            INSERT INTO bai_viet (duong_dan, loai, tieu_de, tom_tat, noi_dung,
+                                  anh_bia, ten_khach, da_dang, dang_luc, nguoi_sua)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s,
                     CASE WHEN %s THEN now() ELSE NULL END, %s)
             RETURNING *
             """,
-            (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
+            (duong_dan, loai, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
              da_dang, da_dang, nguoi_sua),
         ).fetchone()
 
@@ -755,6 +774,7 @@ def them_bai_viet(
 def sua_bai_viet(
     ma: int,
     duong_dan: str,
+    loai: str,
     tieu_de: str,
     tom_tat: str,
     noi_dung: str,
@@ -775,6 +795,7 @@ def sua_bai_viet(
             """
             UPDATE bai_viet SET
                 duong_dan    = %s,
+                loai         = %s,
                 tieu_de      = %s,
                 tom_tat      = %s,
                 noi_dung     = %s,
@@ -791,7 +812,7 @@ def sua_bai_viet(
             WHERE id = %s
             RETURNING *
             """,
-            (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
+            (duong_dan, loai, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
              da_dang, da_dang, nguoi_sua, ma),
         ).fetchone()
 

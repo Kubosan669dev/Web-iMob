@@ -23,7 +23,7 @@ from pathlib import Path
 # Muốn thử Gemini thật thì chạy backend rồi gọi /api/chat, đừng bật ở đây.
 os.environ["GEMINI_API_KEY"] = ""
 
-from api_bai_viet import tao_duong_dan  # noqa: E402
+from api_bai_viet import LOAI_HOP_LE, tao_duong_dan  # noqa: E402
 from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
@@ -151,6 +151,12 @@ def kiem_duong_dan():
         that = tao_duong_dan(tieu_de)
         kq.append((f"duong dan {tieu_de!r} -> {mong_doi!r} (nhan {that!r})",
                    that == mong_doi))
+
+    # Hai chuoi loai phai khop TUNG KY TU voi ban JavaScript
+    # (src/services/baiVietService.js). Lech mot chu thi may chu tra 400 va
+    # bai khong luu duoc — nen khoa lai o day.
+    kq.append((f"co dung 2 loai bai (nhan {sorted(LOAI_HOP_LE)})",
+               LOAI_HOP_LE == {"cau_chuyen", "tin_cong_ty"}))
 
     dai = tao_duong_dan("rat dai " * 40)
     kq.append((f"duong dan khong qua 80 ky tu (nhan {len(dai)})", len(dai) <= 80))

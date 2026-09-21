@@ -89,7 +89,7 @@ const MUC_TRANG_CHU = [
 const MUC_KHAC = [
   // khoa: null vì bài viết KHÔNG nằm trong bảng noi_dung mà có bảng riêng
   // (bai_viet). Mục này tự lưu lấy, không đi qua thanh lưu chung ở dưới.
-  { id: "cau-chuyen", nhan: "Câu chuyện", khoa: null, icon: BookOpen, neo: "/cau-chuyen" },
+  { id: "bai-viet", nhan: "Bài viết", khoa: null, icon: BookOpen, neo: "/tin-tuc" },
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
   { id: "tai-khoan-demo", nhan: "Đăng nhập thử", khoa: null, icon: KeyRound },
   { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
@@ -1191,13 +1191,13 @@ export default function AdminPage() {
                 <MucTaiKhoanDemo />
               )}
             </Khung>
-          ) : muc === "cau-chuyen" ? (
+          ) : muc === "bai-viet" ? (
             <Khung>
               <TieuDeMuc
-                ghiChu="Bài viết của mục Câu chuyện khách hàng"
-                neo="/cau-chuyen"
+                ghiChu="Câu chuyện khách hàng và Tin công ty"
+                neo="/tin-tuc"
               >
-                Câu chuyện
+                Bài viết
               </TieuDeMuc>
               <MucBaiViet />
             </Khung>

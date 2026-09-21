@@ -6,7 +6,13 @@ import Anh from "../components/ui/Anh.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { diaChiAnh } from "../utils/anh.js";
-import { docBaiViet, tachDoan, ngayViet } from "../services/baiVietService.js";
+import {
+  LOAI,
+  LOAI_CAU_CHUYEN,
+  docBaiViet,
+  tachDoan,
+  ngayViet,
+} from "../services/baiVietService.js";
 
 // ============================================================
 // BaiVietPage — trang đọc một câu chuyện.
@@ -18,8 +24,12 @@ import { docBaiViet, tachDoan, ngayViet } from "../services/baiVietService.js";
 // CUỐI BÀI LUÔN CÓ MỘT VIỆC CỤ THỂ để làm tiếp (hỏi chatbot hoặc liên hệ).
 // Bài hay mà hết bài không có lối đi tiếp thì người đọc đóng tab, và công viết
 // coi như bỏ.
+//
+// `mucMacDinh` là loại SUY RA TỪ ĐƯỜNG DẪN đang mở, chỉ dùng khi chưa biết bài
+// thuộc loại nào — lúc đang tải và lúc không tìm thấy. Tải xong thì lấy theo
+// loại thật của bài, nên mở nhầm đường dẫn vẫn quay lại đúng mục.
 // ============================================================
-export default function BaiVietPage() {
+export default function BaiVietPage({ mucMacDinh = LOAI_CAU_CHUYEN }) {
   const { duongDan } = useParams();
   const congTy = useCongTy();
 
@@ -50,6 +60,7 @@ export default function BaiVietPage() {
   }, [duongDan]);
 
   const doan = tachDoan(bai?.noi_dung);
+  const muc = LOAI[bai?.loai ?? mucMacDinh] ?? LOAI[LOAI_CAU_CHUYEN];
 
   return (
     <section className="relative overflow-hidden py-28 lg:py-32">
@@ -60,11 +71,11 @@ export default function BaiVietPage() {
 
       <Container rong="max-w-3xl" className="relative">
         <Link
-          to="/cau-chuyen"
+          to={muc.duongDan}
           className="mb-8 inline-flex items-center gap-1 text-sm font-medium text-ink-soft transition hover:text-brand"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          Tất cả câu chuyện
+          {muc.nhan}
         </Link>
 
         {trangThai === "dang-tai" ? (
@@ -75,16 +86,16 @@ export default function BaiVietPage() {
         ) : trangThai === "khong-thay" ? (
           <div className="rounded-2xl border border-line bg-paper/40 px-6 py-14 text-center">
             <p className="text-base font-semibold text-ink">
-              Không tìm thấy câu chuyện này.
+              Không tìm thấy bài viết này.
             </p>
             <p className="mt-2 text-sm text-ink-soft">
               Có thể đường dẫn đã đổi, hoặc bài chưa được đăng.
             </p>
             <Link
-              to="/cau-chuyen"
+              to={muc.duongDan}
               className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
             >
-              Xem các câu chuyện khác
+              Xem các bài khác
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
