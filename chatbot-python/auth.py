@@ -212,6 +212,18 @@ def yeu_cau_dang_nhap(
     return _giai_ve(thong_tin)[0]
 
 
+def nguoi_dang_nhap(
+    thong_tin: HTTPAuthorizationCredentials | None = Depends(_bearer),
+) -> tuple[str, str]:
+    """Như yeu_cau_dang_nhap nhưng trả về CẢ (tên, vai trò).
+
+    Dùng cho đường dẫn mà cả hai vai đều vào được, nhưng BÊN TRONG có vài thao
+    tác chỉ quản trị mới được làm — ví dụ viết bài thì ai cũng viết, còn bấm
+    ĐĂNG thì không. Chặn kiểu đó phải nằm trong thân hàm, nên hàm cần biết vai.
+    """
+    return _giai_ve(thong_tin)
+
+
 def chi_quan_tri(ly_do: str = "Tài khoản dùng thử không được làm việc này."):
     """Sinh ra một dependency CHỈ nhận tài khoản quản trị thật.
 

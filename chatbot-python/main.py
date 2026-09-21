@@ -14,6 +14,8 @@ Các nhóm đường dẫn:
   /api/noi-dung       — nội dung website cho CMS         (api_noi_dung.py)
   /api/lien-he        — khách để lại thông tin           (api_lien_he.py)
   /api/anh            — ảnh tải lên từ trang quản trị     (api_anh.py)
+  /api/bai-viet       — "Câu chuyện khách hàng", công khai (api_bai_viet.py)
+  /api/quan-tri/bai-viet — bài viết cho CMS, thấy cả bài nháp
 
 NGUYÊN TẮC: database là TÙY CHỌN. Không có (hoặc chết) thì CMS và việc lưu liên
 hệ tự tắt, còn chatbot vẫn chạy y như cũ. Website cũng có bản JSON đóng gói sẵn
@@ -37,6 +39,7 @@ from pydantic import BaseModel
 
 import api_anh
 import api_auth
+import api_bai_viet
 import api_lien_he
 import api_noi_dung
 import auth
@@ -156,6 +159,7 @@ app.include_router(api_auth.router)
 app.include_router(api_noi_dung.router)
 app.include_router(api_lien_he.router)
 app.include_router(api_anh.router)
+app.include_router(api_bai_viet.router)
 
 # ============================================================
 # Mỗi khách một phiên chat riêng

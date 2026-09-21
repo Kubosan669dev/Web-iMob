@@ -23,6 +23,7 @@ from pathlib import Path
 # Muốn thử Gemini thật thì chạy backend rồi gọi /api/chat, đừng bật ở đây.
 os.environ["GEMINI_API_KEY"] = ""
 
+from api_bai_viet import tao_duong_dan  # noqa: E402
 from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
@@ -122,6 +123,41 @@ def kiem_chot_chan_gia():
     return kq
 
 
+# ============================================================
+# ĐƯỜNG DẪN BÀI VIẾT (thêm 21/09/2026)
+#
+# tao_duong_dan() biến tiêu đề tiếng Việt thành phần đuôi URL. Sai ở đây thì
+# không có lỗi nào hiện ra — chỉ là bài viết nằm ở một địa chỉ xấu hoặc khó gõ,
+# và sửa về sau thì mọi link đã chia sẻ chết theo.
+#
+# Chữ 'đ' là chỗ dễ sai nhất: nó KHÔNG phải 'd' cộng dấu mà là một chữ cái
+# riêng trong bảng mã, nên bước bỏ dấu thông thường không đụng tới nó. Quên
+# thay tay thì "đào tạo" ra thành "ao-tao" — vẫn chạy, chỉ là sai.
+# ============================================================
+DUONG_DAN_MONG_DOI = [
+    ("Yên Tử Số ra mắt", "yen-tu-so-ra-mat"),
+    ("Đào tạo chuyển đổi số", "dao-tao-chuyen-doi-so"),
+    ("Zalo Mini App Bảo tàng Quảng Ninh", "zalo-mini-app-bao-tang-quang-ninh"),
+    ("Đường ĐI — thử: dấu?!", "duong-di-thu-dau"),
+    ("ĐỦ ĐẦY ĐỦ", "du-day-du"),
+    ("   ", "bai-viet"),          # tiêu đề rỗng vẫn phải ra một đường dẫn dùng được
+    ("Bài 1 & Bài 2", "bai-1-bai-2"),
+]
+
+
+def kiem_duong_dan():
+    kq = []
+    for tieu_de, mong_doi in DUONG_DAN_MONG_DOI:
+        that = tao_duong_dan(tieu_de)
+        kq.append((f"duong dan {tieu_de!r} -> {mong_doi!r} (nhan {that!r})",
+                   that == mong_doi))
+
+    dai = tao_duong_dan("rat dai " * 40)
+    kq.append((f"duong dan khong qua 80 ky tu (nhan {len(dai)})", len(dai) <= 80))
+    kq.append(("duong dan khong ket thuc bang dau gach", not dai.endswith("-")))
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -152,6 +188,18 @@ def main():
             print(f"      FAIL — {ten}")
     print(f"      {len(PHAI_CHAN)} cau phai chan · "
           f"{len(KHONG_DUOC_CHAN)} cau khong duoc bat oan")
+
+    print()
+    print("[bai-viet] Duong dan sinh tu tieu de tieng Viet")
+    so_loi = 0
+    for ten, ok in kiem_duong_dan():
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            so_loi += 1
+            print(f"      FAIL — {ten}")
+    print(f"      {len(DUONG_DAN_MONG_DOI)} tieu de + 2 rang buoc do dai"
+          f"{'' if so_loi == 0 else f' — {so_loi} loi'}")
 
     print("\n" + "=" * 55)
     print(f"KẾT QUẢ: {dat}/{tong} kiểm tra ĐẠT.")

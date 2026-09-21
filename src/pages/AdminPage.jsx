@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   ArrowUpRight,
+  BookOpen,
   Building2,
   CheckCircle2,
   Download,
@@ -31,6 +32,7 @@ import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
 import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
+import MucBaiViet from "../components/admin/MucBaiViet.jsx";
 import MucSanPham from "../components/admin/MucSanPham.jsx";
 import MucTaiKhoanDemo from "../components/admin/MucTaiKhoanDemo.jsx";
 import MucTongQuan from "../components/admin/MucTongQuan.jsx";
@@ -85,6 +87,9 @@ const MUC_TRANG_CHU = [
 ];
 
 const MUC_KHAC = [
+  // khoa: null vì bài viết KHÔNG nằm trong bảng noi_dung mà có bảng riêng
+  // (bai_viet). Mục này tự lưu lấy, không đi qua thanh lưu chung ở dưới.
+  { id: "cau-chuyen", nhan: "Câu chuyện", khoa: null, icon: BookOpen, neo: "/cau-chuyen" },
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
   { id: "tai-khoan-demo", nhan: "Đăng nhập thử", khoa: null, icon: KeyRound },
   { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
@@ -1185,6 +1190,16 @@ export default function AdminPage() {
               ) : (
                 <MucTaiKhoanDemo />
               )}
+            </Khung>
+          ) : muc === "cau-chuyen" ? (
+            <Khung>
+              <TieuDeMuc
+                ghiChu="Bài viết của mục Câu chuyện khách hàng"
+                neo="/cau-chuyen"
+              >
+                Câu chuyện
+              </TieuDeMuc>
+              <MucBaiViet />
             </Khung>
           ) : muc === "tin-nhan" ? (
             laKhachThu ? (

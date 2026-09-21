@@ -22,6 +22,12 @@ const DigitalTransformationPage = lazy(
 const RobotPage = lazy(() => import("./pages/RobotPage.jsx"));
 const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 
+// Mục "Câu chuyện khách hàng" — danh sách và trang đọc từng bài. Nội dung nằm
+// trong bảng bai_viet, soạn ở /admin. Cũng lazy(): khách vào trang chủ không
+// tải kèm, và mục này còn chưa có trong menu chính.
+const CauChuyenPage = lazy(() => import("./pages/CauChuyenPage.jsx"));
+const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
+
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
 // LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
 const LegalPage = lazy(() => import("./pages/LegalPage.jsx"));
@@ -69,6 +75,11 @@ export default function App() {
                   />
                   <Route path="/robot" element={<RobotPage />} />
                   <Route path="/vr360" element={<Vr360Page />} />
+                  <Route path="/cau-chuyen" element={<CauChuyenPage />} />
+                  <Route
+                    path="/cau-chuyen/:duongDan"
+                    element={<BaiVietPage />}
+                  />
                   <Route
                     path="/privacy-policy"
                     element={<LegalPage slug="privacy-policy" />}

@@ -170,6 +170,39 @@ CREATE TABLE IF NOT EXISTS lien_he (
 );
 
 CREATE INDEX IF NOT EXISTS lien_he_moi_nhat ON lien_he (tao_luc DESC);
+
+-- Bài viết của mục "Câu chuyện khách hàng".
+--
+-- VÌ SAO LÀ BẢNG RIÊNG, KHÔNG PHẢI MỘT KHOÁ TRONG noi_dung: mọi khoá trong
+-- noi_dung được đọc HẾT một lượt mỗi lần khách mở bất kỳ trang nào
+-- (GET /api/noi-dung). Nhét bài viết vào đó thì ai vào trang chủ cũng kéo về
+-- toàn bộ thân bài của mọi bài viết — càng viết nhiều trang chủ càng nặng,
+-- trong khi trang chủ không dùng tới chữ nào. Bảng riêng còn cho phép lọc
+-- nháp/đã đăng ngay trong câu SQL và cho mỗi bài một đường dẫn riêng.
+--
+-- duong_dan là phần đuôi URL (/cau-chuyen/<duong_dan>), không dấu. UNIQUE vì
+-- hai bài trùng đường dẫn thì một bài vĩnh viễn không ai mở được.
+--
+-- noi_dung là CHỮ THUẦN, không phải HTML. Giao diện tách đoạn theo dòng trống
+-- rồi vẽ bằng <p>. Cố ý không nhận HTML: nội dung do người dùng gõ mà đem
+-- chèn thẳng vào trang là mở cửa cho XSS.
+CREATE TABLE IF NOT EXISTS bai_viet (
+    id            BIGSERIAL PRIMARY KEY,
+    duong_dan     TEXT UNIQUE NOT NULL,
+    tieu_de       TEXT NOT NULL,
+    tom_tat       TEXT NOT NULL DEFAULT '',
+    noi_dung      TEXT NOT NULL DEFAULT '',
+    anh_bia       TEXT,
+    ten_khach     TEXT,
+    da_dang       BOOLEAN NOT NULL DEFAULT false,
+    dang_luc      TIMESTAMPTZ,
+    tao_luc       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    cap_nhat_luc  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    nguoi_sua     TEXT
+);
+
+-- Câu truy vấn của trang công khai luôn là "da_dang = true, mới nhất trước".
+CREATE INDEX IF NOT EXISTS bai_viet_da_dang ON bai_viet (da_dang, dang_luc DESC);
 """
 
 
@@ -617,3 +650,154 @@ def vai_tro_cua(ten_dang_nhap: str) -> str | None:
     """
     nguoi = lay_nguoi_dung(ten_dang_nhap)
     return nguoi["vai_tro"] if nguoi else None
+
+
+# ============================================================
+# Bài viết — mục "Câu chuyện khách hàng"
+#
+# Hai đường đọc tách hẳn nhau:
+#   · danh_sach_bai_viet(chi_da_dang=True)  — trang công khai
+#   · danh_sach_bai_viet(chi_da_dang=False) — trang quản trị, thấy cả bài nháp
+#
+# Tách bằng THAM SỐ chứ không bằng hai hàm giống nhau, để chỗ lọc `da_dang`
+# chỉ nằm ở đúng một dòng SQL. Hai hàm song song thì sớm muộn cũng có một hàm
+# được sửa mà hàm kia quên, và bản quên chính là bản làm lộ bài nháp.
+# ============================================================
+
+# Danh sách KHÔNG kéo theo cột noi_dung: thân bài có thể vài nghìn chữ, mà
+# trang danh sách chỉ vẽ tiêu đề với tóm tắt. Xem thêm ghi chú ở danh_sach_anh.
+COT_TOM_LUOC = (
+    "id, duong_dan, tieu_de, tom_tat, anh_bia, ten_khach, "
+    "da_dang, dang_luc, tao_luc, cap_nhat_luc, nguoi_sua"
+)
+
+
+def danh_sach_bai_viet(chi_da_dang: bool = True, gioi_han: int = 100) -> list[dict]:
+    if not co_db():
+        return []
+    with pool().connection() as conn:
+        if chi_da_dang:
+            return conn.execute(
+                f"""
+                SELECT {COT_TOM_LUOC} FROM bai_viet
+                WHERE da_dang = true
+                ORDER BY dang_luc DESC NULLS LAST, id DESC
+                LIMIT %s
+                """,
+                (gioi_han,),
+            ).fetchall()
+        # Trang quản trị: bài nháp lên trước để người viết thấy ngay việc dở dang.
+        return conn.execute(
+            f"""
+            SELECT {COT_TOM_LUOC} FROM bai_viet
+            ORDER BY da_dang ASC, cap_nhat_luc DESC
+            LIMIT %s
+            """,
+            (gioi_han,),
+        ).fetchall()
+
+
+def lay_bai_viet_theo_duong_dan(duong_dan: str, chi_da_dang: bool = True) -> dict | None:
+    """Một bài đầy đủ (có thân bài) để vẽ trang đọc."""
+    if not co_db():
+        return None
+    with pool().connection() as conn:
+        return conn.execute(
+            """
+            SELECT * FROM bai_viet
+            WHERE duong_dan = %s AND (%s = false OR da_dang = true)
+            """,
+            (duong_dan, chi_da_dang),
+        ).fetchone()
+
+
+def lay_bai_viet(ma: int) -> dict | None:
+    if not co_db():
+        return None
+    with pool().connection() as conn:
+        return conn.execute("SELECT * FROM bai_viet WHERE id = %s", (ma,)).fetchone()
+
+
+def duong_dan_dang_dung(duong_dan: str, tru_ma: int | None = None) -> bool:
+    """Đường dẫn này đã có bài khác dùng chưa? (bỏ qua chính bài đang sửa)"""
+    with pool().connection() as conn:
+        return conn.execute(
+            "SELECT 1 FROM bai_viet WHERE duong_dan = %s AND id IS DISTINCT FROM %s",
+            (duong_dan, tru_ma),
+        ).fetchone() is not None
+
+
+def them_bai_viet(
+    duong_dan: str,
+    tieu_de: str,
+    tom_tat: str,
+    noi_dung: str,
+    anh_bia: str | None,
+    ten_khach: str | None,
+    da_dang: bool,
+    nguoi_sua: str,
+) -> dict:
+    """Thêm một bài. dang_luc chỉ được đặt khi bài THẬT SỰ được đăng."""
+    with pool().connection() as conn:
+        return conn.execute(
+            """
+            INSERT INTO bai_viet (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia,
+                                  ten_khach, da_dang, dang_luc, nguoi_sua)
+            VALUES (%s, %s, %s, %s, %s, %s, %s,
+                    CASE WHEN %s THEN now() ELSE NULL END, %s)
+            RETURNING *
+            """,
+            (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
+             da_dang, da_dang, nguoi_sua),
+        ).fetchone()
+
+
+def sua_bai_viet(
+    ma: int,
+    duong_dan: str,
+    tieu_de: str,
+    tom_tat: str,
+    noi_dung: str,
+    anh_bia: str | None,
+    ten_khach: str | None,
+    da_dang: bool,
+    nguoi_sua: str,
+) -> dict | None:
+    """Sửa một bài.
+
+    dang_luc GIỮ NGUYÊN nếu bài vốn đã đăng — sửa lỗi chính tả trong một bài
+    cũ không được làm nó nhảy lên đầu danh sách như bài mới. Chỉ đặt dang_luc
+    vào đúng lần đầu chuyển từ nháp sang đăng; gỡ xuống nháp thì xoá đi để lần
+    đăng sau lấy mốc mới.
+    """
+    with pool().connection() as conn:
+        return conn.execute(
+            """
+            UPDATE bai_viet SET
+                duong_dan    = %s,
+                tieu_de      = %s,
+                tom_tat      = %s,
+                noi_dung     = %s,
+                anh_bia      = %s,
+                ten_khach    = %s,
+                da_dang      = %s,
+                dang_luc     = CASE
+                                 WHEN %s = false THEN NULL
+                                 WHEN dang_luc IS NULL THEN now()
+                                 ELSE dang_luc
+                               END,
+                cap_nhat_luc = now(),
+                nguoi_sua    = %s
+            WHERE id = %s
+            RETURNING *
+            """,
+            (duong_dan, tieu_de, tom_tat, noi_dung, anh_bia, ten_khach,
+             da_dang, da_dang, nguoi_sua, ma),
+        ).fetchone()
+
+
+def xoa_bai_viet(ma: int) -> bool:
+    with pool().connection() as conn:
+        return conn.execute(
+            "DELETE FROM bai_viet WHERE id = %s RETURNING id", (ma,)
+        ).fetchone() is not None

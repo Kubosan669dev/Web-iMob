@@ -166,6 +166,12 @@ async function goi(duongDan, { method = "GET", than, canVe = true } = {}) {
   return res.json();
 }
 
+/** Cho các service khác dùng lại đúng lớp gọi API này (kèm vé, bắt 401, đọc
+ *  `detail` của FastAPI) thay vì tự viết fetch riêng. Viết lại một bản thứ hai
+ *  thì sớm muộn hai bản sẽ xử lý lỗi khác nhau, và bản quên xử lý 401 sẽ để
+ *  người dùng ngồi nhìn màn hình trắng sau khi vé hết hạn. */
+export { goi as goiApi };
+
 // ---------- Đăng nhập ----------
 export async function dangNhap(tenDangNhap, matKhau) {
   const kq = await goi("/api/dang-nhap", {
