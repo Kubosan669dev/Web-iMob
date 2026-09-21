@@ -156,9 +156,6 @@ ADMIN_PASSWORD=
 # Bỏ trống thì chatbot vẫn chạy bằng kho tri thức trong máy.
 GEMINI_API_KEY=
 
-# Tài khoản dùng thử (bỏ trống cả hai = tắt hẳn).
-TESTER_USER=
-TESTER_PASSWORD=
 ENV
 fi
 

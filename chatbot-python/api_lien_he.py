@@ -16,7 +16,7 @@ from auth import chi_quan_tri
 router = APIRouter(tags=["lien-he"])
 
 CHI_QUAN_TRI = chi_quan_tri(
-    "Tài khoản dùng thử không xem được thông tin khách hàng."
+    "Chỉ tài khoản quản trị mới xem được thông tin khách hàng."
 )
 
 REGEX_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")

@@ -14,7 +14,6 @@ import { O, ODai } from "./Fields.jsx";
 import ChonAnh from "./ChonAnh.jsx";
 import Anh from "../ui/Anh.jsx";
 import { diaChiAnh } from "../../utils/anh.js";
-import { laKhachThu } from "../../services/adminService.js";
 import {
   LOAI,
   LOAI_CAU_CHUYEN,
@@ -50,10 +49,9 @@ import {
 //    ngắt đoạn chỗ nào, ảnh bìa cắt ra sao. Xem thử ngay cạnh ô soạn thì sửa
 //    được trước khi đăng, thay vì đăng rồi mở web ra xem rồi quay lại sửa.
 //
-// 4. TÀI KHOẢN DÙNG THỬ KHÔNG ĐĂNG VÀ KHÔNG XOÁ ĐƯỢC.
-//    Giao diện ẩn hai nút đó đi cho đỡ bấm nhầm, nhưng HÀNG RÀO THẬT nằm ở máy
-//    chủ (api_bai_viet.py). Ẩn nút chỉ là phép lịch sự — mở F12 gõ một dòng
-//    fetch là qua được.
+// 4. CHỈ TÀI KHOẢN QUẢN TRỊ SOẠN ĐƯỢC BÀI.
+//    Hàng rào thật nằm ở máy chủ (api_bai_viet.py, dependency chi_quan_tri),
+//    không phải ở giao diện — ẩn nút đi thì mở F12 gõ một dòng fetch là qua.
 // ============================================================
 
 const NUT_CHINH =
@@ -142,8 +140,6 @@ function XemThu({ bai }) {
 }
 
 export default function MucBaiViet() {
-  const khachThu = laKhachThu();
-
   const [danhSach, setDanhSach] = useState(null); // null = đang tải
   const [dangSua, setDangSua] = useState(null); // null = đang xem danh sách
   const [ban, setBan] = useState(BAI_TRONG); // bản đang gõ dở
@@ -320,16 +316,14 @@ export default function MucBaiViet() {
                   Sửa
                 </button>
 
-                {!khachThu && (
-                  <button
-                    type="button"
-                    onClick={() => xoa(bai)}
-                    className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[0.8125rem] font-medium text-ink-faint transition hover:bg-loi-nen hover:text-loi"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    Xoá
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => xoa(bai)}
+                  className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[0.8125rem] font-medium text-ink-faint transition hover:bg-loi-nen hover:text-loi"
+                >
+                  <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  Xoá
+                </button>
               </li>
             ))}
           </ul>
@@ -470,14 +464,7 @@ export default function MucBaiViet() {
         />
 
         {/* ---------- Đăng lên web ---------- */}
-        {khachThu ? (
-          <p className="flex items-start gap-2.5 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-faint">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            Tài khoản dùng thử viết và sửa được bài nháp, nhưng không đăng bài lên
-            trang công khai.
-          </p>
-        ) : (
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-mist px-4 py-3.5">
+        <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-mist px-4 py-3.5">
             <input
               type="checkbox"
               checked={ban.da_dang}
@@ -493,8 +480,7 @@ export default function MucBaiViet() {
                 còn ở đây.
               </span>
             </span>
-          </label>
-        )}
+        </label>
       </div>
 
       {xemThu && <XemThu bai={ban} />}

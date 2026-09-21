@@ -132,28 +132,20 @@ CREATE TABLE IF NOT EXISTS anh (
 
 CREATE INDEX IF NOT EXISTS anh_moi_nhat ON anh (tao_luc DESC);
 
--- Dòng tài khoản hiện trên MÀN HÌNH ĐĂNG NHẬP để người kiểm thử tự vào.
+-- ⚠️ XOÁ BẢNG tai_khoan_demo (21/09/2026).
 --
--- ⚠️ CỘT mat_khau_hien LƯU MẬT KHẨU DẠNG THÔ, KHÔNG BĂM. Đây là CỐ Ý, không
--- phải sơ suất — mục đích của nó là ĐỂ IN RA MÀN HÌNH, mà chuỗi băm thì không
--- suy ngược lại được. Nói cách khác: mật khẩu này công khai theo thiết kế.
+-- Bảng đó lưu một mật khẩu DẠNG THÔ, cố ý, để in công khai lên màn hình đăng
+-- nhập cho người kiểm thử tự vào. Tính năng đã bỏ theo yêu cầu, nên để bảng
+-- nằm lại là giữ một mật khẩu rõ trong database mà không ai còn dùng tới —
+-- đúng thứ mình vừa muốn dọn đi.
 --
--- Vì vậy, hai điều bắt buộc phải nhớ:
---   · Đừng bao giờ đặt vào đây một mật khẩu đang dùng ở nơi khác.
---   · Bảng nguoi_dung VẪN chỉ lưu chuỗi băm. Bảng này KHÔNG dùng để đăng nhập,
---     nó chỉ nói "hiện dòng chữ gì lên màn hình". Đăng nhập vẫn đi qua bcrypt
---     như cũ, nên xoá sạch bảng này cũng không ai mất quyền vào.
---
--- CHECK (id = 1): bảng này chỉ được có ĐÚNG MỘT dòng. Không ràng buộc thì sớm
--- muộn cũng có hai dòng và không ai biết dòng nào đang hiệu lực.
-CREATE TABLE IF NOT EXISTS tai_khoan_demo (
-    id            INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-    bat           BOOLEAN NOT NULL DEFAULT false,
-    ten_hien      TEXT NOT NULL DEFAULT '',
-    mat_khau_hien TEXT NOT NULL DEFAULT '',
-    cap_nhat_luc  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    nguoi_sua     TEXT
-);
+-- Dòng này chạy mỗi lần khởi động và vô hại khi bảng đã biến mất. Khoảng vài
+-- tháng nữa, khi chắc chắn mọi máy chủ đều đã chạy qua bản này, gỡ đi được.
+DROP TABLE IF EXISTS tai_khoan_demo;
+
+-- Dọn nốt tài khoản mang vai 'khach_thu' nếu còn sót. Quên bước này là để hở
+-- một cửa vào vĩnh viễn bằng một mật khẩu từng được in công khai.
+DELETE FROM nguoi_dung WHERE vai_tro = 'khach_thu';
 
 -- Khách để lại thông tin (từ form liên hệ hoặc từ chatbot).
 -- ĐÂY LÀ DỮ LIỆU CÁ NHÂN — xem Nghị định 13/2023.
@@ -245,7 +237,6 @@ def khoi_tao() -> bool:
 
         _nap_noi_dung_lan_dau()
         _dat_tai_khoan_admin()
-        _dat_tai_khoan_thu()
     except Exception:
         log.exception(
             "Không kết nối được database — CMS và lưu liên hệ sẽ TẮT, "
@@ -362,85 +353,6 @@ def _dat_tai_khoan_admin() -> None:
             """,
             (ten, bam_mat_khau(mat_khau)),
         )
-
-
-def _dat_tai_khoan_thu() -> None:
-    """Tài khoản DÙNG THỬ cho người kiểm thử — mật khẩu hiện công khai ở /admin.
-
-    Bật bằng cách đặt cả hai biến TESTER_USER và TESTER_PASSWORD. Bỏ trống một
-    trong hai thì tài khoản bị XÓA khỏi database và dòng gợi ý ở màn hình đăng
-    nhập cũng tự biến mất — tắt bằng một biến môi trường, không phải sửa code.
-
-    ⚠️ VAI TRÒ 'khach_thu', KHÔNG PHẢI 'quan_tri'. Đây là điểm mấu chốt của cả
-    tính năng này: mật khẩu đã hiện công khai thì coi như cả internet đăng nhập
-    được. Tài khoản đó TUYỆT ĐỐI không được chạm vào bảng lien_he — trong đó là
-    họ tên, số điện thoại, email và lời nhắn của khách thật, tức dữ liệu cá nhân
-    thuộc phạm vi Nghị định 13/2023. Chặn ở máy chủ (api_lien_he.py dùng
-    yeu_cau_quan_tri) chứ không chỉ ẩn cái tab đi ở giao diện — ẩn giao diện thì
-    người ta vẫn gọi thẳng API đọc được.
-
-    Tài khoản thử VẪN sửa được nội dung website, vì nếu không thì chẳng kiểm thử
-    được gì. Rủi ro đó chấp nhận được: nội dung luôn khôi phục lại được bằng nút
-    "Nạp lại từ file gốc" trong trang quản trị.
-    """
-    from auth import VAI_KHACH_THU, bam_mat_khau
-
-    ten = os.getenv("TESTER_USER", "").strip()
-    mat_khau = os.getenv("TESTER_PASSWORD", "")
-
-    if not ten or not mat_khau:
-        # Dọn tài khoản thử cũ nếu có: quên xóa là để hở một cửa vào vĩnh viễn.
-        with pool().connection() as conn:
-            da_xoa = conn.execute(
-                "DELETE FROM nguoi_dung WHERE vai_tro = %s RETURNING ten_dang_nhap",
-                (VAI_KHACH_THU,),
-            ).fetchall()
-        if da_xoa:
-            log.info("Đã xóa tài khoản dùng thử (TESTER_USER/TESTER_PASSWORD bỏ trống).")
-        return
-
-    if len(mat_khau) < 8:
-        log.error("TESTER_PASSWORD phải dài ít nhất 8 ký tự — bỏ qua tài khoản thử.")
-        return
-
-    with pool().connection() as conn:
-        # Không cho trùng tên với tài khoản quản trị: nếu trùng, câu UPDATE bên
-        # dưới sẽ hạ chính tài khoản thật xuống vai khách thử và khóa mình ra
-        # ngoài phần Liên hệ.
-        dang_co = conn.execute(
-            "SELECT vai_tro FROM nguoi_dung WHERE ten_dang_nhap = %s",
-            (ten,),
-        ).fetchone()
-        if dang_co and dang_co["vai_tro"] != VAI_KHACH_THU:
-            log.error(
-                "TESTER_USER trùng tên với tài khoản quản trị '%s' — bỏ qua, "
-                "nếu không sẽ tự hạ quyền chính mình. Đặt tên khác đi.",
-                ten,
-            )
-            return
-
-        # Xóa tài khoản thử CŨ trước: đổi TESTER_USER sang tên mới mà không xóa
-        # tên cũ thì cả hai cùng đăng nhập được, trong khi màn hình chỉ hiện tên
-        # mới — một cửa vào mà không ai còn nhớ.
-        conn.execute(
-            "DELETE FROM nguoi_dung WHERE vai_tro = %s AND ten_dang_nhap <> %s",
-            (VAI_KHACH_THU, ten),
-        )
-        conn.execute(
-            """
-            INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau_hash, vai_tro)
-            VALUES (%s, %s, %s)
-            ON CONFLICT (ten_dang_nhap) DO UPDATE
-                SET mat_khau_hash = EXCLUDED.mat_khau_hash,
-                    vai_tro       = EXCLUDED.vai_tro
-            """,
-            (ten, bam_mat_khau(mat_khau), VAI_KHACH_THU),
-        )
-    log.warning(
-        "Tài khoản dùng thử '%s' đang BẬT — mật khẩu hiện công khai ở /admin. "
-        "Tài khoản này không xem được mục Liên hệ.",
-        ten,
-    )
 
 
 def dong() -> None:
@@ -614,54 +526,6 @@ def tong_dung_luong_anh() -> int:
             "SELECT COALESCE(SUM(kich_thuoc), 0) AS tong FROM anh"
         ).fetchone()
     return int(dong_tong["tong"])
-
-
-# ============================================================
-# Dòng tài khoản hiện ở màn hình đăng nhập
-#
-# Trước 20/08/2026 việc này chỉ cấu hình được bằng biến môi trường trên Render:
-# đổi một chữ cũng phải mở dashboard, sửa biến, chờ khởi động lại. Công ty yêu
-# cầu chỉnh thẳng trong /admin. Biến môi trường VẪN dùng được và làm giá trị
-# lùi về, nên bản cũ đang chạy không hỏng gì.
-# ============================================================
-def lay_tai_khoan_demo() -> dict | None:
-    """Cấu hình đang lưu trong database. None nếu chưa ai đặt gì."""
-    if not co_db():
-        return None
-    with pool().connection() as conn:
-        return conn.execute(
-            "SELECT bat, ten_hien, mat_khau_hien, cap_nhat_luc, nguoi_sua "
-            "FROM tai_khoan_demo WHERE id = 1"
-        ).fetchone()
-
-
-def ghi_tai_khoan_demo(bat: bool, ten: str, mat_khau: str, nguoi_sua: str) -> None:
-    with pool().connection() as conn:
-        conn.execute(
-            """
-            INSERT INTO tai_khoan_demo (id, bat, ten_hien, mat_khau_hien,
-                                        cap_nhat_luc, nguoi_sua)
-            VALUES (1, %s, %s, %s, now(), %s)
-            ON CONFLICT (id) DO UPDATE
-                SET bat           = EXCLUDED.bat,
-                    ten_hien      = EXCLUDED.ten_hien,
-                    mat_khau_hien = EXCLUDED.mat_khau_hien,
-                    cap_nhat_luc  = now(),
-                    nguoi_sua     = EXCLUDED.nguoi_sua
-            """,
-            (bat, ten, mat_khau, nguoi_sua),
-        )
-
-
-def vai_tro_cua(ten_dang_nhap: str) -> str | None:
-    """Vai trò của một tài khoản, hoặc None nếu không có tài khoản đó.
-
-    Trang quản trị dùng hàm này để cảnh báo đúng mức: đem tài khoản TOÀN QUYỀN
-    ra hiện công khai thì hậu quả khác hẳn so với một tài khoản chỉ sửa nội
-    dung, và người bấm nút phải thấy được sự khác nhau đó ngay lúc bấm.
-    """
-    nguoi = lay_nguoi_dung(ten_dang_nhap)
-    return nguoi["vai_tro"] if nguoi else None
 
 
 # ============================================================

@@ -8,7 +8,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
 import db
-from auth import yeu_cau_dang_nhap
+from auth import chi_quan_tri
+
+# ⚠️ yeu_cau_quan_tri chứ KHÔNG phải yeu_cau_dang_nhap (siết 21/09/2026).
+#
+# Sắp có tài khoản thành viên cho khách đăng ký ngoài website, và vé của họ do
+# CÙNG một nơi phát ra. Để nguyên "chỉ cần đăng nhập" thì bất kỳ ai đăng ký một
+# tài khoản thành viên cũng sửa được toàn bộ chữ trên website — bằng một lời
+# gọi API, không cần vào /admin.
+CHI_QUAN_TRI = chi_quan_tri("Chỉ tài khoản quản trị mới sửa được nội dung website.")
 
 router = APIRouter(tags=["noi-dung"])
 
@@ -35,7 +43,7 @@ def doc_noi_dung():
 def ghi_noi_dung(
     khoa: str,
     than: GhiNoiDung,
-    nguoi_sua: str = Depends(yeu_cau_dang_nhap),
+    nguoi_sua: str = Depends(CHI_QUAN_TRI),
 ):
     if khoa not in KHOA_HOP_LE:
         raise HTTPException(

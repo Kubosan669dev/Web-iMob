@@ -13,9 +13,9 @@ const KHOA_VE = "imob_admin_ve";
 const KHOA_TEN = "imob_admin_ten";
 const KHOA_VAI = "imob_admin_vai";
 
-// Hai vai trò — phải khớp với auth.py bên backend.
+// Vai trò — phải khớp với auth.py bên backend.
+// Vai 'khach_thu' đã bỏ hẳn 21/09/2026: chỉ còn một tài khoản quản trị.
 export const VAI_QUAN_TRI = "quan_tri";
-export const VAI_KHACH_THU = "khach_thu";
 
 // Backend gói free trên Render NGỦ sau 15 phút. Lần gọi đầu phải chờ máy chủ
 // thức dậy nên hạn chờ phải rộng — 45 giây. Trang admin có hiện thông báo
@@ -50,10 +50,6 @@ export function layVaiTro() {
   } catch {
     return VAI_QUAN_TRI;
   }
-}
-
-export function laKhachThu() {
-  return layVaiTro() === VAI_KHACH_THU;
 }
 
 function luuVe(ve, ten, vai) {
@@ -183,19 +179,6 @@ export async function dangNhap(tenDangNhap, matKhau) {
   return kq.ten_dang_nhap;
 }
 
-/** Tài khoản dùng thử để hiện ở màn hình đăng nhập. Trả null khi tính năng tắt.
- *
- *  Nuốt mọi lỗi: máy chủ đang ngủ hoặc bản backend cũ chưa có đường dẫn này thì
- *  chỉ là không hiện dòng gợi ý — tuyệt đối không được chặn người ta đăng nhập. */
-export async function taiKhoanThu() {
-  try {
-    const kq = await goi("/api/tai-khoan-thu", { canVe: false });
-    return kq?.ten && kq?.mat_khau ? kq : null;
-  } catch {
-    return null;
-  }
-}
-
 // ---------- Nội dung ----------
 export function docNoiDung() {
   return goi("/api/noi-dung", { canVe: false });
@@ -285,17 +268,4 @@ export function danhSachAnh() {
 
 export function xoaAnh(ma) {
   return goi(`/api/anh/${encodeURIComponent(ma)}`, { method: "DELETE" });
-}
-
-
-// ---------- Dòng tài khoản ở màn hình đăng nhập ----------
-export function docCaiDatDemo() {
-  return goi("/api/cai-dat-demo");
-}
-
-export function ghiCaiDatDemo({ bat, ten, matKhau }) {
-  return goi("/api/cai-dat-demo", {
-    method: "PUT",
-    than: { bat, ten, mat_khau: matKhau },
-  });
 }

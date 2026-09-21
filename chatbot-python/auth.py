@@ -30,22 +30,19 @@ JWT_ALG = "HS256"
 SO_GIO_HAN_VE = 8
 
 # ============================================================
-# HAI VAI TRÒ
+# VAI TRÒ
 #
-# quan_tri   — tài khoản thật của công ty. Làm được mọi thứ.
-# khach_thu  — tài khoản dùng thử, mật khẩu HIỆN CÔNG KHAI ở màn hình đăng nhập
-#              để người kiểm thử tự vào. Sửa được nội dung website, nhưng KHÔNG
-#              đọc được mục Liên hệ.
+# quan_tri — tài khoản của công ty, vào được /admin và làm được mọi thứ.
 #
-# Vì sao phải chặn mục Liên hệ: bảng lien_he chứa họ tên, số điện thoại, email
-# và lời nhắn của khách thật — dữ liệu cá nhân theo Nghị định 13/2023. Mật khẩu
-# đã công khai thì phải coi như cả internet đang cầm tài khoản đó.
+# Vai 'khach_thu' (tài khoản dùng thử, mật khẩu hiện công khai ở màn hình đăng
+# nhập) đã BỎ HẲN ngày 21/09/2026 theo yêu cầu: chỉ còn đúng MỘT tài khoản quản
+# trị. Mọi tài khoản mang vai đó bị xoá khi máy chủ khởi động (xem db.py).
 #
-# Chặn ở ĐÂY, tại máy chủ. Ẩn cái tab đi ở giao diện là vô nghĩa: mở F12 gõ một
-# dòng fetch là đọc được sạch.
+# Bộ máy phân vai vẫn giữ nguyên chứ không gỡ bỏ, vì sắp có vai 'thanh_vien'
+# cho khách đăng ký ngoài website. Lúc đó chi_quan_tri() là thứ duy nhất ngăn
+# một thành viên dùng vé của mình để gọi thẳng vào API quản trị.
 # ============================================================
 VAI_QUAN_TRI = "quan_tri"
-VAI_KHACH_THU = "khach_thu"
 
 # bcrypt chỉ xử lý tối đa 72 byte; dài hơn là phần thừa bị bỏ lặng lẽ.
 GIOI_HAN_BYTE_MAT_KHAU = 72
@@ -206,8 +203,12 @@ def yeu_cau_dang_nhap(
 ) -> str:
     """Dependency của FastAPI: gắn vào endpoint nào thì endpoint đó cần vé hợp lệ.
 
-    Trả về tên đăng nhập để endpoint biết ai đang sửa (ghi vào cột nguoi_sua).
-    Nhận CẢ HAI vai trò — dùng cho những việc tài khoản thử cũng được làm.
+    Trả về tên đăng nhập để endpoint biết ai đang thao tác.
+
+    ⚠️ Hàm này nhận MỌI vai trò, kể cả thành viên đăng ký ngoài website. Nó chỉ
+    dành cho đường dẫn của chính thành viên (hồ sơ, tư liệu họ gửi). Đường dẫn
+    quản trị phải dùng chi_quan_tri() — xem ghi chú ở đó. Tính tới 21/09/2026
+    không đường dẫn quản trị nào còn dùng hàm này.
     """
     return _giai_ve(thong_tin)[0]
 
@@ -217,20 +218,19 @@ def nguoi_dang_nhap(
 ) -> tuple[str, str]:
     """Như yeu_cau_dang_nhap nhưng trả về CẢ (tên, vai trò).
 
-    Dùng cho đường dẫn mà cả hai vai đều vào được, nhưng BÊN TRONG có vài thao
-    tác chỉ quản trị mới được làm — ví dụ viết bài thì ai cũng viết, còn bấm
-    ĐĂNG thì không. Chặn kiểu đó phải nằm trong thân hàm, nên hàm cần biết vai.
+    Dùng cho đường dẫn mà nhiều vai cùng vào được, nhưng BÊN TRONG có thao tác
+    chỉ một vai mới được làm. Chặn kiểu đó phải nằm trong thân hàm, nên hàm cần
+    biết vai trò của người gọi.
     """
     return _giai_ve(thong_tin)
 
 
-def chi_quan_tri(ly_do: str = "Tài khoản dùng thử không được làm việc này."):
+def chi_quan_tri(ly_do: str = "Tài khoản này không được làm việc đó."):
     """Sinh ra một dependency CHỈ nhận tài khoản quản trị thật.
 
     Nhận `ly_do` để mỗi đường dẫn nói đúng chuyện của mình. Bản đầu dùng chung
-    một câu "không xem được thông tin khách hàng" cho mọi chỗ, nên lúc tài khoản
-    thử bấm xóa ảnh lại nhận được câu nói về khách hàng — người đọc tưởng mình
-    bấm nhầm nút.
+    một câu cho mọi chỗ, nên bấm xoá ảnh lại nhận được câu nói về khách hàng —
+    người đọc tưởng mình bấm nhầm nút.
 
     Trả 403 chứ KHÔNG phải 401: 401 nghĩa là "chưa/hết đăng nhập" và trang admin
     sẽ đá người ta về màn hình đăng nhập, trong khi họ vẫn đang đăng nhập bình

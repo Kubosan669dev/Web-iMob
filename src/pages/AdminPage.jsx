@@ -11,7 +11,6 @@ import {
   FileText,
   Handshake,
   Inbox,
-  KeyRound,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -34,7 +33,6 @@ import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
 import MucBaiViet from "../components/admin/MucBaiViet.jsx";
 import MucSanPham from "../components/admin/MucSanPham.jsx";
-import MucTaiKhoanDemo from "../components/admin/MucTaiKhoanDemo.jsx";
 import MucTongQuan from "../components/admin/MucTongQuan.jsx";
 
 // ============================================================
@@ -91,7 +89,6 @@ const MUC_KHAC = [
   // (bai_viet). Mục này tự lưu lấy, không đi qua thanh lưu chung ở dưới.
   { id: "bai-viet", nhan: "Bài viết", khoa: null, icon: BookOpen, neo: "/tin-tuc" },
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
-  { id: "tai-khoan-demo", nhan: "Đăng nhập thử", khoa: null, icon: KeyRound },
   { id: "giao-dien", nhan: "Giao diện", khoa: "giaoDien", icon: Palette, neo: "/" },
   { id: "phap-ly", nhan: "Trang pháp lý", khoa: "legalPages", icon: FileText, neo: "/privacy-policy" },
 ];
@@ -869,12 +866,6 @@ export default function AdminPage() {
     setLyDoThoat(lyDo);
   });
 
-  // Tài khoản dùng thử (mật khẩu hiện công khai ở màn hình đăng nhập) không
-  // được xem mục Tin nhắn — trong đó là họ tên, số điện thoại, email của khách
-  // thật. Máy chủ mới là nơi chặn thật (auth.yeu_cau_quan_tri); ẩn ở đây chỉ để
-  // người test khỏi bấm vào một cái tab rồi nhận thông báo lỗi.
-  const laKhachThu = api.laKhachThu();
-
   // Còn thay đổi chưa lưu trong bộ nhớ hay không. Dùng cho effect tải nội dung
   // bên dưới — xem lý do ở đó.
   const conSuaDoRef = useRef(false);
@@ -1162,9 +1153,7 @@ export default function AdminPage() {
               Khác
             </p>
             <div className="space-y-0.5">
-              {MUC_KHAC.filter(
-                (m) => !(laKhachThu && (m.id === "tin-nhan" || m.id === "tai-khoan-demo"))
-              ).map((m) => (
+              {MUC_KHAC.map((m) => (
                 <NutMuc key={m.id} m={m} />
               ))}
             </div>
@@ -1178,19 +1167,6 @@ export default function AdminPage() {
 
           {muc === "tong-quan" ? (
             <MucTongQuan noiDung={noiDung} diChuyen={setMuc} />
-          ) : muc === "tai-khoan-demo" ? (
-            <Khung>
-              <TieuDeMuc ghiChu="Dòng tài khoản hiện sẵn cho người kiểm thử">
-                Đăng nhập thử
-              </TieuDeMuc>
-              {laKhachThu ? (
-                <p className="text-sm leading-relaxed text-ink-soft">
-                  Tài khoản dùng thử không đổi được cấu hình này.
-                </p>
-              ) : (
-                <MucTaiKhoanDemo />
-              )}
-            </Khung>
           ) : muc === "bai-viet" ? (
             <Khung>
               <TieuDeMuc
@@ -1202,16 +1178,7 @@ export default function AdminPage() {
               <MucBaiViet />
             </Khung>
           ) : muc === "tin-nhan" ? (
-            laKhachThu ? (
-              <Khung>
-                <p className="text-sm leading-relaxed text-ink-soft">
-                  Tài khoản dùng thử không xem được thông tin khách hàng. Mục này
-                  chứa họ tên, số điện thoại và email của khách thật.
-                </p>
-              </Khung>
-            ) : (
-              <MucTinNhan />
-            )
+            <MucTinNhan />
           ) : dangTai ? (
             <p className="flex items-center gap-2 py-10 text-sm text-ink-soft">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

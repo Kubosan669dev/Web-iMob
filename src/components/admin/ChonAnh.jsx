@@ -133,7 +133,6 @@ function KhoAnh({ dangChon, chon, dong }) {
   const [loi, setLoi] = useState("");
   const [daDung, setDaDung] = useState(0);
   const [toiDa, setToiDa] = useState(0);
-  const laKhachThu = api.laKhachThu();
 
   const nap = async () => {
     setLoi("");
@@ -229,16 +228,14 @@ function KhoAnh({ dangChon, chon, dong }) {
                   </span>
                 )}
 
-                {!laKhachThu && (
-                  <button
-                    type="button"
-                    onClick={() => xoa(tam)}
-                    aria-label={`Xóa ${tam.ten_goc}`}
-                    className="absolute right-1.5 top-1.5 rounded-lg bg-panel/90 p-1.5 text-ink-faint transition-colors hover:bg-loi-nen hover:text-loi"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => xoa(tam)}
+                  aria-label={`Xóa ${tam.ten_goc}`}
+                  className="absolute right-1.5 top-1.5 rounded-lg bg-panel/90 p-1.5 text-ink-faint transition-colors hover:bg-loi-nen hover:text-loi"
+                >
+                  <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                </button>
               </li>
             );
           })}

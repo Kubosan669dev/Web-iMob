@@ -26,24 +26,6 @@ import Logo from "../ui/Logo.jsx";
 // cận và bớt trống trải.
 // ============================================================
 
-// ============================================================
-// Ô TÀI KHOẢN DÙNG THỬ (công ty yêu cầu 20/08/2026: "hiển thị tên user
-// password ở đó để tester có thể truy cập vào").
-//
-// Tên và mật khẩu lấy từ MÁY CHỦ qua /api/tai-khoan-thu, không phải từ biến
-// VITE_ lúc build. Lý do: tài khoản thật nằm ở Render (biến TESTER_USER /
-// TESTER_PASSWORD) còn website build ở Vercel. Nếu chép mật khẩu sang một biến
-// VITE_ thì hai nơi sẽ lệch nhau ngay lần đổi mật khẩu đầu tiên — màn hình hiện
-// một mật khẩu cũ, người test gõ 5 lần rồi bị khóa IP 15 phút mà không hiểu vì
-// sao. Lấy từ API thì chỉ có một nguồn sự thật, và tắt cũng chỉ cần bỏ trống
-// biến trên Render, không phải build lại website.
-//
-// ⚠️ AN TOÀN: tài khoản này mang vai 'khach_thu' — sửa được nội dung website
-// nhưng KHÔNG đọc được mục Tin nhắn (họ tên, số điện thoại, email khách thật —
-// dữ liệu cá nhân theo Nghị định 13/2023). Chặn nằm ở máy chủ, xem
-// auth.yeu_cau_quan_tri và api_lien_he.py.
-// ============================================================
-
 const O_NHAP =
   "w-full rounded-xl border border-transparent bg-mist py-3 pl-11 text-[0.9375rem] " +
   "text-ink placeholder-ink-faint outline-none transition-colors " +
@@ -78,7 +60,6 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
   const [loi, setLoi] = useState("");
   const [dangGui, setDangGui] = useState(false);
   const [choLau, setChoLau] = useState(false);
-  const [taiKhoanThu, setTaiKhoanThu] = useState(null);
 
   // Bấm gửi -> hẹn giờ; xong (hoặc lỗi) -> phần dọn dẹp huỷ hẹn giờ, nên câu
   // giải thích không bao giờ loé lên sau khi việc đã xong.
@@ -90,17 +71,6 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
     const dongHo = setTimeout(() => setChoLau(true), NGUONG_CHO_LAU);
     return () => clearTimeout(dongHo);
   }, [dangGui]);
-
-  // Hỏi máy chủ xem có tài khoản dùng thử không. Gọi ngầm và nuốt mọi lỗi:
-  // máy chủ đang ngủ thì chỉ là chưa hiện dòng gợi ý, người biết mật khẩu vẫn
-  // đăng nhập bình thường. `con` chặn việc gán state sau khi rời trang.
-  useEffect(() => {
-    let con = true;
-    api.taiKhoanThu().then((tk) => con && setTaiKhoanThu(tk));
-    return () => {
-      con = false;
-    };
-  }, []);
 
   const guiDi = async (e) => {
     e.preventDefault();
@@ -247,39 +217,6 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
               <p className="text-center text-[0.8125rem] text-ink-faint">
                 Máy chủ phản hồi chậm hơn bình thường, vui lòng đợi thêm giây lát.
               </p>
-            )}
-
-            {/* ---------- Dòng tài khoản dùng thử ----------
-                Công ty chốt 20/08/2026: gọn đúng MỘT DÒNG, theo mẫu ảnh gửi
-                kèm ("Demo: admin / imob@2025"). Bản trước là một ô có nhãn,
-                bảng hai dòng và nút riêng — công ty thấy rườm rà.
-
-                Vẫn giữ ba thứ, vì chúng không tốn thêm dòng nào:
-                  · font-mono cho phần tài khoản — mật khẩu hay có l/1/I và
-                    O/0, phông thường nhìn y hệt nhau, chép nhầm là gõ sai 5
-                    lần rồi bị khoá IP 15 phút.
-                  · select-all — nháy đúp một cái là bôi đen được cả cụm.
-                  · cả dòng là một cái nút: bấm vào tự điền sẵn hai ô ở trên.
-                    Nhìn vẫn là một dòng chữ, chỉ đậm nền lên khi rê chuột.
-
-                Câu "không xem được thông tin khách hàng" chuyển vào title —
-                đọc được khi rê chuột, mà không chiếm chỗ trên màn hình. */}
-            {taiKhoanThu && (
-              <button
-                type="button"
-                onClick={() => {
-                  setTen(taiKhoanThu.ten);
-                  setMatKhau(taiKhoanThu.mat_khau);
-                  setLoi("");
-                }}
-                title="Bấm để điền sẵn. Tài khoản này sửa được nội dung website nhưng không xem được thông tin khách hàng."
-                className="w-full rounded-xl bg-brand-soft px-4 py-3 text-center text-[0.8125rem] text-brand transition-colors hover:bg-brand hover:text-tren-brand"
-              >
-                Demo:{" "}
-                <span className="select-all break-all font-mono">
-                  {taiKhoanThu.ten} / {taiKhoanThu.mat_khau}
-                </span>
-              </button>
             )}
           </form>
         </div>

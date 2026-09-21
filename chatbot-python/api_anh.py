@@ -21,13 +21,16 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.responses import Response
 
 import db
-from auth import chi_quan_tri, yeu_cau_dang_nhap
+from auth import chi_quan_tri
 
 log = logging.getLogger("imob.anh")
 
 router = APIRouter(tags=["anh"])
 
-CHI_QUAN_TRI = chi_quan_tri("Tài khoản dùng thử không xóa được ảnh.")
+# Cả ba việc (tải lên, xem kho, xoá) đều siết về quản trị ngày 21/09/2026.
+# Trước đó chỉ cần "đã đăng nhập", mà sắp tới thành viên ngoài website cũng
+# đăng nhập được — để nguyên là mở kho ảnh của công ty cho người lạ tải lên.
+CHI_QUAN_TRI = chi_quan_tri("Chỉ tài khoản quản trị mới dùng được kho ảnh.")
 
 # ============================================================
 # Giới hạn
@@ -86,7 +89,7 @@ def _bat_buoc_co_db() -> None:
 @router.post("/api/anh", status_code=status.HTTP_201_CREATED)
 async def tai_len(
     file: UploadFile = File(...),
-    nguoi_tai_len: str = Depends(yeu_cau_dang_nhap),
+    nguoi_tai_len: str = Depends(CHI_QUAN_TRI),
 ):
     _bat_buoc_co_db()
 
@@ -155,7 +158,7 @@ async def tai_len(
 
 
 @router.get("/api/anh")
-def danh_sach(_: str = Depends(yeu_cau_dang_nhap)):
+def danh_sach(_: str = Depends(CHI_QUAN_TRI)):
     _bat_buoc_co_db()
     return {
         "danh_sach": db.danh_sach_anh(),

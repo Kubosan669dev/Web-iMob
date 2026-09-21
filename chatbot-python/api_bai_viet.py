@@ -11,14 +11,10 @@ mà đó đúng là loại nhầm lẫn khó phát hiện nhất — bài nháp 
 không có lỗi nào hiện lên, chỉ là khách đọc được thứ chưa ai duyệt. Tách gốc
 đường dẫn thì nhìn tên hàm là biết ngay hàm đó phục vụ ai.
 
-VỀ HAI VAI TRÒ (xem auth.py):
-  · quan_tri  — làm mọi thứ.
-  · khach_thu — viết và sửa bài NHÁP, nhưng KHÔNG đăng và KHÔNG xoá được.
-
-Mật khẩu của tài khoản dùng thử hiện công khai ở màn hình đăng nhập, nên phải
-coi như cả internet đang cầm tài khoản đó. Cho nó viết nháp thì không sao —
-nháp không ai nhìn thấy. Cho nó bấm ĐĂNG thì là cho người lạ viết lên trang
-công khai của công ty, đứng tên iMob.
+MỌI ĐƯỜNG DẪN QUẢN TRỊ ĐỀU ĐÒI VAI 'quan_tri', không phải chỉ "đã đăng nhập".
+Sắp có tài khoản thành viên cho khách ngoài website, và vé của họ do cùng một
+nơi phát ra — để nguyên "đã đăng nhập" là cho bất kỳ ai đăng ký cũng viết được
+lên trang công khai của công ty, đứng tên iMob.
 """
 
 import re
@@ -28,11 +24,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
 import db
-from auth import VAI_QUAN_TRI, chi_quan_tri, nguoi_dang_nhap
+from auth import chi_quan_tri
 
 router = APIRouter(tags=["bai-viet"])
 
-CHI_QUAN_TRI_XOA = chi_quan_tri("Tài khoản dùng thử không xoá được bài viết.")
+CHI_QUAN_TRI = chi_quan_tri("Chỉ tài khoản quản trị mới soạn được bài viết.")
 
 # Giới hạn độ dài ngay ở cửa. Thân bài 40.000 ký tự đã là khoảng 30 trang A4 —
 # dài hơn thế gần như chắc chắn là dán nhầm chứ không phải bài viết.
@@ -180,26 +176,15 @@ def _chot_loai(than: BaiVietVao) -> str:
     return than.loai
 
 
-def _chan_khach_thu_dang(vai: str, da_dang: bool) -> None:
-    if da_dang and vai != VAI_QUAN_TRI:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=(
-                "Tài khoản dùng thử viết và sửa được bài nháp, nhưng không đăng "
-                "bài lên trang công khai. Lưu bài ở dạng nháp giúp mình nhé."
-            ),
-        )
-
-
 @router.get("/api/quan-tri/bai-viet")
-def danh_sach_quan_tri(_ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
+def danh_sach_quan_tri(_ten: str = Depends(CHI_QUAN_TRI)):
     """Cả bài nháp lẫn bài đã đăng. Nháp xếp lên trước."""
     _can_db()
     return db.danh_sach_bai_viet(chi_da_dang=False)
 
 
 @router.get("/api/quan-tri/bai-viet/{ma}")
-def doc_bai_quan_tri(ma: int, _ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
+def doc_bai_quan_tri(ma: int, _ten: str = Depends(CHI_QUAN_TRI)):
     _can_db()
     bai = db.lay_bai_viet(ma)
     if bai is None:
@@ -210,10 +195,8 @@ def doc_bai_quan_tri(ma: int, _ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
 
 
 @router.post("/api/quan-tri/bai-viet", status_code=status.HTTP_201_CREATED)
-def them_bai(than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
+def them_bai(than: BaiVietVao, ten: str = Depends(CHI_QUAN_TRI)):
     _can_db()
-    ten, vai = ai
-    _chan_khach_thu_dang(vai, than.da_dang)
     return db.them_bai_viet(
         duong_dan=_chot_duong_dan(than),
         loai=_chot_loai(than),
@@ -228,23 +211,8 @@ def them_bai(than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
 
 
 @router.put("/api/quan-tri/bai-viet/{ma}")
-def sua_bai(ma: int, than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_nhap)):
+def sua_bai(ma: int, than: BaiVietVao, ten: str = Depends(CHI_QUAN_TRI)):
     _can_db()
-    ten, vai = ai
-
-    dang_co = db.lay_bai_viet(ma)
-    if dang_co is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"Không có bài #{ma}."
-        )
-
-    # Chặn hai việc khác nhau, cùng một lý do.
-    #   · Đăng một bài nháp — chuyện rõ ràng.
-    #   · Sửa một bài ĐANG ĐĂNG — cũng là viết lên trang công khai, chỉ khác là
-    #     đi cửa sau. Thiếu vế này thì tài khoản dùng thử vẫn thay được toàn bộ
-    #     chữ trong một bài đã đăng mà không phạm luật nào.
-    _chan_khach_thu_dang(vai, than.da_dang or dang_co["da_dang"])
-
     bai = db.sua_bai_viet(
         ma=ma,
         duong_dan=_chot_duong_dan(than, tru_ma=ma),
@@ -265,7 +233,7 @@ def sua_bai(ma: int, than: BaiVietVao, ai: tuple[str, str] = Depends(nguoi_dang_
 
 
 @router.delete("/api/quan-tri/bai-viet/{ma}")
-def xoa_bai(ma: int, _ten: str = Depends(CHI_QUAN_TRI_XOA)):
+def xoa_bai(ma: int, _ten: str = Depends(CHI_QUAN_TRI)):
     _can_db()
     if not db.xoa_bai_viet(ma):
         raise HTTPException(
