@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
-import KhungForm, { OChu } from "../components/taikhoan/KhungForm.jsx";
+import KhungXacThuc, { OChu } from "../components/taikhoan/KhungXacThuc.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { useTaiKhoan } from "../context/TaiKhoanContext.jsx";
@@ -48,7 +48,7 @@ export default function DangNhapPage() {
   }
 
   return (
-    <KhungForm
+    <KhungXacThuc
       tieuDe="Đăng nhập"
       dan="Đăng nhập để gửi tư liệu cho trợ lý ảo của iMob."
       loi={loi}
@@ -91,6 +91,6 @@ export default function DangNhapPage() {
         {dangGui && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
         {dangGui ? "Đang đăng nhập…" : "Đăng nhập"}
       </Button>
-    </KhungForm>
+    </KhungXacThuc>
   );
 }

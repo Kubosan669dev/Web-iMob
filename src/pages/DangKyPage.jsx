@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
-import KhungForm, { OChu } from "../components/taikhoan/KhungForm.jsx";
+import KhungXacThuc, { OChu } from "../components/taikhoan/KhungXacThuc.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { useTaiKhoan } from "../context/TaiKhoanContext.jsx";
@@ -75,7 +75,7 @@ export default function DangKyPage() {
   }
 
   return (
-    <KhungForm
+    <KhungXacThuc
       tieuDe="Tạo tài khoản"
       dan="Có tài khoản là bạn gửi được tư liệu cho trợ lý ảo của iMob: kinh nghiệm, câu hỏi hay gặp, thông tin cần đính chính."
       loi={loi}
@@ -143,6 +143,6 @@ export default function DangKyPage() {
         {dangGui && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
         {dangGui ? "Đang tạo tài khoản…" : "Tạo tài khoản"}
       </Button>
-    </KhungForm>
+    </KhungXacThuc>
   );
 }

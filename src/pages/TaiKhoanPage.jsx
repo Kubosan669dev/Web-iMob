@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { Check, Loader2, LogOut, Shield, Sparkles, UserRound } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import Button from "../components/ui/Button.jsx";
-import { OChu } from "../components/taikhoan/KhungForm.jsx";
+import { OChu } from "../components/taikhoan/KhungXacThuc.jsx";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import { useCongTy } from "../context/NoiDungContext.jsx";
 import { useTaiKhoan } from "../context/TaiKhoanContext.jsx";
@@ -31,7 +31,7 @@ function The({ tieuDe, mo_ta, children }) {
 function BaoKetQua({ loi, xong, chuXong }) {
   if (loi) {
     return (
-      <p role="alert" className="text-sm text-red-700">
+      <p role="alert" className="text-sm text-loi">
         {loi}
       </p>
     );

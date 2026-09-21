@@ -29,14 +29,14 @@ const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 const DanhSachBaiVietPage = lazy(() => import("./pages/DanhSachBaiVietPage.jsx"));
 const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
 
-// Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
-// LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
 // Tài khoản thành viên (21/09/2026): đăng ký, đăng nhập, hồ sơ. Cùng lazy()
 // — phần lớn khách vào xem website không bao giờ mở tới ba trang này.
 const DangNhapPage = lazy(() => import("./pages/DangNhapPage.jsx"));
 const DangKyPage = lazy(() => import("./pages/DangKyPage.jsx"));
 const TaiKhoanPage = lazy(() => import("./pages/TaiKhoanPage.jsx"));
 
+// Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
+// LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
 const LegalPage = lazy(() => import("./pages/LegalPage.jsx"));
 
 // Style-guide nội bộ: tách khỏi bundle chính bằng lazy() vì khách
@@ -107,8 +107,6 @@ export default function App() {
                     path="/tin-tuc/:duongDan"
                     element={<BaiVietPage mucMacDinh="tin_cong_ty" />}
                   />
-                  <Route path="/dang-nhap" element={<DangNhapPage />} />
-                  <Route path="/dang-ky" element={<DangKyPage />} />
                   <Route path="/tai-khoan" element={<TaiKhoanPage />} />
                   <Route
                     path="/privacy-policy"
@@ -119,6 +117,19 @@ export default function App() {
                     element={<LegalPage slug="terms-of-service" />}
                   />
                 </Route>
+
+                {/* Đăng nhập / đăng ký — ĐỨNG NGOÀI Layout, tức là không
+                    Navbar, không Footer, không nút chat. Một trang đăng nhập
+                    chỉ có đúng một việc phải làm; thanh menu thì bày ra mười
+                    lối đi khác, trong đó "Nhận tư vấn" trông y hệt một nút
+                    bấm chính. Lối quay về nằm ngay trong trang (logo ở góc và
+                    dòng "Về trang chủ") — xem components/taikhoan/KhungXacThuc.jsx.
+
+                    /tai-khoan thì NGƯỢC LẠI, vẫn nằm trong Layout: lúc đó
+                    người ta đã đăng nhập xong và đang duyệt website bình
+                    thường, cất menu đi chỉ làm họ mắc kẹt. */}
+                <Route path="/dang-nhap" element={<DangNhapPage />} />
+                <Route path="/dang-ky" element={<DangKyPage />} />
 
                 {/* Style-guide nội bộ — không Navbar/Footer */}
                 <Route path="/ui-kit" element={<UiKitPage />} />
