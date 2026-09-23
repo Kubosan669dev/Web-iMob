@@ -8,18 +8,36 @@ import { useCongTy } from "../../context/NoiDungContext.jsx";
 // Công ty yêu cầu 20/08/2026: đặt bản đồ ở chân trang và lấp chỗ trống trong
 // thẻ thông tin liên hệ.
 //
-// ⚠️ KHÔNG lấy thẳng `address` làm từ khoá tra bản đồ. Đã thử: chuỗi đầy đủ
-// "Văn phòng tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, phường Hạ Long,
-// tỉnh Quảng Ninh" KHÔNG tra ra vị trí nào — phần "Văn phòng tầng 3" làm hỏng
-// việc tra cứu. Kiểm bằng bộ tra cứu mở của OpenStreetMap:
-//     "Dốc Ngân Hàng, Hạ Long, Quảng Ninh"  -> 20.9572849, 107.0932340
-//                                              "Dốc Ngân Hàng, Phường Hạ Long"
-//     chuỗi địa chỉ đầy đủ                   -> không tìm thấy
-//     "HL68 Building" một mình               -> không tìm thấy (bản đồ mở chưa
-//                                              có tên toà nhà tư nhân này)
-// Nên `banDo` là một trường RIÊNG trong company.json, ghép tên toà nhà TRƯỚC
-// tên phố: Google biết toà nhà thì ghim đúng toà nhà, không biết thì lùi về
-// đúng con phố — mà con phố thì đã kiểm chứng là chính xác.
+// ⚠️ KHÔNG lấy thẳng `address` làm từ khoá tra bản đồ. Chuỗi đầy đủ "Văn phòng
+// tầng 3, Toà nhà HL68 Building, Dốc Ngân hàng, phường Hạ Long, tỉnh Quảng
+// Ninh" KHÔNG tra ra vị trí nào — phần "Văn phòng tầng 3" làm hỏng việc tra
+// cứu. Nên `banDo` là một trường RIÊNG trong company.json.
+//
+// SỬA 23/09/2026 — GHIM CŨ SAI CHỖ. Trước đó `banDo` là toạ độ
+// "20.9572849,107.0932340", tra được từ "Dốc Ngân Hàng" trên bản đồ mở
+// OpenStreetMap. Nhưng công ty cho biết văn phòng nằm trên ĐỒI CỘT 2, cách
+// đó một quãng — cái ghim đang chỉ vào vòng xuyến Dốc Ngân Hàng, chỗ quán
+// Ô Pal Coffee.
+//
+// Đã dựng thật khung nhúng này rồi chụp lại để đối chiếu (không đoán):
+//     "Đồi Cột 2, Hạ Long, Quảng Ninh"          -> ghim GIỮA PHỐ, không rõ toà nào
+//     "HL 68 Building, Đồi Cột 2, Hạ Long, …"   -> ghim ĐÚNG TOÀ NHÀ, có tên
+//                                                  "HL 68 Building" trên bản đồ
+//     "HL68 Building" (viết liền, đứng một mình) -> không tìm thấy
+// OpenStreetMap vẫn KHÔNG biết "Đồi Cột 2" lẫn "HL 68 Building"; chỉ Google
+// biết. Nên đừng tra lại bằng OSM rồi tưởng từ khoá này hỏng.
+//
+// Ghép tên toà nhà TRƯỚC tên phố: Google biết toà nhà thì ghim đúng toà nhà,
+// không biết thì lùi về đúng con phố.
+//
+// ⚠️ `address` VẪN GHI "Dốc Ngân hàng" — CỐ Ý, công ty quyết ngày 23/09/2026.
+// Tức là dòng chữ địa chỉ và cái ghim đang nói hai con phố khác nhau. Đừng
+// "sửa cho khớp": chuỗi địa chỉ đó còn nằm trong chính sách bảo mật và trong
+// kho kiến thức của chatbot, đổi nó là việc của công ty chứ không phải việc
+// dọn dẹp mã. Khi nào công ty chốt lại địa chỉ thì sửa cả 4 nơi một lượt:
+// src/data/company.json, src/data/legalPages.json, và hai chỗ trong
+// chatbot-python/data/imob_chatbot_data.json (company.street/full và
+// rag_chunks đầu tiên).
 //
 // Sửa được ở /admin → Thông tin công ty. Muốn ghim thật chính xác thì mở
 // Google Maps, bấm chuột phải vào đúng cửa, chọn toạ độ rồi dán vào ô đó dạng
