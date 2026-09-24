@@ -19,6 +19,7 @@ lên trang công khai của công ty, đứng tên iMob.
 
 import re
 import unicodedata
+from urllib.parse import unquote, urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -35,6 +36,25 @@ CHI_QUAN_TRI = chi_quan_tri("Chỉ tài khoản quản trị mới soạn đư�
 DAI_NHAT_TIEU_DE = 200
 DAI_NHAT_TOM_TAT = 500
 DAI_NHAT_NOI_DUNG = 40_000
+
+# ⚠️ Hai giới hạn dưới đây là cho thứ người dùng GÕ VÀO, không phải cho thứ
+# được lưu. Trước 24/09/2026 chúng là 80 và 100, và đó là nguyên nhân lỗi 422
+# sếp gặp khi đăng bài:
+#
+#   · Ô Đường dẫn: gõ tay một câu 81 ký tự là bị từ chối — trong khi máy chủ
+#     vẫn tự rút gọn thành đường dẫn ≤ 80 ký tự (xem tao_duong_dan). Chặn ở cửa
+#     một thứ mà bước sau vốn đã xử lý được là bắt người dùng làm việc thay máy.
+#   · Ô Ảnh bìa: nhận cả link ảnh ở trang khác (utils/anh.js), mà link ảnh
+#     Facebook dài 200–400 ký tự. Các mục khác trong /admin dùng CÙNG ô chọn ảnh
+#     lại không giới hạn — cùng một link, dán ở Sản phẩm thì được, ở Bài viết thì
+#     hỏng.
+DAI_NHAT_DUONG_DAN_NHAP = 300
+DAI_NHAT_ANH_BIA = 2000
+
+# Tên miền được coi là "của mình": dán link bài trên các tên miền này vào ô
+# Đường dẫn thì lấy phần đuôi. Link của mọi tên miền khác bị từ chối kèm lời
+# giải thích.
+TEN_MIEN_CUA_MINH = ("imob.vn", "localhost", "127.0.0.1")
 
 # ============================================================
 # HAI LOẠI BÀI
@@ -78,6 +98,54 @@ def tao_duong_dan(tieu_de: str) -> str:
         chu = chu.rstrip("-")
 
     return chu or "bai-viet"
+
+
+def duong_dan_tu_o_nhap(chu: str) -> str:
+    """Thứ người dùng gõ vào ô Đường dẫn -> đường dẫn dùng được.
+
+    Ô này tên là "Đường dẫn", và người ta hiểu chữ đó theo hai kiểu. Kiểu đúng
+    là phần đuôi địa chỉ của bài (ngay-nay-nam-truoc). Kiểu sai nhưng rất tự
+    nhiên là "link tới bài gốc" — dán cả link Facebook vào. Hàm này xử lý cả hai:
+
+      "https://imob.vn/tin-tuc/ngay-nay-nam-truoc" -> "ngay-nay-nam-truoc"
+      "/tin-tuc/ngay-nay-nam-truoc"                -> "ngay-nay-nam-truoc"
+      "https://facebook.com/..."                   -> 400, giải thích ô này là gì
+      "Ngày này năm trước"                         -> "ngay-nay-nam-truoc"
+
+    Trước 24/09/2026 link imob.vn không bị từ chối mà bị biến thành
+    "https-imob-vn-tin-tuc-ngay-nay-nam-truoc" — lỗi im lặng, chỉ lộ ra khi
+    đem đường dẫn đó đi chia sẻ.
+    """
+    chu = chu.strip()
+    la_link = "://" in chu or chu.lower().startswith("www.")
+    if la_link:
+        phan = urlsplit(chu if "://" in chu else "https://" + chu)
+        may = (phan.hostname or "").lower()
+        cua_minh = any(may == m or may.endswith("." + m) for m in TEN_MIEN_CUA_MINH)
+        if not cua_minh:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    "Ô «Đường dẫn» là phần đuôi địa chỉ của bài NGAY TRÊN imob.vn "
+                    "(ví dụ: ngay-nay-nam-truoc), không phải link tới trang khác. "
+                    "Muốn dẫn nguồn thì dán link vào cuối nội dung bài. Để trống ô "
+                    "này thì máy tự đặt theo tiêu đề."
+                ),
+            )
+        chu = unquote(phan.path)
+
+    # Còn dấu "/" (link của mình, hoặc gõ tay "/tin-tuc/abc") thì chỉ phần
+    # cuối là đường dẫn của bài; phần trước là mục, do loại bài quyết định.
+    if "/" in chu:
+        doan = [d for d in chu.split("/") if d.strip()]
+        if not doan:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Địa chỉ này không có phần đuôi của bài viết nào. Để trống ô «Đường dẫn» thì máy tự đặt theo tiêu đề.",
+            )
+        chu = doan[-1]
+
+    return tao_duong_dan(chu)
 
 
 def duong_dan_chua_dung(tieu_de: str, tru_ma: int | None = None) -> str:
@@ -146,18 +214,20 @@ class BaiVietVao(BaseModel):
     loai: str = LOAI_CAU_CHUYEN
     tom_tat: str = Field(default="", max_length=DAI_NHAT_TOM_TAT)
     noi_dung: str = Field(default="", max_length=DAI_NHAT_NOI_DUNG)
-    # id của ảnh trong bảng `anh` (tải lên qua /api/anh), hoặc bỏ trống.
-    anh_bia: str | None = Field(default=None, max_length=100)
+    # Một trong ba dạng: /api/anh/<mã> (tải lên), /anh/ten.webp (có sẵn trong
+    # website), hoặc https://… (ảnh ở trang khác) — xem src/utils/anh.js.
+    anh_bia: str | None = Field(default=None, max_length=DAI_NHAT_ANH_BIA)
     ten_khach: str | None = Field(default=None, max_length=200)
     da_dang: bool = False
     # Để trống thì máy tự đặt theo tiêu đề. Người dùng sửa được vì đổi tiêu đề
     # của một bài ĐÃ ĐĂNG mà đường dẫn đổi theo là làm chết mọi link đã chia sẻ.
-    duong_dan: str | None = Field(default=None, max_length=80)
+    # Giới hạn là cho chữ GÕ VÀO; đường dẫn lưu lại luôn ≤ 80 ký tự.
+    duong_dan: str | None = Field(default=None, max_length=DAI_NHAT_DUONG_DAN_NHAP)
 
 
 def _chot_duong_dan(than: BaiVietVao, tru_ma: int | None = None) -> str:
     if than.duong_dan and than.duong_dan.strip():
-        goc = tao_duong_dan(than.duong_dan)
+        goc = duong_dan_tu_o_nhap(than.duong_dan)
         if db.duong_dan_dang_dung(goc, tru_ma):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,

@@ -23,6 +23,11 @@ import {
   duongDanBai,
   suaBaiViet,
   themBaiViet,
+  GIOI_HAN,
+  loiDoDai,
+  laLinkTrangKhac,
+  LOI_LINK_TRANG_KHAC,
+  xemTruocDuongDan,
   xoaBaiViet,
   tachDoan,
   ngayViet,
@@ -198,6 +203,17 @@ export default function MucBaiViet() {
   const luu = async () => {
     if (!ban.tieu_de.trim()) {
       setLoi("Bài viết cần có tiêu đề.");
+      return;
+    }
+    // Chặn ở đây thay vì để máy chủ trả 422: câu lỗi nói đúng tên ô và đúng số
+    // ký tự phải bớt, mà không mất một vòng gọi mạng nào.
+    const quaDai = loiDoDai(ban);
+    if (quaDai) {
+      setLoi(quaDai);
+      return;
+    }
+    if (laLinkTrangKhac(ban.duong_dan)) {
+      setLoi(LOI_LINK_TRANG_KHAC);
       return;
     }
     setDangLuu(true);
@@ -414,6 +430,7 @@ export default function MucBaiViet() {
           nhan="Tiêu đề"
           giaTri={ban.tieu_de}
           doi={doi("tieu_de")}
+          toiDa={GIOI_HAN.tieu_de}
           moTa="Câu này hiện ở danh sách và trên tab trình duyệt."
         />
 
@@ -422,6 +439,7 @@ export default function MucBaiViet() {
           dongToiThieu={2}
           giaTri={ban.tom_tat}
           doi={doi("tom_tat")}
+          toiDa={GIOI_HAN.tom_tat}
           moTa="Một hai câu, hiện ngay dưới tiêu đề ở trang danh sách."
         />
 
@@ -429,6 +447,7 @@ export default function MucBaiViet() {
           nhan="Tên khách hàng"
           giaTri={ban.ten_khach}
           doi={doi("ten_khach")}
+          toiDa={GIOI_HAN.ten_khach}
           moTa="Hiện cạnh ngày đăng. Nhớ xin phép trước khi nêu tên đơn vị của khách."
         />
 
@@ -444,22 +463,32 @@ export default function MucBaiViet() {
           dongToiThieu={14}
           giaTri={ban.noi_dung}
           doi={doi("noi_dung")}
+          toiDa={GIOI_HAN.noi_dung}
           moTa="Để MỘT DÒNG TRỐNG giữa hai đoạn. Xuống dòng thường vẫn nằm trong cùng một đoạn."
         />
 
+        {/* Nhãn cũ chỉ ghi "Đường dẫn", trùng chữ với ô "Hoặc gõ đường dẫn" của
+            Ảnh bìa ngay phía trên, và rất dễ hiểu thành "link tới bài gốc".
+            Ngày 24/09/2026 chính nhầm lẫn đó sinh ra lỗi 422 khi đăng bài. */}
         <O
-          nhan="Đường dẫn"
+          nhan="Đường dẫn của bài trên imob.vn (không bắt buộc)"
           giaTri={ban.duong_dan}
           doi={doi("duong_dan")}
+          toiDa={GIOI_HAN.duong_dan}
           placeholder="để trống — máy tự đặt theo tiêu đề"
           moTa={
-            <>
-              Địa chỉ bài trên web:{" "}
-              <span className="font-mono text-ink-soft">
-                {LOAI[ban.loai]?.duongDan}/{ban.duong_dan || "…"}
-              </span>
-              . Bài đã đăng rồi thì ĐỪNG đổi — mọi link đã chia sẻ sẽ hỏng hết.
-            </>
+            laLinkTrangKhac(ban.duong_dan) ? (
+              <span className="font-medium text-loi">{LOI_LINK_TRANG_KHAC}</span>
+            ) : (
+              <>
+                Địa chỉ bài trên web sẽ là:{" "}
+                <span className="font-mono text-ink-soft">
+                  {LOAI[ban.loai]?.duongDan}/
+                  {xemTruocDuongDan(ban.duong_dan || ban.tieu_de) || "…"}
+                </span>
+                . Bài đã đăng rồi thì ĐỪNG đổi — mọi link đã chia sẻ sẽ hỏng hết.
+              </>
+            )
           }
         />
 

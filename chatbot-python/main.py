@@ -46,6 +46,7 @@ import api_thanh_vien
 import api_tu_lieu
 import auth
 import db
+import loi_nhap_lieu
 from imob_bot import ChatBot, KienThuc
 from imob_bot import gemini
 
@@ -156,6 +157,11 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+
+# Đổi lỗi 422 của FastAPI từ danh sách kỹ thuật thành một câu tiếng Việt
+# chỉ thẳng ô nào sai. Phải gắn TRƯỚC các router để không router nào lọt
+# ra ngoài — xem loi_nhap_lieu.py.
+loi_nhap_lieu.gan_vao(app)
 
 app.include_router(api_auth.router)
 app.include_router(api_noi_dung.router)

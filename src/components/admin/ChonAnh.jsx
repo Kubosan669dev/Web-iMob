@@ -436,8 +436,10 @@ export default function ChonAnh({ nhan, giaTri, doi, moTa, daSua = false }) {
 
       {/* ---------- Đường dẫn tay ---------- */}
       <details className="mt-2.5">
+        {/* Trước 24/09/2026 ghi "Hoặc gõ đường dẫn" — trùng chữ với ô Đường dẫn
+            của bài viết ngay phía dưới, người soạn không biết ô nào là ô nào. */}
         <summary className="cursor-pointer text-[0.8125rem] text-ink-faint transition-colors hover:text-ink-soft">
-          Hoặc gõ đường dẫn
+          Hoặc dán địa chỉ ảnh
         </summary>
         <input
           value={giaTri ?? ""}
@@ -450,6 +452,16 @@ export default function ChonAnh({ nhan, giaTri, doi, moTa, daSua = false }) {
           nhanh hơn ảnh tải lên đây, vì nó đi cùng website chứ không qua máy chủ API.
           Ảnh ở khối đầu trang nên để loại đó.
         </span>
+        {/* Ảnh ở trang khác vẫn được nhận (utils/anh.js), nhưng phải nói trước
+            cái giá của nó: link ảnh Facebook/Zalo có chữ ký hết hạn sau vài
+            ngày, và lúc đó ảnh bìa vỡ mà không ai được báo. */}
+        {/^(https?:)?\/\//i.test((giaTri ?? "").trim()) && (
+          <span className="mt-1.5 block rounded-xl bg-loi-nen px-3.5 py-2.5 text-[0.8125rem] leading-relaxed text-loi">
+            Đây là ảnh ở trang khác. Nếu trang đó xoá hoặc đổi ảnh thì ảnh ở đây cũng mất
+            — ảnh lấy từ Facebook, Zalo thường hết hạn sau vài ngày. Chắc nhất là tải ảnh
+            về máy rồi bấm <span className="font-semibold">Tải ảnh lên</span>.
+          </span>
+        )}
       </details>
 
       {moTa && (

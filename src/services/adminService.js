@@ -1,3 +1,4 @@
+import { docLoi } from "./loiMayChu.js";
 import { API_BASE_URL } from "../utils/constants.js";
 
 // ============================================================
@@ -130,8 +131,7 @@ async function goi(duongDan, { method = "GET", than, canVe = true } = {}) {
     // (vd "Sai quá nhiều lần. Thử lại sau 15 phút.") thay vì câu chung chung.
     let thongDiep = `Máy chủ báo lỗi ${res.status}.`;
     try {
-      const loi = await res.json();
-      if (typeof loi?.detail === "string") thongDiep = loi.detail;
+      thongDiep = docLoi(await res.json(), thongDiep).thongDiep;
     } catch {
       /* không đọc được thân lỗi — giữ câu mặc định */
     }
@@ -251,8 +251,7 @@ export async function taiAnhLen(file) {
   if (!res.ok) {
     let thongDiep = `Máy chủ báo lỗi ${res.status}.`;
     try {
-      const loi = await res.json();
-      if (typeof loi?.detail === "string") thongDiep = loi.detail;
+      thongDiep = docLoi(await res.json(), thongDiep).thongDiep;
     } catch {
       /* không đọc được thân lỗi */
     }

@@ -28,6 +28,7 @@ import api_thanh_vien as tv  # noqa: E402
 import api_tu_lieu as tl  # noqa: E402
 import auth  # noqa: E402
 import db  # noqa: E402
+import loi_nhap_lieu as lnl  # noqa: E402
 from imob_bot import ChatBot, KienThuc  # noqa: E402
 from imob_bot import guardrails as gr
 from imob_bot.text_utils import bo_dau
@@ -165,6 +166,43 @@ def kiem_duong_dan():
     dai = tao_duong_dan("rat dai " * 40)
     kq.append((f"duong dan khong qua 80 ky tu (nhan {len(dai)})", len(dai) <= 80))
     kq.append(("duong dan khong ket thuc bang dau gach", not dai.endswith("-")))
+
+    # --- O "Duong dan" nguoi dung go vao (24/09/2026) ---
+    # Loi 422 khi dang bai: go qua 80 ky tu, hoac dan link, vao o nay. Nay:
+    # link bai tren imob.vn -> lay phan duoi; link trang khac -> 400 kem giai
+    # thich; chu dai -> tu rut gon.
+    import api_bai_viet as bv
+    from fastapi import HTTPException
+
+    for vao, ra in (
+        ("https://imob.vn/tin-tuc/ngay-nay-nam-truoc", "ngay-nay-nam-truoc"),
+        ("www.imob.vn/cau-chuyen/yen-tu-so", "yen-tu-so"),
+        ("/tin-tuc/abc-def", "abc-def"),
+        ("http://localhost:5173/tin-tuc/bai-thu", "bai-thu"),
+        ("Ngày này năm trước", "ngay-nay-nam-truoc"),
+    ):
+        that = bv.duong_dan_tu_o_nhap(vao)
+        kq.append((f"o duong dan {vao!r} -> {ra!r} (nhan {that!r})", that == ra))
+
+    chu_dai = "Ngày này năm trước iMob cùng Quảng Ninh tham gia Triển lãm " * 3
+    that = bv.duong_dan_tu_o_nhap(chu_dai)
+    kq.append((f"o duong dan: chu dai {len(chu_dai)} ky tu duoc rut con <= 80 (nhan {len(that)})",
+               len(chu_dai) > 80 and len(that) <= 80))
+
+    for vao in ("https://www.facebook.com/imob.vn/posts/123",
+                "https://imob.vn.gia-mao.com/tin-tuc/abc",   # duoi gia mao
+                "https://imob.vn/"):                         # khong co phan duoi
+        try:
+            bv.duong_dan_tu_o_nhap(vao)
+            bi_chan = False
+        except HTTPException as e:
+            bi_chan = e.status_code == 400
+        kq.append((f"o duong dan {vao!r} phai bi tu choi 400", bi_chan))
+
+    # Gioi han cho chu GO VAO phai du cho thu nguoi ta that su dan: link anh
+    # Facebook 200-400 ky tu. Truoc day la 100 va 80.
+    kq.append(("gioi han anh bia >= 1000", bv.DAI_NHAT_ANH_BIA >= 1000))
+    kq.append(("gioi han o duong dan > 80", bv.DAI_NHAT_DUONG_DAN_NHAP > 80))
     return kq
 
 
@@ -299,6 +337,73 @@ def kiem_tu_lieu():
     return kq
 
 
+def kiem_loi_nhap_lieu():
+    """Cau loi 422 phai NEU DUNG O va DUNG SO, bang tieng Viet.
+
+    Co that ngay 23/09/2026: nguoi soan bai bam Luu tam lan, nam lan nhan dung
+    mot cau "May chu bao loi 422." Cac phep kiem duoi day giu cho cau do khong
+    quay lai.
+    """
+    kq = []
+
+    dai = [{"type": "string_too_long", "loc": ("body", "tom_tat"),
+            "ctx": {"max_length": 500}, "input": "a" * 812}]
+    cau = lnl.cau_tieng_viet(dai)
+    kq.append(("cau loi neu ten o bang tieng Viet", "Tóm tắt" in cau))
+    kq.append(("cau loi neu do dai dang co", "812" in cau))
+    kq.append(("cau loi neu gioi han", "500" in cau))
+    kq.append(("cau loi neu so ky tu phai bot", "312" in cau))
+    kq.append(("cau loi khong lot chu tieng Anh cua pydantic",
+               "String should have" not in cau and "string_too_long" not in cau))
+
+    thieu = [{"type": "missing", "loc": ("body", "tieu_de"), "input": {}}]
+    cau_thieu = lnl.cau_tieng_viet(thieu)
+    kq.append(("o thieu -> bao 'chua co gi'",
+               "Tiêu đề" in cau_thieu and "chưa có gì" in cau_thieu))
+
+    # Ten o chua co trong bang van phai chi dung cho, khong duoc nuot mat.
+    la = [{"type": "string_too_long", "loc": ("body", "truong_la"),
+           "ctx": {"max_length": 5}, "input": "x" * 9}]
+    kq.append(("ten o la van hien ra (khong nuot mat)",
+               "truong_la" in lnl.cau_tieng_viet(la)))
+
+    # Chi so mang phai bi bo qua, lay ten o that.
+    long_loc = [{"type": "missing", "loc": ("body", "muc", 2, "cau_hoi"), "input": {}}]
+    kq.append(("bo qua chi so mang, lay ten o cuoi",
+               "Câu hỏi" in lnl.cau_tieng_viet(long_loc)))
+
+    # Nhieu loi: neu toi da ba o roi dem phan con lai.
+    nhieu = [{"type": "string_too_long", "loc": ("body", k),
+              "ctx": {"max_length": 10}, "input": "c" * 30}
+             for k in ("tieu_de", "tom_tat", "noi_dung", "ten_khach", "duong_dan")]
+    cau_nhieu = lnl.cau_tieng_viet(nhieu)
+    kq.append(("nhieu loi: chi neu 3 o dau", cau_nhieu.count("đang dài") == 3))
+    kq.append(("nhieu loi: dem so o con lai", "Còn 2 ô nữa" in cau_nhieu))
+
+    kq.append(("danh sach rong van co cau tra ve", bool(lnl.cau_tieng_viet([]))))
+
+    # GIOI HAN ben Python va ben JS PHAI BANG NHAU. Lech thi hoac form chan oan,
+    # hoac form bao con cho ma may chu tra 422 — kieu loi khong ai ngo toi vi
+    # nhin rieng tung ben deu thay dung.
+    import re
+    import api_bai_viet as bv
+    from pathlib import Path
+    # Duong dan tinh tu CHINH FILE NAY, khong tinh tu thu muc dang dung: chay
+    # bo kiem thu tu thu muc goc du an la mot viec rat binh thuong.
+    js = (Path(__file__).resolve().parent.parent / "src" / "services" / "baiVietService.js").read_text(encoding="utf-8")
+    khoi = js.split("export const GIOI_HAN = {")[1].split("};")[0]
+    mau = r"(\w+):\s*(\d+)"
+    tu_js = {m.group(1): int(m.group(2)) for m in re.finditer(mau, khoi)}
+    for o, so_py in (("tieu_de", bv.DAI_NHAT_TIEU_DE),
+                     ("tom_tat", bv.DAI_NHAT_TOM_TAT),
+                     ("noi_dung", bv.DAI_NHAT_NOI_DUNG),
+                     ("duong_dan", bv.DAI_NHAT_DUONG_DAN_NHAP),
+                     ("anh_bia", bv.DAI_NHAT_ANH_BIA)):
+        kq.append((f"gioi han {o} khop giua Python va JS", tu_js.get(o) == so_py))
+
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -358,6 +463,19 @@ def main():
     print()
     print("[tu-lieu] Don chu, trang thai va gioi han do dai")
     phep = kiem_tu_lieu()
+    so_loi = 0
+    for ten, ok in phep:
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            so_loi += 1
+            print(f"      FAIL - {ten}")
+    print(f"      {len(phep)} phep kiem"
+          f"{'' if so_loi == 0 else f' - {so_loi} loi'}")
+
+    print()
+    print("[loi-422] Cau loi nhap lieu bang tieng Viet")
+    phep = kiem_loi_nhap_lieu()
     so_loi = 0
     for ten, ok in phep:
         tong += 1

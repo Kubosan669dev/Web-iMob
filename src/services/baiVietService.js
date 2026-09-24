@@ -39,6 +39,108 @@ export const LOAI = {
   },
 };
 
+// ============================================================
+// GIỚI HẠN ĐỘ DÀI
+//
+// Phải khớp với DAI_NHAT_* trong chatbot-python/api_bai_viet.py. Đặt ở đây một
+// bản để form đếm được ký tự và chặn TRƯỚC khi gửi đi.
+//
+// Vì sao cần chặn ở cả hai nơi: máy chủ chặn là để dữ liệu không hỏng, còn form
+// chặn là để người soạn biết mình đang vượt bao nhiêu NGAY LÚC GÕ. Chỉ chặn ở
+// máy chủ thì họ viết xong cả bài mới biết mình phải cắt — đúng chuyện đã xảy
+// ra ngày 23/09/2026.
+//
+// ⚠️ Sửa số ở đây thì sửa luôn bên api_bai_viet.py. Để lệch thì hoặc form chặn
+// oan, hoặc máy chủ trả 422 mà form bảo là vẫn còn chỗ.
+// ============================================================
+export const GIOI_HAN = {
+  tieu_de: 200,
+  tom_tat: 500,
+  noi_dung: 40000,
+  // Hai số dưới là cho chữ GÕ VÀO. Trước 24/09/2026 là 100 và 80 — link ảnh
+  // Facebook (200–400 ký tự) và một câu gõ tay 81 ký tự đều bị 422. Đường dẫn
+  // lưu lại vẫn luôn ≤ 80 ký tự vì máy chủ tự rút gọn.
+  anh_bia: 2000,
+  ten_khach: 200,
+  duong_dan: 300,
+};
+
+// ============================================================
+// XEM TRƯỚC ĐƯỜNG DẪN
+//
+// Bản sao của duong_dan_tu_o_nhap() + tao_duong_dan() bên
+// chatbot-python/api_bai_viet.py, CHỈ để hiện cho người soạn thấy đường dẫn
+// thật trông ra sao ngay lúc gõ. Máy chủ mới là nơi quyết định: lưu xong, form
+// nạp lại đúng đường dẫn máy chủ đã chốt, nên lỡ hai bản lệch nhau một chữ thì
+// người dùng vẫn thấy kết quả thật ngay sau khi bấm Lưu.
+// ============================================================
+const TEN_MIEN_CUA_MINH = ["imob.vn", "localhost", "127.0.0.1"];
+
+/** Là link tới một trang KHÁC imob.vn? (dán nhầm link Facebook vào ô Đường dẫn) */
+export function laLinkTrangKhac(chu) {
+  const c = (chu ?? "").trim();
+  if (!c.includes("://") && !c.toLowerCase().startsWith("www.")) return false;
+  try {
+    const may = new URL(c.includes("://") ? c : `https://${c}`).hostname.toLowerCase();
+    return !TEN_MIEN_CUA_MINH.some((m) => may === m || may.endsWith(`.${m}`));
+  } catch {
+    return true;
+  }
+}
+
+export const LOI_LINK_TRANG_KHAC =
+  "Ô «Đường dẫn» là phần đuôi địa chỉ của bài NGAY TRÊN imob.vn (ví dụ: ngay-nay-nam-truoc), " +
+  "không phải link tới trang khác. Muốn dẫn nguồn thì dán link vào cuối nội dung bài. " +
+  "Để trống ô này thì máy tự đặt theo tiêu đề.";
+
+/** "Ngày này năm trước" -> "ngay-nay-nam-truoc". Trả "" nếu chưa gõ gì. */
+export function xemTruocDuongDan(chu) {
+  let c = (chu ?? "").trim();
+  if (!c || laLinkTrangKhac(c)) return "";
+  if (c.includes("://") || c.toLowerCase().startsWith("www.")) {
+    try {
+      c = decodeURIComponent(new URL(c.includes("://") ? c : `https://${c}`).pathname);
+    } catch {
+      return "";
+    }
+  }
+  if (c.includes("/")) c = c.split("/").filter((d) => d.trim()).pop() ?? "";
+  let s = c
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Mn}/gu, "")
+    .replace(/đ/g, "d")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  if (s.length > 80) {
+    s = s.slice(0, 80);
+    if (s.includes("-")) s = s.slice(0, s.lastIndexOf("-"));
+    s = s.replace(/-+$/, "");
+  }
+  return s || "bai-viet";
+}
+
+/** Nhãn tiếng Việt của từng ô, để dựng câu lỗi "Ô «Tóm tắt» dài quá". */
+export const NHAN_O = {
+  tieu_de: "Tiêu đề",
+  tom_tat: "Tóm tắt",
+  noi_dung: "Nội dung bài",
+  anh_bia: "Ảnh bìa",
+  ten_khach: "Tên khách hàng",
+  duong_dan: "Đường dẫn",
+};
+
+/** Ô đầu tiên vượt giới hạn, hoặc chuỗi rỗng nếu mọi ô đều đạt. */
+export function loiDoDai(bai) {
+  for (const [o, toiDa] of Object.entries(GIOI_HAN)) {
+    const dai = (bai[o] ?? "").length;
+    if (dai > toiDa) {
+      return `Ô «${NHAN_O[o]}» đang dài ${dai} ký tự, tối đa ${toiDa}. Bạn rút bớt ${dai - toiDa} ký tự rồi lưu lại nhé.`;
+    }
+  }
+  return "";
+}
+
 /** Địa chỉ trang đọc của một bài, đặt theo đúng loại của nó.
  *
  *  Dùng hàm này ở mọi chỗ cần dựng link thay vì tự nối chuỗi: loại nào nằm

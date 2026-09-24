@@ -55,8 +55,32 @@ function MoTa({ children }) {
   );
 }
 
+/**
+ * Đếm ký tự cho những ô có giới hạn bên máy chủ.
+ *
+ * CỐ Ý KHÔNG dùng thuộc tính maxLength của trình duyệt. maxLength chặn êm ru:
+ * dán 900 chữ vào ô giới hạn 500 thì trình duyệt lấy 500 đầu, không báo gì, và
+ * người soạn đăng lên một đoạn tóm tắt cụt ngang mà không biết. Đếm rồi để họ
+ * tự cắt thì không mất chữ nào.
+ *
+ * Chỉ hiện khi đã dùng quá 80% — hiện suốt thì mười ô là mười con số nhấp nháy
+ * trong khi chẳng ô nào sắp chạm giới hạn.
+ */
+function Dem({ dangCo, toiDa }) {
+  if (!toiDa || dangCo < toiDa * 0.8) return null;
+  const qua = dangCo > toiDa;
+  return (
+    <span
+      className={`mt-1.5 block text-[0.8125rem] font-medium ${qua ? "text-loi" : "text-ink-faint"}`}
+    >
+      {dangCo}/{toiDa} ký tự
+      {qua ? ` — thừa ${dangCo - toiDa}, phải bớt đi mới lưu được.` : ""}
+    </span>
+  );
+}
+
 /** Ô nhập một dòng. */
-export function O({ nhan, giaTri, doi, moTa, daSua = false, ...props }) {
+export function O({ nhan, giaTri, doi, moTa, daSua = false, toiDa, ...props }) {
   return (
     <label className="block">
       <Nhan doi={daSua}>{nhan}</Nhan>
@@ -66,6 +90,7 @@ export function O({ nhan, giaTri, doi, moTa, daSua = false, ...props }) {
         onChange={(e) => doi(e.target.value)}
         {...props}
       />
+      <Dem dangCo={(giaTri ?? "").length} toiDa={toiDa} />
       <MoTa>{moTa}</MoTa>
     </label>
   );
@@ -78,7 +103,7 @@ export function O({ nhan, giaTri, doi, moTa, daSua = false, ...props }) {
  * Cao cố định thì hoặc chừa thừa một khoảng trống lớn, hoặc bắt người soạn cuộn
  * trong một ô bé xíu để đọc lại đoạn mình vừa viết.
  */
-export function ODai({ nhan, giaTri, doi, moTa, daSua = false, dongToiThieu = 3, ...props }) {
+export function ODai({ nhan, giaTri, doi, moTa, daSua = false, dongToiThieu = 3, toiDa, ...props }) {
   const oRef = useRef(null);
 
   useEffect(() => {
@@ -101,6 +126,7 @@ export function ODai({ nhan, giaTri, doi, moTa, daSua = false, dongToiThieu = 3,
         onChange={(e) => doi(e.target.value)}
         {...props}
       />
+      <Dem dangCo={(giaTri ?? "").length} toiDa={toiDa} />
       <MoTa>{moTa}</MoTa>
     </label>
   );
