@@ -337,3 +337,14 @@
     @apply text-brand underline underline-offset-2 hover:text-brand-deep;
   }
 }
+
+/* ------------------------------------------------------------
+   Khung chat của nền tảng iMob CMS (components/chatbot/ChatbotNenTang.jsx).
+   Khung chat do script của nền tảng tự gắn vào <body>, nằm ngoài React. Khi
+   rời các trang dùng Layout (vd sang /admin), component đặt
+   data-bot-nen-tang="an" lên <html> và quy tắc này giấu nó — đúng cả khi khung
+   chat xuất hiện SAU lúc rời trang (script tải bất đồng bộ).
+   ------------------------------------------------------------ */
+html[data-bot-nen-tang="an"] .imob-widget-container {
+  display: none !important;
+}

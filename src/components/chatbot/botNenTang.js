@@ -1,0 +1,63 @@
+// ============================================================
+// Chatbot của nền tảng iMob CMS (kho "Web iMob") — cấu hình và công tắc.
+//
+// Bot này KHÔNG chạy trong website. Website chỉ chèn khung chat của nền tảng
+// (2 file widget.css + widget.min.js); tri thức, AI và lịch sử hội thoại nằm
+// ở hệ thống iMob CMS. Quản lý tri thức: imob.hangdaaodieu.com → Quản lý tài
+// liệu → Web iMob.
+//
+// Tách khỏi ChatbotNenTang.jsx vì file .jsx chỉ nên xuất component (luật
+// react-refresh), còn Layout.jsx cần gọi dungBotMoi().
+// ============================================================
+
+// Địa chỉ hệ thống chatbot. Khi nền tảng chuyển sang hạ tầng iMob thì CHỈ đổi
+// dòng này — nhưng ĐỪNG đặt nó chung tên miền imob.vn: /api/* của imob.vn là
+// API của website (đăng nhập, bài viết…), hệ thống chatbot cũng dùng /api/v1/…
+// nên hai bên sẽ đụng nhau. Dùng tên miền con, ví dụ chatbot.imob.vn.
+export const GOC_BOT = "https://imob.hangdaaodieu.com";
+
+// Đổi số này khi nền tảng báo có bản khung chat mới — trình duyệt của khách sẽ
+// tải bản mới thay vì dùng bản cũ đã lưu.
+export const PHIEN_BAN_BOT = "20260926-suggestions-3";
+
+// Khoá của kho "Web iMob". Khoá này VỐN CÔNG KHAI — khung chat nào cũng phải
+// để nó trong mã trang. Thứ bảo vệ nó là danh sách tên miền cho phép bên nền
+// tảng (hiện khai báo: imob.vn). ⚠️ Đừng nhầm với khoá Gemini — cái đó là bí
+// mật và không bao giờ được nằm ở đây.
+//
+// Khoá imob_live_Zds… là của kho Yên Tử, không phải của kho này.
+export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
+
+// ============================================================
+// CÔNG TẮC
+//
+//   "thu"        — chỉ ai mở link imob.vn/?bot=moi mới thấy bot mới (nhớ trong
+//                  cả phiên, chuyển trang không mất). Mở ?bot=cu để quay lại.
+//                  Khách bình thường vẫn thấy bot iMob cũ.
+//   "chinh-thuc" — mọi khách đều thấy bot mới, bot cũ ẩn.
+//
+// Vì sao bắt đầu bằng "thu": kho Web iMob đang được nạp tri thức. Bật cho mọi
+// người lúc kho còn mỏng thì khách hỏi gì cũng nhận "chưa có thông tin".
+//
+// ⚠️ Trước khi chuyển sang "chinh-thuc": cho www.imob.vn tự chuyển về imob.vn.
+// Ô tên miền của nền tảng chỉ nhận MỘT tên miền (đã thử 01/10/2026), nên khách
+// vào bằng www.imob.vn sẽ bị nền tảng chặn (403).
+// ============================================================
+export const CHE_DO_BOT = "thu";
+
+const KHOA_PHIEN = "imob_dung_bot_moi";
+
+/** Trang hiện tại có dùng bot mới không. `search` là chuỗi "?bot=moi…". */
+export function dungBotMoi(search) {
+  if (CHE_DO_BOT === "chinh-thuc") return true;
+  const q = new URLSearchParams(search).get("bot");
+  try {
+    if (q === "moi") sessionStorage.setItem(KHOA_PHIEN, "1");
+    if (q === "cu") sessionStorage.removeItem(KHOA_PHIEN);
+    return sessionStorage.getItem(KHOA_PHIEN) === "1";
+  } catch {
+    // Trình duyệt chặn sessionStorage (chế độ riêng tư…): vẫn thử được, chỉ là
+    // chuyển trang thì phải mở lại link có ?bot=moi.
+    return q === "moi";
+  }
+}
