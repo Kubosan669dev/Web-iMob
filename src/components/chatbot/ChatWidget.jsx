@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { MessageCircle, X } from "lucide-react";
 import { onOpenChat } from "../../utils/chatBus.js";
 import { useGiaoDien } from "../../context/NoiDungContext.jsx";
+import { daTungDong, ghiDaDong } from "./chatDaDong.js";
 
 // TẢI TRỄ khung chat: ChatWindow kéo theo react-markdown (~150kB) nhưng
 // khách chỉ cần khi thực sự bấm mở chat. lazy() tách nó thành file riêng,
@@ -28,23 +29,6 @@ const ChatWindow = lazy(() => import("./ChatWindow.jsx"));
 // ở trang sau nữa là phiền. Ghi nhớ trong sessionStorage — hết phiên duyệt web
 // là quên, hôm sau khách quay lại vẫn được chào như thường.
 // ============================================================
-const KHOA_DA_DONG = "imob_chat_da_dong";
-
-function daTungDong() {
-  try {
-    return sessionStorage.getItem(KHOA_DA_DONG) === "1";
-  } catch {
-    return false; // chế độ riêng tư chặn storage — coi như chưa đóng lần nào
-  }
-}
-
-function ghiDaDong() {
-  try {
-    sessionStorage.setItem(KHOA_DA_DONG, "1");
-  } catch {
-    /* không ghi được cũng không sao, chỉ mất trí nhớ giữa các trang */
-  }
-}
 
 // Khung chờ trong lúc tải file ChatWindow (thường chỉ chớp mắt).
 // Giữ đúng hình dạng panel để không bị "giật" bố cục khi nội dung hiện ra.
@@ -61,7 +45,7 @@ function ChatWindowSkeleton() {
     Cả thẻ bấm được để mở chat; dấu X ở góc là bỏ qua. X đặt NGOÀI nút lớn
     (absolute) chứ không lồng vào trong: nút trong nút là HTML sai và trình đọc
     màn hình đọc ra lộn xộn. */
-function LoiChao({ chu, mo, bo }) {
+export function LoiChao({ chu, mo, bo }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12, scale: 0.94 }}
