@@ -348,3 +348,22 @@
 html[data-bot-nen-tang="an"] .imob-widget-container {
   display: none !important;
 }
+
+/* Không cho khung chat trồi lên che thanh menu (cao 65px, cố định ở đỉnh).
+   Nền tảng chỉ chừa 120px cho nút tròn bên dưới, chưa tính menu của mình, nên
+   trên laptop màn thấp hoặc máy đặt phóng to 125% khung chat đè lên menu
+   (đã gặp 01/10/2026). Số trừ = khoảng từ đáy màn hình tới đáy khung chat
+   (nền tảng: 24 + 90, trên điện thoại 16 + 80) + menu 65 + khe hở 12.
+   max(320px, …): màn hình quá thấp thì chấp nhận đè menu, còn hơn khung chat
+   bé tới mức không gõ được. Bộ chọn hai lớp để thắng CSS của nền tảng — file
+   đó tải SAU file này. */
+.imob-widget-container .imob-chatbox {
+  max-height: max(320px, calc(100vh - 191px));
+  max-height: max(320px, calc(100dvh - 191px));
+}
+@media (max-width: 480px) {
+  .imob-widget-container .imob-chatbox {
+    max-height: max(320px, calc(100vh - 173px));
+    max-height: max(320px, calc(100dvh - 173px));
+  }
+}

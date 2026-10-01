@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { GOC_BOT, KHOA_BOT, PHIEN_BAN_BOT } from "./botNenTang.js";
+import { onOpenChat } from "../../utils/chatBus.js";
 
 // ============================================================
 // Khung chat của nền tảng iMob CMS. Xem cấu hình và công tắc ở botNenTang.js.
@@ -44,11 +45,26 @@ function chenMotLan() {
   }
 }
 
+// Các nút "Chat với AI" trên trang (Hero, About, ServiceHero…) gọi openChat()
+// trong chatBus.js. Bot cũ tự nghe sự kiện đó; khung chat của nền tảng thì
+// không biết gì về nó, nên mình mở hộ bằng cách bấm nút tròn của nó. Khách bấm
+// lúc script còn đang tải thì chờ thêm tối đa ~5 giây.
+function moKhungChat(conLan = 25) {
+  const nut = document.getElementById("imob-toggle-btn");
+  if (nut) {
+    if (!document.querySelector(".imob-chatbox.open")) nut.click();
+    return;
+  }
+  if (conLan > 0) setTimeout(() => moKhungChat(conLan - 1), 200);
+}
+
 export default function ChatbotNenTang() {
   useEffect(() => {
     chenMotLan();
     delete document.documentElement.dataset.botNenTang;
+    const boNghe = onOpenChat(() => moKhungChat());
     return () => {
+      boNghe();
       document.documentElement.dataset.botNenTang = "an";
     };
   }, []);
