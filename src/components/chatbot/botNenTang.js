@@ -36,14 +36,14 @@ export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
 //                  Khách bình thường vẫn thấy bot iMob cũ.
 //   "chinh-thuc" — mọi khách đều thấy bot mới, bot cũ ẩn.
 //
-// Vì sao bắt đầu bằng "thu": kho Web iMob đang được nạp tri thức. Bật cho mọi
-// người lúc kho còn mỏng thì khách hỏi gì cũng nhận "chưa có thông tin".
+// Bật "chinh-thuc" ngày 01/10/2026. Cùng ngày đã cho www.imob.vn tự chuyển về
+// imob.vn trong nginx: ô tên miền của nền tảng chỉ nhận MỘT tên miền, khách ở
+// lại www sẽ bị nền tảng chặn (403). Đổi tên miền website thì nhớ cả hai chỗ.
 //
-// ⚠️ Trước khi chuyển sang "chinh-thuc": cho www.imob.vn tự chuyển về imob.vn.
-// Ô tên miền của nền tảng chỉ nhận MỘT tên miền (đã thử 01/10/2026), nên khách
-// vào bằng www.imob.vn sẽ bị nền tảng chặn (403).
+// Muốn quay về bot cũ: đổi lại thành "thu" rồi đẩy lên — mã bot cũ vẫn còn
+// nguyên (ChatWidget.jsx).
 // ============================================================
-export const CHE_DO_BOT = "thu";
+export const CHE_DO_BOT = "chinh-thuc";
 
 const KHOA_PHIEN = "imob_dung_bot_moi";
 
