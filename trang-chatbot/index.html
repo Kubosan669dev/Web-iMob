@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--
+  ============================================================
+  Trang chatbot riêng: https://chatbot.imob.vn
+
+  Yêu cầu của lãnh đạo (02/10/2026): một "không gian mới" chỉ để hỏi đáp,
+  KHÔNG có tin tức hay quảng cáo dịch vụ iMob — chỉ logo và hotline — để người
+  dùng không khó chịu hay nghi bị "bán hàng trá hình". Link này dùng để đi
+  truyền thông. Sau này có thể thêm mục bài viết trải nghiệm các địa phương.
+
+  Trang KHÔNG tự chạy AI: nó chèn khung chat của nền tảng iMob CMS (kho
+  "Web iMob", cùng kho với bot trên imob.vn) rồi dùng CSS kéo khung chat từ góc
+  phải ra giữa, chiếm gần hết màn hình. Cấu hình bot: xem
+  src/components/chatbot/botNenTang.js của website chính.
+
+  Đứng TÁCH khỏi app React: một file tĩnh, không build. nginx trỏ thẳng
+  chatbot.imob.vn vào thư mục này trong bản đang chạy (/var/www/imob/current/
+  trang-chatbot), nên mỗi lần triển khai website là trang này cập nhật theo.
+  ============================================================
+-->
+<title>Trợ lý ảo du lịch Quảng Ninh</title>
+<meta name="description" content="Hỏi đáp về du lịch, điểm đến và trải nghiệm ở Quảng Ninh. Trợ lý ảo trả lời ngay, miễn phí.">
+<meta name="theme-color" content="#4318d9">
+<link rel="icon" href="favicon.png">
+
+<!-- Xem trước khi dán link lên Facebook, Zalo -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chatbot.imob.vn/">
+<meta property="og:title" content="Trợ lý ảo du lịch Quảng Ninh">
+<meta property="og:description" content="Hỏi về điểm đến, lịch trình, ăn uống, trải nghiệm ở Quảng Ninh. Trợ lý ảo trả lời ngay.">
+<meta property="og:image" content="https://chatbot.imob.vn/anh-chia-se.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --brand: #4318d9;
+    --brand-deep: #2c0fa3;
+    --chu: #1f2340;
+    --chu-nhat: #5a607a;
+    --nen-tren: #f3f1fd;
+    --nen-duoi: #e9f4f1; /* xanh ngọc rất nhạt — màu nước vịnh */
+    --nui: #2f7a6b;
+    --cao-dau: 64px;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    /* Cột dọc: đầu trang / khung chat / dòng lưu ý. Khung chat của nền tảng tự
+       gắn vào CUỐI <body>, nên dùng "order" để đưa nó lên giữa. */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* điện thoại: co lại khi bàn phím bật lên */
+    overflow: hidden;
+    font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--chu);
+    background: linear-gradient(180deg, var(--nen-tren) 0%, var(--nen-duoi) 100%);
+    position: relative;
+  }
+
+  /* Dãy núi đá vôi mờ ở đáy trang — gợi vịnh Hạ Long, không tranh chỗ với chat. */
+  .nui {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 26vh;
+    color: var(--nui);
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .dau {
+    order: 0;
+    flex: 0 0 var(--cao-dau);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 max(16px, env(safe-area-inset-left));
+    position: relative;
+    z-index: 2;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--chu); }
+  .logo img { width: 36px; height: 36px; display: block; }
+  .logo span { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .hotline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--brand);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(31, 35, 64, 0.08), 0 0 0 1px rgba(67, 24, 217, 0.12);
+    transition: background-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .hotline:hover { background: var(--brand); color: #fff; }
+  .hotline:focus-visible, .logo:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+  .hotline svg { width: 16px; height: 16px; flex: none; }
+
+  .an-di { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Chỗ giữ trong lúc khung chat của nền tảng đang tải (thường dưới 1 giây). */
+  .cho {
+    order: 1;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--chu-nhat);
+    position: relative;
+    z-index: 1;
+  }
+  .cho p { margin: 0; max-width: 34ch; line-height: 1.6; }
+  .cho a { color: var(--brand); font-weight: 600; }
+  body:has(.imob-widget-container) .cho { display: none; }
+
+  .luu-y {
+    order: 2;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 6px 16px max(10px, env(safe-area-inset-bottom));
+    text-align: center;
+    font-size: 12px;
+    color: var(--chu-nhat);
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ------------------------------------------------------------
+     KÉO KHUNG CHAT CỦA NỀN TẢNG RA GIỮA TRANG
+     CSS của nền tảng đặt khung chat cố định ở góc phải dưới, có nút tròn để
+     mở/đóng. Ở đây khung chat LÀ cả trang: luôn mở, không có nút tròn, không
+     có nút X. Bộ chọn bắt đầu bằng "html body" để thắng CSS của nền tảng,
+     kể cả các quy tắc cho điện thoại (@media max-width 480px) của họ.
+     ------------------------------------------------------------ */
+  html body .imob-widget-container {
+    order: 1;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    align-self: stretch;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    padding: 4px 16px 0;
+    z-index: 1;
+  }
+  html body .imob-widget-container .imob-chatbox {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: 780px;
+    margin: 0 auto; /* căn giữa — "justify-content" của khung ngoài không ăn */
+    height: 100%;
+    max-height: none;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  html body #imob-toggle-btn,
+  html body #imob-close-btn { display: none; }
+
+  @media (max-width: 480px) {
+    :root { --cao-dau: 56px; }
+    .logo span { display: none; }
+    .hotline { padding: 8px 14px; font-size: 14px; }
+    html body .imob-widget-container { padding: 0 8px; }
+    html body .imob-widget-container .imob-chatbox { border-radius: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hotline { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <svg class="nui" viewBox="0 0 1440 300" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="currentColor" d="M0 300 L0 270 C14 270 28 230 32 198 Q50 182 69 198 C73 230 87 284 101 284 C112 284 121 158 126 87 Q153 71 180 87 C185 158 194 252 206 252 C218 252 236 185 240 129 Q262 113 285 129 C289 185 307 277 320 277 C343 277 344 234 351 205 Q386 189 421 205 C428 234 429 253 452 253 C458 253 476 189 482 135 Q510 119 538 135 C544 189 562 285 577 285 C586 285 601 185 604 129 Q624 113 643 129 C646 185 661 269 672 269 C681 269 692 225 699 190 Q738 174 776 190 C783 225 794 262 811 262 C817 262 820 164 823 96 Q842 80 861 96 C864 164 867 263 878 263 C891 263 905 166 912 100 Q944 84 977 100 C984 166 998 279 1018 279 C1029 279 1029 214 1035 173 Q1062 157 1089 173 C1095 214 1095 265 1111 265 C1129 265 1128 205 1136 160 Q1176 144 1217 160 C1225 205 1224 278 1243 278 C1255 278 1268 243 1275 218 Q1308 202 1340 218 C1347 243 1360 271 1376 271 C1388 271 1367 185 1374 129 Q1407 113 1440 129 C1447 185 1426 285 1440 285 C1447 285 1404 198 1409 149 Q1436 133 1462 149 C1467 198 1424 279 1440 279 C1449 279 1416 210 1420 167 Q1440 151 1459 167 C1463 210 1430 253 1440 253 C1452 253 1377 203 1387 157 Q1434 141 1482 157 C1492 203 1417 278 1440 278 C1448 278 1406 197 1411 148 Q1438 132 1465 148 C1470 197 1428 260 1440 260 C1439 260 1410 173 1414 110 Q1436 94 1457 110 C1461 173 1432 258 1440 258 C1441 258 1402 189 1407 135 Q1434 119 1462 135 C1467 189 1428 255 1440 255 C1455 255 1396 188 1403 134 Q1439 118 1475 134 C1482 188 1423 277 1440 277 C1449 277 1405 186 1410 130 Q1436 114 1462 130 C1467 186 1423 274 1440 274 C1447 274 1418 241 1422 215 Q1438 199 1455 215 C1459 241 1430 264 1440 264 L1440 300 Z"/>
+  </svg>
+
+  <header class="dau">
+    <a class="logo" href="https://chatbot.imob.vn/" aria-label="iMob — trợ lý ảo">
+      <img src="logo-imob.png" alt="" width="36" height="36">
+      <span>iMob</span>
+    </a>
+    <a class="hotline" href="tel:0936982256">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      0936 982 256
+    </a>
+  </header>
+
+  <h1 class="an-di">Trợ lý ảo du lịch Quảng Ninh</h1>
+
+  <div class="cho" id="cho" role="status">
+    <p>Đang mở trợ lý ảo…</p>
+  </div>
+
+  <p class="luu-y">Câu trả lời do trợ lý AI tổng hợp, có thể chưa chính xác. Vui lòng kiểm tra lại trước khi đi.</p>
+
+<script>
+  // Khung chat của nền tảng iMob CMS — kho "Web iMob". Khoá này vốn công khai
+  // (nằm trong mã của mọi trang có khung chat); thứ bảo vệ nó là danh sách tên
+  // miền cho phép bên nền tảng. Giữ giống src/components/chatbot/botNenTang.js.
+  var GOC_BOT = "https://imob.hangdaaodieu.com";
+  var PHIEN_BAN_BOT = "20260926-suggestions-3";
+  var KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
+
+  (function () {
+    var css = document.createElement("link");
+    css.rel = "stylesheet";
+    // PHẢI có /widget/: thiếu thì máy chủ vẫn trả 200 nhưng là trang HTML.
+    css.href = GOC_BOT + "/widget/widget.css?v=" + PHIEN_BAN_BOT;
+    // Chèn TRƯỚC thẻ <style> của trang để CSS của trang được áp sau, thắng.
+    document.head.insertBefore(css, document.head.querySelector("style"));
+
+    var js = document.createElement("script");
+    js.src = GOC_BOT + "/widget/widget.min.js?v=" + PHIEN_BAN_BOT;
+    js.async = true;
+    js.dataset.apiKey = KHOA_BOT;
+    js.dataset.apiBase = GOC_BOT;
+    document.body.appendChild(js);
+
+    // Bấm hộ nút tròn một lần để khung chat ở trạng thái "đang mở" bên trong
+    // mã của nền tảng (CSS ở trên chỉ lo phần nhìn; không bấm thì khung chat
+    // trống trơn).
+    //
+    // ⚠️ PHẢI CHỜ lượt gọi /api/v1/chat/init XONG rồi mới bấm. Bấm sớm hơn thì
+    // khung chat hiện lời chào mặc định "Xin chào! Tôi là trợ lý ảo…" và KHÔNG
+    // có câu gợi ý — lời chào + gợi ý của kho đến từ lượt gọi đó (đã thử
+    // 02/10/2026). Biết lượt gọi xong nhờ PerformanceObserver: trình duyệt ghi
+    // một mục "resource" khi tải xong một địa chỉ.
+    var daInit = false;
+    try {
+      new PerformanceObserver(function (ds) {
+        ds.getEntries().forEach(function (m) {
+          if (m.name.indexOf("/api/v1/chat/init") !== -1) daInit = true;
+        });
+      }).observe({ type: "resource", buffered: true });
+    } catch (e) {
+      daInit = true; // trình duyệt quá cũ: bỏ qua bước chờ, dựa vào hạn 5 giây bên dưới
+    }
+
+    var lan = 0;
+    var cho = setInterval(function () {
+      lan++;
+      var nut = document.getElementById("imob-toggle-btn");
+      // Có nút + init xong; hoặc có nút đã 5 giây mà vẫn chưa thấy init thì bấm luôn.
+      if (nut && (daInit || lan > 20)) {
+        clearInterval(cho);
+        setTimeout(function () {
+          if (!document.querySelector(".imob-chatbox.open")) nut.click();
+          // Máy tính: đưa con trỏ vào ô nhập. Điện thoại thì không, kẻo bàn
+          // phím bật lên che nửa màn hình ngay khi vừa vào trang.
+          if (window.matchMedia("(min-width: 768px)").matches) {
+            var o = document.getElementById("imob-chat-input");
+            if (o) setTimeout(function () { o.focus(); }, 300);
+          }
+        }, 150);
+        return;
+      }
+      if (lan > 60) { // ~15 giây vẫn chưa có khung chat
+        clearInterval(cho);
+        document.getElementById("cho").innerHTML =
+          "<p>Chưa kết nối được trợ lý ảo. Bạn tải lại trang, hoặc gọi " +
+          "<a href=\"tel:0936982256\">0936 982 256</a> để được hỗ trợ.</p>";
+      }
+    }, 250);
+  })();
+</script>
+</body>
+</html>
