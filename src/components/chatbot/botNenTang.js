@@ -35,6 +35,9 @@ export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
 //                  cả phiên, chuyển trang không mất). Mở ?bot=cu để quay lại.
 //                  Khách bình thường vẫn thấy bot iMob cũ.
 //   "chinh-thuc" — mọi khách đều thấy bot mới, bot cũ ẩn.
+//   "an"         — imob.vn KHÔNG có khung chat nào. Các nút "Chat với AI" dẫn
+//                  sang trang giới thiệu /tro-ly-ao, trang đó có nút mở
+//                  TRANG_CHATBOT (xem Layout.jsx và pages/TroLyAoPage.jsx).
 //
 // LỊCH SỬ:
 //   01/10/2026 — bật "chinh-thuc" (kho Web iMob khai báo tên miền imob.vn).
@@ -47,14 +50,20 @@ export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
 // ⚠️ Vì vậy ?bot=moi trên imob.vn hiện KHÔNG dùng được (nền tảng chặn). Muốn
 // bật lại bot nền tảng ở imob.vn thì cần một kho khai báo tên miền imob.vn,
 // hoặc nền tảng cho một kho nhận nhiều tên miền.
+//   02/10/2026 (chiều) — "an" theo yêu cầu: tạm ẩn cả bot cũ, dồn khách sang
+//                trang giới thiệu /tro-ly-ao rồi sang chatbot.imob.vn.
 // ============================================================
-export const CHE_DO_BOT = "thu";
+export const CHE_DO_BOT = "an";
+
+// Trang chatbot riêng (thư mục trang-chatbot/, nginx: imob-chatbot).
+export const TRANG_CHATBOT = "https://chatbot.imob.vn";
 
 const KHOA_PHIEN = "imob_dung_bot_moi";
 
 /** Trang hiện tại có dùng bot mới không. `search` là chuỗi "?bot=moi…". */
 export function dungBotMoi(search) {
   if (CHE_DO_BOT === "chinh-thuc") return true;
+  if (CHE_DO_BOT === "an") return false;
   const q = new URLSearchParams(search).get("bot");
   try {
     if (q === "moi") sessionStorage.setItem(KHOA_PHIEN, "1");
