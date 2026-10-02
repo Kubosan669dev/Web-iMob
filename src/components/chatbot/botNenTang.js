@@ -35,9 +35,10 @@ export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
 //                  cả phiên, chuyển trang không mất). Mở ?bot=cu để quay lại.
 //                  Khách bình thường vẫn thấy bot iMob cũ.
 //   "chinh-thuc" — mọi khách đều thấy bot mới, bot cũ ẩn.
-//   "an"         — imob.vn KHÔNG có khung chat nào. Các nút "Chat với AI" dẫn
-//                  sang trang giới thiệu /tro-ly-ao, trang đó có nút mở
-//                  TRANG_CHATBOT (xem Layout.jsx và pages/TroLyAoPage.jsx).
+//   "an"         — imob.vn KHÔNG có khung chat nào. Thay bằng popup giới thiệu
+//                  trợ lý ảo (PopupTroLyAo.jsx) tự hiện sau vài giây và khi bấm
+//                  "Chat với AI"; nút trong popup mở TRANG_CHATBOT. Có thêm
+//                  trang giới thiệu đầy đủ /tro-ly-ao (pages/TroLyAoPage.jsx).
 //
 // LỊCH SỬ:
 //   01/10/2026 — bật "chinh-thuc" (kho Web iMob khai báo tên miền imob.vn).
