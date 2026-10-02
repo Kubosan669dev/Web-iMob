@@ -22,8 +22,6 @@ const DigitalTransformationPage = lazy(
 // hệ vì chưa có trang nào để đi tới.
 const RobotPage = lazy(() => import("./pages/RobotPage.jsx"));
 const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
-// Trang giới thiệu trợ lý ảo du lịch Quảng Ninh, dẫn sang chatbot.imob.vn.
-const TroLyAoPage = lazy(() => import("./pages/TroLyAoPage.jsx"));
 
 // Bài viết: hai mục "Câu chuyện khách hàng" và "Tin công ty" dùng CHUNG một
 // component danh sách, khác nhau ở prop `loai`. Nội dung nằm trong bảng
@@ -89,7 +87,6 @@ export default function App() {
                   />
                   <Route path="/robot" element={<RobotPage />} />
                   <Route path="/vr360" element={<Vr360Page />} />
-                  <Route path="/tro-ly-ao" element={<TroLyAoPage />} />
                   {/* Chuỗi "cau_chuyen"/"tin_cong_ty" viết thẳng ở đây thay
                       vì import hằng số từ services/baiVietService.js: import
                       sẽ kéo cả module dịch vụ vào bundle chính, trong khi hai

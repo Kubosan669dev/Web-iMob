@@ -35,36 +35,21 @@ export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
 //                  cả phiên, chuyển trang không mất). Mở ?bot=cu để quay lại.
 //                  Khách bình thường vẫn thấy bot iMob cũ.
 //   "chinh-thuc" — mọi khách đều thấy bot mới, bot cũ ẩn.
-//   "an"         — imob.vn KHÔNG có khung chat nào. Thay bằng popup giới thiệu
-//                  trợ lý ảo (PopupTroLyAo.jsx) tự hiện sau vài giây và khi bấm
-//                  "Chat với AI"; nút trong popup mở TRANG_CHATBOT. Có thêm
-//                  trang giới thiệu đầy đủ /tro-ly-ao (pages/TroLyAoPage.jsx).
 //
-// LỊCH SỬ:
-//   01/10/2026 — bật "chinh-thuc" (kho Web iMob khai báo tên miền imob.vn).
-//   02/10/2026 — về lại "thu": kho Web iMob CHUYỂN sang trang riêng
-//                https://chatbot.imob.vn (thư mục trang-chatbot/) theo yêu cầu
-//                lãnh đạo. Ô tên miền của nền tảng chỉ nhận MỘT tên miền, nên
-//                kho này giờ KHÔNG trả lời trên imob.vn nữa — imob.vn dùng lại
-//                bot cũ (ChatWidget.jsx), vốn trả lời về dịch vụ iMob.
+// Bật "chinh-thuc" ngày 01/10/2026. Cùng ngày đã cho www.imob.vn tự chuyển về
+// imob.vn trong nginx: ô tên miền của nền tảng chỉ nhận MỘT tên miền, khách ở
+// lại www sẽ bị nền tảng chặn (403). Đổi tên miền website thì nhớ cả hai chỗ.
 //
-// ⚠️ Vì vậy ?bot=moi trên imob.vn hiện KHÔNG dùng được (nền tảng chặn). Muốn
-// bật lại bot nền tảng ở imob.vn thì cần một kho khai báo tên miền imob.vn,
-// hoặc nền tảng cho một kho nhận nhiều tên miền.
-//   02/10/2026 (chiều) — "an" theo yêu cầu: tạm ẩn cả bot cũ, dồn khách sang
-//                trang giới thiệu /tro-ly-ao rồi sang chatbot.imob.vn.
+// Muốn quay về bot cũ: đổi lại thành "thu" rồi đẩy lên — mã bot cũ vẫn còn
+// nguyên (ChatWidget.jsx).
 // ============================================================
-export const CHE_DO_BOT = "an";
-
-// Trang chatbot riêng (thư mục trang-chatbot/, nginx: imob-chatbot).
-export const TRANG_CHATBOT = "https://chatbot.imob.vn";
+export const CHE_DO_BOT = "chinh-thuc";
 
 const KHOA_PHIEN = "imob_dung_bot_moi";
 
 /** Trang hiện tại có dùng bot mới không. `search` là chuỗi "?bot=moi…". */
 export function dungBotMoi(search) {
   if (CHE_DO_BOT === "chinh-thuc") return true;
-  if (CHE_DO_BOT === "an") return false;
   const q = new URLSearchParams(search).get("bot");
   try {
     if (q === "moi") sessionStorage.setItem(KHOA_PHIEN, "1");
