@@ -69,14 +69,17 @@ function moKhungChat(conLan = 25) {
 function theoDoiKhungChat({ khiMo, khiDong }) {
   let quanSat = null;
   let hen = null;
-  let conLan = 60;
+  let conLan = 200; // 200 × 150ms ≈ 30 giây
   const gan = () => {
     const khung = document.querySelector(".imob-chatbox");
     if (!khung) {
-      if (conLan-- > 0) hen = setTimeout(gan, 500);
+      if (conLan-- > 0) hen = setTimeout(gan, 150);
       return;
     }
     let dangMo = khung.classList.contains("open");
+    // Khung chat bản chatbot.imob.vn tự mở ngay khi tải xong — có thể đã mở
+    // trước lúc mình tìm thấy nó. Báo luôn, không thì lần mở đó bị bỏ sót.
+    if (dangMo) khiMo();
     quanSat = new MutationObserver(() => {
       const mo = khung.classList.contains("open");
       if (mo && !dangMo) khiMo();
@@ -114,13 +117,32 @@ export default function ChatbotNenTang() {
     chenMotLan();
     delete document.documentElement.dataset.botNenTang;
     const boNghe = onOpenChat(() => moKhungChat());
+
+    // ⚠️ Khung chat bản chatbot.imob.vn (từ 03/10/2026) TỰ MỞ mỗi lần tải trang,
+    // kể cả trên điện thoại, và không nhớ khách đã đóng: khách bấm ✕ rồi tải
+    // lại trang là nó lại bật lên. Giữ việc tự mở (anh Thắng muốn khách thấy
+    // khung chat ngay), chỉ thêm: khách ĐÃ TỰ TAY ĐÓNG trong phiên này thì đóng
+    // hộ lần tự mở đó. Phân biệt "tự mở" với "khách bấm mở" bằng việc khách đã
+    // chạm / bấm phím vào trang chưa — bấm "Chat với AI" hay nút tròn đều là chạm.
+    let khachDaTuongTac = false;
+    const ghiTuongTac = () => {
+      khachDaTuongTac = true;
+    };
+    window.addEventListener("pointerdown", ghiTuongTac, true);
+    window.addEventListener("keydown", ghiTuongTac, true);
+
     const boTheoDoi = theoDoiKhungChat({
-      khiMo: () => setChao(false),
+      khiMo: () => {
+        setChao(false);
+        if (daTungDong() && !khachDaTuongTac) document.getElementById("imob-close-btn")?.click();
+      },
       khiDong: ghiDaDong,
     });
     return () => {
       boNghe();
       boTheoDoi();
+      window.removeEventListener("pointerdown", ghiTuongTac, true);
+      window.removeEventListener("keydown", ghiTuongTac, true);
       document.documentElement.dataset.botNenTang = "an";
     };
   }, []);

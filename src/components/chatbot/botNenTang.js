@@ -1,32 +1,34 @@
 // ============================================================
-// Chatbot của nền tảng iMob CMS (kho "Web iMob") — cấu hình và công tắc.
+// Chatbot của nền tảng iMob CMS (kho "iMob") — cấu hình và công tắc.
 //
 // Bot này KHÔNG chạy trong website. Website chỉ chèn khung chat của nền tảng
 // (2 file widget.css + widget.min.js); tri thức, AI và lịch sử hội thoại nằm
-// ở hệ thống iMob CMS. Quản lý tri thức: imob.hangdaaodieu.com → Quản lý tài
-// liệu → Web iMob.
+// ở hệ thống iMob CMS. Quản lý tri thức: chatbot.imob.vn → Quản lý Tài liệu →
+// thẻ "iMob".
 //
 // Tách khỏi ChatbotNenTang.jsx vì file .jsx chỉ nên xuất component (luật
 // react-refresh), còn Layout.jsx cần gọi dungBotMoi().
 // ============================================================
 
-// Địa chỉ hệ thống chatbot. Khi nền tảng chuyển sang hạ tầng iMob thì CHỈ đổi
-// dòng này — nhưng ĐỪNG đặt nó chung tên miền imob.vn: /api/* của imob.vn là
-// API của website (đăng nhập, bài viết…), hệ thống chatbot cũng dùng /api/v1/…
-// nên hai bên sẽ đụng nhau. Dùng tên miền con, ví dụ chatbot.imob.vn.
-export const GOC_BOT = "https://imob.hangdaaodieu.com";
+// Địa chỉ hệ thống chatbot. Từ 03/10/2026 nền tảng chạy trên hạ tầng iMob
+// (máy CMC, thư mục /home/imob — anh Thắng quản lý) ở tên miền con riêng.
+// Trước đó là imob.hangdaaodieu.com. ĐỪNG đặt nó chung tên miền imob.vn: /api/*
+// của imob.vn là API của website, hệ thống chatbot cũng dùng /api/v1/….
+export const GOC_BOT = "https://chatbot.imob.vn";
 
 // Đổi số này khi nền tảng báo có bản khung chat mới — trình duyệt của khách sẽ
 // tải bản mới thay vì dùng bản cũ đã lưu.
-export const PHIEN_BAN_BOT = "20260926-suggestions-3";
+export const PHIEN_BAN_BOT = "20261003-chatbot-imob-vn";
 
-// Khoá của kho "Web iMob". Khoá này VỐN CÔNG KHAI — khung chat nào cũng phải
+// Khoá của kho "iMob". Khoá này VỐN CÔNG KHAI — khung chat nào cũng phải
 // để nó trong mã trang. Thứ bảo vệ nó là danh sách tên miền cho phép bên nền
-// tảng (hiện khai báo: imob.vn). ⚠️ Đừng nhầm với khoá Gemini — cái đó là bí
-// mật và không bao giờ được nằm ở đây.
+// tảng (kho "iMob" khai báo: imob.vn). ⚠️ Đừng nhầm với khoá Gemini — cái đó là
+// bí mật và không bao giờ được nằm ở đây.
 //
-// Khoá imob_live_Zds… là của kho Yên Tử, không phải của kho này.
-export const KHOA_BOT = "imob_live_p6rkc41dBMhR6gUEG87df1D6uaxQMC4";
+// Khoá của kho "iMob" trên hệ thống mới chatbot.imob.vn. Khoá của hệ thống cũ
+// (imob_live_p6rk… kho Web iMob, imob_live_Zds… kho Yên Tử) bị hệ thống mới
+// trả 401 — đã thử 03/10/2026.
+export const KHOA_BOT = "imob_live_qBcBKkD7uOT7ljKaCAdaMQQzOmIwx3V";
 
 // ============================================================
 // CÔNG TẮC
