@@ -1,4 +1,5 @@
 import ServiceHero from "../components/service/ServiceHero.jsx";
+import TourVr360 from "../components/service/TourVr360.jsx";
 import FeatureList from "../components/service/FeatureList.jsx";
 import CardGrid from "../components/service/CardGrid.jsx";
 import SolutionColumns from "../components/service/SolutionColumns.jsx";
@@ -29,6 +30,7 @@ export default function Vr360Page() {
   return (
     <>
       <ServiceHero {...data.hero} />
+      <TourVr360 />
       <FeatureList {...data.goiGom} />
       <CardGrid {...data.loiIch} />
       <SolutionColumns {...data.banDoSo} />
