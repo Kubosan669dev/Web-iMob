@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, UserRound } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import Logo from "../ui/Logo.jsx";
@@ -45,7 +45,9 @@ function NavItem({ item, active }) {
       <The
         {...dich}
         className={
-          "flex items-center gap-1 px-3.5 py-2 text-[0.9375rem] font-medium transition-colors duration-200 " +
+          // whitespace-nowrap + đệm hẹp ở lg: từ khi thêm mục VR360 (7 mục),
+          // màn 1024px không đủ chỗ cho đệm 3.5 — chữ bị bẻ hai dòng.
+          "flex items-center gap-1 whitespace-nowrap px-2.5 py-2 text-[0.9375rem] font-medium transition-colors duration-200 xl:px-3.5 " +
           (active ? "text-brand" : "text-ink-soft hover:text-ink")
         }
       >
@@ -92,7 +94,7 @@ function NutTaiKhoan() {
     return (
       <Link
         to="/dang-nhap"
-        className="hidden items-center gap-1.5 px-3 py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink lg:inline-flex"
+        className="hidden items-center gap-1.5 whitespace-nowrap px-3 py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink lg:inline-flex"
       >
         <UserRound className="h-4 w-4" aria-hidden="true" />
         Đăng nhập
@@ -114,6 +116,7 @@ function NutTaiKhoan() {
 export default function Navbar() {
   const congTy = useCongTy();
   const activeId = useActiveSection(SECTION_IDS);
+  const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -140,14 +143,26 @@ export default function Navbar() {
           {/* ---------- Menu desktop ---------- */}
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu chính">
             {NAV_ITEMS.map((item) => (
-              <NavItem key={item.id} item={item} active={item.id === activeId} />
+              // Mục VR360 không phải khối trên trang chủ nên useActiveSection
+              // không bao giờ trả id của nó — sáng theo đường dẫn đang mở.
+              // Các mục còn lại là khối TRÊN TRANG CHỦ: chỉ sáng khi đang ở
+              // trang chủ, nếu không "Trang chủ" sáng kèm ở mọi trang khác.
+              <NavItem
+                key={item.id}
+                item={item}
+                active={
+                  item.id === "tour-360"
+                    ? pathname === item.to
+                    : pathname === "/" && item.id === activeId
+                }
+              />
             ))}
           </nav>
 
           {/* ---------- Bên phải: CTA + hamburger ---------- */}
           <div className="flex items-center gap-1 lg:gap-2">
             <NutTaiKhoan />
-            <Button href="/#contact" size="sm" className="ml-2 hidden lg:inline-flex">
+            <Button href="/#contact" size="sm" className="ml-2 hidden whitespace-nowrap lg:inline-flex">
               Nhận tư vấn
             </Button>
             <button

@@ -54,6 +54,9 @@ export const NAV_ITEMS = [
       { label: "Thực tế ảo 360°", to: "/vr360" },
     ],
   },
+  // Mục riêng 16/10/2026 theo yêu cầu công ty: mở thẳng trang tour 360°
+  // (/tour-360) — khác /vr360 ở trên là trang GIỚI THIỆU dịch vụ.
+  { id: "tour-360", label: "VR360", to: "/tour-360" },
   { id: "about", label: "Về chúng tôi", href: "/#about" },
 
   // Mục "Tin tức" có danh sách con, giống mục "Công nghệ" ở trên.

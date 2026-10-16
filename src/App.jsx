@@ -22,6 +22,9 @@ const DigitalTransformationPage = lazy(
 // hệ vì chưa có trang nào để đi tới.
 const RobotPage = lazy(() => import("./pages/RobotPage.jsx"));
 const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
+// Trang tour 360° (16/10/2026) — đích của mục "VR360" riêng trên thanh menu:
+// danh sách điểm ngắm bên trái, tour Panoee bên phải.
+const TourVr360Page = lazy(() => import("./pages/TourVr360Page.jsx"));
 
 // Bài viết: hai mục "Câu chuyện khách hàng" và "Tin công ty" dùng CHUNG một
 // component danh sách, khác nhau ở prop `loai`. Nội dung nằm trong bảng
@@ -87,6 +90,7 @@ export default function App() {
                   />
                   <Route path="/robot" element={<RobotPage />} />
                   <Route path="/vr360" element={<Vr360Page />} />
+                  <Route path="/tour-360" element={<TourVr360Page />} />
                   {/* Chuỗi "cau_chuyen"/"tin_cong_ty" viết thẳng ở đây thay
                       vì import hằng số từ services/baiVietService.js: import
                       sẽ kéo cả module dịch vụ vào bundle chính, trong khi hai

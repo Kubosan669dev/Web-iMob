@@ -15,8 +15,11 @@ import { dungBotMoi } from "../chatbot/botNenTang.js";
 // nền tảng iMob CMS (ChatbotNenTang). Hiện cả hai thì hai nút nổi đè lên nhau
 // ở cùng góc phải. Bot nào được hiện do công tắc trong botNenTang.js quyết định.
 export default function Layout() {
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const botMoi = useMemo(() => dungBotMoi(search), [search]);
+  // Trang tour 360°: tour chiếm trọn màn hình và có nút toàn màn hình ở góc
+  // phải dưới — đúng chỗ nút chat nổi. Để cả hai thì nút chat đè mất nút kia.
+  const anChat = pathname === "/tour-360";
 
   return (
     <>
@@ -25,7 +28,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
-      {botMoi ? <ChatbotNenTang /> : <ChatWidget />}
+      {anChat ? null : botMoi ? <ChatbotNenTang /> : <ChatWidget />}
     </>
   );
 }

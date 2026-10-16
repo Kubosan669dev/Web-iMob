@@ -1,0 +1,101 @@
+{
+  "_note": "Danh sách điểm ngắm của trang /tour-360 (mục VR360 trên thanh menu). Mỗi điểm là MỘT cảnh trong tour Panoee của iMob: `canh` là đường dẫn cảnh (slug), tour.panoee.net/<tour>/<canh> mở thẳng cảnh đó. Thêm điểm: mở tour trên Panoee, bấm sang cảnh cần thêm, chép phần cuối địa chỉ vào `canh`. `loai` quyết định biểu tượng: chua | van-hoa | tien-ich. Mô tả viết thận trọng: chuyện dân gian ghi 'tương truyền', không nêu năm, số đo hay danh hiệu chưa đối chiếu.",
+  "tour": {
+    "id": "6acde696a04f4c000852045c",
+    "ten": "VR360 Phường Yên Tử",
+    "canhMacDinh": "2-chua-djng-02"
+  },
+  "diemNgam": [
+    {
+      "id": "chua-dong",
+      "ten": "Chùa Đồng",
+      "loai": "chua",
+      "moTa": "Ngôi chùa trên đỉnh cao nhất của núi Yên Tử, điểm cuối của hành trình hành hương. Từ sân chùa có thể phóng tầm mắt ra cả vùng núi non Đông Bắc.",
+      "canh": "2-chua-djng-02"
+    },
+    {
+      "id": "van-tieu",
+      "ten": "Chùa Vân Tiêu – Chùa Bảo Sái",
+      "loai": "chua",
+      "moTa": "Hai ngôi chùa trên lưng chừng núi, dọc con đường đá dẫn lên Chùa Đồng. Vân Tiêu nghĩa là “đỉnh mây”, nơi mây núi thường bao quanh.",
+      "canh": "5-van-tieu-bo-sai_01"
+    },
+    {
+      "id": "mot-mai",
+      "ten": "Chùa Một Mái",
+      "loai": "chua",
+      "moTa": "Ngôi chùa nhỏ tựa lưng vào vách đá, chỉ có một mái lợp, nằm trên con đường dẫn lên đỉnh núi.",
+      "canh": "6-chua-mt-mai"
+    },
+    {
+      "id": "hoa-yen",
+      "ten": "Chùa Hoa Yên",
+      "loai": "chua",
+      "moTa": "Ngôi chùa lớn ở trung tâm khu di tích. Tương truyền đây là nơi Phật hoàng Trần Nhân Tông tu hành và giảng đạo.",
+      "canh": "8-chua-hoa-yen_1"
+    },
+    {
+      "id": "giai-oan",
+      "ten": "Chùa Giải Oan",
+      "loai": "chua",
+      "moTa": "Ngôi chùa bên dòng suối Giải Oan, nằm giữa rừng già. Tương truyền chùa được lập để cầu siêu cho các cung nữ đã theo vua Trần Nhân Tông lên núi.",
+      "canh": "17-chua-gii-oan"
+    },
+    {
+      "id": "cap-treo",
+      "ten": "Ga cáp treo",
+      "loai": "tien-ich",
+      "moTa": "Nhà ga cáp treo đưa du khách vượt sườn núi lên các chùa trên cao, rút ngắn đáng kể chặng leo bộ.",
+      "canh": "13-ga-cap-treo-04"
+    },
+    {
+      "id": "le-hoi",
+      "ten": "Trung tâm lễ hội",
+      "loai": "van-hoa",
+      "moTa": "Không gian lễ hội dưới chân núi, nơi diễn ra các hoạt động trong mùa lễ hội Yên Tử hằng năm.",
+      "canh": "15-trung-tam-l-hi_fix"
+    },
+    {
+      "id": "trung-bay",
+      "ten": "Nhà trưng bày",
+      "loai": "van-hoa",
+      "moTa": "Nơi trưng bày hiện vật và tư liệu về lịch sử khu di tích Yên Tử.",
+      "canh": "18-nha-trng-bay"
+    },
+    {
+      "id": "van-hoa",
+      "ten": "Trung tâm Văn hoá Yên Tử",
+      "loai": "van-hoa",
+      "moTa": "Khu kiến trúc mái ngói nâu giữa thung lũng, nơi giới thiệu lịch sử và văn hoá Phật giáo Trúc Lâm tới du khách.",
+      "canh": "19-djim-s-1"
+    },
+    {
+      "id": "chua-lan",
+      "ten": "Chùa Lân",
+      "loai": "chua",
+      "moTa": "Quần thể chùa dưới chân núi, với chính điện mái cong, sân lát đá rộng và quả cầu đá đỏ đặt trước bậc thềm.",
+      "canh": "25-chua-lan-snh-trc"
+    },
+    {
+      "id": "cam-thuc",
+      "ten": "Chùa Cẩm Thực",
+      "loai": "chua",
+      "moTa": "Ngôi chùa nhỏ giữa rừng thông. Tương truyền là nơi Phật hoàng Trần Nhân Tông dừng chân dùng bữa trên đường lên núi.",
+      "canh": "23-djim-s-5"
+    },
+    {
+      "id": "suoi-tam",
+      "ten": "Chùa Suối Tắm",
+      "loai": "chua",
+      "moTa": "Ngôi chùa bên dòng suối dưới chân núi. Tương truyền là nơi Phật hoàng Trần Nhân Tông tắm gội trước khi lên núi tu hành.",
+      "canh": "24-djim-s-6"
+    },
+    {
+      "id": "chua-trinh",
+      "ten": "Chùa Trình",
+      "loai": "chua",
+      "moTa": "Cửa ngõ của khu di tích. Theo lệ xưa, khách hành hương ghé chùa để “trình” trước khi lên núi Yên Tử.",
+      "canh": "1-2-1"
+    }
+  ]
+}
