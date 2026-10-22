@@ -47,11 +47,14 @@
      /etc/nginx/imob-demo-khoa.conf trên máy chủ (xem trien-khai/nginx-demo.conf).
      Trang thiếu file đó thì khung chat hiện nhưng nền tảng trả 401.
      ⚠️ Đường dẫn PHẢI có /widget/ — thiếu thì máy chủ trả trang HTML của
-     dashboard với mã 200, khung chat vỡ mà không báo lỗi. -->
-<link rel="stylesheet" href="https://chatbot.imob.vn/widget/widget.css?v=20261022-demo">
+     dashboard với mã 200, khung chat vỡ mà không báo lỗi.
+     /widget/ và /api/ đi qua CHÍNH demo.imob.vn — nginx chuyển tiếp sang
+     chatbot.imob.vn, vì máy chủ chatbot chặn CORS với tên miền mới (xem
+     trien-khai/nginx-demo.conf). -->
+<link rel="stylesheet" href="/widget/widget.css?v=20261022-demo">
 <script async
-  src="https://chatbot.imob.vn/widget/widget.min.js?v=20261022-demo"
+  src="/widget/widget.min.js?v=20261022-demo"
   data-api-key="__KHOA_BOT_DEMO__"
-  data-api-base="https://chatbot.imob.vn"></script>
+  data-api-base="https://demo.imob.vn"></script>
 </body>
 </html>
