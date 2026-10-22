@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--
+  ============================================================
+  Trang thử nghiệm: https://demo.imob.vn  (22/10/2026)
+
+  Yêu cầu: nhúng con bot "Demo" (tạo trên CMS chatbot.imob.vn) lên một tên
+  miền phụ để thử tính năng chatbot cho bảo tàng. Chưa có giao diện riêng nên
+  lấy luôn tour VR360 Bảo tàng – Thư viện tỉnh Quảng Ninh làm nền: người xem
+  vừa dạo bảo tàng 360° vừa hỏi bot.
+
+  Trang KHÔNG tự chạy AI: chỉ chèn khung chat của nền tảng (widget.css +
+  widget.min.js). Tri thức, hạn mức, khoá Gemini của bot Demo quản lý trên
+  chatbot.imob.vn. Kho "Demo" phải khai báo tên miền demo.imob.vn, không thì
+  nền tảng từ chối trả lời.
+
+  Đứng tách khỏi app React, không build. nginx trỏ demo.imob.vn vào thư mục
+  này trong bản đang chạy (/var/www/imob/current/trang-demo) — xem
+  trien-khai/nginx-demo.conf.
+  ============================================================
+-->
+<title>Trợ lý ảo Bảo tàng – Thư viện tỉnh Quảng Ninh (bản thử)</title>
+<meta name="description" content="Tham quan Bảo tàng – Thư viện tỉnh Quảng Ninh qua tour thực tế ảo 360° và hỏi trợ lý ảo ngay trên trang.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#111111">
+<link rel="icon" href="favicon.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
+  /* Tour phủ kín màn hình. 100dvh để thanh địa chỉ điện thoại không che đáy. */
+  .tour { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; border: 0; display: block; }
+</style>
+</head>
+<body>
+<iframe
+  class="tour"
+  title="Tour 360° Bảo tàng – Thư viện tỉnh Quảng Ninh"
+  src="https://tour.panoee.net/iframe/69aae4c3e6bc609daf3b14e6?embedFullscreen=1&amp;embedVr=1&amp;embedGyro=1"
+  allow="autoplay; accelerometer; gyroscope; fullscreen; xr-spatial-tracking"
+  allowfullscreen></iframe>
+
+<!-- Khung chat bot "Demo" của nền tảng iMob CMS.
+     KHOÁ KHÔNG NẰM TRONG GIT (kho mã công khai): __KHOA_BOT_DEMO__ là chữ giữ
+     chỗ, nginx thay bằng khoá thật lúc gửi trang — khoá để trong file
+     /etc/nginx/imob-demo-khoa.conf trên máy chủ (xem trien-khai/nginx-demo.conf).
+     Trang thiếu file đó thì khung chat hiện nhưng nền tảng trả 401.
+     ⚠️ Đường dẫn PHẢI có /widget/ — thiếu thì máy chủ trả trang HTML của
+     dashboard với mã 200, khung chat vỡ mà không báo lỗi. -->
+<link rel="stylesheet" href="https://chatbot.imob.vn/widget/widget.css?v=20261022-demo">
+<script async
+  src="https://chatbot.imob.vn/widget/widget.min.js?v=20261022-demo"
+  data-api-key="__KHOA_BOT_DEMO__"
+  data-api-base="https://chatbot.imob.vn"></script>
+</body>
+</html>
