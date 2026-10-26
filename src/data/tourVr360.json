@@ -1,5 +1,5 @@
 {
-  "_note": "Các tour 360° của trang /tour-360 (mục VR360 trên thanh menu). Mỗi tour một danh sách điểm ngắm; mỗi điểm là MỘT cảnh trên Panoee: `canh` là đường dẫn cảnh (slug), tour.panoee.net/<id tour>/<canh> mở thẳng cảnh đó. Thêm tour: thêm một khối vào `tours` (khoá `khoa` dùng trên địa chỉ: /tour-360?tour=<khoa>). Thêm điểm: mở tour trên Panoee, bấm sang cảnh cần thêm, chép phần cuối địa chỉ vào `canh`. `loai` quyết định biểu tượng: toan-canh | chua | co-quan | van-hoa | thien-nhien | nuoc | cho | tien-ich. Danh sách Quảng Tân lấy theo mục Virtual Tour của bandosoxaquangtan.vn (cùng là sản phẩm iMob), câu chữ đã bớt từ ngữ quảng cáo. Mô tả viết thận trọng: chuyện dân gian ghi 'tương truyền', không nêu năm, số đo hay danh hiệu chưa đối chiếu.",
+  "_note": "Các tour 360° của trang /tour-360 (mục VR360 trên thanh menu). Mỗi tour một danh sách điểm ngắm; mỗi điểm là MỘT cảnh trên Panoee: `canh` là đường dẫn cảnh (slug), tour.panoee.net/<id tour>/<canh> mở thẳng cảnh đó. Thêm tour: thêm một khối vào `tours` (khoá `khoa` dùng trên địa chỉ: /tour-360?tour=<khoa>). Thêm điểm: mở tour trên Panoee, bấm sang cảnh cần thêm, chép phần cuối địa chỉ vào `canh`. `loai` quyết định biểu tượng VÀ mục hiển thị (xem NHOM_HIEN_THI trong TourVr360Page.jsx): toan-canh | chua | thien-nhien | nuoc | van-hoa | cho | an-uong | tien-ich | giao-thong | cong-nghiep | co-quan | truong-hoc. `moTa` không bắt buộc — điểm chưa có mô tả thì khung dưới chỉ hiện tên mục, đừng bịa mô tả cho đủ. Danh sách Quảng Tân lấy theo mục Virtual Tour của bandosoxaquangtan.vn (cùng là sản phẩm iMob), câu chữ đã bớt từ ngữ quảng cáo. Mô tả viết thận trọng: chuyện dân gian ghi 'tương truyền', không nêu năm, số đo hay danh hiệu chưa đối chiếu. Cập nhật 26/10/2026: tour Yên Tử thêm nhiều nhóm cảnh (đền, chùa, cơ quan, trường học); 4 nhóm chưa có cảnh xuất bản (Tượng Phật Hoàng, Khu Tháp Tổ, Miếu Cửa Ông Thầy, Đền Mắt Rồng) chưa đưa vào.",
   "tours": [
     {
       "khoa": "yen-tu",
@@ -44,11 +44,68 @@
           "canh": "17-chua-gii-oan"
         },
         {
-          "id": "cap-treo",
-          "ten": "Ga cáp treo",
-          "loai": "tien-ich",
-          "moTa": "Nhà ga cáp treo đưa du khách vượt sườn núi lên các chùa trên cao, rút ngắn đáng kể chặng leo bộ.",
-          "canh": "13-ga-cap-treo-04"
+          "id": "chua-lan",
+          "ten": "Chùa Lân",
+          "loai": "chua",
+          "moTa": "Quần thể chùa dưới chân núi, với chính điện mái cong, sân lát đá rộng và quả cầu đá đỏ đặt trước bậc thềm.",
+          "canh": "1-25"
+        },
+        {
+          "id": "chua-trinh",
+          "ten": "Chùa Trình",
+          "loai": "chua",
+          "moTa": "Cửa ngõ của khu di tích. Theo lệ xưa, khách hành hương ghé chùa để “trình” trước khi lên núi Yên Tử.",
+          "canh": "1-2-1"
+        },
+        {
+          "id": "cam-thuc",
+          "ten": "Chùa Cẩm Thực",
+          "loai": "chua",
+          "moTa": "Ngôi chùa nhỏ giữa rừng thông. Tương truyền là nơi Phật hoàng Trần Nhân Tông dừng chân dùng bữa trên đường lên núi.",
+          "canh": "23-djim-s-5"
+        },
+        {
+          "id": "suoi-tam",
+          "ten": "Chùa Suối Tắm",
+          "loai": "chua",
+          "moTa": "Ngôi chùa bên dòng suối dưới chân núi. Tương truyền là nơi Phật hoàng Trần Nhân Tông tắm gội trước khi lên núi tu hành.",
+          "canh": "24-djim-s-6"
+        },
+        {
+          "id": "bi-trung",
+          "ten": "Chùa Bí Trung",
+          "loai": "chua",
+          "canh": "1-4"
+        },
+        {
+          "id": "bao-long",
+          "ten": "Chùa Bảo Long",
+          "loai": "chua",
+          "canh": "1"
+        },
+        {
+          "id": "den-nam-mau",
+          "ten": "Đền Năm Mẫu",
+          "loai": "chua",
+          "canh": "1-8"
+        },
+        {
+          "id": "dinh-nam-mau",
+          "ten": "Đình Năm Mẫu",
+          "loai": "chua",
+          "canh": "1-1"
+        },
+        {
+          "id": "mieu-nam-mau",
+          "ten": "Miếu Năm Mẫu",
+          "loai": "chua",
+          "canh": "1-2"
+        },
+        {
+          "id": "den-trung-doan-5",
+          "ten": "Đền thờ Trung đoàn 5",
+          "loai": "chua",
+          "canh": "1-23"
         },
         {
           "id": "le-hoi",
@@ -72,32 +129,143 @@
           "canh": "19-djim-s-1"
         },
         {
-          "id": "chua-lan",
-          "ten": "Chùa Lân",
-          "loai": "chua",
-          "moTa": "Quần thể chùa dưới chân núi, với chính điện mái cong, sân lát đá rộng và quả cầu đá đỏ đặt trước bậc thềm.",
-          "canh": "25-chua-lan-snh-trc"
+          "id": "cap-treo",
+          "ten": "Ga cáp treo",
+          "loai": "tien-ich",
+          "moTa": "Nhà ga cáp treo đưa du khách vượt sườn núi lên các chùa trên cao, rút ngắn đáng kể chặng leo bộ.",
+          "canh": "13-ga-cap-treo-04"
         },
         {
-          "id": "cam-thuc",
-          "ten": "Chùa Cẩm Thực",
-          "loai": "chua",
-          "moTa": "Ngôi chùa nhỏ giữa rừng thông. Tương truyền là nơi Phật hoàng Trần Nhân Tông dừng chân dùng bữa trên đường lên núi.",
-          "canh": "23-djim-s-5"
+          "id": "ho-yen-trung",
+          "ten": "Hồ Yên Trung",
+          "loai": "nuoc",
+          "canh": "toan-cnh"
         },
         {
-          "id": "suoi-tam",
-          "ten": "Chùa Suối Tắm",
-          "loai": "chua",
-          "moTa": "Ngôi chùa bên dòng suối dưới chân núi. Tương truyền là nơi Phật hoàng Trần Nhân Tông tắm gội trước khi lên núi tu hành.",
-          "canh": "24-djim-s-6"
+          "id": "khe-song-thac-bac",
+          "ten": "Khe song thác bạc",
+          "loai": "nuoc",
+          "canh": "1-27"
         },
         {
-          "id": "chua-trinh",
-          "ten": "Chùa Trình",
-          "loai": "chua",
-          "moTa": "Cửa ngõ của khu di tích. Theo lệ xưa, khách hành hương ghé chùa để “trình” trước khi lên núi Yên Tử.",
-          "canh": "1-2-1"
+          "id": "bao-tang-nguoi-dao",
+          "ten": "Bảo tàng người Dao",
+          "loai": "van-hoa",
+          "canh": "0"
+        },
+        {
+          "id": "nha-hang-nguoi-dao",
+          "ten": "Nhà hàng người Dao",
+          "loai": "an-uong",
+          "canh": "1-7"
+        },
+        {
+          "id": "ben-xe",
+          "ten": "Ngã ba – bến xe điện Yên Tử",
+          "loai": "giao-thong",
+          "canh": "20-djim-s-2"
+        },
+        {
+          "id": "khu-cong-nghiep",
+          "ten": "Khu công nghiệp",
+          "loai": "cong-nghiep",
+          "canh": "dji_0036"
+        },
+        {
+          "id": "ubnd",
+          "ten": "UBND phường Yên Tử",
+          "loai": "co-quan",
+          "canh": "1-18"
+        },
+        {
+          "id": "dang-uy",
+          "ten": "Trụ sở Đảng uỷ – HĐND phường Yên Tử",
+          "loai": "co-quan",
+          "canh": "1-21"
+        },
+        {
+          "id": "tram-y-te",
+          "ten": "Trạm y tế phường Yên Tử",
+          "loai": "co-quan",
+          "canh": "1-22"
+        },
+        {
+          "id": "bqldt",
+          "ten": "Ban Quản lý di tích",
+          "loai": "co-quan",
+          "canh": "25-djn-trinh"
+        },
+        {
+          "id": "mn-thuong-yen-cong",
+          "ten": "Trường Mầm non Thượng Yên Công",
+          "loai": "truong-hoc",
+          "canh": "1-19"
+        },
+        {
+          "id": "mn-dong-chanh",
+          "ten": "Trường Mầm non Đồng Chanh",
+          "loai": "truong-hoc",
+          "canh": "1-20"
+        },
+        {
+          "id": "mn-bi-trung",
+          "ten": "Trường Mầm non Bí Trung",
+          "loai": "truong-hoc",
+          "canh": "1-9"
+        },
+        {
+          "id": "mn-phuong-nam",
+          "ten": "Trường Mầm non Phương Nam",
+          "loai": "truong-hoc",
+          "canh": "1-13"
+        },
+        {
+          "id": "th-phuong-dong",
+          "ten": "Trường Tiểu học Phương Đông",
+          "loai": "truong-hoc",
+          "canh": "1-15"
+        },
+        {
+          "id": "thcs-dong-chanh",
+          "ten": "Trường THCS Đồng Chanh",
+          "loai": "truong-hoc",
+          "canh": "1-10"
+        },
+        {
+          "id": "ththcs-phuong-dong",
+          "ten": "Trường TH&THCS Phương Đông",
+          "loai": "truong-hoc",
+          "canh": "1-17"
+        },
+        {
+          "id": "ththcs-phuong-nam",
+          "ten": "Trường TH&THCS Phương Nam",
+          "loai": "truong-hoc",
+          "canh": "1-12"
+        },
+        {
+          "id": "ththcs-phuong-nam-b",
+          "ten": "Trường TH&THCS Phương Nam B",
+          "loai": "truong-hoc",
+          "canh": "1-11"
+        },
+        {
+          "id": "ththcs-phuong-nam-c",
+          "ten": "Trường TH&THCS Phương Nam C",
+          "loai": "truong-hoc",
+          "canh": "1-14"
+        },
+        {
+          "id": "ththcs-yt-nguyen-ba-ngoc",
+          "ten": "Trường TH&THCS Yên Tử – điểm trường Nguyễn Bá Ngọc",
+          "loai": "truong-hoc",
+          "canh": "1-16"
+        },
+        {
+          "id": "ththcs-yt-kim-dong",
+          "ten": "Trường TH&THCS Yên Tử – điểm trường Kim Đồng",
+          "loai": "truong-hoc",
+          "canh": "1-24"
         }
       ]
     },

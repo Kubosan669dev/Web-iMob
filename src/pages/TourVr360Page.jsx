@@ -2,16 +2,20 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Building2,
+  BusFront,
   CableCar,
   Droplets,
   Earth,
+  Factory,
   Flag,
   Landmark,
   Mountain,
   PanelLeftClose,
   PanelLeftOpen,
+  School,
   Search,
   Store,
+  Utensils,
 } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle.js";
 import duLieu from "../data/tourVr360.json";
@@ -44,16 +48,57 @@ const linkCanh = (tour, canh) => `https://tour.panoee.net/${tour.id}/${canh}`;
 const BIEU_TUONG = {
   "toan-canh": Earth,
   chua: Landmark,
-  "co-quan": Flag,
-  "van-hoa": Building2,
   "thien-nhien": Mountain,
   nuoc: Droplets,
+  "van-hoa": Building2,
   cho: Store,
+  "an-uong": Utensils,
   "tien-ich": CableCar,
+  "giao-thong": BusFront,
+  "cong-nghiep": Factory,
+  "co-quan": Flag,
+  "truong-hoc": School,
 };
 
+// Danh sách chia mục theo `loai` (26/10/2026: tour Yên Tử lên hơn 40 điểm,
+// một cột liền 40 dòng thì khó tìm). Thứ tự mục = thứ tự hiện; trong mỗi mục
+// giữ thứ tự của file dữ liệu. Loại nào không có trong bảng này rơi vào "Khác".
+const NHOM_HIEN_THI = [
+  { ten: "Toàn cảnh", loai: ["toan-canh"] },
+  { ten: "Chùa – đền – di tích", loai: ["chua"] },
+  { ten: "Thiên nhiên", loai: ["thien-nhien", "nuoc"] },
+  {
+    ten: "Văn hoá – dịch vụ",
+    loai: [
+      "van-hoa",
+      "cho",
+      "an-uong",
+      "tien-ich",
+      "giao-thong",
+      "cong-nghiep",
+    ],
+  },
+  { ten: "Cơ quan", loai: ["co-quan"] },
+  { ten: "Trường học", loai: ["truong-hoc"] },
+];
+const tenMuc = (loai) =>
+  NHOM_HIEN_THI.find((n) => n.loai.includes(loai))?.ten ?? "Khác";
+
+function chiaMuc(ds) {
+  const muc = NHOM_HIEN_THI.map((n) => ({
+    ten: n.ten,
+    diem: ds.filter((d) => n.loai.includes(d.loai)),
+  }));
+  const khac = ds.filter(
+    (d) => !NHOM_HIEN_THI.some((n) => n.loai.includes(d.loai)),
+  );
+  if (khac.length) muc.push({ ten: "Khác", diem: khac });
+  return muc.filter((m) => m.diem.length);
+}
+
 const diemMacDinh = (tour) =>
-  (tour.diemNgam.find((d) => d.canh === tour.canhMacDinh) ?? tour.diemNgam[0]).id;
+  (tour.diemNgam.find((d) => d.canh === tour.canhMacDinh) ?? tour.diemNgam[0])
+    .id;
 
 // Tìm không phân biệt dấu: "chua dong" vẫn ra "Chùa Đồng".
 const boDau = (s) =>
@@ -100,7 +145,9 @@ export default function TourVr360Page() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
                   Hệ thống Virtual Tour
                 </p>
-                <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-ink">VR360 {tour.ten}</h1>
+                <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-ink">
+                  VR360 {tour.ten}
+                </h1>
               </div>
               <button
                 type="button"
@@ -112,7 +159,11 @@ export default function TourVr360Page() {
               </button>
             </div>
             {TOURS.length > 1 && (
-              <div className="mt-4 flex rounded-xl bg-mist p-1" role="group" aria-label="Chọn tour">
+              <div
+                className="mt-4 flex rounded-xl bg-mist p-1"
+                role="group"
+                aria-label="Chọn tour"
+              >
                 {TOURS.map((t) => (
                   <button
                     key={t.khoa}
@@ -151,44 +202,63 @@ export default function TourVr360Page() {
             <p className="px-1 text-xs font-semibold uppercase tracking-[0.14em] text-ink-faint">
               Danh sách điểm ngắm ({danhSach.length})
             </p>
-            <ul className="mt-3 space-y-2">
-              {danhSach.map((d) => {
-                const Icon = BIEU_TUONG[d.loai] ?? Landmark;
-                const dangChon = d.id === chon;
-                return (
-                  <li key={d.id}>
-                    <button
-                      type="button"
-                      onClick={() => setChon(d.id)}
-                      aria-current={dangChon ? "true" : undefined}
-                      className={
-                        "flex w-full items-center gap-3 rounded-xl border-l-[3px] px-4 py-3 text-left text-[0.9375rem] transition-colors focus-visible:outline-2 focus-visible:outline-brand " +
-                        (dangChon
-                          ? "border-brand bg-brand-soft font-semibold text-ink"
-                          : "border-transparent bg-mist/60 text-ink-soft hover:bg-mist hover:text-ink")
-                      }
-                    >
-                      <Icon
-                        className={"h-4.5 w-4.5 shrink-0 " + (dangChon ? "text-brand" : "text-ink-faint")}
-                        aria-hidden="true"
-                      />
-                      {d.ten}
-                    </button>
-                  </li>
-                );
-              })}
-              {danhSach.length === 0 && (
-                <li className="px-1 py-4 text-sm text-ink-faint">
-                  Không có điểm nào khớp “{tu}”. Thử gõ ngắn hơn, ví dụ “Hoa Yên”.
-                </li>
-              )}
-            </ul>
+            {chiaMuc(danhSach).map((muc) => (
+              <div key={muc.ten} className="mt-4 first:mt-3">
+                <p className="px-1 pb-2 text-[0.8125rem] font-semibold text-ink">
+                  {muc.ten}{" "}
+                  <span className="font-normal text-ink-faint">
+                    · {muc.diem.length}
+                  </span>
+                </p>
+                <ul className="space-y-2">
+                  {muc.diem.map((d) => {
+                    const Icon = BIEU_TUONG[d.loai] ?? Landmark;
+                    const dangChon = d.id === chon;
+                    return (
+                      <li key={d.id}>
+                        <button
+                          type="button"
+                          onClick={() => setChon(d.id)}
+                          aria-current={dangChon ? "true" : undefined}
+                          className={
+                            "flex w-full items-center gap-3 rounded-xl border-l-[3px] px-4 py-3 text-left text-[0.9375rem] transition-colors focus-visible:outline-2 focus-visible:outline-brand " +
+                            (dangChon
+                              ? "border-brand bg-brand-soft font-semibold text-ink"
+                              : "border-transparent bg-mist/60 text-ink-soft hover:bg-mist hover:text-ink")
+                          }
+                        >
+                          <Icon
+                            className={
+                              "h-4.5 w-4.5 shrink-0 " +
+                              (dangChon ? "text-brand" : "text-ink-faint")
+                            }
+                            aria-hidden="true"
+                          />
+                          {d.ten}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+            {danhSach.length === 0 && (
+              <p className="px-1 py-4 text-sm text-ink-faint">
+                Không có điểm nào khớp “{tu}”. Thử gõ ngắn hơn, ví dụ “Hoa Yên”.
+              </p>
+            )}
           </div>
 
           {/* Mô tả điểm đang xem — luôn nằm đáy cột */}
           <div className="border-t border-line bg-mist px-5 py-5 sm:px-6">
-            <p className="text-sm font-semibold uppercase tracking-wide text-brand">{diem.ten}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{diem.moTa}</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand">
+              {diem.ten}
+            </p>
+            {/* Điểm chưa có mô tả: chỉ ghi mục + cách xem, KHÔNG tự bịa nội dung. */}
+            <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
+              {diem.moTa ??
+                `${tenMuc(diem.loai)} · Kéo để nhìn quanh, bấm các mũi tên trong tour để đi sang cảnh khác.`}
+            </p>
           </div>
         </aside>
 
