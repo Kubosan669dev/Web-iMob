@@ -1,5 +1,5 @@
 {
-  "_note": "Các tour 360° của trang /tour-360 (mục VR360 trên thanh menu). Mỗi tour một danh sách điểm ngắm; mỗi điểm là MỘT cảnh trên Panoee: `canh` là đường dẫn cảnh (slug), tour.panoee.net/<id tour>/<canh> mở thẳng cảnh đó. Thêm tour: thêm một khối vào `tours` (khoá `khoa` dùng trên địa chỉ: /tour-360?tour=<khoa>). Thêm điểm: mở tour trên Panoee, bấm sang cảnh cần thêm, chép phần cuối địa chỉ vào `canh`. `loai` quyết định biểu tượng VÀ mục hiển thị (xem NHOM_HIEN_THI trong TourVr360Page.jsx): toan-canh | chua | thien-nhien | nuoc | van-hoa | cho | an-uong | tien-ich | giao-thong | cong-nghiep | co-quan | truong-hoc. `moTa` không bắt buộc — điểm chưa có mô tả thì khung dưới chỉ hiện tên mục, đừng bịa mô tả cho đủ. Danh sách Quảng Tân lấy theo mục Virtual Tour của bandosoxaquangtan.vn (cùng là sản phẩm iMob), câu chữ đã bớt từ ngữ quảng cáo. Mô tả viết thận trọng: chuyện dân gian ghi 'tương truyền', không nêu năm, số đo hay danh hiệu chưa đối chiếu. Cập nhật 26/10/2026: tour Yên Tử thêm nhiều nhóm cảnh (đền, chùa, cơ quan, trường học); 4 nhóm chưa có cảnh xuất bản (Tượng Phật Hoàng, Khu Tháp Tổ, Miếu Cửa Ông Thầy, Đền Mắt Rồng) chưa đưa vào.",
+  "_note": "Các tour 360° của trang /tour-360 (mục VR360 trên thanh menu). Mỗi tour một danh sách điểm ngắm; mỗi điểm là MỘT cảnh trên Panoee: `canh` là đường dẫn cảnh (slug), tour.panoee.net/<id tour>/<canh> mở thẳng cảnh đó. Thêm tour: thêm một khối vào `tours` (khoá `khoa` dùng trên địa chỉ: /tour-360?tour=<khoa>). Thêm điểm: mở tour trên Panoee, bấm sang cảnh cần thêm, chép phần cuối địa chỉ vào `canh`. Cảnh không có đường dẫn chữ (slug trống) thì `canh` là MÃ CẢNH 24 ký tự — Panoee nhận cả hai dạng. `loai` quyết định biểu tượng VÀ mục hiển thị (xem NHOM_HIEN_THI trong TourVr360Page.jsx): toan-canh | chua | thien-nhien | nuoc | van-hoa | cho | an-uong | tien-ich | giao-thong | cong-nghiep | co-quan | truong-hoc. `moTa` không bắt buộc — điểm chưa có mô tả thì khung dưới chỉ hiện tên mục, đừng bịa mô tả cho đủ. Danh sách Quảng Tân lấy theo mục Virtual Tour của bandosoxaquangtan.vn (cùng là sản phẩm iMob), câu chữ đã bớt từ ngữ quảng cáo. Mô tả viết thận trọng: chuyện dân gian ghi 'tương truyền', không nêu năm, số đo hay danh hiệu chưa đối chiếu. Cập nhật 26/10/2026: tour Yên Tử thêm nhiều nhóm cảnh (đền, chùa, cơ quan, trường học); 2 nhóm chưa có cảnh nào (Tượng Phật Hoàng, Khu Tháp Tổ) chưa đưa vào.",
   "tours": [
     {
       "khoa": "yen-tu",
@@ -100,6 +100,18 @@
           "ten": "Miếu Năm Mẫu",
           "loai": "chua",
           "canh": "1-2"
+        },
+        {
+          "id": "mieu-cua-ong-thay",
+          "ten": "Miếu Cửa Ông Thầy",
+          "loai": "chua",
+          "canh": "6acde697a04f4c000852046d"
+        },
+        {
+          "id": "den-mat-rong",
+          "ten": "Đền Mắt Rồng",
+          "loai": "chua",
+          "canh": "6acde698a04f4c000852047a"
         },
         {
           "id": "den-trung-doan-5",
