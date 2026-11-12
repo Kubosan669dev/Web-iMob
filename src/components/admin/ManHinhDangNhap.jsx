@@ -91,8 +91,7 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
       if (api.layVaiTro() !== api.VAI_QUAN_TRI) {
         api.dangXuat();
         setLoi(
-          "Đây là tài khoản thành viên, không vào được trang quản trị. " +
-            "Bạn xem tài khoản của mình ở trang /tai-khoan nhé.",
+          "Đây là tài khoản thành viên, không vào được trang quản trị.",
         );
         return;
       }

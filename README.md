@@ -35,7 +35,6 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 | Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
 | Tour VR360 | `/tour-360` | `pages/TourVr360Page.jsx` | `data/tourVr360.json` |
 | Tin tức, câu chuyện | `/tin-tuc`, `/cau-chuyen` | `pages/DanhSachBaiVietPage.jsx`, `BaiVietPage.jsx` | từ API (`services/baiVietService.js`) |
-| Tài khoản | `/dang-nhap`, `/dang-ky`, `/tai-khoan` | `pages/DangNhapPage.jsx`…, `components/taikhoan/` | từ API (`services/taiKhoanService.js`) |
 | Quản trị nội dung | `/admin` | `pages/AdminPage.jsx` + `components/admin/` | từ API (`services/adminService.js`) |
 | Pháp lý | `/privacy-policy`, `/terms-of-service` | `pages/LegalPage.jsx` | `data/legalPages.json` |
 | Bảng mẫu giao diện (nội bộ) | `/ui-kit` | `pages/UiKitPage.jsx` | |
@@ -77,6 +76,13 @@ ssh chung "bash /var/www/imob/trien-khai.sh"
 
 Script tự chạy kiểm tra, build, đổi sang bản mới; hỏng bước nào thì tự quay về
 bản cũ. Chi tiết: `trien-khai/README.md`.
+
+## Tài khoản thành viên (đã gỡ khỏi website)
+
+Đăng ký, đăng nhập, hồ sơ thành viên đã gỡ khỏi website ngày 12/11/2026. Ba link
+cũ (`/dang-nhap`, `/dang-ky`, `/tai-khoan`) tự về trang chủ. API thành viên
+trong `chatbot-python/` vẫn còn nguyên. Mã giao diện cũ và phần đang làm dở (xác
+minh email, quên mật khẩu) nằm ở nhánh git `luu-tai-khoan-dang-do`.
 
 ## Chuyển hướng link cũ
 

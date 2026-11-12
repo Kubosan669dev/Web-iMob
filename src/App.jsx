@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "motion/react";
 import Layout from "./components/layout/Layout.jsx";
 import ScrollToTop from "./components/util/ScrollToTop.jsx";
@@ -7,7 +7,6 @@ import ChuyenHuongCu from "./components/util/ChuyenHuongCu.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
 import { BangMauProvider } from "./context/BangMauContext.jsx";
-import { TaiKhoanProvider } from "./context/TaiKhoanContext.jsx";
 
 // Các trang dịch vụ tách bundle bằng lazy() — khách vào trang chủ không tải
 // kèm. Nội dung từng trang đọc từ data/servicePages.json.
@@ -32,12 +31,6 @@ const TourVr360Page = lazy(() => import("./pages/TourVr360Page.jsx"));
 // bai_viet, soạn ở /admin. Cùng lazy() — khách vào trang chủ không tải kèm.
 const DanhSachBaiVietPage = lazy(() => import("./pages/DanhSachBaiVietPage.jsx"));
 const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
-
-// Tài khoản thành viên (21/09/2026): đăng ký, đăng nhập, hồ sơ. Cùng lazy()
-// — phần lớn khách vào xem website không bao giờ mở tới ba trang này.
-const DangNhapPage = lazy(() => import("./pages/DangNhapPage.jsx"));
-const DangKyPage = lazy(() => import("./pages/DangKyPage.jsx"));
-const TaiKhoanPage = lazy(() => import("./pages/TaiKhoanPage.jsx"));
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
 // LegalPage, khác nhau ở prop slug. Nội dung đọc từ data/legalPages.json.
@@ -68,11 +61,6 @@ export default function App() {
             thức từ nội dung, và nằm NGOÀI router vì màu áp cho cả site — kể cả
             trang /admin, để không phải nhớ hai bộ màu. */}
         <BangMauProvider>
-          {/* TaiKhoanProvider bọc NGOÀI router vì thanh menu (luôn hiện) và
-              trang /tai-khoan phải nhìn cùng một sự thật về "ai đang đăng
-              nhập". Để mỗi nơi tự đọc trình duyệt thì bấm Đăng xuất xong,
-              thanh menu vẫn hiện tên cho tới lúc tải lại trang. */}
-          <TaiKhoanProvider>
           <BrowserRouter>
             <ScrollToTop />
             {/* Link cũ -> trang mới. Đang TẮT (công tắc trong
@@ -115,7 +103,6 @@ export default function App() {
                     path="/tin-tuc/:duongDan"
                     element={<BaiVietPage mucMacDinh="tin_cong_ty" />}
                   />
-                  <Route path="/tai-khoan" element={<TaiKhoanPage />} />
                   <Route
                     path="/privacy-policy"
                     element={<LegalPage slug="privacy-policy" />}
@@ -126,18 +113,15 @@ export default function App() {
                   />
                 </Route>
 
-                {/* Đăng nhập / đăng ký — ĐỨNG NGOÀI Layout, tức là không
-                    Navbar, không Footer, không nút chat. Một trang đăng nhập
-                    chỉ có đúng một việc phải làm; thanh menu thì bày ra mười
-                    lối đi khác, trong đó "Nhận tư vấn" trông y hệt một nút
-                    bấm chính. Lối quay về nằm ngay trong trang (logo ở góc và
-                    dòng "Về trang chủ") — xem components/taikhoan/KhungXacThuc.jsx.
-
-                    /tai-khoan thì NGƯỢC LẠI, vẫn nằm trong Layout: lúc đó
-                    người ta đã đăng nhập xong và đang duyệt website bình
-                    thường, cất menu đi chỉ làm họ mắc kẹt. */}
-                <Route path="/dang-nhap" element={<DangNhapPage />} />
-                <Route path="/dang-ky" element={<DangKyPage />} />
+                {/* Tài khoản thành viên (đăng ký, đăng nhập, hồ sơ) đã GỠ khỏi
+                    website 12/11/2026 — web gọn lại còn hỏi đáp AI, chưa cần
+                    tài khoản. Ai còn giữ link cũ thì về trang chủ thay vì gặp
+                    trang trắng. API thành viên trong chatbot-python/ vẫn còn
+                    nguyên; phần đang làm dở (xác minh email, quên mật khẩu)
+                    cất ở nhánh git `luu-tai-khoan-dang-do`. */}
+                <Route path="/dang-nhap" element={<Navigate to="/" replace />} />
+                <Route path="/dang-ky" element={<Navigate to="/" replace />} />
+                <Route path="/tai-khoan" element={<Navigate to="/" replace />} />
 
                 {/* Style-guide nội bộ — không Navbar/Footer */}
                 <Route path="/ui-kit" element={<UiKitPage />} />
@@ -148,7 +132,6 @@ export default function App() {
             </Suspense>
             </ChuyenHuongCu>
           </BrowserRouter>
-          </TaiKhoanProvider>
         </BangMauProvider>
       </NoiDungProvider>
     </MotionConfig>
