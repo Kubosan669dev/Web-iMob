@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "motion/react";
 import Layout from "./components/layout/Layout.jsx";
 import ScrollToTop from "./components/util/ScrollToTop.jsx";
+import ChuyenHuongCu from "./components/util/ChuyenHuongCu.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
 import { BangMauProvider } from "./context/BangMauContext.jsx";
@@ -74,6 +75,9 @@ export default function App() {
           <TaiKhoanProvider>
           <BrowserRouter>
             <ScrollToTop />
+            {/* Link cũ -> trang mới. Đang TẮT (công tắc trong
+                data/chuyenHuong.json) cho tới khi trang mới lên. */}
+            <ChuyenHuongCu>
             <Suspense fallback={null}>
               <Routes>
                 {/* Các trang chính dùng chung Layout (Navbar + Footer) */}
@@ -142,6 +146,7 @@ export default function App() {
                 <Route path="/admin" element={<AdminPage />} />
               </Routes>
             </Suspense>
+            </ChuyenHuongCu>
           </BrowserRouter>
           </TaiKhoanProvider>
         </BangMauProvider>

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/chuyen-huong.mjs --kiem-tra",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -12,7 +13,8 @@
     "test:chat:flow": "node scripts/test-chatbot-flow.mjs",
     "test:congty": "node scripts/kiem-tra-congty-dong.mjs",
     "test:doitac": "node scripts/kiem-tra-doi-tac.mjs",
-    "bangmau": "node scripts/kiem-tra-bang-mau.mjs"
+    "bangmau": "node scripts/kiem-tra-bang-mau.mjs",
+    "chuyenhuong": "node scripts/chuyen-huong.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.2.8",

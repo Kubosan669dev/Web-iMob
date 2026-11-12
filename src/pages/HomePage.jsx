@@ -46,8 +46,8 @@ export default function HomePage() {
 
           Dữ liệu KHÔNG mất: cả hai chỗ cùng đọc khoá `projects` trong CMS, nên
           sửa trong /admin → Sản phẩm vẫn hiện ra ở băng chuyền như cũ.
-          Component src/sections/Projects.jsx vẫn còn nguyên trong mã nguồn,
-          muốn bật lại chỉ cần thêm <Projects /> vào đây. */}
+          File src/sections/Projects.jsx đã xoá 12/11/2026 khi dọn dự án; cần
+          lại thì lấy từ lịch sử git. */}
 
       {/* Dải tên đối tác chạy ngang — thêm 22/08/2026, đúng chỗ công ty dặn:
           "ở trên phần dịch vụ mình để chạy 1 dòng các đối tác và đơn vị đã
