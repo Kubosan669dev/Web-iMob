@@ -144,7 +144,7 @@ export default function BaiVietPage({ mucMacDinh = LOAI_CAU_CHUYEN }) {
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-4">
                 <Link
-                  to="/#contact"
+                  to="/ve-chung-toi#contact"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-tren-brand transition hover:opacity-90"
                 >
                   Nhận tư vấn

@@ -21,6 +21,11 @@ import "@fontsource/be-vietnam-pro/900.css"; // font-black (tiêu đề lớn)
 // JetBrains Mono giữ nguyên: dùng cho nhãn, mã, số liệu — kiểu chữ máy tính
 // tương phản rõ với phần chữ nội dung.
 import "@fontsource-variable/jetbrains-mono";
+// Chữ có chân cho TIÊU ĐỀ — giao diện mới chốt 13/11/2026 (trang Hỏi đáp AI).
+// Playfair Display có bộ chữ tiếng Việt riêng nên dấu không bị ghép lệch.
+// Chỉ nạp 600 + 600 nghiêng: tiêu đề chỉ dùng đúng hai kiểu này.
+import "@fontsource/playfair-display/600.css";
+import "@fontsource/playfair-display/600-italic.css";
 
 import "./styles/index.css";
 import App from "./App.jsx";

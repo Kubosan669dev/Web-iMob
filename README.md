@@ -1,6 +1,10 @@
 # Website iMob (imob.vn)
 
-Bản đồ dự án: cái gì nằm ở đâu, sửa việc gì thì mở file nào. Cập nhật 12/11/2026.
+Bản đồ dự án: cái gì nằm ở đâu, sửa việc gì thì mở file nào. Cập nhật 13/11/2026.
+
+Từ 13/11/2026 website có **hai mục**: Hỏi đáp AI cho địa phương (trang chủ) và
+Về chúng tôi (trang chủ cũ chuyển sang). Giao diện theo bản công ty chốt; màu
+là bảng "Bản địa" (`ban-dia`).
 
 Website chạy thật tại **https://imob.vn** trên một máy chủ CMC. Gồm ba phần:
 
@@ -31,7 +35,8 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 
 | Trang | Đường dẫn | File chính | Dữ liệu |
 |---|---|---|---|
-| Trang chủ | `/` | `pages/HomePage.jsx` + các khối trong `sections/` | `data/hero.json`, `about.json`, `doiTac.json`, `services.json` |
+| Trang chủ = Hỏi đáp AI | `/` | `pages/HomePage.jsx` + các khối trong `sections/hoi-dap/` | `data/diaPhuong.json` (địa phương, số liệu, câu gợi ý) |
+| Về chúng tôi (trang chủ cũ) | `/ve-chung-toi` | `pages/VeChungToiPage.jsx` + các khối trong `sections/` | `data/hero.json`, `about.json`, `doiTac.json`, `services.json` |
 | Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
 | Tour VR360 | `/tour-360` | `pages/TourVr360Page.jsx` | `data/tourVr360.json` |
 | Tin tức, câu chuyện | `/tin-tuc`, `/cau-chuyen` | `pages/DanhSachBaiVietPage.jsx`, `BaiVietPage.jsx` | từ API (`services/baiVietService.js`) |
@@ -44,7 +49,9 @@ Dùng chung cho mọi trang:
 | Việc | File |
 |---|---|
 | Khai báo các trang (router) | `src/App.jsx` |
-| Thanh menu, chân trang | `components/layout/`, mục menu trong `utils/constants.js` |
+| Thanh menu, chân trang | `components/layout/`, mục menu + nút "Đăng ký cho địa phương" trong `utils/constants.js` |
+| Nút "Hỏi ngay" gửi câu hỏi vào khung chat | `utils/chatBus.js` → `components/chatbot/ChatbotNenTang.jsx` (`guiCauHoi`) |
+| Form "Đăng ký cho địa phương" | `sections/hoi-dap/DangKyDiaPhuong.jsx` → `POST /api/dang-ky-dia-phuong` (`chatbot-python/api_lien_he.py`) |
 | Khung chat nền tảng (khoá bot, công tắc) | `components/chatbot/botNenTang.js`, `ChatbotNenTang.jsx` |
 | Bot cũ của website (đang ẩn, để dự phòng) | `components/chatbot/ChatWidget.jsx`…, `services/chatBrain.js`, `data/kienThuc.json` |
 | Nút, thẻ, logo… dùng lại | `components/ui/` |
@@ -86,10 +93,12 @@ minh email, quên mật khẩu) nằm ở nhánh git `luu-tai-khoan-dang-do`.
 
 ## Chuyển hướng link cũ
 
-Website đang gọn lại còn hai mục (Hỏi đáp AI, Về chúng tôi). Link của các trang
-sẽ bỏ được chuyển sang trang mới theo **một bảng duy nhất**:
-`src/data/chuyenHuong.json`. Đang **tắt** (`"bat": false`) cho tới khi trang mới
-lên. Cách bật ghi ở đầu `trien-khai/nginx-chuyen-huong.conf`.
+Bảng duy nhất: `src/data/chuyenHuong.json`, **đang bật** từ 13/11/2026. Hiện chỉ
+chuyển các link neo của trang chủ cũ (`imob.vn/#contact`, `/#about`…) sang đúng
+khối trên `/ve-chung-toi`; phần này chạy trong web nên không cần sửa nginx. Các
+trang dịch vụ và tin tức vẫn giữ (trang Về chúng tôi có link tới chúng). Muốn
+chuyển cả đường dẫn thì thêm vào `duongDan`, chạy `npm run chuyenhuong`, rồi làm
+theo hướng dẫn ở đầu `trien-khai/nginx-chuyen-huong.conf`.
 
 ## Những điều không được làm
 

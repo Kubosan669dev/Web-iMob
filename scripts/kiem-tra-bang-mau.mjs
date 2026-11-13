@@ -45,7 +45,18 @@ const CHUNG_SANG = {
 };
 
 const BANG = {
-  // ---- BẢNG MẶC ĐỊNH TỪ 22/08/2026 ----
+  // ---- BẢNG MẶC ĐỊNH TỪ 13/11/2026 ----
+  // Theo giao diện công ty chốt cho imob.vn mới (Hỏi đáp AI cho địa phương):
+  // nền kem giấy dó, xanh rừng thiền làm màu chính, nâu đất làm màu nhấn.
+  // brandDeep đồng thời là nền của dải tối "Giải pháp AI cho địa phương".
+  "ban-dia": {
+    ten: "Bản địa", mo: "Xanh rừng, nền kem, nâu đất — giao diện 11/2026, mặc định", toi: false,
+    paper: "#faf7f0", mist: "#f2ede1", panel: "#ffffff",
+    ink: "#16241c", inkSoft: "#47584d", inkFaint: "#5a6a5f", line: "#e3dccb",
+    brand: "#1f4a35", brandDeep: "#143426", brandSoft: "#e2ebe2",
+    accent: "#7a3e12", accentSoft: "#f5e6d6", ...CHUNG_SANG,
+  },
+  // ---- BẢNG MẶC ĐỊNH 22/08/2026 → 13/11/2026 ----
   // Công ty xem bản chàm-tím rồi nhắn: "màu trông đơn điệu quá, cty công nghệ
   // mà nhạt nhẽo thế à", kèm 10 ảnh trang web mẫu và một combo màu trên
   // TikTok. Đo màu chủ đạo của 10 ảnh đó bằng máy (gom pixel theo vùng
@@ -242,7 +253,7 @@ const dau = [
   "// ============================================================",
   "",
   "/** Bảng màu dùng khi chưa ai chọn gì. Là màu trong logo iMob. */",
-  'export const KHOA_MAC_DINH = "cyber-indigo";',
+  'export const KHOA_MAC_DINH = "ban-dia";',
   "",
   "export const BANG_MAU = [",
 ];

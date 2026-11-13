@@ -13,9 +13,34 @@
 // ============================================================
 
 /** Bảng màu dùng khi chưa ai chọn gì. Là màu trong logo iMob. */
-export const KHOA_MAC_DINH = "cyber-indigo";
+export const KHOA_MAC_DINH = "ban-dia";
 
 export const BANG_MAU = [
+  {
+    khoa: "ban-dia",
+    ten: "Bản địa",
+    moTa: "Xanh rừng, nền kem, nâu đất — giao diện 11/2026, mặc định",
+    toi: false,
+    bien: {
+      "--color-paper": "#faf7f0",
+      "--color-mist": "#f2ede1",
+      "--color-panel": "#ffffff",
+      "--color-ink": "#16241c",
+      "--color-ink-soft": "#47584d",
+      "--color-ink-faint": "#5a6a5f",
+      "--color-line": "#e3dccb",
+      "--color-brand": "#1f4a35",
+      "--color-brand-deep": "#143426",
+      "--color-brand-soft": "#e2ebe2",
+      "--color-tren-brand": "#ffffff",
+      "--color-accent": "#7a3e12",
+      "--color-accent-soft": "#f5e6d6",
+      "--color-loi": "#b3261e",
+      "--color-loi-nen": "#fdecea",
+      "--color-canhbao": "#955405",
+      "--color-canhbao-cham": "#d97706",
+    },
+  },
   {
     khoa: "cyber-indigo",
     ten: "Cyber Indigo",

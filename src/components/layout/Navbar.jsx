@@ -1,134 +1,80 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, Menu } from "lucide-react";
+import { BadgeCheck, Menu } from "lucide-react";
 import Container from "../ui/Container.jsx";
 import Logo from "../ui/Logo.jsx";
-import Button from "../ui/Button.jsx";
 import MobileMenu from "./MobileMenu.jsx";
-import useActiveSection from "../../hooks/useActiveSection.js";
-import { NAV_ITEMS } from "../../utils/constants.js";
+import { NAV_ITEMS, NUT_DANG_KY } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
 
-// Mảng id section — khai báo ngoài component để tham chiếu ổn định
-// (useActiveSection phụ thuộc vào nó, xem comment trong hook)
-const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
-
-/* ---------- ĐÃ GỠ: thanh liên hệ trên cùng (19/08/2026) ----------
-   Trước đây có một dải mỏng phía trên thanh menu, hiện số điện thoại, email và
-   giờ làm việc.
-
-   Gỡ theo góp ý của công ty: ngay bên phải thanh menu đã có nút "Nhận tư vấn",
-   bấm vào là ra đủ số điện thoại, email và địa chỉ văn phòng — nên dải kia
-   thành thừa, chỉ tổ đẩy nội dung chính xuống thấp thêm 33px.
-
-   ⚠️ Việc này làm THANH MENU THẤP ĐI, và có ba chỗ đang tính theo chiều cao đó:
-     • styles/index.css     -> section[id] { scroll-margin-top }
-     • sections/Hero.jsx    -> padding-top của dải màu thương hiệu
-     • chatbot/ChatWidget.jsx -> sm:max-h của khung chat (nếu sai, khung chat
-       chui xuống dưới menu và mất luôn nút đóng — đã dính lỗi này một lần)
-   Sửa chiều cao menu thì phải xem lại cả ba chỗ trên.
-   ---------------------------------------------------------------- */
-
-// Một item trên menu desktop; item có children sẽ kèm dropdown (mở bằng CSS group-hover)
+// ============================================================
+// Thanh menu — giao diện công ty chốt 13/11/2026.
 //
-// Item có `to` là TRANG KHÁC trong cùng ứng dụng -> đi bằng <Link> để không
-// tải lại cả web. Item có `href` là một khối trên trang chủ (dạng "/#about")
-// -> vẫn là <a>, vì nhảy tới neo #... là việc của trình duyệt.
-function NavItem({ item, active }) {
-  const The = item.to ? Link : "a";
-  const dich = item.to ? { to: item.to } : { href: item.href };
+// Ba cụm: logo bên trái, HAI mục giữa (Hỏi đáp AI · Về chúng tôi), nút
+// "Đăng ký cho địa phương" bên phải.
+//
+// So với ảnh mẫu, CỐ Ý bỏ hai thứ:
+//   • Nút đổi ngôn ngữ "VN": website chưa có bản dịch nào, bấm vào chẳng đổi
+//     được gì.
+//   • Ảnh đại diện người dùng: phần tài khoản thành viên đã gỡ 12/11/2026.
+//
+// ⚠️ Chiều cao thanh menu (h-16 = 64px) đang được tính ở
+// styles/index.css -> section[id] { scroll-margin-top }. Đổi chiều cao thì
+// sửa cả chỗ đó, không thì bấm neo bị menu che mất tiêu đề.
+// ============================================================
 
-  return (
-    <div className="group relative">
-      <The
-        {...dich}
-        className={
-          // whitespace-nowrap + đệm hẹp ở lg: từ khi thêm mục VR360 (7 mục),
-          // màn 1024px không đủ chỗ cho đệm 3.5 — chữ bị bẻ hai dòng.
-          "flex items-center gap-1 whitespace-nowrap px-2.5 py-2 text-[0.9375rem] font-medium transition-colors duration-200 xl:px-3.5 " +
-          (active ? "text-brand" : "text-ink-soft hover:text-ink")
-        }
-      >
-        {item.label}
-        {item.children && (
-          <ChevronDown
-            className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180"
-            aria-hidden="true"
-          />
-        )}
-      </The>
-
-      {/* Dropdown (chỉ item có children). pt-2 tạo "cầu" hover không bị hụt */}
-      {item.children && (
-        <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-          <div className="w-72 rounded-2xl bg-panel p-2 shadow-lift">
-            {item.children.map((child) => (
-              <Link
-                key={child.label}
-                to={child.to}
-                className="block rounded-xl px-4 py-2.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink"
-              >
-                {child.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+function dangMo(item, pathname) {
+  return item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
 }
 
 export default function Navbar() {
   const congTy = useCongTy();
-  const activeId = useActiveSection(SECTION_IDS);
   const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-
-      {/* Thanh điều hướng LUÔN mờ đục, không đổi trạng thái theo cuộn — giống
-          apple.com. Bản trước để trong suốt khi ở đầu trang rồi mới hiện nền
-          lúc cuộn; đổi trạng thái như vậy làm header nhấp nháy mỗi lần cuộn
-          qua ngưỡng, và ở đầu trang thì menu chữ xám nằm trên nền trắng trơn
-          trông như bị bỏ quên. */}
-      <div className="border-b border-line bg-paper/80 backdrop-blur-xl">
-        <Container className="flex h-16 items-center justify-between">
-          {/* ---------- Logo ----------
-              Logo dùng ảnh chính thức có sẵn ô nền, KHÔNG tự dựng ô nền bằng
-              bg-brand nữa: bg-brand đổi theo bảng màu, mà logo công ty thì
-              không được phép đổi màu. Xem components/ui/Logo.jsx. */}
-          <a href="/#home" className="flex items-center gap-2.5">
+      <div className="border-b border-line/70 bg-paper/85 backdrop-blur-xl">
+        <Container rong="max-w-6xl" className="grid h-16 grid-cols-[1fr_auto] items-center lg:grid-cols-[1fr_auto_1fr]">
+          {/* Logo: ảnh chính thức, không đổi màu theo bảng màu (xem ui/Logo.jsx) */}
+          <Link to="/" className="flex items-center gap-2.5 justify-self-start">
             <Logo className="h-8 w-8" />
-            <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">
-              {congTy.name}
-            </span>
-          </a>
+            <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">{congTy.name}</span>
+          </Link>
 
-          {/* ---------- Menu desktop ---------- */}
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu chính">
-            {NAV_ITEMS.map((item) => (
-              // Mục VR360 không phải khối trên trang chủ nên useActiveSection
-              // không bao giờ trả id của nó — sáng theo đường dẫn đang mở.
-              // Các mục còn lại là khối TRÊN TRANG CHỦ: chỉ sáng khi đang ở
-              // trang chủ, nếu không "Trang chủ" sáng kèm ở mọi trang khác.
-              <NavItem
-                key={item.id}
-                item={item}
-                active={
-                  item.id === "tour-360"
-                    ? pathname === item.to
-                    : pathname === "/" && item.id === activeId
-                }
-              />
-            ))}
+          <nav className="hidden items-center gap-2 lg:flex" aria-label="Menu chính">
+            {NAV_ITEMS.map((item) => {
+              const mo = dangMo(item, pathname);
+              return (
+                <Link
+                  key={item.id}
+                  to={item.to}
+                  aria-current={mo ? "page" : undefined}
+                  className={
+                    "relative px-4 py-2 text-[0.9375rem] font-medium transition-colors " +
+                    (mo ? "text-ink" : "text-ink-soft hover:text-ink")
+                  }
+                >
+                  {item.label}
+                  {mo && (
+                    <span
+                      className="absolute inset-x-4 -bottom-[1px] h-0.5 rounded-full bg-brand"
+                      aria-hidden="true"
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* ---------- Bên phải: CTA + hamburger ---------- */}
-          <div className="flex items-center gap-1 lg:gap-2">
-            <Button href="/#contact" size="sm" className="ml-2 hidden whitespace-nowrap lg:inline-flex">
-              Nhận tư vấn
-            </Button>
+          <div className="flex items-center justify-self-end gap-1">
+            <a
+              href={NUT_DANG_KY.href}
+              className="hidden items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-tren-brand transition-colors hover:bg-brand-deep lg:inline-flex"
+            >
+              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              {NUT_DANG_KY.label}
+            </a>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -141,12 +87,7 @@ export default function Navbar() {
         </Container>
       </div>
 
-      {/* ---------- Menu mobile (slide panel) ---------- */}
-      <MobileMenu
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        activeId={activeId}
-      />
+      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} pathname={pathname} />
     </header>
   );
 }

@@ -1,161 +1,116 @@
 import { Link } from "react-router-dom";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Container from "../ui/Container.jsx";
-import BanDo from "../ui/BanDo.jsx";
-import {
-  FacebookIcon,
-  YoutubeIcon,
-  LinkedinIcon,
-  GithubIcon,
-} from "../icons/BrandIcons.jsx";
-import { NAV_ITEMS, SOCIAL_LINKS } from "../../utils/constants.js";
+import { NAV_ITEMS, NUT_DANG_KY } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
 
-// Map id social (từ constants) → icon thương hiệu (SVG inline —
-// lucide v1 đã bỏ brand icons, xem components/icons/BrandIcons.jsx)
-const SOCIAL_ICONS = {
-  facebook: FacebookIcon,
-  youtube: YoutubeIcon,
-  linkedin: LinkedinIcon,
-  github: GithubIcon,
-};
-
-// Link cột Dịch vụ lấy từ dropdown SERVICES của menu chính
-// → một nguồn dữ liệu duy nhất trong constants.js
-const serviceLinks = NAV_ITEMS.find((item) => item.id === "services")?.children ?? [];
-
-/* Chân trang kiểu Apple: CHỮ RẤT NHỎ (12–13px), nhiều cột link, một vạch kẻ
-   mảnh, rồi dòng pháp lý dưới cùng. Không icon to, không ô màu, không đổ bóng.
-   Chân trang là nơi tra cứu chứ không phải nơi gây ấn tượng, nên nó nhường hết
-   sự chú ý cho phần nội dung phía trên. */
+// ============================================================
+// Chân trang — giao diện công ty chốt 13/11/2026: ba cột (thương hiệu + câu
+// trích, điều hướng, liên hệ) rồi dòng pháp lý dưới cùng.
+//
+// ⚠️ MỌI THÔNG TIN LIÊN HỆ ĐỌC TỪ useCongTy() (sửa ở /admin → Liên hệ), không
+// viết cứng. Ảnh mẫu ghi "banbientap@imob.vn", "đầu mối Hà Nội • Đà Nẵng •
+// TP.HCM", "63 tỉnh thành", "© 2025" — không cái nào đúng (email chính thức là
+// admin@imob.vn, văn phòng ở Hạ Long, cả nước còn 34 tỉnh từ 01/07/2025), nên
+// đã thay bằng dữ liệu thật.
+//
+// Câu trích là SỨ MỆNH chính thức của công ty (company.json → suMenh), không
+// phải câu tự đặt.
+//
+// Chân trang cũ có hàng biểu tượng Facebook / YouTube / LinkedIn / GitHub — cả
+// bốn đều trỏ "#" (chưa có trang thật) nên đã bỏ. Có trang thật thì thêm lại.
+// ============================================================
 
 function CotLink({ tieuDe, children }) {
   return (
     <div>
-      <h4 className="mb-3 text-xs font-semibold text-ink">{tieuDe}</h4>
-      <ul className="space-y-2.5">{children}</ul>
+      <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-ink">{tieuDe}</h4>
+      <ul className="space-y-2.5 text-sm text-ink-soft">{children}</ul>
     </div>
   );
 }
 
-function DongLink({ href, to, children }) {
-  const cls = "text-xs text-ink-soft transition-colors hover:text-brand";
-  return (
-    <li>
-      {to ? (
-        <Link to={to} className={cls}>
-          {children}
-        </Link>
-      ) : (
-        <a href={href} className={cls}>
-          {children}
-        </a>
-      )}
-    </li>
-  );
-}
-
 export default function Footer() {
-  // Thông tin công ty lấy từ context: mặc định là company.json trong bundle,
-  // sẽ tự đổi sang bản sửa trong /admin khi API trả về. Xem NoiDungContext.jsx.
   const congTy = useCongTy();
-  const soDienThoaiGoi = congTy.phone.replace(/\s/g, "");
+  const goi = congTy.phone.replace(/\s/g, "");
+  const nam = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-line bg-paper">
-      <Container className="py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* ---------- Cột 1: Điều hướng ---------- */}
-          <CotLink tieuDe="Khám phá">
+    <footer className="border-t border-line bg-mist">
+      <Container rong="max-w-6xl" className="py-14">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_0.8fr_1.2fr] md:gap-12">
+          <div className="max-w-md">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-xl font-semibold tracking-tight text-ink">{congTy.name}</span>
+              <span className="rounded-md bg-panel px-2 py-0.5 text-xs text-ink-soft">
+                Hỏi đáp AI cho địa phương
+              </span>
+            </div>
+            {congTy.suMenh && (
+              <p className="mt-5 font-display text-xl italic leading-snug text-ink">
+                “{congTy.suMenh}”
+              </p>
+            )}
+            <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+              {congTy.fullName}. {congTy.description}.
+            </p>
+          </div>
+
+          <CotLink tieuDe="Điều hướng">
             {NAV_ITEMS.map((item) => (
-              <DongLink key={item.id} href={item.href}>
-                {item.label}
-              </DongLink>
+              <li key={item.id}>
+                <Link to={item.to} className="transition-colors hover:text-brand">
+                  {item.label}
+                </Link>
+              </li>
             ))}
-          </CotLink>
-
-          {/* ---------- Cột 2: Dịch vụ ---------- */}
-          <CotLink tieuDe="Dịch vụ">
-            {serviceLinks.map((service) => (
-              <DongLink key={service.label} to={service.to}>
-                {service.label}
-              </DongLink>
-            ))}
-          </CotLink>
-
-          {/* ---------- Cột 3: Liên hệ ---------- */}
-          <CotLink tieuDe="Liên hệ">
-            <DongLink href={`tel:${soDienThoaiGoi}`}>{congTy.phone}</DongLink>
-            <DongLink href={`mailto:${congTy.email}`}>{congTy.email}</DongLink>
-            <li className="text-xs leading-relaxed text-ink-soft">
-              {congTy.workingHours}
+            <li>
+              <a href={NUT_DANG_KY.href} className="transition-colors hover:text-brand">
+                {NUT_DANG_KY.label}
+              </a>
+            </li>
+            <li>
+              <Link to="/tour-360" className="transition-colors hover:text-brand">
+                Tour thực tế ảo 360°
+              </Link>
             </li>
           </CotLink>
 
-          {/* ---------- Cột 4: Địa chỉ + mạng xã hội ---------- */}
-          <CotLink tieuDe="Văn phòng">
-            <li className="text-xs leading-relaxed text-ink-soft">
-              {congTy.address}
+          <CotLink tieuDe="Liên hệ hợp tác">
+            <li className="flex gap-2.5">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+              <a href={`tel:${goi}`} className="font-medium text-ink hover:text-brand">
+                {congTy.phone}
+              </a>
             </li>
-            {/* Bản đồ chân trang — công ty yêu cầu 20/08/2026, theo đúng mẫu
-                trang phường Quảng Tân: địa chỉ bằng chữ, ngay dưới là bản đồ.
-                Thấp (h-28) vì chân trang là nơi tra cứu, không phải nơi gây ấn
-                tượng — đủ để nhận ra khu vực rồi bấm mở app thật. */}
-            <li className="pt-3">
-              <BanDo cao="h-28" />
+            <li className="flex gap-2.5">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+              <a href={`mailto:${congTy.email}`} className="font-medium text-ink hover:text-brand">
+                {congTy.email}
+              </a>
             </li>
-            <li className="pt-3">
-              <div className="flex items-center gap-4">
-                {SOCIAL_LINKS.map(({ id, label, href }) => {
-                  const Icon = SOCIAL_ICONS[id];
-                  return (
-                    <a
-                      key={id}
-                      href={href}
-                      aria-label={label}
-                      className="text-ink-faint transition-colors hover:text-brand"
-                    >
-                      {Icon && <Icon className="h-4 w-4" />}
-                    </a>
-                  );
-                })}
-              </div>
+            <li className="flex gap-2.5">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+              <span>{congTy.address}</span>
             </li>
+            {congTy.workingHours && <li className="pl-[1.625rem]">{congTy.workingHours}</li>}
           </CotLink>
         </div>
-      </Container>
 
-      {/* ---------- Dòng pháp lý ---------- */}
-      <div className="border-t border-line py-6">
-        <Container className="space-y-3">
-          {/* Tên pháp nhân. Công ty xác nhận 18/08/2026 chỉ dùng MỘT địa chỉ —
-              văn phòng HL68, đã hiện ở cột Liên hệ phía trên nên không lặp lại. */}
-          <p className="text-xs leading-relaxed text-ink-faint">{congTy.fullName}</p>
-
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-ink-faint">
-              © {new Date().getFullYear()} {congTy.name}. Tất cả quyền được bảo
-              lưu.
-            </p>
-            <nav
-              className="flex items-center gap-4 text-xs"
-              aria-label="Liên kết pháp lý"
-            >
-              <Link
-                to="/privacy-policy"
-                className="text-ink-soft transition-colors hover:text-brand"
-              >
-                Chính sách bảo mật
-              </Link>
-              <Link
-                to="/terms-of-service"
-                className="text-ink-soft transition-colors hover:text-brand"
-              >
-                Điều khoản dịch vụ
-              </Link>
-            </nav>
+        <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {nam} {congTy.fullName}.
+          </p>
+          <div className="flex gap-5">
+            <Link to="/privacy-policy" className="hover:text-brand">
+              Chính sách bảo mật
+            </Link>
+            <Link to="/terms-of-service" className="hover:text-brand">
+              Điều khoản dịch vụ
+            </Link>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </footer>
   );
 }

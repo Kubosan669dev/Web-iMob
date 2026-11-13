@@ -404,6 +404,39 @@ def kiem_loi_nhap_lieu():
     return kq
 
 
+# ============================================================
+# Dang ky cho dia phuong (13/11/2026) — form cong khai o trang Hoi dap AI
+# ============================================================
+def kiem_dang_ky_dia_phuong():
+    from pydantic import ValidationError
+    from api_lien_he import DangKyDiaPhuong, loi_nhan_dang_ky
+
+    kq = []
+    du = dict(don_vi="Ban quản lý di tích Yên Tử", ho_ten="Nguyễn Văn B",
+              so_dien_thoai="0936 982 256")
+
+    def hop_le(**doi):
+        try:
+            DangKyDiaPhuong(**{**du, **doi})
+            return True
+        except ValidationError:
+            return False
+
+    kq.append(("du 3 truong bat buoc, khong email -> hop le", hop_le()))
+    kq.append(("co email dung -> hop le", hop_le(email="a@b.vn")))
+    kq.append(("email sai -> bi chan", not hop_le(email="khong-phai-email")))
+    kq.append(("thieu don vi -> bi chan", not hop_le(don_vi="")))
+    kq.append(("thieu ho ten -> bi chan", not hop_le(ho_ten="")))
+    kq.append(("so dien thoai bang chu -> bi chan", not hop_le(so_dien_thoai="goi cho toi nhe")))
+    kq.append(("so dien thoai qua ngan -> bi chan", not hop_le(so_dien_thoai="0936")))
+    kq.append(("+84 va dau cach -> hop le", hop_le(so_dien_thoai="+84 936 982 256")))
+    kq.append(("don vi dai 5000 ky tu -> bi chan", not hop_le(don_vi="x" * 5000)))
+    ln = loi_nhan_dang_ky(DangKyDiaPhuong(**du, ghi_chu="Muốn làm thử dịp lễ hội"))
+    kq.append(("loi nhan co ten don vi va ghi chu",
+               "Ban quản lý di tích Yên Tử" in ln and "lễ hội" in ln))
+    return kq
+
+
 def main():
     kt = KienThuc.tu_file(FILE_THAT if FILE_THAT.exists() else FILE_MAU)
     tests = kt.data.get("test_cases", [])
@@ -446,6 +479,16 @@ def main():
             print(f"      FAIL — {ten}")
     print(f"      {len(DUONG_DAN_MONG_DOI)} tieu de + 2 rang buoc do dai"
           f"{'' if so_loi == 0 else f' — {so_loi} loi'}")
+
+    print()
+    print("[dia-phuong] Form dang ky cho dia phuong")
+    phep = kiem_dang_ky_dia_phuong()
+    for ten, ok in phep:
+        tong += 1
+        dat += 1 if ok else 0
+        if not ok:
+            print(f"      FAIL - {ten}")
+    print(f"      {len(phep)} phep kiem")
 
     print()
     print("[tai-khoan] Luat dat ten, mat khau va vai tro")

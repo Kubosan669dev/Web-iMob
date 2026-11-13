@@ -75,7 +75,16 @@ for (const l of bang.duongDan) {
   daGap.add(l.tu);
   dich.add(l.den);
 }
-for (const den of Object.values(bang.neo)) dich.add(den);
+// Đích của neo được phép kèm #khối (vd "/ve-chung-toi#contact"): kiểm phần
+// đường dẫn như mọi đích khác, phần #khối chỉ cần đúng dạng.
+for (const den of Object.values(bang.neo)) {
+  const [duong, khoi] = den.split("#");
+  if (!duongHopLe(duong) && duong !== "/")
+    loi.push(`"neo" co dich khong hop le: ${JSON.stringify(den)}`);
+  if (khoi !== undefined && !/^[a-z0-9-]+$/.test(khoi))
+    loi.push(`"neo" co #khoi khong hop le: ${JSON.stringify(den)}`);
+  dich.add(duong);
+}
 
 // ---- 2. Không chuyển vòng tròn: trang đích không được là link cũ ----
 for (const den of dich) {

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, Phone } from "lucide-react";
 import Button from "../ui/Button.jsx";
 import Logo from "../ui/Logo.jsx";
-import { NAV_ITEMS } from "../../utils/constants.js";
+import { NAV_ITEMS, NUT_DANG_KY } from "../../utils/constants.js";
 import { useCongTy } from "../../context/NoiDungContext.jsx";
 
 // Hiệu ứng panel + stagger từng item
@@ -23,10 +23,9 @@ const itemVariants = {
 };
 
 // MobileMenu: panel trượt từ phải, chỉ hiển thị < lg (hamburger ở Navbar).
-// Ngưỡng là lg chứ không phải md: menu có 5 mục nhãn tiếng Việt, ở md xếp
-// ngang là chật. Đổi ngưỡng ở đây thì phải đổi cả `lg:hidden` / `lg:flex`
-// trong Navbar.jsx cho khớp.
-export default function MobileMenu({ open, onClose, activeId }) {
+// Đổi ngưỡng lg ở đây thì phải đổi cả `lg:hidden` / `lg:flex` trong
+// Navbar.jsx cho khớp.
+export default function MobileMenu({ open, onClose, pathname }) {
   const congTy = useCongTy();
 
   // Khóa scroll body khi menu đang mở
@@ -83,42 +82,21 @@ export default function MobileMenu({ open, onClose, activeId }) {
                 không phải tiết kiệm chỗ. */}
             <nav className="flex-1 overflow-y-auto px-5 py-6">
               {NAV_ITEMS.map((item) => {
-                // Xem ghi chú cùng chuyện này trong Navbar.jsx: `to` là trang
-                // khác (đi bằng <Link>), `href` là một khối trên trang chủ.
-                const The = item.to ? Link : "a";
-                const dich = item.to ? { to: item.to } : { href: item.href };
-
+                const mo = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                 return (
-                <motion.div key={item.id} variants={itemVariants} className="py-1">
-                  <The
-                    {...dich}
-                    onClick={onClose}
-                    className={
-                      "block py-2.5 text-2xl tracking-tight transition-colors " +
-                      (item.id === activeId
-                        ? "font-semibold text-brand"
-                        : "font-medium text-ink hover:text-brand")
-                    }
-                  >
-                    {item.label}
-                  </The>
-
-                  {/* Sub-link của Dịch vụ: liệt kê thẳng, không dropdown trên mobile */}
-                  {item.children && (
-                    <div className="mb-2 space-y-1 pl-4">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          to={child.to}
-                          onClick={onClose}
-                          className="block py-1.5 text-[0.9375rem] text-ink-soft transition-colors hover:text-brand"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
+                  <motion.div key={item.id} variants={itemVariants} className="py-1">
+                    <Link
+                      to={item.to}
+                      onClick={onClose}
+                      aria-current={mo ? "page" : undefined}
+                      className={
+                        "block py-2.5 font-display text-[1.75rem] tracking-tight transition-colors " +
+                        (mo ? "font-semibold text-brand" : "font-semibold text-ink hover:text-brand")
+                      }
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
                 );
               })}
             </nav>
@@ -132,19 +110,15 @@ export default function MobileMenu({ open, onClose, activeId }) {
             >
               <Button
                 href={`tel:${congTy.phone.replace(/\s/g, "")}`}
+                variant="outline"
                 className="w-full"
                 onClick={onClose}
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 {congTy.phone}
               </Button>
-              <Button
-                href="/#contact"
-                variant="outline"
-                className="w-full"
-                onClick={onClose}
-              >
-                Gửi yêu cầu tư vấn
+              <Button href={NUT_DANG_KY.href} className="w-full" onClick={onClose}>
+                {NUT_DANG_KY.label}
               </Button>
             </motion.div>
           </motion.aside>

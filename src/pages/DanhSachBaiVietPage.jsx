@@ -126,7 +126,7 @@ export default function DanhSachBaiVietPage({ loai = LOAI_CAU_CHUYEN }) {
                 : "Mời bạn quay lại sau ít hôm. Trong lúc chờ, xem thử các dự án đã bàn giao nhé."}
             </p>
             <Link
-              to="/#projects"
+              to="/ve-chung-toi#projects"
               className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
             >
               Xem dự án đã làm

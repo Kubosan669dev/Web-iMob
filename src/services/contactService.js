@@ -16,16 +16,28 @@ const HET_GIO_MS = 45000;
 
 // API_BASE_URL rỗng -> gọi đường dẫn tương đối. Lúc `npm run dev` thì
 // vite.config.js chuyển tiếp /api/* sang backend ở cổng 8000.
-export async function submitContact(formData) {
+export function submitContact(formData) {
+  return guiDen("/api/lien-he", formData);
+}
+
+// Form "Tư vấn thí điểm" ở trang Hỏi đáp AI (13/11/2026). Máy chủ:
+// POST /api/dang-ky-dia-phuong (chatbot-python/api_lien_he.py) — bắt buộc
+// don_vi, ho_ten, so_dien_thoai; email không bắt buộc. Lưu chung bảng liên hệ,
+// xem ở /admin với nguồn "dia-phuong".
+export function dangKyDiaPhuong(duLieu) {
+  return guiDen("/api/dang-ky-dia-phuong", duLieu);
+}
+
+async function guiDen(duong, duLieu) {
   const controller = new AbortController();
   const hetGio = setTimeout(() => controller.abort(), HET_GIO_MS);
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/lien-he`, {
+    const res = await fetch(`${API_BASE_URL}${duong}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
-      body: JSON.stringify(formData),
+      body: JSON.stringify(duLieu),
     });
 
     // Trang tĩnh có luật SPA rewrite nên mọi đường dẫn lạ đều trả index.html

@@ -1,19 +1,12 @@
 {
-  "_note": "Bảng chuyển hướng link cũ -> trang mới (12/11/2026). Website gọn lại còn hai mục: Hỏi đáp AI (trang chủ) và Về chúng tôi. Đây là NGUỒN DUY NHẤT: sửa xong chạy `npm run chuyenhuong` để sinh lại trien-khai/nginx-chuyen-huong.conf. `bat` = công tắc cho phần chạy trong web (components/util/ChuyenHuongCu.jsx); CHỈ đổi thành true khi trang đích đã có trong App.jsx — script kiểm tra sẽ chặn build nếu thiếu. `caTrangCon` = chuyển cả các trang con (vd /tin-tuc/ten-bai). `neo` = link cũ dạng imob.vn/#about (phần sau dấu # không gửi lên máy chủ nên nginx không thấy, chỉ web tự xử lý được).",
-  "bat": false,
-  "duongDan": [
-    { "tu": "/zalo-miniapp", "den": "/ve-chung-toi" },
-    { "tu": "/software-hardware", "den": "/ve-chung-toi" },
-    { "tu": "/digital-transformation", "den": "/ve-chung-toi" },
-    { "tu": "/robot", "den": "/ve-chung-toi" },
-    { "tu": "/vr360", "den": "/ve-chung-toi" },
-    { "tu": "/cau-chuyen", "den": "/ve-chung-toi", "caTrangCon": true },
-    { "tu": "/tin-tuc", "den": "/ve-chung-toi", "caTrangCon": true }
-  ],
+  "_note": "Bảng chuyển hướng link cũ -> trang mới. Website gọn lại còn hai mục: Hỏi đáp AI (trang chủ) và Về chúng tôi (/ve-chung-toi = trang chủ cũ). Đây là NGUỒN DUY NHẤT: sửa xong chạy `npm run chuyenhuong` để sinh lại trien-khai/nginx-chuyen-huong.conf. `bat` = công tắc cho phần chạy trong web (components/util/ChuyenHuongCu.jsx). `duongDan` = đường dẫn cũ -> mới (nginx cũng làm được, xem file .conf); `caTrangCon` = chuyển cả các trang con. `neo` = link cũ dạng imob.vn/#about (phần sau dấu # không gửi lên máy chủ nên chỉ web tự xử lý được); đích được phép có #khối.",
+  "_lichSu": "13/11/2026: BẬT. Bỏ 7 dòng duongDan cũ (5 trang dịch vụ, /cau-chuyen, /tin-tuc -> /ve-chung-toi): các trang đó VẪN GIỮ vì trang Về chúng tôi có link dẫn sang chúng — chuyển hướng thì khách bấm vào lại bị đưa về đúng trang đang đứng. Chỉ còn chuyển các neo của trang chủ cũ sang đúng khối trên /ve-chung-toi.",
+  "bat": true,
+  "duongDan": [],
   "neo": {
-    "about": "/ve-chung-toi",
-    "services": "/ve-chung-toi",
-    "projects": "/ve-chung-toi",
-    "contact": "/ve-chung-toi"
+    "about": "/ve-chung-toi#about",
+    "services": "/ve-chung-toi#services",
+    "projects": "/ve-chung-toi#projects",
+    "contact": "/ve-chung-toi#contact"
   }
 }

@@ -108,7 +108,7 @@ export default function LegalPage({ slug }) {
         {/* ---------- Quay lại ---------- */}
         <div className="mt-14 border-t border-line pt-8">
           <Link
-            to="/#home"
+            to="/"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-colors hover:text-ink"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />

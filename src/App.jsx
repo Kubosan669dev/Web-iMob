@@ -8,6 +8,9 @@ import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
 import { BangMauProvider } from "./context/BangMauContext.jsx";
 
+// Trang "Về chúng tôi" = trang chủ cũ (từ 13/11/2026, xem pages/HomePage.jsx).
+const VeChungToiPage = lazy(() => import("./pages/VeChungToiPage.jsx"));
+
 // Các trang dịch vụ tách bundle bằng lazy() — khách vào trang chủ không tải
 // kèm. Nội dung từng trang đọc từ data/servicePages.json.
 const ZaloMiniAppPage = lazy(() => import("./pages/ZaloMiniAppPage.jsx"));
@@ -63,14 +66,14 @@ export default function App() {
         <BangMauProvider>
           <BrowserRouter>
             <ScrollToTop />
-            {/* Link cũ -> trang mới. Đang TẮT (công tắc trong
-                data/chuyenHuong.json) cho tới khi trang mới lên. */}
+            {/* Link cũ -> trang mới (bảng: data/chuyenHuong.json). */}
             <ChuyenHuongCu>
             <Suspense fallback={null}>
               <Routes>
                 {/* Các trang chính dùng chung Layout (Navbar + Footer) */}
                 <Route element={<Layout />}>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/ve-chung-toi" element={<VeChungToiPage />} />
                   <Route path="/zalo-miniapp" element={<ZaloMiniAppPage />} />
                   <Route
                     path="/software-hardware"

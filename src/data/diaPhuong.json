@@ -1,0 +1,107 @@
+{
+  "_note": "CÁC ĐỊA PHƯƠNG trên trang Hỏi đáp AI (trang chủ từ 13/11/2026): ô chọn vùng, thẻ địa phương, câu hỏi gợi ý. Địa phương ĐẦU TIÊN là vùng chọn sẵn và là thẻ lớn. Thêm địa phương = thêm một phần tử, không phải sửa mã.",
+  "_quyTac": "⚠️ CHỈ GHI SỐ CÓ NGUỒN. Giao diện mẫu công ty gửi có các số như '1,420+ tri thức', '780+ bản ghi số' — không có nguồn nên đã bỏ. Mỗi con số dưới đây ghi rõ đếm ở đâu trong `_nguon`; số đổi thì đếm lại rồi sửa cả `_nguon`. Tên hành chính dùng tên SAU sắp xếp 01/07/2025 (không còn cấp huyện).",
+  "_anh": "Ảnh đều là ảnh THẬT từ dự án iMob đã làm: Yên Tử cắt từ ảnh 360° Chùa Đồng công ty tự chụp (thư mục VR YEN TU), Đông Triều lấy từ bandosodongtrieu.vn, Quảng Tân lấy từ bản đồ số xã Quảng Tân. Ảnh nằm trong public/anh/dia-phuong/.",
+  "danhSach": [
+    {
+      "khoa": "yen-tu",
+      "ten": "Yên Tử",
+      "hanhChinh": "Phường Yên Tử · Quảng Ninh",
+      "nhan": "Di sản văn hoá & tâm linh",
+      "tieuDePhu": "Đất tổ Thiền phái Trúc Lâm",
+      "moTa": "Quần thể di tích và danh thắng nơi Phật hoàng Trần Nhân Tông tu hành, lập nên Thiền phái Trúc Lâm. Hỏi đường lên chùa Đồng, cáp treo, các chùa, am, tháp trên núi.",
+      "anh": "/anh/dia-phuong/yen-tu-chua-dong.webp",
+      "anhMoTa": "Chùa Đồng trên đỉnh Yên Tử, ảnh toàn cảnh 360° do iMob chụp",
+      "soLieu": [{ "so": "43", "nhan": "điểm ngắm 360°" }],
+      "_nguon": "43 = số điểm ngắm của tour 'yen-tu' trong src/data/tourVr360.json (13/11/2026).",
+      "xem360": "/tour-360",
+      "ungDung": [
+        { "loai": "Zalo Mini App", "ten": "Yên Tử Số", "lienKet": "https://zalo.me/s/1740150693479312611/" },
+        { "loai": "Website", "ten": "Phường Yên Tử", "lienKet": "https://phuongyentu.com.vn" }
+      ],
+      "cauHoi": {
+        "khach": [
+          "Đường lên chùa Đồng đi mất bao lâu, nên mặc gì?",
+          "Nên đi cáp treo hay đi bộ lên Yên Tử?",
+          "Lộ trình tham quan Yên Tử trong một ngày"
+        ],
+        "kinh-doanh": [
+          "Làm sao đưa cơ sở kinh doanh của tôi lên bản đồ số?",
+          "Mùa lễ hội Yên Tử bắt đầu từ khi nào?",
+          "Du khách đến Yên Tử thường hỏi những dịch vụ gì?"
+        ],
+        "cu-dan": [
+          "UBND phường Yên Tử làm việc giờ nào?",
+          "Thủ tục đăng ký hộ kinh doanh cần giấy tờ gì?",
+          "Lịch lễ hội Xuân Yên Tử năm nay"
+        ]
+      }
+    },
+    {
+      "khoa": "dong-trieu",
+      "ten": "Đông Triều",
+      "hanhChinh": "Phường Đông Triều · Quảng Ninh",
+      "nhan": "Di tích & lịch sử",
+      "tieuDePhu": "Đất phát tích nhà Trần",
+      "moTa": "Nhiều đình, chùa, đền cổ như chùa Triều Khê, đình Mỹ Cụ, đền Di Ái, chùa Báo Ân, đã có tour thực tế ảo trên bản đồ số.",
+      "anh": "/anh/dia-phuong/dong-trieu-chua-trieu-khe.webp",
+      "anhMoTa": "Chùa Triều Khê, phường Đông Triều",
+      "soLieu": [{ "so": "13", "nhan": "địa điểm thực tế ảo 360°" }],
+      "_nguon": "13 = trang chủ bandosodongtrieu.vn ghi '13 Địa điểm — Thực tế ảo 360°' (13/11/2026).",
+      "xem360": "https://bandosodongtrieu.vn",
+      "ungDung": [{ "loai": "Bản đồ số", "ten": "Đông Triều", "lienKet": "https://bandosodongtrieu.vn" }],
+      "cauHoi": {
+        "khach": [
+          "Đông Triều có những di tích nhà Trần nào nên ghé?",
+          "Chùa Triều Khê ở đâu, đi thế nào?",
+          "Gợi ý lịch trình nửa ngày ở Đông Triều"
+        ],
+        "kinh-doanh": [
+          "Làm sao đưa cơ sở kinh doanh của tôi lên bản đồ số Đông Triều?",
+          "Du khách đến Đông Triều thường tìm dịch vụ gì?",
+          "Thủ tục đăng ký hộ kinh doanh ở phường Đông Triều"
+        ],
+        "cu-dan": [
+          "Nhà văn hoá khu phố của tôi ở đâu?",
+          "UBND phường Đông Triều làm việc giờ nào?",
+          "Tra cứu thủ tục hành chính của phường"
+        ]
+      }
+    },
+    {
+      "khoa": "quang-tan",
+      "ten": "Quảng Tân",
+      "hanhChinh": "Xã Quảng Tân · Quảng Ninh",
+      "nhan": "Du lịch sinh thái",
+      "tieuDePhu": "Ruộng bậc thang, thác và rừng",
+      "moTa": "Vùng cao với ruộng bậc thang, thác Bạch Vân, thác Diệp Cày, hồ Đầm Hà, cùng chợ phiên và các hộ kinh doanh địa phương trên bản đồ số.",
+      "anh": "/anh/dia-phuong/quang-tan-ruong-bac-thang.webp",
+      "anhMoTa": "Ruộng bậc thang xã Quảng Tân",
+      "soLieu": [
+        { "so": "51", "nhan": "địa điểm trên bản đồ số" },
+        { "so": "32", "nhan": "hộ kinh doanh" },
+        { "so": "12", "nhan": "điểm ngắm 360°" }
+      ],
+      "_nguon": "51 và 32 = đếm từ danh sách địa điểm công khai của bản đồ số xã Quảng Tân (api.bandosoxaquangtan.vn/api/places, 13/11/2026; 32 là số mục tên 'Hộ kinh doanh'). 12 = số điểm ngắm tour 'quang-tan' trong src/data/tourVr360.json.",
+      "xem360": "/tour-360?tour=quang-tan",
+      "ungDung": [{ "loai": "Bản đồ số", "ten": "Xã Quảng Tân", "lienKet": "https://bandosoxaquangtan.vn" }],
+      "cauHoi": {
+        "khach": [
+          "Thác Bạch Vân đi đường nào, có chỗ ăn uống không?",
+          "Mùa nào ruộng bậc thang Quảng Tân đẹp nhất?",
+          "Gợi ý lịch trình một ngày ở Quảng Tân"
+        ],
+        "kinh-doanh": [
+          "Làm sao để cơ sở của tôi hiện trên bản đồ số Quảng Tân?",
+          "Ở Quảng Tân có những hộ kinh doanh nào bán đặc sản?",
+          "Thủ tục đăng ký hộ kinh doanh ở xã Quảng Tân"
+        ],
+        "cu-dan": [
+          "UBND xã Quảng Tân ở đâu, làm việc giờ nào?",
+          "Chợ Quảng Lâm họp phiên ngày nào?",
+          "Các trường học trên địa bàn xã Quảng Tân"
+        ]
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
    bên dưới — nhưng vẫn thắng, vì bộ chọn trong đó là `html[data-bang-mau=...]`
    có độ ưu tiên (0,1,1), cao hơn `:root` (0,1,0) mà Tailwind sinh ra.
    Không có thuộc tính data-bang-mau thì trang chạy bằng đúng khối @theme —
-   nên khối đó phải luôn khai ĐÚNG bảng mặc định (hiện là cyber-indigo), không
+   nên khối đó phải luôn khai ĐÚNG bảng mặc định (hiện là ban-dia, từ 13/11/2026), không
    thì lúc mới mở trang loé lên một bảng màu rồi mới đổi sang bảng thật. */
 @import "./bangMau.css";
 
@@ -47,28 +47,31 @@
      bản web dùng được, và quan trọng hơn là nó không được vẽ cho dấu tiếng
      Việt. Chữ đúng dấu quan trọng hơn giống Apple. */
   --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  /* Chữ có chân cho tiêu đề lớn (giao diện chốt 13/11/2026). Dùng DÈ: chỉ
+     tiêu đề khối và tên địa phương, thân bài vẫn là Be Vietnam Pro. */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", monospace;
 
   /* --- Nền trang khách: chỉ hai bậc, xen kẽ nhau --- */
-  --color-paper: #ffffff;
-  --color-mist: #eef1fc; /* xám NGẢ CHÀM — dải nền xen kẽ VÀ mặt card */
+  --color-paper: #faf7f0;
+  --color-mist: #f2ede1; /* kem đậm — dải nền xen kẽ VÀ mặt card */
   --color-panel: #ffffff;
 
   /* --- Mực (chữ & viền) — đã kiểm tra tương phản trên nền trắng ---
      ink 17:1 · ink-soft 7.1:1 · ink-faint 4.9:1 (vẫn đạt chuẩn AA, cố ý đậm
      hơn màu xám nhạt Apple hay dùng vì màu đó chỉ đạt ~3.5:1). */
-  --color-ink: #0d0e2b;
-  --color-ink-soft: #4a4e7c;
-  --color-ink-faint: #5c6089;
-  --color-line: #dbdff5;
+  --color-ink: #16241c;
+  --color-ink-soft: #47584d;
+  --color-ink-faint: #5a6a5f;
+  --color-line: #e3dccb;
 
   /* --- Chàm tím: màu thương hiệu, lấy từ logo iMob ---
      Khác bản trước ở một điểm quan trọng: màu này đạt 7.8:1 trên nền trắng,
      nên DÙNG ĐƯỢC CẢ làm chữ lẫn làm nền nút. Không phải chia đôi thành hai
      biến "màu để tô" và "màu để viết" như bảng ngọc bích cũ. */
-  --color-brand: #4318d9;
-  --color-brand-deep: #2c0fa3; /* trạng thái hover / nhấn */
-  --color-brand-soft: #e8e3fe; /* nền nhạt cho nhãn, ô icon */
+  --color-brand: #1f4a35;
+  --color-brand-deep: #143426; /* trạng thái hover / nhấn */
+  --color-brand-soft: #e2ebe2; /* nền nhạt cho nhãn, ô icon */
 
   /* --- MÀU NHẤN: màu thứ HAI của trang (thêm 22/08/2026) ---
      Vì sao có nó: công ty chê bản cũ "màu trông đơn điệu quá, cty công nghệ mà
@@ -85,8 +88,8 @@
      ⚠️ DÙNG DÈ. Màu nhấn chỉ nên xuất hiện ở vài chỗ có chủ đích (điểm dừng
      thứ hai của dải đầu trang, dải Hỏi iMob AI, khối phụ trong hình minh hoạ).
      Rải khắp nơi thì lại thành đơn điệu hai màu thay vì một. */
-  --color-accent: #00707f;
-  --color-accent-soft: #d5f1f3;
+  --color-accent: #7a3e12;
+  --color-accent-soft: #f5e6d6;
 
   /* Chữ đặt TRÊN nền màu thương hiệu.
      Bản trước viết cứng text-white ở 8 chỗ. Chỉ đúng chừng nào màu thương hiệu
@@ -114,7 +117,7 @@
      lên trên mặt phẳng trang (khung chat, menu xổ xuống). */
   --shadow-soft: 0 1px 2px rgba(26, 26, 46, 0.04), 0 8px 24px -12px rgba(26, 26, 46, 0.1);
   --shadow-lift: 0 4px 12px rgba(26, 26, 46, 0.06), 0 24px 48px -20px rgba(26, 26, 46, 0.2);
-  --shadow-brand: 0 8px 24px -10px rgba(67, 24, 217, 0.5);
+  --shadow-brand: 0 8px 24px -10px rgba(31, 74, 53, 0.45);
 
   /* --- Animations --- */
   --animate-float: float 6s ease-in-out infinite;

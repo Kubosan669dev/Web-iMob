@@ -79,11 +79,11 @@ const MUC_CHINH = [
 ];
 
 const MUC_TRANG_CHU = [
-  { id: "hero", nhan: "Hero", khoa: "hero", icon: Sparkles, neo: "/#home" },
-  { id: "san-pham", nhan: "Sản phẩm", khoa: "projects", icon: Package, neo: "/#projects" },
-  { id: "doi-tac", nhan: "Đối tác", khoa: "doiTac", icon: Handshake, neo: "/#services" },
-  { id: "about", nhan: "Giới thiệu", khoa: "about", icon: Building2, neo: "/#about" },
-  { id: "lien-he", nhan: "Liên hệ", khoa: "company", icon: Phone, neo: "/#contact" },
+  { id: "hero", nhan: "Hero", khoa: "hero", icon: Sparkles, neo: "/ve-chung-toi#home" },
+  { id: "san-pham", nhan: "Sản phẩm", khoa: "projects", icon: Package, neo: "/ve-chung-toi#projects" },
+  { id: "doi-tac", nhan: "Đối tác", khoa: "doiTac", icon: Handshake, neo: "/ve-chung-toi#services" },
+  { id: "about", nhan: "Giới thiệu", khoa: "about", icon: Building2, neo: "/ve-chung-toi#about" },
+  { id: "lien-he", nhan: "Liên hệ", khoa: "company", icon: Phone, neo: "/ve-chung-toi#contact" },
 ];
 
 const MUC_KHAC = [
@@ -156,7 +156,7 @@ function MucHero({ d, doi, daSua }) {
   const s = (k) => (v) => doi({ ...d, [k]: v });
   return (
     <Khung>
-      <TieuDeMuc ghiChu="Màn hình đầu tiên khách nhìn thấy" neo="/#home">
+      <TieuDeMuc ghiChu="Màn hình đầu tiên khách nhìn thấy" neo="/ve-chung-toi#home">
         Hero
       </TieuDeMuc>
       <div className="space-y-5">
@@ -222,7 +222,7 @@ function MucAbout({ d, doi, daSua }) {
   const s = (k) => (v) => doi({ ...d, [k]: v });
   return (
     <Khung>
-      <TieuDeMuc ghiChu="Khối giới thiệu ở trang chủ" neo="/#about">
+      <TieuDeMuc ghiChu="Khối giới thiệu ở trang chủ" neo="/ve-chung-toi#about">
         Giới thiệu
       </TieuDeMuc>
       <div className="space-y-5">
@@ -313,7 +313,7 @@ function MucDoiTac({ d, doi, daSua }) {
     <Khung>
       <TieuDeMuc
         ghiChu="Dải tên chạy ngang, nằm giữa khối đầu trang và khối Công nghệ"
-        neo="/#services"
+        neo="/ve-chung-toi#services"
       >
         Đối tác
       </TieuDeMuc>
@@ -377,7 +377,7 @@ function MucLienHe({ d, doi, daSua }) {
     <Khung>
       <TieuDeMuc
         ghiChu="Website và chatbot dùng chung — sửa một lần, cả hai cùng đổi"
-        neo="/#contact"
+        neo="/ve-chung-toi#contact"
       >
         Liên hệ
       </TieuDeMuc>
@@ -1219,7 +1219,7 @@ export default function AdminPage() {
                 <Khung>
                   <TieuDeMuc
                     ghiChu="Thêm, sửa, xoá và đổi thứ tự sản phẩm trên trang chủ"
-                    neo="/#projects"
+                    neo="/ve-chung-toi#projects"
                   >
                     Sản phẩm
                   </TieuDeMuc>

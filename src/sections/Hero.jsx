@@ -171,7 +171,8 @@ function DongMuc({ muc }) {
   // việc cuộn, đúng cách thanh menu trên cùng đang làm (Navbar.jsx). Khoảng
   // hụt do thanh menu che đã có `section[id] { scroll-margin-top }` trong
   // styles/index.css xử lý.
-  const trongTrang = muc.den.startsWith("#") || muc.den.startsWith("/#");
+  // Từ 13/11/2026 các khối này nằm ở /ve-chung-toi (không còn ở trang chủ).
+  const trongTrang = /^(\/ve-chung-toi)?#/.test(muc.den);
 
   return (
     <li>
@@ -217,18 +218,18 @@ const MUC = [
   {
     nhan: "Các sản phẩm nổi bật trong năm",
     phu: "Đã bàn giao và đang chạy tại Quảng Ninh",
-    den: "/#projects",
+    den: "/ve-chung-toi#projects",
     icon: Package,
   },
   {
     nhan: "Thiết kế app/web theo yêu cầu",
     phu: "Zalo Mini App · website · phần mềm",
-    den: "/#services",
+    den: "/ve-chung-toi#services",
     icon: MonitorSmartphone,
   },
   {
     nhan: "Khảo sát và nâng cấp app/web, phần mềm đang có lên chuẩn an toàn an ninh mạng cấp độ 2 trở lên",
-    den: "/#contact",
+    den: "/ve-chung-toi#contact",
     icon: ShieldCheck,
   },
   {
@@ -256,7 +257,7 @@ const MUC = [
   },
   {
     nhan: "Vận hành, ứng cứu sự cố an toàn an ninh mạng và hỗ trợ tư vấn an ninh mạng, giám sát 24/7 không cần xây dựng đội ngũ nội bộ",
-    den: "/#contact",
+    den: "/ve-chung-toi#contact",
     icon: Radar,
   },
 ];

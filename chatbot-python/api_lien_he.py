@@ -147,6 +147,72 @@ def lien_he_nhanh(than: LienHeNhanh, request: Request):
     return {"ok": True, "id": ma}
 
 
+# ============================================================
+# Đăng ký cho địa phương (13/11/2026) — form "Tư vấn thí điểm" ở cuối trang
+# Hỏi đáp AI (src/sections/hoi-dap/DangKyDiaPhuong.jsx).
+#
+# Vì sao không dùng /api/lien-he: người điền là cán bộ đại diện một đơn vị,
+# thông tin cần là TÊN ĐƠN VỊ + người liên hệ + SỐ ĐIỆN THOẠI; email không bắt
+# buộc (form trong giao diện chốt không có ô email). /api/lien-he lại bắt buộc
+# email đúng định dạng.
+#
+# Lưu chung bảng lien_he với nguon="dia-phuong" để người trực xem cùng một chỗ
+# ở /admin → Liên hệ. Tên đơn vị đi vào lời nhắn.
+# ============================================================
+class DangKyDiaPhuong(BaseModel):
+    don_vi: str = Field(min_length=2, max_length=200)
+    ho_ten: str = Field(min_length=1, max_length=120)
+    so_dien_thoai: str = Field(min_length=8, max_length=40)
+    email: str = Field(default="", max_length=200)
+    nhu_cau: str = Field(default="", max_length=120)
+    ghi_chu: str = Field(default="", max_length=2000)
+
+    @field_validator("so_dien_thoai")
+    @classmethod
+    def kiem_sdt(cls, v: str) -> str:
+        v = v.strip()
+        if not (REGEX_SDT.match(v) and sum(c.isdigit() for c in v) >= 8):
+            raise ValueError("Số điện thoại chưa đúng.")
+        return v
+
+    @field_validator("email")
+    @classmethod
+    def kiem_email_tuy_chon(cls, v: str) -> str:
+        v = v.strip()
+        if v and not REGEX_EMAIL.match(v):
+            raise ValueError("Email không đúng định dạng.")
+        return v
+
+
+def loi_nhan_dang_ky(than: DangKyDiaPhuong) -> str:
+    dong = [f"Đơn vị / địa phương: {than.don_vi.strip()}"]
+    if than.ghi_chu.strip():
+        dong.append(than.ghi_chu.strip())
+    return " · ".join(dong)
+
+
+@router.post("/api/dang-ky-dia-phuong", status_code=status.HTTP_201_CREATED)
+def dang_ky_dia_phuong(than: DangKyDiaPhuong, request: Request):
+    _chan_spam(request)
+
+    if not db.co_db():
+        # KHÔNG báo thành công giả — xem lý do ở /api/lien-he phía trên.
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Hệ thống chưa sẵn sàng nhận đăng ký. Vui lòng gọi hotline giúp mình nhé.",
+        )
+
+    ma = db.them_lien_he(
+        nguon="dia-phuong",
+        ho_ten=than.ho_ten.strip(),
+        email=than.email or None,
+        so_dien_thoai=than.so_dien_thoai,
+        dich_vu=than.nhu_cau.strip() or None,
+        loi_nhan=loi_nhan_dang_ky(than),
+    )
+    return {"ok": True, "id": ma}
+
+
 # ⚠️ yeu_cau_quan_tri chứ KHÔNG phải yeu_cau_dang_nhap (đổi 20/08/2026).
 # Từ khi có tài khoản dùng thử hiện mật khẩu công khai ở màn hình đăng nhập,
 # "đã đăng nhập" không còn đồng nghĩa với "được tin cậy". Bảng lien_he chứa họ

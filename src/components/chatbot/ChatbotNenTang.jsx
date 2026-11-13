@@ -62,6 +62,30 @@ function moKhungChat(conLan = 25) {
   if (conLan > 0) setTimeout(() => moKhungChat(conLan - 1), 200);
 }
 
+// Gửi một câu hỏi vào khung chat của nền tảng (ô "Hỏi ngay" ở trang Hỏi đáp
+// AI). Khung chat nằm ngoài React và mã của nó bị làm rối, nên làm đúng như
+// người thật: điền chữ vào ô nhập rồi bấm nút gửi. Id ô nhập và nút gửi đo trên
+// khung chat thật ngày 13/11/2026: #imob-chat-input (textarea), #imob-send-btn.
+//
+// ⚠️ PHẢI gán giá trị qua "setter gốc" của textarea rồi phát sự kiện input.
+// Gán thẳng `o.value = ...` thì chữ hiện lên nhưng nếu khung chat theo dõi ô
+// nhập bằng sự kiện input, nó vẫn tưởng ô trống và nút gửi không làm gì.
+// Nền tảng đổi id thì hàm này lặng lẽ chỉ còn MỞ khung chat (không gửi được) —
+// khách vẫn tự gõ lại được, không hỏng trang.
+function guiCauHoi(cauHoi, conLan = 25) {
+  const o = document.getElementById("imob-chat-input");
+  const nutGui = document.getElementById("imob-send-btn");
+  const khungMo = document.querySelector(".imob-chatbox.open");
+  if (!o || !nutGui || !khungMo) {
+    if (conLan > 0) setTimeout(() => guiCauHoi(cauHoi, conLan - 1), 200);
+    return;
+  }
+  const ganGoc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set;
+  ganGoc.call(o, cauHoi);
+  o.dispatchEvent(new Event("input", { bubbles: true }));
+  nutGui.click();
+}
+
 // Báo cho mình biết khi khung chat của nền tảng mở ra / đóng lại, bất kể do ai
 // bấm (nút tròn, dấu X trong khung, nút "Chat với AI", hay mình tự mở). Khung
 // chat nằm ngoài React nên chỉ còn cách nhìn lớp "open" của nó đổi. Script của
@@ -116,7 +140,10 @@ export default function ChatbotNenTang() {
   useEffect(() => {
     chenMotLan();
     delete document.documentElement.dataset.botNenTang;
-    const boNghe = onOpenChat(() => moKhungChat());
+    const boNghe = onOpenChat((cauHoi) => {
+      moKhungChat();
+      if (cauHoi) guiCauHoi(cauHoi);
+    });
 
     // ⚠️ Khung chat bản chatbot.imob.vn (từ 03/10/2026) TỰ MỞ mỗi lần tải trang,
     // kể cả trên điện thoại, và không nhớ khách đã đóng: khách bấm ✕ rồi tải
