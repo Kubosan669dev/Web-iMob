@@ -6,6 +6,8 @@ Từ 13/11/2026 website có **hai mục**: Hỏi đáp AI cho địa phương (t
 Về chúng tôi (trang chủ cũ chuyển sang). Giao diện theo bản công ty chốt; màu
 là bảng "Bản địa" (`ban-dia`).
 
+> **Người mới tiếp nhận:** đọc [docs/BAN-GIAO-GIAI-DOAN-3.md](docs/BAN-GIAO-GIAI-DOAN-3.md) trước: việc đang làm, việc cần làm, các nguyên tắc phải giữ.
+
 Website chạy thật tại **https://imob.vn** trên một máy chủ CMC. Gồm ba phần:
 
 | Phần | Thư mục | Là gì |
