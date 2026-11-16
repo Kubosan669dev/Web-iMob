@@ -23,6 +23,10 @@ const SoftwareHardwarePage = lazy(
 const DigitalTransformationPage = lazy(
   () => import("./pages/DigitalTransformationPage.jsx"),
 );
+// Trang chi tiết Trợ lý AI địa phương; nội dung lấy từ servicePages.json.
+const TroLyDiaPhuongPage = lazy(
+  () => import("./pages/TroLyDiaPhuongPage.jsx"),
+);
 // Hai trang thêm 21/08/2026 từ tài liệu công ty gửi. /robot là đích thật cho
 // mục thứ 4 trong bảy mục ở trang chủ — trước đó mục đó chỉ dẫn về form liên
 // hệ vì chưa có trang nào để đi tới.
@@ -87,6 +91,11 @@ export default function App() {
                   <Route
                     path="/digital-transformation"
                     element={<DigitalTransformationPage />}
+                  />
+                  {/* Đích "Tìm hiểu thêm" của thẻ Trợ lý AI địa phương ở /ve-chung-toi. */}
+                  <Route
+                    path="/tro-ly-ai-dia-phuong"
+                    element={<TroLyDiaPhuongPage />}
                   />
                   <Route path="/robot" element={<RobotPage />} />
                   <Route path="/vr360" element={<Vr360Page />} />

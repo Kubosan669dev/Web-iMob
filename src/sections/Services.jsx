@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Layers, Smartphone, Cpu, GraduationCap, Check, ChevronRight } from "lucide-react";
+import { Layers, Smartphone, Cpu, GraduationCap, Bot, Check, ChevronRight } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import SectionTitle from "../components/ui/SectionTitle.jsx";
 import Reveal from "../components/ui/Reveal.jsx";
+// services.json dùng chung cho thẻ ở đây và lựa chọn dịch vụ trong form liên hệ.
 import services from "../data/services.json";
 
 // Map chuỗi icon trong services.json → component lucide
@@ -11,15 +12,16 @@ const SERVICE_ICONS = {
   smartphone: Smartphone,
   cpu: Cpu,
   "graduation-cap": GraduationCap,
+  bot: Bot,
 };
 
 /* Thẻ dịch vụ kiểu Apple: bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng.
    Liên kết cuối thẻ dùng dấu › thay cho mũi tên → và bỏ chữ IN HOA — đó là
    kiểu liên kết đặc trưng của apple.com, nhẹ hơn hẳn một cái nút.
 
-   CỐ Ý KHÔNG đánh số 01/02/03 cho ba dịch vụ: đánh số ngụ ý có thứ tự phải đi
-   qua, mà ba dịch vụ này song song, khách chọn cái nào cũng được. Số ở đó chỉ
-   là trang trí giả vờ mang thông tin. (Khối Quy trình trên trang dịch vụ con
+   CỐ Ý KHÔNG đánh số các dịch vụ: đánh số ngụ ý có thứ tự phải đi qua, mà các
+   dịch vụ này song song, khách chọn cái nào cũng được. Số ở đó chỉ là trang trí
+   giả vờ mang thông tin. (Khối Quy trình trên trang dịch vụ con
    thì có đánh số, vì đó mới thật sự là các bước nối tiếp nhau.) */
 function TheDichVu({ service }) {
   const Icon = SERVICE_ICONS[service.icon] ?? Layers;
@@ -45,7 +47,7 @@ function TheDichVu({ service }) {
         ))}
       </ul>
 
-      {/* mt-auto ghim liên kết xuống đáy để ba thẻ cao bằng nhau vẫn thẳng hàng */}
+      {/* mt-auto ghim liên kết xuống đáy để các thẻ cao bằng nhau vẫn thẳng hàng */}
       <Link
         to={service.route}
         className="group/link mt-auto inline-flex items-center pt-8 text-[1.0625rem] font-medium text-brand hover:underline"
@@ -70,11 +72,11 @@ export default function Services() {
             badge="Dịch vụ"
             title="Từ bài toán của bạn"
             highlight="đến hệ thống chạy thật."
-            description="Ba nhóm giải pháp cốt lõi, thiết kế may đo theo quy mô và nghiệp vụ của từng đơn vị — không bán gói sẵn."
+            description="Bốn nhóm giải pháp cốt lõi, thiết kế may đo theo quy mô và nghiệp vụ của từng đơn vị — không bán gói sẵn."
           />
         </Reveal>
 
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {services.map((service, index) => (
             <Reveal key={service.id} delay={index * 0.1} className="h-full">
               <TheDichVu service={service} />

@@ -34,5 +34,17 @@
       "Thực hành công cụ số & AI tại chỗ",
       "Đồng hành hỗ trợ sau đào tạo"
     ]
+  },
+  {
+    "id": "local-ai",
+    "route": "/tro-ly-ai-dia-phuong",
+    "icon": "bot",
+    "title": "Trợ lý AI địa phương",
+    "description": "Trợ lý hỏi đáp tra cứu kho tài liệu riêng của từng địa phương, giúp người dân và du khách tìm thông tin văn hoá, dịch vụ và thủ tục.",
+    "features": [
+      "Trả lời dựa trên tài liệu địa phương cung cấp",
+      "Kèm nguồn để người dùng đối chiếu",
+      "Cập nhật tài liệu, không cần lập trình"
+    ]
   }
 ]

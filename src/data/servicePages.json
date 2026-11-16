@@ -472,5 +472,112 @@
         { "title": "Bàn giao & hướng dẫn", "desc": "Ghép tour vào website, tạo mã QR, hướng dẫn sử dụng và bàn giao toàn bộ tư liệu." }
       ]
     }
+  },
+
+  "local-ai": {
+    "meta": {
+      "route": "/tro-ly-ai-dia-phuong",
+      "title": "Trợ lý AI địa phương | iMob Solution & Technology",
+      "description": "Kho tri thức riêng và trợ lý AI giúp người dân, du khách tra cứu thông tin địa phương bằng hội thoại, kèm nguồn tài liệu để đối chiếu."
+    },
+    "hero": {
+      "badge": "Hỏi đáp AI cho địa phương",
+      "title": "Kho tri thức riêng,",
+      "highlight": "trợ lý trả lời có nguồn",
+      "description": "Tập hợp tài liệu văn hoá, di tích, dịch vụ và thông tin hành chính của địa phương thành kho tri thức để người dân, du khách tra cứu bằng hội thoại tự nhiên.",
+      "highlights": [
+        { "icon": "database", "label": "Kho tài liệu theo địa phương" },
+        { "icon": "message-circle", "label": "Hỏi đáp tự nhiên" },
+        { "icon": "book-open-check", "label": "Nguồn để đối chiếu" },
+        { "icon": "refresh-cw", "label": "Cập nhật khi tài liệu đổi" }
+      ]
+    },
+    "solutions": {
+      "badge": "Đối tượng phục vụ",
+      "title": "Một trợ lý AI",
+      "highlight": "cho cả địa phương",
+      "description": "Mỗi nhóm người dùng có nhu cầu tra cứu khác nhau; nội dung trả lời dựa trên kho tài liệu của địa phương.",
+      "columns": [
+        {
+          "icon": "landmark",
+          "title": "Chính quyền & ban quản lý",
+          "items": [
+            "Cung cấp thông tin địa phương qua một kênh tra cứu",
+            "Giới thiệu di tích, quy hoạch và thủ tục từ tài liệu được cung cấp",
+            "Cập nhật nội dung khi có thay đổi"
+          ]
+        },
+        {
+          "icon": "users",
+          "title": "Du khách & người dân",
+          "items": [
+            "Tìm hiểu văn hoá, di tích và dịch vụ địa phương",
+            "Đặt câu hỏi bằng ngôn ngữ tự nhiên",
+            "Mở nguồn tham khảo dưới câu trả lời"
+          ]
+        },
+        {
+          "icon": "store",
+          "title": "Hộ kinh doanh & dịch vụ",
+          "items": [
+            "Giúp người dùng tìm thông tin dịch vụ địa phương",
+            "Kết nối nội dung giới thiệu với kho thông tin chung",
+            "Hỗ trợ khách tra cứu ngoài giờ hành chính"
+          ]
+        }
+      ]
+    },
+    "features": {
+      "badge": "Cách trợ lý hoạt động",
+      "title": "Từ tài liệu",
+      "highlight": "đến câu trả lời",
+      "description": "Trợ lý tìm nội dung liên quan trong kho tri thức của địa phương trước khi tạo câu trả lời.",
+      "items": [
+        {
+          "title": "Tra cứu bằng hội thoại",
+          "desc": "Người dùng hỏi về địa điểm, văn hoá, dịch vụ hoặc thông tin hành chính bằng câu chữ thông thường."
+        },
+        {
+          "title": "Dựa trên kho tài liệu riêng",
+          "desc": "Câu trả lời được tạo từ tài liệu địa phương cung cấp, thay vì chỉ dựa vào kiến thức chung của AI."
+        },
+        {
+          "title": "Kèm nguồn tham khảo",
+          "desc": "Thẻ nguồn bên dưới câu trả lời giúp người dùng mở tài liệu liên quan để kiểm tra."
+        },
+        {
+          "title": "Cập nhật nội dung",
+          "desc": "Đơn vị có thể cập nhật tài liệu trong trang quản trị; trợ lý sẽ tra cứu theo nội dung mới."
+        }
+      ]
+    },
+    "process": {
+      "badge": "Quy trình triển khai",
+      "title": "Từ dữ liệu địa phương",
+      "highlight": "đến trợ lý AI",
+      "description": "Phạm vi và tiến độ được thống nhất sau khi khảo sát nguồn tài liệu, nhu cầu và quy trình cập nhật của từng đơn vị.",
+      "steps": [
+        {
+          "title": "Tiếp nhận dữ liệu",
+          "desc": "Cùng đơn vị xác định nguồn tài liệu và phạm vi thông tin cần đưa vào kho tri thức."
+        },
+        {
+          "title": "Chuẩn hoá tri thức",
+          "desc": "Sắp xếp, làm sạch và phân loại tài liệu để thuận tiện cho việc tra cứu."
+        },
+        {
+          "title": "Thiết lập trợ lý AI",
+          "desc": "Cấu hình truy xuất tài liệu và cách hiển thị nguồn tham khảo trong câu trả lời."
+        },
+        {
+          "title": "Kiểm thử chuyên môn",
+          "desc": "Cùng đơn vị thử các câu hỏi thực tế, rà soát nội dung và điều chỉnh kho tài liệu."
+        },
+        {
+          "title": "Triển khai & vận hành",
+          "desc": "Đưa trợ lý vào sử dụng, hướng dẫn cập nhật dữ liệu và tiếp nhận điều chỉnh khi cần."
+        }
+      ]
+    }
   }
 }

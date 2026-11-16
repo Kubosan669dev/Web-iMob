@@ -38,12 +38,16 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 | Trang chủ = Hỏi đáp AI | `/` | `pages/HomePage.jsx` + các khối trong `sections/hoi-dap/` | `data/diaPhuong.json` (địa phương, số liệu, câu gợi ý) |
 | Trang chat cả màn hình | `/hoi-dap/:diaPhuong` (vd `/hoi-dap/yen-tu?hoi=câu hỏi`) | `pages/HoiDapPage.jsx` + `sections/hoi-dap/KhungChatCaTrang.jsx` | `data/diaPhuong.json` (có toạ độ), thời tiết: `services/thoiTietService.js` (Open-Meteo) |
 | Về chúng tôi (trang chủ cũ) | `/ve-chung-toi` | `pages/VeChungToiPage.jsx` + các khối trong `sections/` | `data/hero.json`, `about.json`, `doiTac.json`, `services.json` |
-| Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
+| Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/tro-ly-ai-dia-phuong`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
 | Tour VR360 | `/tour-360` | `pages/TourVr360Page.jsx` | `data/tourVr360.json` |
 | Tin tức (gộp tin công ty + câu chuyện khách hàng, có trên menu) | `/tin-tuc`, `/tin-tuc?muc=tin-cong-ty`, `/cau-chuyen`; bài: `/tin-tuc/:bai`, `/cau-chuyen/:bai` | `pages/TinTucPage.jsx`, `BaiVietPage.jsx` | từ API (`services/baiVietService.js`), soạn ở `/admin` → Bài viết |
 | Quản trị nội dung | `/admin` | `pages/AdminPage.jsx` + `components/admin/` | từ API (`services/adminService.js`) |
 | Pháp lý | `/privacy-policy`, `/terms-of-service` | `pages/LegalPage.jsx` | `data/legalPages.json` |
 | Bảng mẫu giao diện (nội bộ) | `/ui-kit` | `pages/UiKitPage.jsx` | |
+
+Thẻ **Trợ lý AI địa phương** trên trang Về chúng tôi được khai báo trong
+`src/data/services.json`; nội dung trang riêng nằm ở mục `local-ai` trong
+`src/data/servicePages.json`, còn route được nối trong `src/App.jsx`.
 
 Dùng chung cho mọi trang:
 
