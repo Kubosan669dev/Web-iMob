@@ -106,7 +106,7 @@ export default function BaiVietPage({ mucMacDinh = LOAI_CAU_CHUYEN }) {
                 {ngayViet(bai.dang_luc)}
                 {bai.ten_khach ? ` · ${bai.ten_khach}` : ""}
               </p>
-              <h1 className="text-3xl font-black leading-tight tracking-tight text-ink sm:text-4xl">
+              <h1 className="font-display text-3xl font-semibold leading-tight text-brand-deep sm:text-4xl">
                 {bai.tieu_de}
               </h1>
               {bai.tom_tat && (

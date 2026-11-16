@@ -32,10 +32,10 @@ const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 // danh sách điểm ngắm bên trái, tour Panoee bên phải.
 const TourVr360Page = lazy(() => import("./pages/TourVr360Page.jsx"));
 
-// Bài viết: hai mục "Câu chuyện khách hàng" và "Tin công ty" dùng CHUNG một
-// component danh sách, khác nhau ở prop `loai`. Nội dung nằm trong bảng
-// bai_viet, soạn ở /admin. Cùng lazy() — khách vào trang chủ không tải kèm.
-const DanhSachBaiVietPage = lazy(() => import("./pages/DanhSachBaiVietPage.jsx"));
+// Tin tức: MỘT trang cho cả "Tin công ty" và "Câu chuyện khách hàng" (gộp
+// 16/11/2026, xem pages/TinTucPage.jsx). Nội dung trong bảng bai_viet, soạn ở
+// /admin. lazy() — khách vào trang chủ không tải kèm.
+const TinTucPage = lazy(() => import("./pages/TinTucPage.jsx"));
 const BaiVietPage = lazy(() => import("./pages/BaiVietPage.jsx"));
 
 // Trang pháp lý (Chính sách bảo mật / Điều khoản dịch vụ) — cùng một component
@@ -95,18 +95,12 @@ export default function App() {
                       vì import hằng số từ services/baiVietService.js: import
                       sẽ kéo cả module dịch vụ vào bundle chính, trong khi hai
                       trang kia đang cố ý tách ra bằng lazy(). */}
-                  <Route
-                    path="/cau-chuyen"
-                    element={<DanhSachBaiVietPage loai="cau_chuyen" />}
-                  />
+                  <Route path="/cau-chuyen" element={<TinTucPage />} />
                   <Route
                     path="/cau-chuyen/:duongDan"
                     element={<BaiVietPage mucMacDinh="cau_chuyen" />}
                   />
-                  <Route
-                    path="/tin-tuc"
-                    element={<DanhSachBaiVietPage loai="tin_cong_ty" />}
-                  />
+                  <Route path="/tin-tuc" element={<TinTucPage />} />
                   <Route
                     path="/tin-tuc/:duongDan"
                     element={<BaiVietPage mucMacDinh="tin_cong_ty" />}

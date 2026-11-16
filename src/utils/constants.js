@@ -24,7 +24,7 @@ export const SITE = company;
 
 // Menu điều hướng — Navbar, MobileMenu, Footer đều đọc từ đây.
 //
-// GỌN LẠI CÒN HAI MỤC (13/11/2026) theo định hướng mới của công ty: imob.vn là
+// GỌN LẠI CÒN HAI MỤC (13/11/2026; thêm "Tin tức" 16/11/2026) theo định hướng mới của công ty: imob.vn là
 // nơi du khách, hộ kinh doanh hỏi đáp chatbot AI về địa phương; mọi phần giới
 // thiệu công ty (dự án, công nghệ, tin tức, liên hệ) gom vào "Về chúng tôi".
 // Menu cũ bảy mục (Trang chủ, Dự án, Công nghệ ▾, VR360, Về chúng tôi, Tin
@@ -34,6 +34,9 @@ export const SITE = company;
 // `to` = đường dẫn trang (đi bằng <Link>). Mục đang mở tô màu theo pathname.
 export const NAV_ITEMS = [
   { id: "hoi-dap", label: "Hỏi đáp AI", to: "/" },
+  // Thêm 16/11/2026: một trang gộp tin công ty + câu chuyện khách hàng.
+  // `cungMuc`: các đường dẫn khác cũng tô sáng mục này trên menu.
+  { id: "tin-tuc", label: "Tin tức", to: "/tin-tuc", cungMuc: ["/cau-chuyen"] },
   { id: "ve-chung-toi", label: "Về chúng tôi", to: "/ve-chung-toi" },
 ];
 

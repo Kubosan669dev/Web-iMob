@@ -24,7 +24,8 @@ import { useCongTy } from "../../context/NoiDungContext.jsx";
 // ============================================================
 
 function dangMo(item, pathname) {
-  return item.to === "/" ? (pathname === "/" || pathname.startsWith("/hoi-dap")) : pathname.startsWith(item.to);
+  if (item.to === "/") return pathname === "/" || pathname.startsWith("/hoi-dap");
+  return [item.to, ...(item.cungMuc ?? [])].some((p) => pathname.startsWith(p));
 }
 
 export default function Navbar() {

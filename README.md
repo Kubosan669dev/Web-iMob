@@ -40,7 +40,7 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 | Về chúng tôi (trang chủ cũ) | `/ve-chung-toi` | `pages/VeChungToiPage.jsx` + các khối trong `sections/` | `data/hero.json`, `about.json`, `doiTac.json`, `services.json` |
 | Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
 | Tour VR360 | `/tour-360` | `pages/TourVr360Page.jsx` | `data/tourVr360.json` |
-| Tin tức, câu chuyện | `/tin-tuc`, `/cau-chuyen` | `pages/DanhSachBaiVietPage.jsx`, `BaiVietPage.jsx` | từ API (`services/baiVietService.js`) |
+| Tin tức (gộp tin công ty + câu chuyện khách hàng, có trên menu) | `/tin-tuc`, `/tin-tuc?muc=tin-cong-ty`, `/cau-chuyen`; bài: `/tin-tuc/:bai`, `/cau-chuyen/:bai` | `pages/TinTucPage.jsx`, `BaiVietPage.jsx` | từ API (`services/baiVietService.js`), soạn ở `/admin` → Bài viết |
 | Quản trị nội dung | `/admin` | `pages/AdminPage.jsx` + `components/admin/` | từ API (`services/adminService.js`) |
 | Pháp lý | `/privacy-policy`, `/terms-of-service` | `pages/LegalPage.jsx` | `data/legalPages.json` |
 | Bảng mẫu giao diện (nội bộ) | `/ui-kit` | `pages/UiKitPage.jsx` | |
