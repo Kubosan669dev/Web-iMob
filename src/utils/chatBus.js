@@ -8,10 +8,13 @@
 
 const OPEN_CHAT_EVENT = "imob:open-chat";
 
-export function openChat(cauHoi = "") {
-  window.dispatchEvent(
-    new CustomEvent(OPEN_CHAT_EVENT, { detail: { cauHoi: String(cauHoi).trim() } }),
-  );
+// ⚠️ CHỈ nhận câu hỏi là CHUỖI. Nhiều nút gắn thẳng `onClick={openChat}`
+// (Hero, About, ServiceHero) nên React truyền vào SỰ KIỆN BẤM CHUỘT. Bản
+// 13/11/2026 ép mọi thứ thành chuỗi → khung chat tự gửi "[object Object]"
+// (người dùng báo 16/11/2026). Không phải chuỗi thì coi như không có câu hỏi.
+export function openChat(cauHoi) {
+  const cau = typeof cauHoi === "string" ? cauHoi.trim() : "";
+  window.dispatchEvent(new CustomEvent(OPEN_CHAT_EVENT, { detail: { cauHoi: cau } }));
 }
 
 export function onOpenChat(handler) {
