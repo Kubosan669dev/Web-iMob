@@ -370,3 +370,52 @@ html[data-bot-nen-tang="an"] .imob-widget-container {
     max-height: max(320px, calc(100dvh - 173px));
   }
 }
+
+/* ------------------------------------------------------------
+   CHAT CẢ TRANG (/hoi-dap, 16/11/2026) — xem sections/hoi-dap/KhungChatCaTrang.jsx.
+   Hộp khung chat của nền tảng được chuyển vào ô .o-chat-ca-trang; các quy tắc
+   dưới đây biến nó từ khung nổi góc phải thành khung nằm trong trang.
+   ⚠️ Bộ chọn ba lớp + !important vì CSS nền tảng tải SAU file này và tự đặt
+   position/width/height/opacity cho từng phần.
+   Nền tảng đổi tên lớp (.imob-…) thì phần này thôi tác dụng: khung chat lại nổi
+   ở góc như cũ — xấu nhưng không hỏng, khách vẫn chat được.
+   ------------------------------------------------------------ */
+.o-chat-ca-trang .imob-widget-container {
+  position: relative !important;
+  inset: auto !important;
+  z-index: auto !important;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans) !important;
+  /* Màu khung chat theo bảng màu của web thay cho chàm-tím mặc định */
+  --primary-color: var(--color-brand);
+  --primary-hover: var(--color-brand-deep);
+  --primary-gradient: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-deep) 100%);
+  --bg-color: var(--color-panel);
+  --text-color: var(--color-ink);
+  --bot-msg-bg: var(--color-mist);
+  --user-msg-bg: var(--color-brand);
+  --user-msg-text: var(--color-tren-brand);
+}
+.o-chat-ca-trang .imob-widget-container .imob-chatbox {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: all !important;
+  border-radius: var(--radius-card) !important;
+  border: 1px solid var(--color-line) !important;
+  box-shadow: var(--shadow-soft) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.o-chat-ca-trang .imob-widget-container .imob-widget-toggle,
+.o-chat-ca-trang .imob-widget-container #imob-close-btn {
+  display: none !important;
+}
+.o-chat-ca-trang .imob-widget-container .imob-chat-header {
+  padding: 14px 20px;
+}

@@ -1,6 +1,7 @@
 {
   "_note": "CÁC ĐỊA PHƯƠNG trên trang Hỏi đáp AI (trang chủ từ 13/11/2026): ô chọn vùng, thẻ địa phương, câu hỏi gợi ý. Địa phương ĐẦU TIÊN là vùng chọn sẵn và là thẻ lớn. Thêm địa phương = thêm một phần tử, không phải sửa mã.",
   "_quyTac": "⚠️ CHỈ GHI SỐ CÓ NGUỒN. Giao diện mẫu công ty gửi có các số như '1,420+ tri thức', '780+ bản ghi số' — không có nguồn nên đã bỏ. Mỗi con số dưới đây ghi rõ đếm ở đâu trong `_nguon`; số đổi thì đếm lại rồi sửa cả `_nguon`. Tên hành chính dùng tên SAU sắp xếp 01/07/2025 (không còn cấp huyện).",
+  "_toaDo": "Toạ độ tra từ OpenStreetMap (Nominatim) ngày 16/11/2026 — dùng cho thời tiết (Open-Meteo) và bản đồ ở trang chat /hoi-dap. Yên Tử lấy điểm Chùa Đồng.",
   "_anh": "Ảnh đều là ảnh THẬT từ dự án iMob đã làm: Yên Tử cắt từ ảnh 360° Chùa Đồng công ty tự chụp (thư mục VR YEN TU), Đông Triều lấy từ bandosodongtrieu.vn, Quảng Tân lấy từ bản đồ số xã Quảng Tân. Ảnh nằm trong public/anh/dia-phuong/.",
   "danhSach": [
     {
@@ -15,6 +16,7 @@
       "soLieu": [{ "so": "43", "nhan": "điểm ngắm 360°" }],
       "_nguon": "43 = số điểm ngắm của tour 'yen-tu' trong src/data/tourVr360.json (13/11/2026).",
       "xem360": "/tour-360",
+      "toaDo": { "lat": 21.1608, "lon": 106.7149, "ten": "Chùa Đồng, đỉnh Yên Tử" },
       "ungDung": [
         { "loai": "Zalo Mini App", "ten": "Yên Tử Số", "lienKet": "https://zalo.me/s/1740150693479312611/" },
         { "loai": "Website", "ten": "Phường Yên Tử", "lienKet": "https://phuongyentu.com.vn" }
@@ -49,6 +51,7 @@
       "soLieu": [{ "so": "13", "nhan": "địa điểm thực tế ảo 360°" }],
       "_nguon": "13 = trang chủ bandosodongtrieu.vn ghi '13 Địa điểm — Thực tế ảo 360°' (13/11/2026).",
       "xem360": "https://bandosodongtrieu.vn",
+      "toaDo": { "lat": 21.0802, "lon": 106.5184, "ten": "Phường Đông Triều" },
       "ungDung": [{ "loai": "Bản đồ số", "ten": "Đông Triều", "lienKet": "https://bandosodongtrieu.vn" }],
       "cauHoi": {
         "khach": [
@@ -84,6 +87,7 @@
       ],
       "_nguon": "51 và 32 = đếm từ danh sách địa điểm công khai của bản đồ số xã Quảng Tân (api.bandosoxaquangtan.vn/api/places, 13/11/2026; 32 là số mục tên 'Hộ kinh doanh'). 12 = số điểm ngắm tour 'quang-tan' trong src/data/tourVr360.json.",
       "xem360": "/tour-360?tour=quang-tan",
+      "toaDo": { "lat": 21.3614, "lon": 107.5825, "ten": "Xã Quảng Tân" },
       "ungDung": [{ "loai": "Bản đồ số", "ten": "Xã Quảng Tân", "lienKet": "https://bandosoxaquangtan.vn" }],
       "cauHoi": {
         "khach": [

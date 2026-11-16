@@ -8,6 +8,9 @@ import HomePage from "./pages/HomePage.jsx";
 import { NoiDungProvider } from "./context/NoiDungContext.jsx";
 import { BangMauProvider } from "./context/BangMauContext.jsx";
 
+// Trang chat cả màn hình (giai đoạn 2, 16/11/2026).
+const HoiDapPage = lazy(() => import("./pages/HoiDapPage.jsx"));
+
 // Trang "Về chúng tôi" = trang chủ cũ (từ 13/11/2026, xem pages/HomePage.jsx).
 const VeChungToiPage = lazy(() => import("./pages/VeChungToiPage.jsx"));
 
@@ -74,6 +77,8 @@ export default function App() {
                 <Route element={<Layout />}>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/ve-chung-toi" element={<VeChungToiPage />} />
+                  <Route path="/hoi-dap" element={<HoiDapPage />} />
+                  <Route path="/hoi-dap/:khoa" element={<HoiDapPage />} />
                   <Route path="/zalo-miniapp" element={<ZaloMiniAppPage />} />
                   <Route
                     path="/software-hardware"

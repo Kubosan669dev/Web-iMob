@@ -82,7 +82,7 @@ export default function MobileMenu({ open, onClose, pathname }) {
                 không phải tiết kiệm chỗ. */}
             <nav className="flex-1 overflow-y-auto px-5 py-6">
               {NAV_ITEMS.map((item) => {
-                const mo = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+                const mo = item.to === "/" ? (pathname === "/" || pathname.startsWith("/hoi-dap")) : pathname.startsWith(item.to);
                 return (
                   <motion.div key={item.id} variants={itemVariants} className="py-1">
                     <Link

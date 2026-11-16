@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { ExternalLink, Map as MapIcon, MessageSquare, Rotate3d } from "lucide-react";
 import Container from "../../components/ui/Container.jsx";
-import { openChat } from "../../utils/chatBus.js";
 import diaPhuong from "../../data/diaPhuong.json";
 
 // ============================================================
@@ -129,7 +128,8 @@ const NUT_CHINH =
 const NUT_PHU =
   "inline-flex items-center justify-center gap-2 rounded-lg bg-mist px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-line";
 
-const hoiVe = (d) => () => openChat(`Giới thiệu cho tôi về ${d.ten}`);
+// Nút "Trò chuyện với AI": sang trang chat cả màn hình của đúng địa phương.
+const trangChat = (d) => `/hoi-dap/${d.khoa}`;
 
 export default function DiaPhuongTieuBieu() {
   const [dau, ...con] = DS;
@@ -161,10 +161,10 @@ export default function DiaPhuongTieuBieu() {
               <DaiSoLieu d={dau} />
               <p className="text-sm leading-relaxed text-ink-soft">{dau.moTa}</p>
               <div className="mt-auto flex flex-wrap gap-2.5">
-                <button type="button" onClick={hoiVe(dau)} className={NUT_CHINH}>
+                <Link to={trangChat(dau)} className={NUT_CHINH}>
                   <MessageSquare className="h-4 w-4" aria-hidden="true" />
                   Trò chuyện với AI về vùng này
-                </button>
+                </Link>
                 {dau.xem360 && <NutXem360 den={dau.xem360} className={NUT_PHU} />}
               </div>
             </div>
@@ -178,10 +178,10 @@ export default function DiaPhuongTieuBieu() {
                 <p className="text-sm leading-relaxed text-ink-soft">{d.moTa}</p>
                 <SoLieuNho d={d} />
                 <div className="mt-auto grid gap-2">
-                  <button type="button" onClick={hoiVe(d)} className={NUT_PHU}>
+                  <Link to={trangChat(d)} className={NUT_PHU}>
                     <MessageSquare className="h-4 w-4" aria-hidden="true" />
                     Trò chuyện với AI
-                  </button>
+                  </Link>
                   {d.xem360 && <NutXem360 den={d.xem360} gon className={NUT_PHU + " bg-transparent ring-1 ring-line"} />}
                 </div>
               </div>

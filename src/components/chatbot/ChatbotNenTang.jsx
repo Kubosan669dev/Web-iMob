@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { GOC_BOT, KHOA_BOT, PHIEN_BAN_BOT } from "./botNenTang.js";
+import { GOC_BOT, KHOA_BOT, PHIEN_BAN_BOT, dangCaTrang, guiCauHoi, moKhungChat } from "./botNenTang.js";
 import { onOpenChat } from "../../utils/chatBus.js";
 import { useGiaoDien } from "../../context/NoiDungContext.jsx";
 import { daTungDong, ghiDaDong } from "./chatDaDong.js";
@@ -47,43 +47,6 @@ function chenMotLan() {
     js.dataset.apiBase = GOC_BOT; // -> data-api-base
     document.body.appendChild(js);
   }
-}
-
-// Các nút "Chat với AI" trên trang (Hero, About, ServiceHero…) gọi openChat()
-// trong chatBus.js. Bot cũ tự nghe sự kiện đó; khung chat của nền tảng thì
-// không biết gì về nó, nên mình mở hộ bằng cách bấm nút tròn của nó. Khách bấm
-// lúc script còn đang tải thì chờ thêm tối đa ~5 giây.
-function moKhungChat(conLan = 25) {
-  const nut = document.getElementById("imob-toggle-btn");
-  if (nut) {
-    if (!document.querySelector(".imob-chatbox.open")) nut.click();
-    return;
-  }
-  if (conLan > 0) setTimeout(() => moKhungChat(conLan - 1), 200);
-}
-
-// Gửi một câu hỏi vào khung chat của nền tảng (ô "Hỏi ngay" ở trang Hỏi đáp
-// AI). Khung chat nằm ngoài React và mã của nó bị làm rối, nên làm đúng như
-// người thật: điền chữ vào ô nhập rồi bấm nút gửi. Id ô nhập và nút gửi đo trên
-// khung chat thật ngày 13/11/2026: #imob-chat-input (textarea), #imob-send-btn.
-//
-// ⚠️ PHẢI gán giá trị qua "setter gốc" của textarea rồi phát sự kiện input.
-// Gán thẳng `o.value = ...` thì chữ hiện lên nhưng nếu khung chat theo dõi ô
-// nhập bằng sự kiện input, nó vẫn tưởng ô trống và nút gửi không làm gì.
-// Nền tảng đổi id thì hàm này lặng lẽ chỉ còn MỞ khung chat (không gửi được) —
-// khách vẫn tự gõ lại được, không hỏng trang.
-function guiCauHoi(cauHoi, conLan = 25) {
-  const o = document.getElementById("imob-chat-input");
-  const nutGui = document.getElementById("imob-send-btn");
-  const khungMo = document.querySelector(".imob-chatbox.open");
-  if (!o || !nutGui || !khungMo) {
-    if (conLan > 0) setTimeout(() => guiCauHoi(cauHoi, conLan - 1), 200);
-    return;
-  }
-  const ganGoc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set;
-  ganGoc.call(o, cauHoi);
-  o.dispatchEvent(new Event("input", { bubbles: true }));
-  nutGui.click();
 }
 
 // Báo cho mình biết khi khung chat của nền tảng mở ra / đóng lại, bất kể do ai
@@ -161,7 +124,10 @@ export default function ChatbotNenTang() {
     const boTheoDoi = theoDoiKhungChat({
       khiMo: () => {
         setChao(false);
-        if (daTungDong() && !khachDaTuongTac) document.getElementById("imob-close-btn")?.click();
+        // Đang ở trang chat cả màn hình (pages/HoiDapPage.jsx) thì khung chat
+        // PHẢI mở — không đóng hộ dù trước đó khách từng đóng popup.
+        if (daTungDong() && !khachDaTuongTac && !dangCaTrang())
+          document.getElementById("imob-close-btn")?.click();
       },
       khiDong: ghiDaDong,
     });
@@ -178,7 +144,7 @@ export default function ChatbotNenTang() {
   useEffect(() => {
     if (!tuMo || daTungDong()) return;
     const hen = setTimeout(() => {
-      if (daTungDong() || document.querySelector(".imob-chatbox.open")) return;
+      if (daTungDong() || dangCaTrang() || document.querySelector(".imob-chatbox.open")) return;
       if (window.matchMedia("(min-width: 640px)").matches) moKhungChat();
       else if (loiChao) setChao(true); // điện thoại: chỉ chào, không mở
     }, treMs);

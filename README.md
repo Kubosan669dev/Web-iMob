@@ -36,6 +36,7 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 | Trang | Đường dẫn | File chính | Dữ liệu |
 |---|---|---|---|
 | Trang chủ = Hỏi đáp AI | `/` | `pages/HomePage.jsx` + các khối trong `sections/hoi-dap/` | `data/diaPhuong.json` (địa phương, số liệu, câu gợi ý) |
+| Trang chat cả màn hình | `/hoi-dap/:diaPhuong` (vd `/hoi-dap/yen-tu?hoi=câu hỏi`) | `pages/HoiDapPage.jsx` + `sections/hoi-dap/KhungChatCaTrang.jsx` | `data/diaPhuong.json` (có toạ độ), thời tiết: `services/thoiTietService.js` (Open-Meteo) |
 | Về chúng tôi (trang chủ cũ) | `/ve-chung-toi` | `pages/VeChungToiPage.jsx` + các khối trong `sections/` | `data/hero.json`, `about.json`, `doiTac.json`, `services.json` |
 | Trang dịch vụ | `/zalo-miniapp`, `/software-hardware`, `/digital-transformation`, `/robot`, `/vr360` | `pages/*Page.jsx` + `components/service/` | `data/servicePages.json` |
 | Tour VR360 | `/tour-360` | `pages/TourVr360Page.jsx` | `data/tourVr360.json` |
