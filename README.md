@@ -48,6 +48,10 @@ scripts/          script kiểm tra, chạy bằng npm (xem "Lệnh thường d�
 Thẻ **Trợ lý AI địa phương** trên trang Về chúng tôi được khai báo trong
 `src/data/services.json`; nội dung trang riêng nằm ở mục `local-ai` trong
 `src/data/servicePages.json`, còn route được nối trong `src/App.jsx`.
+Trang này (`/tro-ly-ai-dia-phuong`) KHÔNG dùng khuôn trang dịch vụ chung mà có
+khối riêng theo ảnh mẫu công ty gửi: `src/sections/tro-ly/KhoiTroLy.jsx`
+(Thực trạng, Giải pháp, Đối tượng phục vụ, Quy trình 5 bước), cuối trang là form
+Đăng ký cho địa phương.
 
 Dùng chung cho mọi trang:
 

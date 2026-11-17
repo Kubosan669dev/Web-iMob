@@ -15,7 +15,10 @@ const SERVICE_ICONS = {
   bot: Bot,
 };
 
-/* Thẻ dịch vụ kiểu Apple: bo góc lớn, nền xám nhạt, KHÔNG viền KHÔNG bóng.
+/* 17/11/2026: thẻ trắng viền mảnh trên nền kem, tiêu đề chữ có chân —
+   cùng kiểu khối "Giải pháp AI của iMob" ở trang Trợ lý AI địa phương.
+
+   Trước đó (kiểu Apple): bo góc lớn, nền xám nhạt, không viền không bóng.
    Liên kết cuối thẻ dùng dấu › thay cho mũi tên → và bỏ chữ IN HOA — đó là
    kiểu liên kết đặc trưng của apple.com, nhẹ hơn hẳn một cái nút.
 
@@ -27,11 +30,13 @@ function TheDichVu({ service }) {
   const Icon = SERVICE_ICONS[service.icon] ?? Layers;
 
   return (
-    <article className="flex h-full flex-col rounded-block bg-mist p-8 sm:p-9">
-      <Icon className="h-9 w-9 text-brand" aria-hidden="true" />
+    <article className="flex h-full flex-col rounded-xl border border-line bg-panel p-7">
+      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-mist text-ink">
+        <Icon className="h-5 w-5" aria-hidden="true" />
+      </span>
 
-      <h3 className="tieu-de-lon mt-6 text-2xl text-ink">{service.title}</h3>
-      <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">
+      <h3 className="mt-6 font-display text-xl font-semibold leading-snug text-ink">{service.title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-ink-soft">
         {service.description}
       </p>
 
@@ -39,9 +44,9 @@ function TheDichVu({ service }) {
         {service.features.map((feature) => (
           <li
             key={feature}
-            className="flex items-start gap-2.5 text-[0.9375rem] text-ink-soft"
+            className="flex items-start gap-2.5 text-sm leading-relaxed text-ink-soft"
           >
-            <Check className="mt-1 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+            <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
             {feature}
           </li>
         ))}
@@ -50,11 +55,11 @@ function TheDichVu({ service }) {
       {/* mt-auto ghim liên kết xuống đáy để các thẻ cao bằng nhau vẫn thẳng hàng */}
       <Link
         to={service.route}
-        className="group/link mt-auto inline-flex items-center pt-8 text-[1.0625rem] font-medium text-brand hover:underline"
+        className="group/link mt-auto inline-flex items-center gap-1 border-t border-line pt-4 text-[0.8125rem] font-medium text-ink hover:text-brand"
       >
         Tìm hiểu thêm
         <ChevronRight
-          className="h-5 w-5 transition-transform group-hover/link:translate-x-0.5"
+          className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5"
           aria-hidden="true"
         />
       </Link>
@@ -65,7 +70,7 @@ function TheDichVu({ service }) {
 export default function Services() {
   return (
     // Nền trắng — xen kẽ với dải nền xám của section Sản phẩm phía trên.
-    <section id="services" className="border-t border-line py-24 lg:py-32">
+    <section id="services" className="border-t border-line bg-paper py-24 lg:py-28">
       <Container className="space-y-14">
         <Reveal>
           <SectionTitle

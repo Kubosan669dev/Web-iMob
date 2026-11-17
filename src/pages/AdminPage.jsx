@@ -29,6 +29,7 @@ import useTuDongDangXuat from "../hooks/useTuDongDangXuat.js";
 import { O, ODai, ODanhSach, OTuKhoa, locDongTrong } from "../components/admin/Fields.jsx";
 import ChonAnh from "../components/admin/ChonAnh.jsx";
 import ManHinhDangNhap from "../components/admin/ManHinhDangNhap.jsx";
+import Logo from "../components/ui/Logo.jsx";
 import * as api from "../services/adminService.js";
 import { MAC_DINH } from "../context/NoiDungContext.jsx";
 import { BANG_MAU } from "../data/bangMau.js";
@@ -83,13 +84,16 @@ const MUC_TRANG_CHU = [
   { id: "san-pham", nhan: "Sản phẩm", khoa: "projects", icon: Package, neo: "/ve-chung-toi#projects" },
   { id: "doi-tac", nhan: "Đối tác", khoa: "doiTac", icon: Handshake, neo: "/ve-chung-toi#services" },
   { id: "about", nhan: "Giới thiệu", khoa: "about", icon: Building2, neo: "/ve-chung-toi#about" },
-  { id: "lien-he", nhan: "Liên hệ", khoa: "company", icon: Phone, neo: "/ve-chung-toi#contact" },
+  // "Thông tin công ty" chứ không phải "Liên hệ" (đổi 17/11/2026): khoá
+  // company là tên, số điện thoại, email, địa chỉ dùng cho CẢ website (chân
+  // trang, form, trang chat) — không chỉ khối Liên hệ.
+  { id: "lien-he", nhan: "Thông tin công ty", khoa: "company", icon: Phone, neo: "/ve-chung-toi#contact" },
 ];
 
 const MUC_KHAC = [
   // khoa: null vì bài viết KHÔNG nằm trong bảng noi_dung mà có bảng riêng
   // (bai_viet). Mục này tự lưu lấy, không đi qua thanh lưu chung ở dưới.
-  { id: "bai-viet", nhan: "Bài viết", khoa: null, icon: BookOpen, neo: "/tin-tuc" },
+  { id: "bai-viet", nhan: "Tin tức", khoa: null, icon: BookOpen, neo: "/tin-tuc" },
   // khoa: null — tu lieu co bang rieng (tu_lieu), muc nay tu luu lay.
   { id: "tu-lieu", nhan: "Tư liệu", khoa: null, icon: Lightbulb },
   { id: "tin-nhan", nhan: "Tin nhắn", khoa: null, icon: Inbox },
@@ -98,6 +102,13 @@ const MUC_KHAC = [
 ];
 
 const TAT_CA_MUC = [...MUC_CHINH, ...MUC_TRANG_CHU, ...MUC_KHAC];
+
+// Nhãn dễ đọc cho cột "nguồn" của tin nhắn (giá trị gốc lưu trong bảng lien_he).
+const NHAN_NGUON = {
+  "dia-phuong": "Đăng ký địa phương",
+  form: "Form liên hệ",
+  chatbot: "Khung chat",
+};
 
 /* ================= Mảnh dùng chung ================= */
 function Bang({ loai, children }) {
@@ -122,7 +133,7 @@ function TieuDeMuc({ children, ghiChu, neo }) {
   return (
     <div className="mb-7 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
       <div>
-        <h2 className="tieu-de-lon text-xl text-ink">{children}</h2>
+        <h2 className="font-display text-2xl font-semibold text-brand-deep">{children}</h2>
         {ghiChu && <p className="mt-1 text-sm text-ink-soft">{ghiChu}</p>}
       </div>
       {neo && (
@@ -139,11 +150,11 @@ function TieuDeMuc({ children, ghiChu, neo }) {
   );
 }
 
-/** Khung một mục: thẻ trắng bo góc lớn đặt trên nền xám nhạt của trang.
-    Không viền, không bóng — chênh lệch sắc độ trắng/xám là đủ để tách. */
+/** Khung một mục: thẻ trắng viền mảnh trên nền kem — cùng kiểu thẻ của
+    website mới (17/11/2026). */
 function Khung({ children }) {
   return (
-    <section className="rounded-block bg-panel p-6 sm:p-8">
+    <section className="rounded-xl border border-line bg-panel p-6 shadow-soft sm:p-8">
       {children}
     </section>
   );
@@ -156,7 +167,7 @@ function MucHero({ d, doi, daSua }) {
   const s = (k) => (v) => doi({ ...d, [k]: v });
   return (
     <Khung>
-      <TieuDeMuc ghiChu="Màn hình đầu tiên khách nhìn thấy" neo="/ve-chung-toi#home">
+      <TieuDeMuc ghiChu="Phần đầu trang Về chúng tôi" neo="/ve-chung-toi#home">
         Hero
       </TieuDeMuc>
       <div className="space-y-5">
@@ -222,7 +233,7 @@ function MucAbout({ d, doi, daSua }) {
   const s = (k) => (v) => doi({ ...d, [k]: v });
   return (
     <Khung>
-      <TieuDeMuc ghiChu="Khối giới thiệu ở trang chủ" neo="/ve-chung-toi#about">
+      <TieuDeMuc ghiChu="Khối giới thiệu ở trang Về chúng tôi" neo="/ve-chung-toi#about">
         Giới thiệu
       </TieuDeMuc>
       <div className="space-y-5">
@@ -235,7 +246,7 @@ function MucAbout({ d, doi, daSua }) {
           giaTri={d.tieuDeNhan}
           doi={s("tieuDeNhan")}
           daSua={daSua}
-          moTa="Nối ngay sau Tiêu đề và được tô màu thương hiệu."
+          moTa="Nối ngay sau Tiêu đề, hiện chữ nghiêng."
         />
         <ODai
           nhan="Mô tả"
@@ -762,7 +773,7 @@ function MucTinNhan() {
 
   return (
     <Khung>
-      <TieuDeMuc ghiChu="Khách để lại từ form liên hệ và từ chatbot">Tin nhắn</TieuDeMuc>
+      <TieuDeMuc ghiChu="Khách để lại từ form liên hệ, form đăng ký cho địa phương và khung chat">Tin nhắn</TieuDeMuc>
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm font-medium text-ink-soft">
@@ -786,7 +797,7 @@ function MucTinNhan() {
           <Inbox className="mx-auto h-7 w-7 text-ink-faint" aria-hidden="true" />
           <p className="mt-3 text-sm text-ink">Chưa có ai để lại thông tin</p>
           <p className="mx-auto mt-1.5 max-w-sm text-[0.8125rem] leading-relaxed text-ink-soft">
-            Tin nhắn sẽ xuất hiện ở đây khi khách gửi form Liên hệ ở trang chủ,
+            Tin nhắn sẽ xuất hiện ở đây khi khách gửi form Liên hệ hoặc form Đăng ký cho địa phương,
             hoặc để lại số điện thoại cho chatbot.
           </p>
         </div>
@@ -815,12 +826,15 @@ function MucTinNhan() {
                     <span
                       className={
                         "rounded-md px-2 py-0.5 text-xs font-medium " +
-                        (r.nguon === "chatbot"
-                          ? "bg-brand-soft text-brand"
-                          : "bg-mist text-ink-soft")
+                        (r.nguon === "dia-phuong"
+                          ? "bg-accent-soft text-accent"
+                          : r.nguon === "chatbot"
+                            ? "bg-brand-soft text-brand"
+                            : "bg-mist text-ink-soft")
                       }
+                      title={r.nguon}
                     >
-                      {r.nguon}
+                      {NHAN_NGUON[r.nguon] ?? r.nguon}
                     </span>
                   </td>
                   <td className="px-2 py-3">{r.ho_ten || "—"}</td>
@@ -990,7 +1004,7 @@ export default function AdminPage() {
       setNoiDung(daLuu);
       setGoc(daLuu);
       setXong(
-        `Đã lưu ${khoaDaSua.length} mục. Tải lại trang chủ (F5) để xem thay đổi.`
+        `Đã lưu ${khoaDaSua.length} mục. Tải lại trang web (F5) để xem thay đổi.`
       );
       setTimeout(() => setXong(""), 6000);
     } catch (err) {
@@ -1059,7 +1073,10 @@ export default function AdminPage() {
   const dat = (khoa) => (v) => setNoiDung((t) => ({ ...t, [khoa]: v }));
   const suaKhoa = (khoa) => khoaDaSua.includes(khoa);
 
-  /* --------- Rail trái --------- */
+  /* --------- Cột trái ---------
+     17/11/2026: nền xanh rừng đậm (brand-deep) như dải "Giải pháp AI cho địa
+     phương" của website, nút đang chọn là ô sáng mờ. Trên điện thoại cột này
+     thành một hàng cuộn ngang ở đầu trang. */
   const NutMuc = ({ m }) => {
     const dangChon = muc === m.id;
     const Icon = m.icon;
@@ -1069,14 +1086,14 @@ export default function AdminPage() {
         onClick={() => setMuc(m.id)}
         aria-current={dangChon ? "page" : undefined}
         className={
-          "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm transition-colors " +
+          "flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors lg:w-full " +
           (dangChon
-            ? "bg-brand-soft font-medium text-brand"
-            : "text-ink-soft hover:bg-panel hover:text-ink")
+            ? "bg-tren-brand/15 font-semibold text-tren-brand"
+            : "text-tren-brand/70 hover:bg-tren-brand/10 hover:text-tren-brand")
         }
       >
         <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <span className="flex-1 font-medium">{m.nhan}</span>
+        <span className="flex-1 whitespace-nowrap">{m.nhan}</span>
         {m.khoa && suaKhoa(m.khoa) && (
           <span className="h-1.5 w-1.5 rounded-full bg-canhbao-cham" title="Chưa lưu" />
         )}
@@ -1084,88 +1101,103 @@ export default function AdminPage() {
     );
   };
 
-  return (
-    // Nền xám nhạt cho khung trang, thẻ nội dung nền trắng — kiểu trang cài
-    // đặt của Apple. Trước đây khu quản trị để nền tối theo lối "xưởng sau cửa
-    // hàng"; bỏ đi để cả site chỉ còn MỘT hệ thiết kế, đỡ phải nhớ hai bộ quy
-    // tắc và mắt không phải thích nghi lại mỗi lần chuyển giữa hai khu.
-    <div className="min-h-screen bg-mist pb-28 text-ink">
-      {/* ---------- Thanh trên ---------- */}
-      <header className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
-          <div className="flex items-baseline gap-3">
-            <span className="text-[1.0625rem] font-semibold tracking-tight text-ink">iMob</span>
-            <span className="text-sm text-ink-faint">
-              Quản trị nội dung
-            </span>
-          </div>
+  const NhomMuc = ({ nhan, ds }) => (
+    <div className="flex gap-1 lg:block lg:space-y-0.5">
+      {nhan && (
+        <p className="mb-2 mt-6 hidden px-3 text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-tren-brand/45 lg:block">
+          {nhan}
+        </p>
+      )}
+      {ds.map((m) => (
+        <NutMuc key={m.id} m={m} />
+      ))}
+    </div>
+  );
 
-          <div className="flex items-center gap-1">
-            <span className="mr-2 hidden text-sm text-ink-faint sm:inline">{ten}</span>
-            <button
-              type="button"
-              onClick={napLaiTuFileGoc}
-              disabled={!noiDung}
-              title="Thay nội dung đang lưu bằng bản JSON trong mã nguồn"
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40"
-            >
-              <FileDown className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden lg:inline">Nạp lại từ file gốc</span>
-            </button>
-            <button
-              type="button"
-              onClick={xuatJson}
-              disabled={!noiDung}
-              title="Tải nội dung về máy để sao lưu"
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40"
-            >
-              <Download className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Xuất JSON</span>
-            </button>
-            <button
-              type="button"
-              onClick={thoat}
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-loi"
-            >
-              <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Thoát</span>
-            </button>
+  const mucDangMo = TAT_CA_MUC.find((m) => m.id === muc);
+  const NUT_PHU =
+    "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-40";
+
+  return (
+    // Cột trái xanh rừng + vùng nội dung nền kem, thẻ trắng viền mảnh — cùng
+    // một hệ thiết kế với website (đổi 17/11/2026). Màu đều lấy từ bảng màu
+    // nên đổi bảng ở mục Giao diện thì trang này đổi theo.
+    <div className="min-h-screen bg-paper pb-28 text-ink lg:grid lg:grid-cols-[15rem_1fr]">
+      {/* ---------- Cột trái ---------- */}
+      <aside className="bg-brand-deep text-tren-brand lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+        <div className="flex items-center gap-2.5 px-5 pb-4 pt-5 lg:pb-2">
+          <Logo className="h-8 w-8" />
+          <div className="leading-tight">
+            <p className="font-semibold">iMob</p>
+            <p className="text-[0.6875rem] uppercase tracking-[0.12em] text-tren-brand/60">Quản trị</p>
           </div>
         </div>
-      </header>
+        <nav
+          aria-label="Mục nội dung"
+          className="flex gap-1 overflow-x-auto px-3 pb-3 lg:block lg:overflow-visible lg:pb-6"
+        >
+          <NhomMuc ds={MUC_CHINH} />
+          <NhomMuc nhan="Trang Về chúng tôi" ds={MUC_TRANG_CHU} />
+          <NhomMuc nhan="Khác" ds={MUC_KHAC} />
+        </nav>
+        <div className="hidden border-t border-tren-brand/10 px-5 py-4 text-xs text-tren-brand/60 lg:block">
+          <Link to="/" target="_blank" className="inline-flex items-center gap-1 hover:text-tren-brand">
+            Mở website imob.vn
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+          </Link>
+        </div>
+      </aside>
 
-      <div className="mx-auto max-w-6xl gap-8 px-5 py-8 lg:grid lg:grid-cols-[13rem_1fr]">
-        {/* ---------- Rail trái ---------- */}
-        <nav aria-label="Mục nội dung" className="mb-8 lg:mb-0">
-          <div className="lg:sticky lg:top-24">
-            <div className="mb-6 space-y-0.5">
-              {MUC_CHINH.map((m) => (
-                <NutMuc key={m.id} m={m} />
-              ))}
-            </div>
-
-            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-ink-faint">
-              Trang chủ
+      <div className="min-w-0">
+        {/* ---------- Thanh trên ---------- */}
+        <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3">
+            <p className="truncate text-sm text-ink-faint">
+              Quản trị nội dung
+              {mucDangMo && (
+                <>
+                  {" "}
+                  / <span className="font-medium text-ink">{mucDangMo.nhan}</span>
+                </>
+              )}
             </p>
-            <div className="space-y-0.5">
-              {MUC_TRANG_CHU.map((m) => (
-                <NutMuc key={m.id} m={m} />
-              ))}
-            </div>
-
-            <p className="mb-2 mt-6 px-3 text-xs font-semibold uppercase tracking-wider text-ink-faint">
-              Khác
-            </p>
-            <div className="space-y-0.5">
-              {MUC_KHAC.map((m) => (
-                <NutMuc key={m.id} m={m} />
-              ))}
+            <div className="flex items-center gap-1">
+              <span className="mr-2 hidden items-center gap-2 text-sm text-ink-soft md:inline-flex">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-soft text-xs font-semibold uppercase text-brand">
+                  {String(ten).slice(0, 1)}
+                </span>
+                {ten}
+              </span>
+              <button
+                type="button"
+                onClick={napLaiTuFileGoc}
+                disabled={!noiDung}
+                title="Thay nội dung đang lưu bằng bản JSON trong mã nguồn"
+                className={NUT_PHU}
+              >
+                <FileDown className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="hidden xl:inline">Nạp lại từ file gốc</span>
+              </button>
+              <button
+                type="button"
+                onClick={xuatJson}
+                disabled={!noiDung}
+                title="Tải nội dung về máy để sao lưu"
+                className={NUT_PHU}
+              >
+                <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">Xuất JSON</span>
+              </button>
+              <button type="button" onClick={thoat} className={NUT_PHU + " hover:text-loi"}>
+                <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">Thoát</span>
+              </button>
             </div>
           </div>
-        </nav>
+        </header>
 
         {/* ---------- Nội dung ---------- */}
-        <main className="min-w-0 space-y-5">
+        <main className="mx-auto max-w-5xl space-y-5 px-5 py-8">
           <Bang loai="loi">{loi}</Bang>
           <Bang loai="xong">{xong}</Bang>
 
@@ -1218,7 +1250,7 @@ export default function AdminPage() {
               {muc === "san-pham" && (
                 <Khung>
                   <TieuDeMuc
-                    ghiChu="Thêm, sửa, xoá và đổi thứ tự sản phẩm trên trang chủ"
+                    ghiChu="Thêm, sửa, xoá và đổi thứ tự sản phẩm ở trang Về chúng tôi"
                     neo="/ve-chung-toi#projects"
                   >
                     Sản phẩm
@@ -1254,8 +1286,8 @@ export default function AdminPage() {
 
       {/* ---------- Thanh lưu: CHỈ hiện khi có thay đổi ---------- */}
       {khoaDaSua.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper/95 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3.5">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-panel/95 backdrop-blur-xl lg:left-60">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 py-3.5">
             <p className="flex items-center gap-2 text-sm text-ink-soft">
               <span className="h-1.5 w-1.5 rounded-full bg-canhbao-cham" aria-hidden="true" />
               Chưa lưu:{" "}
@@ -1271,7 +1303,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={boThayDoi}
                 disabled={dangLuu}
-                className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm text-ink-soft transition-colors hover:bg-mist hover:text-ink disabled:opacity-50"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Bỏ thay đổi
@@ -1280,7 +1312,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={luuTatCa}
                 disabled={dangLuu}
-                className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {dangLuu ? (
                   <>

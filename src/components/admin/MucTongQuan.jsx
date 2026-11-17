@@ -43,7 +43,7 @@ function O({ nhan, so, phu, icon: Icon, canChuY = false, onClick }) {
       </span>
       <span
         className={
-          "tieu-de-lon mt-3 text-[2rem] " + (canChuY ? "text-brand" : "text-ink")
+          "mt-3 font-display text-[2rem] font-semibold " + (canChuY ? "text-brand" : "text-ink")
         }
       >
         {so}
@@ -101,9 +101,9 @@ export default function MucTongQuan({ noiDung, diChuyen }) {
   return (
     <div className="space-y-5">
       {/* ---------- Bốn ô số ---------- */}
-      <section className="rounded-block bg-panel p-6 sm:p-8">
+      <section className="rounded-xl border border-line bg-panel p-6 shadow-soft sm:p-8">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="tieu-de-lon text-xl text-ink">Tổng quan</h2>
+          <h2 className="font-display text-2xl font-semibold text-brand-deep">Tổng quan</h2>
           <button
             type="button"
             onClick={tai}
@@ -130,14 +130,14 @@ export default function MucTongQuan({ noiDung, diChuyen }) {
           <O
             nhan="Tin nhắn"
             so={lienHe === null ? "—" : ds.length}
-            phu="từ form và chatbot"
+            phu="từ các form và khung chat"
             icon={Inbox}
             onClick={() => diChuyen("tin-nhan")}
           />
           <O
             nhan="Sản phẩm"
             so={soSanPham}
-            phu="đang hiện trên trang chủ"
+            phu="ở trang Về chúng tôi"
             icon={Package}
             onClick={() => diChuyen("san-pham")}
           />
@@ -170,9 +170,9 @@ export default function MucTongQuan({ noiDung, diChuyen }) {
       </section>
 
       {/* ---------- Tin nhắn mới nhất ---------- */}
-      <section className="rounded-block bg-panel p-6 sm:p-8">
+      <section className="rounded-xl border border-line bg-panel p-6 shadow-soft sm:p-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="tieu-de-lon text-xl text-ink">Khách vừa liên hệ</h2>
+          <h2 className="font-display text-2xl font-semibold text-brand-deep">Khách vừa liên hệ</h2>
           <a
             href="/"
             target="_blank"

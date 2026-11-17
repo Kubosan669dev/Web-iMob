@@ -237,7 +237,7 @@ export default function MucSanPham({ d, doi }) {
 
   const xoa = (i) => {
     const ten = ds[i]?.title || "sản phẩm này";
-    if (!window.confirm(`Xoá "${ten}" khỏi trang chủ?\n\nChưa mất hẳn — bấm "Bỏ thay đổi" là quay lại được.`))
+    if (!window.confirm(`Xoá "${ten}" khỏi trang Về chúng tôi?\n\nChưa mất hẳn — bấm "Bỏ thay đổi" là quay lại được.`))
       return;
     datDs(ds.filter((_, j) => j !== i));
   };
@@ -256,7 +256,7 @@ export default function MucSanPham({ d, doi }) {
         <div className="rounded-card border border-dashed border-line px-6 py-12 text-center">
           <p className="text-sm text-ink">Chưa có sản phẩm nào.</p>
           <p className="mx-auto mt-1.5 max-w-sm text-[0.8125rem] leading-relaxed text-ink-soft">
-            Khối Sản phẩm sẽ không hiện trên trang chủ cho tới khi có ít nhất một
+            Khối Sản phẩm sẽ không hiện ở trang Về chúng tôi cho tới khi có ít nhất một
             sản phẩm.
           </p>
         </div>
@@ -288,7 +288,7 @@ export default function MucSanPham({ d, doi }) {
       <p className="flex items-start gap-2.5 rounded-xl bg-mist px-4 py-3 text-[0.8125rem] leading-relaxed text-ink-soft">
         <GripVertical className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <span>
-          Thứ tự ở đây là thứ tự trên trang chủ. Sản phẩm{" "}
+          Thứ tự ở đây là thứ tự trên trang Về chúng tôi. Sản phẩm{" "}
           <span className="font-medium text-ink">đứng đầu chiếm trọn bề ngang</span> như
           một sản phẩm chủ lực — dùng hai mũi tên để đưa lên hoặc xuống.
         </span>

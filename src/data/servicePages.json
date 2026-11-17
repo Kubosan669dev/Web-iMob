@@ -486,68 +486,144 @@
       "highlight": "trợ lý trả lời có nguồn",
       "description": "Tập hợp tài liệu văn hoá, di tích, dịch vụ và thông tin hành chính của địa phương thành kho tri thức để người dân, du khách tra cứu bằng hội thoại tự nhiên.",
       "highlights": [
-        { "icon": "database", "label": "Kho tài liệu theo địa phương" },
-        { "icon": "message-circle", "label": "Hỏi đáp tự nhiên" },
-        { "icon": "book-open-check", "label": "Nguồn để đối chiếu" },
-        { "icon": "refresh-cw", "label": "Cập nhật khi tài liệu đổi" }
+        {
+          "icon": "database",
+          "label": "Kho tài liệu theo địa phương"
+        },
+        {
+          "icon": "message-circle",
+          "label": "Hỏi đáp tự nhiên"
+        },
+        {
+          "icon": "book-open-check",
+          "label": "Nguồn để đối chiếu"
+        },
+        {
+          "icon": "refresh-cw",
+          "label": "Cập nhật khi tài liệu đổi"
+        }
       ]
     },
     "solutions": {
       "badge": "Đối tượng phục vụ",
-      "title": "Một trợ lý AI",
-      "highlight": "cho cả địa phương",
+      "title": "Phục vụ mọi nhu cầu",
+      "highlight": "thông tin địa phương",
       "description": "Mỗi nhóm người dùng có nhu cầu tra cứu khác nhau; nội dung trả lời dựa trên kho tài liệu của địa phương.",
       "columns": [
         {
           "icon": "landmark",
           "title": "Chính quyền & ban quản lý",
           "items": [
-            "Cung cấp thông tin địa phương qua một kênh tra cứu",
-            "Giới thiệu di tích, quy hoạch và thủ tục từ tài liệu được cung cấp",
-            "Cập nhật nội dung khi có thay đổi"
-          ]
+            "Trả lời câu hỏi thường gặp, cả ngoài giờ hành chính",
+            "Gom tài liệu di tích, thủ tục về một kho tra cứu",
+            "Tự cập nhật nội dung khi có thay đổi"
+          ],
+          "tag": "Đối tác công vụ",
+          "quote": "Thông tin chính thống đến đúng người, đúng lúc."
         },
         {
           "icon": "users",
           "title": "Du khách & người dân",
           "items": [
-            "Tìm hiểu văn hoá, di tích và dịch vụ địa phương",
-            "Đặt câu hỏi bằng ngôn ngữ tự nhiên",
-            "Mở nguồn tham khảo dưới câu trả lời"
-          ]
+            "Tìm hiểu di tích, lễ hội, ẩm thực, dịch vụ",
+            "Hỏi bằng câu chữ thông thường, ngay khi quét mã QR",
+            "Xem tour 360° trước khi đến"
+          ],
+          "tag": "Người dùng thực địa",
+          "quote": "Hỏi như hỏi một người am hiểu vùng đất."
         },
         {
           "icon": "store",
           "title": "Hộ kinh doanh & dịch vụ",
           "items": [
-            "Giúp người dùng tìm thông tin dịch vụ địa phương",
-            "Kết nối nội dung giới thiệu với kho thông tin chung",
-            "Hỗ trợ khách tra cứu ngoài giờ hành chính"
-          ]
+            "Có mặt trên bản đồ số của địa phương",
+            "Được trợ lý giới thiệu khi du khách hỏi dịch vụ, nếu có trong kho tài liệu",
+            "Tra cứu thủ tục đăng ký hộ kinh doanh"
+          ],
+          "tag": "Kinh tế địa phương",
+          "quote": "Đưa sản phẩm địa phương đến đúng người cần."
         }
       ]
     },
-    "features": {
-      "badge": "Cách trợ lý hoạt động",
-      "title": "Từ tài liệu",
-      "highlight": "đến câu trả lời",
-      "description": "Trợ lý tìm nội dung liên quan trong kho tri thức của địa phương trước khi tạo câu trả lời.",
+    "_ghiChu_16_11": "16/11/2026: trang /tro-ly-ai-dia-phuong dựng lại theo 4 ảnh mẫu công ty gửi (pages/TroLyDiaPhuongPage.jsx, sections/tro-ly/). 'features' cũ thay bằng 'thucTrang' + 'giaiPhap'; 'solutions' thêm nhãn và câu trích. Câu chữ của ảnh mẫu đã sửa cho đúng thực tế: bỏ 'Zero-Hallucination', 'Trung tâm Sáng kiến Số Di sản Việt Nam', 'Hội đồng văn hoá nghiệm thu', 'nghe thuyết minh AI', 'hỏi bằng giọng nói', 'báo cáo thời gian thực', 'chỉ số DTI cấp huyện'. Tính năng chưa có ghi 'Sắp có'.",
+    "thucTrang": {
+      "badge": "Thực trạng dữ liệu địa phương",
+      "title": "Thông tin địa phương cần được kết nối thông minh hơn",
+      "description": "Mỗi vùng đất có vốn văn hoá hàng trăm năm, nhưng phần lớn vẫn nằm rải rác trên giấy tờ và nhiều trang web khác nhau, khó tìm khi cần.",
       "items": [
         {
-          "title": "Tra cứu bằng hội thoại",
-          "desc": "Người dùng hỏi về địa điểm, văn hoá, dịch vụ hoặc thông tin hành chính bằng câu chữ thông thường."
+          "icon": "files",
+          "title": "Thông tin phân tán",
+          "desc": "Tư liệu văn hoá, lịch sử, quy hoạch nằm rải rác ở nhiều nguồn, tài liệu giấy và các cổng thông tin cũ, khó tra cứu tập trung."
         },
         {
-          "title": "Dựa trên kho tài liệu riêng",
-          "desc": "Câu trả lời được tạo từ tài liệu địa phương cung cấp, thay vì chỉ dựa vào kiến thức chung của AI."
+          "icon": "search-x",
+          "title": "Khó khăn cho du khách",
+          "desc": "Du khách dễ gặp thông tin sai lệch, thiếu nguồn đáng tin về phong tục, câu chuyện di tích và dịch vụ tại chỗ."
         },
         {
-          "title": "Kèm nguồn tham khảo",
-          "desc": "Thẻ nguồn bên dưới câu trả lời giúp người dùng mở tài liệu liên quan để kiểm tra."
+          "icon": "store",
+          "title": "Trở ngại cho kinh doanh",
+          "desc": "Hộ kinh doanh và người dân mất nhiều công tra cứu thủ tục, chứng nhận OCOP, chính sách hỗ trợ của địa phương."
         },
         {
-          "title": "Cập nhật nội dung",
-          "desc": "Đơn vị có thể cập nhật tài liệu trong trang quản trị; trợ lý sẽ tra cứu theo nội dung mới."
+          "icon": "landmark",
+          "title": "Áp lực bộ máy quản lý",
+          "desc": "Chính quyền và ban quản lý di tích cần trả lời câu hỏi thường gặp cả ngoài giờ hành chính, nhưng thiếu nhân sự công nghệ."
+        }
+      ],
+      "trich": "Biến tri thức địa phương thành một hệ thống thông tin thông minh, dễ tiếp cận và luôn sẵn sàng phục vụ.",
+      "trichMoTa": "iMob không làm một AI trả lời chung chung. Chúng tôi nối kho tài liệu của chính địa phương với công nghệ hỏi đáp RAG, để câu trả lời dựa trên tài liệu địa phương cung cấp và có nguồn để đối chiếu.",
+      "trichNguoi": "Định hướng sản phẩm của iMob",
+      "camKet": {
+        "title": "Trả lời kèm nguồn tài liệu",
+        "desc": "Câu trả lời có thẻ nguồn để mở tài liệu gốc. AI vẫn có thể nhầm, nên thông tin quan trọng cần đối chiếu."
+      }
+    },
+    "giaiPhap": {
+      "badge": "Giải pháp AI của iMob",
+      "title": "Một nền tảng AI, nhiều giá trị cho địa phương",
+      "description": "Hỏi đáp dựa trên kho tài liệu riêng của từng vùng đất (RAG), kết hợp bản đồ số và tour thực tế ảo iMob đã làm.",
+      "items": [
+        {
+          "icon": "messages-square",
+          "title": "Trợ lý AI địa phương",
+          "desc": "Hỏi đáp bằng câu chữ đời thường về điểm đến, phong tục, di tích và lễ hội của địa phương.",
+          "nhanLink": "Thử trợ lý ngay",
+          "link": "/hoi-dap"
+        },
+        {
+          "icon": "library",
+          "title": "Kho tri thức riêng",
+          "desc": "Mỗi địa phương một kho tài liệu do địa phương cung cấp. Câu trả lời kèm thẻ nguồn để đối chiếu.",
+          "nhanLink": "Trợ lý tìm câu trả lời thế nào",
+          "link": "/#nguon-tri-thuc"
+        },
+        {
+          "icon": "compass",
+          "title": "Khám phá & gợi ý du lịch",
+          "desc": "Gợi ý điểm đến, ẩm thực, lưu trú từ tài liệu địa phương. Kho càng đầy đủ, gợi ý càng sát.",
+          "nhanLink": "Xem trang chat Yên Tử",
+          "link": "/hoi-dap/yen-tu"
+        },
+        {
+          "icon": "qr-code",
+          "title": "Mã QR tại điểm đến",
+          "desc": "Đặt mã QR tại di tích, điểm du lịch: du khách quét bằng camera hoặc Zalo là mở trợ lý, không cần cài ứng dụng.",
+          "nhanLink": "Không cần cài app"
+        },
+        {
+          "icon": "rotate-3d",
+          "title": "Không gian thực tế ảo 360°",
+          "desc": "Tour 360° do iMob thực hiện, như 43 điểm ngắm ở Yên Tử, giúp du khách xem trước trước khi đến.",
+          "nhanLink": "Xem tour Yên Tử",
+          "link": "/tour-360"
+        },
+        {
+          "icon": "chart-line",
+          "title": "Quản trị & phân tích tri thức",
+          "desc": "Ban quản lý tự cập nhật tài liệu trong trang quản trị. Báo cáo câu hỏi của du khách theo tháng đang được phát triển.",
+          "nhanLink": "Sắp có: báo cáo hằng tháng"
         }
       ]
     },
@@ -577,7 +653,8 @@
           "title": "Triển khai & vận hành",
           "desc": "Đưa trợ lý vào sử dụng, hướng dẫn cập nhật dữ liệu và tiếp nhận điều chỉnh khi cần."
         }
-      ]
+      ],
+      "duLieu": "Tài liệu địa phương cung cấp chỉ dùng cho trợ lý của chính địa phương đó. Hệ thống đặt trên máy chủ tại Việt Nam (CMC Cloud). Quyền sở hữu và bảo mật dữ liệu được thống nhất trong hợp đồng."
     }
   }
 }
