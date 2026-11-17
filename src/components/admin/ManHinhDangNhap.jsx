@@ -105,24 +105,26 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
   };
 
   return (
-    // 17/11/2026: hai cột theo giao diện mới — trái là dải xanh rừng có ảnh
-    // núi Yên Tử bạc màu (ảnh iMob tự chụp, cùng ảnh nền trang chủ), phải là
-    // form trên nền kem. Màn hình hẹp chỉ còn form.
+    // 17/11/2026: hai cột — trái là ảnh Chùa Đồng trên đỉnh Yên Tử (ảnh iMob
+    // tự chụp), phải là form. Màn hình hẹp chỉ còn form.
+    //
+    // Cột ảnh CỐ Ý KHÔNG theo bảng màu (theo yêu cầu người dùng): ảnh giữ màu
+    // thật, lớp phủ là đen mờ cố định, chữ trắng cố định. Trước đó cột này
+    // dùng bg-brand-deep nên đổi sang bảng Coral Sunrise là thành mảng cam.
     <div className="grid min-h-screen bg-paper text-ink lg:grid-cols-[1fr_1.1fr]">
-      <div className="relative hidden overflow-hidden bg-brand-deep text-tren-brand lg:block">
+      <div className="relative hidden overflow-hidden bg-[#1b2a22] text-white lg:block">
         <img
-          src="/anh/dia-phuong/yen-tu-nen-nui.webp"
+          src="/anh/dia-phuong/yen-tu-chua-dong.webp"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover opacity-25"
-          style={{ filter: "grayscale(0.4)" }}
+          className="absolute inset-0 h-full w-full object-cover object-[50%_45%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/70 to-brand-deep/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/0" />
         <div className="relative flex h-full flex-col justify-end p-12">
-          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-tren-brand/70">
-            iMob · Hỏi đáp AI cho địa phương
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-white/75">
+            Chùa Đồng · đỉnh Yên Tử
           </p>
-          <p className="mt-4 max-w-md font-display text-3xl font-semibold italic leading-snug">
+          <p className="mt-4 max-w-md font-display text-3xl font-semibold italic leading-snug [text-shadow:0_1px_12px_rgb(0_0_0/0.45)]">
             “Mang công nghệ đến gần hơn, xây dựng cuộc sống thông minh hơn.”
           </p>
         </div>
