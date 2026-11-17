@@ -19,7 +19,10 @@ import { useGiaoDien } from "./NoiDungContext.jsx";
 // trong src/styles/bangMau.css. Xem thêm scripts/kiem-tra-bang-mau.mjs.
 // ============================================================
 
-/** Bảng người xem tự chọn. */
+/** Bảng người xem TỪNG tự chọn bằng nút đổi màu cũ (đã bỏ 13/11/2026).
+    17/11/2026: không đọc nữa, chỉ còn để xoá — màu lưu ở đây từng đè lên bảng
+    đặt trong /admin → Giao diện, khiến đổi màu trong admin mà web (trên máy đã
+    từng bấm nút cũ) không đổi theo. index.html cũng xoá khoá này lúc mở trang. */
 const KHOA_LUU = "imob_bang_mau";
 
 /** Nhớ bảng CHÍNH THỨC của lần vào trước.
@@ -56,7 +59,9 @@ export function BangMauProvider({ children }) {
   // làm cả website mất màu.
   const chinhThuc = timBangMau(giaoDien?.bangMau ?? KHOA_MAC_DINH).khoa;
 
-  const [thuNghiem, setThuNghiem] = useState(() => doc(KHOA_LUU));
+  // Bảng thử chỉ sống trong phiên đang mở (gọi chon()), KHÔNG lưu lại: tải
+  // lại trang là về đúng bảng chính thức.
+  const [thuNghiem, setThuNghiem] = useState(null);
 
   const dangDung = thuNghiem ?? chinhThuc;
   const bang = timBangMau(dangDung);
@@ -77,15 +82,18 @@ export function BangMauProvider({ children }) {
     ghi(KHOA_NHO, chinhThuc);
   }, [chinhThuc]);
 
+  // Dọn màu tự chọn cũ (xem ghi chú ở KHOA_LUU).
+  useEffect(() => {
+    if (doc(KHOA_LUU) !== null) ghi(KHOA_LUU, null);
+  }, []);
+
   const chon = useCallback((khoa) => {
     const hopLe = timBangMau(khoa).khoa;
     setThuNghiem(hopLe);
-    ghi(KHOA_LUU, hopLe);
   }, []);
 
   const thoiThu = useCallback(() => {
     setThuNghiem(null);
-    ghi(KHOA_LUU, null);
   }, []);
 
   const giaTri = useMemo(

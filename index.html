@@ -10,18 +10,19 @@
          màu mặc định rồi mới nhảy sang bảng màu thật, chói mắt nhất là khi
          bảng màu là nền tối.
 
-         Đọc hai khoá, theo đúng thứ tự ưu tiên:
-           imob_bang_mau      — bảng người xem tự chọn ở widget ngoài trang chủ
-           imob_bang_mau_web  — bảng CHÍNH THỨC của lần vào trước, React ghi lại
-                                mỗi lần tải (xem src/context/BangMauContext.jsx)
+         Đọc khoá imob_bang_mau_web — bảng CHÍNH THỨC (đặt ở /admin → Giao diện)
+         của lần vào trước, React ghi lại mỗi lần tải (src/context/BangMauContext.jsx).
+
+         17/11/2026: XOÁ khoá imob_bang_mau (bảng người xem tự chọn bằng nút đổi
+         màu cũ ở trang chủ). Nút đó đã bỏ từ 13/11 nhưng màu nó lưu vẫn đè lên
+         bảng trong admin, mà người xem không còn cách nào gỡ.
 
          Không có khoá nào thì bỏ qua, trang chạy bằng bảng chàm tím mặc định
          khai trong @theme. Cố ý viết bằng JS thuần, không đụng tới mã màu nào. -->
     <script>
       try {
-        var _bm =
-          localStorage.getItem("imob_bang_mau") ||
-          localStorage.getItem("imob_bang_mau_web");
+        localStorage.removeItem("imob_bang_mau");
+        var _bm = localStorage.getItem("imob_bang_mau_web");
         if (_bm) document.documentElement.dataset.bangMau = _bm;
       } catch (e) {
         /* trình duyệt chặn storage — bỏ qua, dùng bảng mặc định */
