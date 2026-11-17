@@ -37,6 +37,9 @@ export const NAV_ITEMS = [
   // Thêm 16/11/2026: một trang gộp tin công ty + câu chuyện khách hàng.
   // `cungMuc`: các đường dẫn khác cũng tô sáng mục này trên menu.
   { id: "tin-tuc", label: "Tin tức", to: "/tin-tuc", cungMuc: ["/cau-chuyen"] },
+  // Trả lại 17/11/2026: mục riêng mở thẳng tour 360° (có từ 16/10/2026 theo
+  // yêu cầu công ty), lỡ bị bỏ khi rút menu còn 3 mục ngày 13/11.
+  { id: "tour-360", label: "VR360", to: "/tour-360" },
   { id: "ve-chung-toi", label: "Về chúng tôi", to: "/ve-chung-toi" },
 ];
 
