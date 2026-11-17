@@ -105,16 +105,39 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-mist px-5 py-12 text-ink">
+    // 17/11/2026: hai cột theo giao diện mới — trái là dải xanh rừng có ảnh
+    // núi Yên Tử bạc màu (ảnh iMob tự chụp, cùng ảnh nền trang chủ), phải là
+    // form trên nền kem. Màn hình hẹp chỉ còn form.
+    <div className="grid min-h-screen bg-paper text-ink lg:grid-cols-[1fr_1.1fr]">
+      <div className="relative hidden overflow-hidden bg-brand-deep text-tren-brand lg:block">
+        <img
+          src="/anh/dia-phuong/yen-tu-nen-nui.webp"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-25"
+          style={{ filter: "grayscale(0.4)" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/70 to-brand-deep/30" />
+        <div className="relative flex h-full flex-col justify-end p-12">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-tren-brand/70">
+            iMob · Hỏi đáp AI cho địa phương
+          </p>
+          <p className="mt-4 max-w-md font-display text-3xl font-semibold italic leading-snug">
+            “Mang công nghệ đến gần hơn, xây dựng cuộc sống thông minh hơn.”
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center px-5 py-12">
       <div className="w-full max-w-[26rem]">
-        <div className="rounded-block bg-panel p-7 sm:p-9">
+        <div className="rounded-xl border border-line bg-panel p-7 shadow-soft sm:p-9">
           {/* ---------- Thương hiệu ---------- */}
           <div className="mb-8 text-center">
             {/* Logo giữ nguyên màu ở mọi bảng màu — xem components/ui/Logo.jsx */}
             <Logo className="mx-auto mb-5 h-16 w-16" />
 
-            <h1 className="tieu-de-lon text-2xl text-ink">
-              iMob <span className="text-brand">Admin</span>
+            <h1 className="font-display text-3xl font-semibold text-brand-deep">
+              iMob <em>Admin</em>
             </h1>
             {/* "QUẢN TRỊ HỆ THỐNG" viết hoa, giãn chữ — theo đúng ảnh mẫu
                 công ty gửi 20/08/2026 ("làm y hệt cái ảnh"). */}
@@ -199,13 +222,15 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
             <button
               type="submit"
               disabled={dangGui}
-              /* Nút chuyển sắc theo ảnh mẫu công ty gửi. CỐ Ý dùng hai màu
+              /* 17/11/2026: bỏ nút chuyển sắc, dùng nút phẳng màu thương hiệu
+                 như mọi nút chính của website mới. Ghi chú cũ bên dưới.
+                 Nút chuyển sắc theo ảnh mẫu công ty gửi. CỐ Ý dùng hai màu
                  thương hiệu (brand -> brand-deep) chứ không ghim cứng mã màu
                  xanh–tím như trong ảnh: trang này chạy được với cả 9 bảng màu,
                  ghim cứng thì bảng nào cũng ra một nút xanh tím lạc lõng, và
                  mất luôn phần bảo đảm tương phản đã đo bằng
                  scripts/kiem-tra-bang-mau.mjs. */
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand to-brand-deep px-5 py-3 text-[1.0625rem] font-medium text-tren-brand transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-5 py-3 text-[1.0625rem] font-semibold text-tren-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
             >
               {dangGui ? (
                 <>
@@ -249,6 +274,7 @@ export default function ManHinhDangNhap({ khiXong, lyDo = "" }) {
             Về trang chủ
           </Link>
         </div>
+      </div>
       </div>
     </div>
   );

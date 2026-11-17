@@ -237,7 +237,7 @@ export function OTuKhoa({ nhan, danhSach, doi, moTa, daSua = false }) {
       {tu.length > 0 && (
         <div className="mt-3 flex items-baseline gap-3 rounded-xl bg-mist px-3.5 py-3">
           <span className="text-[0.8125rem] text-ink-faint">Xem thử</span>
-          <span className="tieu-de-lon text-xl text-brand">
+          <span className="font-display text-xl font-semibold text-brand">
             {tu[xem % tu.length]}
           </span>
         </div>
