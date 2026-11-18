@@ -95,7 +95,7 @@ export default function HeroHoiDap() {
           </Link>
           <p className="inline-flex items-center gap-1.5 text-sm text-ink-faint">
             <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-            Miễn phí, không cần đăng nhập
+            Miễn phí, chỉ cần một tài khoản iMob
           </p>
         </div>
 

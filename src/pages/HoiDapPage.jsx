@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import Container from "../components/ui/Container.jsx";
 import KhungChatCaTrang from "../sections/hoi-dap/KhungChatCaTrang.jsx";
+import CanDangNhap from "../sections/hoi-dap/CanDangNhap.jsx";
+import useTaiKhoan from "../hooks/useTaiKhoan.js";
 import { guiCauHoi } from "../components/chatbot/botNenTang.js";
 import { VAI_TRO, ghepVung } from "../utils/hoiDap.js";
 import { layThoiTiet } from "../services/thoiTietService.js";
@@ -118,8 +120,16 @@ function ThucDia({ d, tt }) {
 const NUT_NHO =
   "inline-flex items-center gap-1.5 rounded-lg bg-mist px-3 py-1.5 text-xs font-medium text-ink transition-colors hover:bg-line";
 
-function GoiY({ d }) {
+// Chưa đăng nhập: bấm câu gợi ý thì sang trang đăng nhập, xong quay về đây
+// và câu đó được gửi luôn (qua ?hoi=).
+function GoiY({ d, daDangNhap }) {
   const [vaiTro, setVaiTro] = useState(VAI_TRO[0].khoa);
+  const diTiep = useNavigate();
+  const hoi = (cau) => {
+    if (daDangNhap) return guiCauHoi(ghepVung(cau, d));
+    const tiep = `/hoi-dap/${d.khoa}?hoi=${encodeURIComponent(cau)}`;
+    diTiep(`/dang-nhap?tiep=${encodeURIComponent(tiep)}`);
+  };
   return (
     <The tieuDe="Gợi ý câu hỏi">
       <div className="mb-3 flex flex-wrap gap-1.5" role="group" aria-label="Chọn vai trò">
@@ -143,7 +153,7 @@ function GoiY({ d }) {
           <li key={cau}>
             <button
               type="button"
-              onClick={() => guiCauHoi(ghepVung(cau, d))}
+              onClick={() => hoi(cau)}
               className="group flex w-full items-start justify-between gap-3 rounded-xl border border-line px-3.5 py-3 text-left text-[0.8125rem] leading-snug text-ink-soft transition-colors hover:border-brand/40 hover:text-ink"
             >
               {cau}
@@ -199,6 +209,7 @@ export default function HoiDapPage() {
   // lại (undefined) cho tới khi có kết quả mới. null = lấy không được.
   const [ttLuu, setTtLuu] = useState({ khoa: null, kq: undefined });
   const tt = ttLuu.khoa === d.khoa ? ttLuu.kq : undefined;
+  const nguoi = useTaiKhoan();
 
   useDocumentTitle(`Hỏi đáp AI về ${d.ten} | iMob`);
 
@@ -281,11 +292,13 @@ export default function HoiDapPage() {
 
       {/* ---------- Chat + cột phải ---------- */}
       <Container rong="max-w-6xl" className="grid gap-6 py-8 lg:grid-cols-[minmax(0,1fr)_21rem]">
-        <KhungChatCaTrang cauHoiDau={cauHoiDau} khiDaGui={xoaThamSo} />
+        {/* Chưa đăng nhập: ô báo phải đăng nhập thay cho khung chat (giữ
+            nguyên ?hoi= trên địa chỉ để đăng nhập xong gửi câu đó luôn). */}
+        {nguoi ? <KhungChatCaTrang cauHoiDau={cauHoiDau} khiDaGui={xoaThamSo} /> : <CanDangNhap />}
 
         <aside className="space-y-5">
           <ThucDia d={d} tt={tt} />
-          <GoiY key={d.khoa} d={d} />
+          <GoiY key={d.khoa} d={d} daDangNhap={!!nguoi} />
           <section className="rounded-2xl bg-brand-deep p-5 text-tren-brand">
             <p className="inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-soft">
               <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
