@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Phone } from "lucide-react";
+import { X, Phone, UserRound } from "lucide-react";
+import useTaiKhoan from "../../hooks/useTaiKhoan.js";
+import { tenGoi } from "../../services/taiKhoanService.js";
 import Button from "../ui/Button.jsx";
 import Logo from "../ui/Logo.jsx";
 import { NAV_ITEMS, NUT_DANG_KY } from "../../utils/constants.js";
@@ -27,6 +29,7 @@ const itemVariants = {
 // Navbar.jsx cho khớp.
 export default function MobileMenu({ open, onClose, pathname }) {
   const congTy = useCongTy();
+  const nguoi = useTaiKhoan();
 
   // Khóa scroll body khi menu đang mở
   useEffect(() => {
@@ -111,6 +114,10 @@ export default function MobileMenu({ open, onClose, pathname }) {
               variants={itemVariants}
               className="space-y-2.5 border-t border-line p-5"
             >
+              <Button href="/dang-nhap" variant="outline" className="w-full" onClick={onClose}>
+                <UserRound className="h-4 w-4" aria-hidden="true" />
+                {nguoi ? `Tài khoản: ${tenGoi(nguoi)}` : "Đăng nhập / Đăng ký"}
+              </Button>
               <Button
                 href={`tel:${congTy.phone.replace(/\s/g, "")}`}
                 variant="outline"

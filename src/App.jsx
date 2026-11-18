@@ -35,6 +35,8 @@ const Vr360Page = lazy(() => import("./pages/Vr360Page.jsx"));
 // Trang tour 360° (16/10/2026) — đích của mục "VR360" riêng trên thanh menu:
 // danh sách điểm ngắm bên trái, tour Panoee bên phải.
 const TourVr360Page = lazy(() => import("./pages/TourVr360Page.jsx"));
+// Đăng nhập / đăng ký người dùng website (làm lại 18/11/2026).
+const TaiKhoanPage = lazy(() => import("./pages/TaiKhoanPage.jsx"));
 
 // Tin tức: MỘT trang cho cả "Tin công ty" và "Câu chuyện khách hàng" (gộp
 // 16/11/2026, xem pages/TinTucPage.jsx). Nội dung trong bảng bai_viet, soạn ở
@@ -124,15 +126,14 @@ export default function App() {
                   />
                 </Route>
 
-                {/* Tài khoản thành viên (đăng ký, đăng nhập, hồ sơ) đã GỠ khỏi
-                    website 12/11/2026 — web gọn lại còn hỏi đáp AI, chưa cần
-                    tài khoản. Ai còn giữ link cũ thì về trang chủ thay vì gặp
-                    trang trắng. API thành viên trong chatbot-python/ vẫn còn
-                    nguyên; phần đang làm dở (xác minh email, quên mật khẩu)
-                    cất ở nhánh git `luu-tai-khoan-dang-do`. */}
-                <Route path="/dang-nhap" element={<Navigate to="/" replace />} />
-                <Route path="/dang-ky" element={<Navigate to="/" replace />} />
-                <Route path="/tai-khoan" element={<Navigate to="/" replace />} />
+                {/* Đăng nhập / đăng ký — làm lại 18/11/2026, giao diện riêng
+                    (không Navbar/Footer). Gọi API thành viên có sẵn trong
+                    chatbot-python/. Trang hồ sơ /tai-khoan chưa làm lại nên
+                    tạm đưa về trang đăng nhập (đã đăng nhập thì trang đó hiện
+                    tên tài khoản và nút đăng xuất). */}
+                <Route path="/dang-nhap" element={<TaiKhoanPage che="dang-nhap" />} />
+                <Route path="/dang-ky" element={<TaiKhoanPage che="dang-ky" />} />
+                <Route path="/tai-khoan" element={<Navigate to="/dang-nhap" replace />} />
 
                 {/* Style-guide nội bộ — không Navbar/Footer */}
                 <Route path="/ui-kit" element={<UiKitPage />} />
