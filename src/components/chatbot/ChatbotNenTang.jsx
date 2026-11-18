@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { GOC_BOT, KHOA_BOT, PHIEN_BAN_BOT, dangCaTrang, guiCauHoi, moKhungChat } from "./botNenTang.js";
-import { onOpenChat } from "../../utils/chatBus.js";
+import { GOC_BOT, KHOA_BOT, PHIEN_BAN_BOT, dangCaTrang, moKhungChat } from "./botNenTang.js";
 import { useGiaoDien } from "../../context/NoiDungContext.jsx";
 import { daTungDong, ghiDaDong } from "./chatDaDong.js";
 import { LoiChao } from "./ChatWidget.jsx";
@@ -103,10 +102,8 @@ export default function ChatbotNenTang() {
   useEffect(() => {
     chenMotLan();
     delete document.documentElement.dataset.botNenTang;
-    const boNghe = onOpenChat((cauHoi) => {
-      moKhungChat();
-      if (cauHoi) guiCauHoi(cauHoi);
-    });
+    // 18/11/2026: nút "Chat với AI" (openChat) không còn mở popup mà chuyển
+    // sang trang chat — việc đó nay do Layout.jsx lo.
 
     // ⚠️ Khung chat bản chatbot.imob.vn (từ 03/10/2026) TỰ MỞ mỗi lần tải trang,
     // kể cả trên điện thoại, và không nhớ khách đã đóng: khách bấm ✕ rồi tải
@@ -132,7 +129,6 @@ export default function ChatbotNenTang() {
       khiDong: ghiDaDong,
     });
     return () => {
-      boNghe();
       boTheoDoi();
       window.removeEventListener("pointerdown", ghiTuongTac, true);
       window.removeEventListener("keydown", ghiTuongTac, true);
