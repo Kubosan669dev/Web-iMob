@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BadgeCheck, Menu } from "lucide-react";
+import useTaiKhoan from "../../hooks/useTaiKhoan.js";
+import { tenGoi } from "../../services/taiKhoanService.js";
 import Container from "../ui/Container.jsx";
 import Logo from "../ui/Logo.jsx";
 import MobileMenu from "./MobileMenu.jsx";
@@ -32,6 +34,7 @@ export default function Navbar() {
   const congTy = useCongTy();
   const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const nguoi = useTaiKhoan();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -69,9 +72,30 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center justify-self-end gap-1">
+            {/* Tài khoản (18/11/2026): chưa đăng nhập -> chữ "Đăng nhập";
+                đã đăng nhập -> chấm chữ cái đầu + tên, bấm vào để xem / đăng xuất. */}
+            <span className="mr-1 hidden h-5 w-px bg-line lg:block" aria-hidden="true" />
+            {nguoi ? (
+              <Link
+                to="/dang-nhap"
+                className="mr-1 hidden items-center gap-2 whitespace-nowrap rounded-full py-1 pl-1 pr-3 text-sm font-medium text-ink-soft transition-colors hover:bg-mist hover:text-ink lg:inline-flex"
+              >
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-xs font-semibold text-tren-brand">
+                  {tenGoi(nguoi).charAt(0).toUpperCase()}
+                </span>
+                {tenGoi(nguoi)}
+              </Link>
+            ) : (
+              <Link
+                to={`/dang-nhap?tiep=${encodeURIComponent(pathname)}`}
+                className="mr-1 hidden whitespace-nowrap px-3 py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink lg:inline-flex"
+              >
+                Đăng nhập
+              </Link>
+            )}
             <a
               href={NUT_DANG_KY.href}
-              className="hidden items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-tren-brand transition-colors hover:bg-brand-deep lg:inline-flex"
+              className="hidden items-center gap-1.5 whitespace-nowrap rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-tren-brand transition-colors hover:bg-brand-deep lg:inline-flex"
             >
               <BadgeCheck className="h-4 w-4" aria-hidden="true" />
               {NUT_DANG_KY.label}
